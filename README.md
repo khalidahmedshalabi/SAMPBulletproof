@@ -25,3 +25,7 @@ Here's a little explaining on layout. Take into consideration that it's planned 
 ### Little advice: writing code and compiling
 
 I personally do this so it's a preference yet I think it's the easiest way to go. If you haven't noticed there are 3 major types of files: *bulletproof.pwn, modules\src\ and modules\header*. What I do is open up *bulletproof.pwn* normally in PAWNO and have 2 Notepad++ windows open; one for src files and the other for header files. This is how it goes, I make changes to header/src files, hit CTRL+SHIFT+S in Notepad++ to save all changes and finally compile with PAWNO.
+
+### Request help
+
+If you have a problem with understanding parts from the source code, use [the issues tracker](https://github.com/KHKKhalid/Bulletproof-Gamemode/issues) to ask for help or more documentation.
