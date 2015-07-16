@@ -1,0 +1,16 @@
+/*
+		Uploads each match data somewhere so that it can be easily displayed in a website.
+		It's still in beta
+*/
+
+#if MATCH_SYNC == 1
+#include <a_mysql>
+
+new
+	MATCHSYNC_Kills[MAX_PLAYERS],
+	MATCHSYNC_Damage[MAX_PLAYERS],
+	MATCHSYNC_Accuracy[MAX_PLAYERS],
+	MATCHSYNC_Rounds[MAX_PLAYERS];
+
+
+#endif

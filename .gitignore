@@ -1,0 +1,13 @@
+
+/WebAPI
+http_destinations.txt
+antimacro.txt
+antimacro.inc
+league.txt
+league.inc
+server_log.txt
+samp-license.txt
+server-readme.txt
+admin_command_log.txt
+crashinfo.txt
+*.ini

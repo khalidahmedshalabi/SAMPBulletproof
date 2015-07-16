@@ -1,0 +1,118 @@
+/*
+		All textdraws: Global, per-player and 3D 
+*/
+
+#include "modules\header\weaponshot.txt"
+
+#define ATTACKER_CHANGES_X      19.4
+#define ATTACKER_CHANGES_Y      0.0
+#define DEFENDER_CHANGES_X      -79
+#define DEFENDER_CHANGES_Y      0.0
+
+// Team bars constant co-ordinates
+#define TEAMBARS_BAR_START_X		557.00
+#define TEAMBARS_BAR_START_Y		422.00
+#define TEAMBARS_TEXT_START_X		559.00
+#define TEAMBARS_DIFF_Y				14.00
+#define TEAMBARS_ATTACKER_COLOR		0xFF6A5644
+#define TEAMBARS_DEFENDER_COLOR		0x7C6DE844
+#define TEAMBARS_ATTACKER_HELP_COLOR		0xFF919344
+#define TEAMBARS_DEFENDER_HELP_COLOR		0x9DF9FF44
+
+// Player interface
+
+#define MAX_PLAYER_INTERFACE_ASPECTS	3
+
+#define INTERFACE_SPEC		0
+#define INTERFACE_NET		1
+#define INTERFACE_HP		2
+
+new bool:PlayerInterface[MAX_PLAYERS][MAX_PLAYER_INTERFACE_ASPECTS];
+
+// Match scoreboard textdraws (credits [U]27 aka [U]jay)
+new Text: ScoreBoardBoxTD[2];
+new Text: RoundsPlayed;
+new Text: TeamScoreText;
+new Text: TeamAttackerTD;
+new Text: TeamDefenderTD;
+new Text: MatchVersusTD;
+new Text: MatchScoreBoardSprite;
+
+
+// - Global Textdraws -
+new Text: AnnTD;
+new Text: PauseTD;
+new Text: LeagueToggleTD;
+new Text: LockServerTD;
+new Text: CloseText;
+new Text: WarModeText;
+new Text: SettingBox;
+new Text: AttHpLose;
+new Text: DefHpLose;
+new Text: TeamHpLose[2];
+new Text: EN_AttackerBox;
+new Text: EN_DefenderBox;
+new Text: EN_CheckPoint;
+new Text: DarkScreen;
+new Text: GunmenuLimitsTD[MAX_TEAMS];
+
+// - Round Textdraws - credits to Niko_boy for the old design I just tweaked it to be quite lagfree -
+
+new Text:leftRedBG;
+new Text:rightBlueBG;
+new Text:timerCenterTD, bool:timerColonShown = false;
+new Text:leftTeamData;
+new Text:rightTeamData;
+new Text:centerTeamNames;
+
+// - Result Textdraws - added by Niko_boy // -
+
+	new //designer:
+		Text: leftBG		, 	Text: rightBG     	,
+		Text: leftUpBG		, 	Text: rightUpBG 	,
+		Text: leftHeader	,	Text: rightHeader	,
+		Text: leftULine		, 	Text: rightULine	,
+		Text: leftUpText	, 	Text: rightUpText	,
+		Text: leftText		, 	Text: rightText		,
+	 	Text: leftTop		,	//Text: rightTop      ,
+	 	Text: lowerBG		,	Text: lowerULine	,
+	 	Text: topTextScore  , 	Text: teamWonHow	,
+	 	//contents:
+        Text: leftNames		, 	Text: rightNames	,
+        Text: leftKills		, 	Text: rightKills	,
+        Text: leftHP		, 	Text: rightHP		,
+        Text: leftDeaths    ,   Text: rightDeaths   ,
+        Text: leftDmg		, 	Text: rightDmg		,
+        Text: leftAcc		, 	Text: rightAcc		,
+        Text: leftPlayed	, 	Text: rightPlayed
+
+	;
+	
+// - Player Textdraws -
+
+new PlayerText:FPSPingPacket[MAX_PLAYERS]; // Ping, FPS and Packetloss textdraw on top right corner.
+new PlayerText:RoundKillDmgTDmg[MAX_PLAYERS]; // Shows Kills, Damage and Total Damage on the left hand side of the radar.
+new PlayerText:DoingDamage[MAX_PLAYERS][MAX_VISUAL_DAMAGES]; // Shows when player hits someone.
+new PlayerText:GettingDamaged[MAX_PLAYERS][MAX_VISUAL_DAMAGES]; // Shows when someone hits you.
+new PlayerText:WhoSpec[MAX_PLAYERS]; // Shows who is spectating you.
+new PlayerText:SpecText[MAX_PLAYERS][4]; // Shows spectated player info.
+new PlayerText:AreaCheckTD[MAX_PLAYERS]; // Show countdown textdraw when the player is out of arena.
+new PlayerText:AreaCheckBG[MAX_PLAYERS];
+new PlayerText:DeathText[MAX_PLAYERS][2];
+new PlayerText:TD_RoundSpec[MAX_PLAYERS];
+new PlayerText:ArmourTextDraw[MAX_PLAYERS];
+new PlayerText:HPTextDraw_TD[MAX_PLAYERS];
+new PlayerText:BaseID_VS[MAX_PLAYERS];
+new PlayerText:DeathMessage[MAX_PLAYERS][2]; new DeathMessageStr[MAX_PLAYERS][64];
+new PlayerBar:HealthBar[MAX_PLAYERS], PlayerBar:ArmourBar[MAX_PLAYERS]; // Server-sided health/armour
+enum TeamBarsDataStruct
+{
+	Bar:TeamBar, // The progress bar that shows player health and armour for team
+	Text:TeamBarText, // The text that shows his name, damage and total hp for team
+	Float:TeamBar_Y, // His bar textdraws Y co-ordinates
+	TeamBar_Team // What team this bar is shown to
+}
+new 
+	TeamBarsData[MAX_PLAYERS][TeamBarsDataStruct], 
+	Iterator:PlayerWithTeamBar<MAX_PLAYERS>, // This array is gonna hold IDs of players who got team bars created for them
+	bool:TeamBarShownForPlayer[MAX_PLAYERS][MAX_BARS]; // Gonna tell whether a team bar is shown to a player or not

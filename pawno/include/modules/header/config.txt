@@ -1,0 +1,29 @@
+/*
+	Gamemode configuration
+*/
+
+new MainWeather; // Server start up weather
+new MainTime; // Server start up time
+new ConfigCPTime; // CP time
+new ConfigRoundTime; // Round time
+new Float:MainSpawn[4]; // Main spawn position and facing angle
+new MainInterior; // Main spawn interior
+new WeatherLimit = 50;
+new TimeLimit = 50;
+
+new Float:Max_Packetloss;
+new Max_Ping;
+new Min_FPS;
+
+new bool:ChangeName = true; // Enable/Disable /changename command.
+new bool:AntiSpam = true;
+new bool:ShortCuts = false;
+new bool:LobbyGuns = true;
+new bool:ServerLocked 	= false;
+new bool:PermLocked 	= false;
+
+new Float:RoundHP = 100.0, Float:RoundAR = 100.0;
+
+new Skin[MAX_TEAMS];
+
+new OnlineInChannel[MAX_CHANNELS];

@@ -1,0 +1,5 @@
+/*
+		Death camera script
+*/
+
+#define DEATH_CAMERA_DURATION		7000	// Duration of death camera views (in milliseconds)

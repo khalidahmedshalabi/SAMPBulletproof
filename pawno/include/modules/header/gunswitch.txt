@@ -1,0 +1,22 @@
+/*
+		Alternative Gun Switching
+*/
+
+#define GUN_SWITCH_CIRCLE_RADIUS	100.0 // Player in this switch weapons are shown in a circular shape, this is the radius of the circle
+#define MAX_GUN_SWITCH_SLOTS		13 // Maximum slots for weapons
+
+// Center of the circular shape (on screen)
+new const Float:gunSwitchCenterX = 330.0;
+new const Float:gunSwitchCenterY = 120.0;
+
+enum GunSwitchData_STRUCT
+{
+	PlayerText:GunSlotTextDraw[MAX_GUN_SWITCH_SLOTS], // preview model textdraw
+	bool:GunSwitchSlotShown[MAX_GUN_SWITCH_SLOTS], // whether this slot is shown or not
+	GunSwitchModelID[MAX_GUN_SWITCH_SLOTS] // weapon model id of this slot
+}
+
+new GunSwitchData[MAX_PLAYERS][GunSwitchData_STRUCT];
+
+// Main design circles for the switching
+new Text:GunSwitchMainCircles[2];

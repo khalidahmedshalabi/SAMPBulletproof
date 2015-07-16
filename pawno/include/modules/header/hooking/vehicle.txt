@@ -1,0 +1,5 @@
+/*
+		Vehicle functions hooking
+*/
+
+new Iterator:DynamicVehicle<MAX_VEHICLES>; // Array of all spawned vehicles by CreateVehicle only

@@ -1,0 +1,4 @@
+/*
+		Safe game-text script 
+		No more crash due to bad use of '~' character
+*/

@@ -1,0 +1,19 @@
+/*
+		Gamemode core
+*/
+
+#define GM_NAME				"Bulletproof 0.1-b9"
+#define GM_WEBSITE			""
+
+#define GTAV_SWITCH_MENU	0	// Toggles the gta v switch menu (gunswitch library)
+#define MATCH_SYNC      	0   // (Beta) Uploads each match data somewhere so that it can be easily displayed in a website.
+
+// Limits
+#define MAX_TEAMS 			6
+#define MAX_CHANNELS    	50
+#define DRAW_DISTANCE   	25
+#define MAX_STATS       	30
+#define MAX_INI_ENTRY_TEXT 	80
+
+new DB:sqliteconnection; // SQLite Databases
+new teamskinlist = mS_INVALID_LISTID;

@@ -1,0 +1,1527 @@
+/*
+		All textdraws: Global, per-player and 3D 
+*/
+
+#include "modules\header\textdraws.txt"
+
+#include "modules\header\weaponshot.txt"
+
+// Credits: [U]27 aka [U]jay
+// Match scoreboard textdraws
+LoadMatchScoreTextDraws()
+{	
+	ScoreBoardBoxTD[0] = TextDrawCreate(474.000000, 7.000000, "-");
+	TextDrawBackgroundColor(ScoreBoardBoxTD[0], 255);
+	TextDrawFont(ScoreBoardBoxTD[0], 1);
+	TextDrawLetterSize(ScoreBoardBoxTD[0], 11.000005, 14.000000);
+	TextDrawColor(ScoreBoardBoxTD[0], 255);
+	TextDrawSetOutline(ScoreBoardBoxTD[0], 0);
+	TextDrawSetProportional(ScoreBoardBoxTD[0], 1);
+	TextDrawSetShadow(ScoreBoardBoxTD[0], 1);
+
+	ScoreBoardBoxTD[1] = TextDrawCreate(524.000000, 43.000000, "-");
+	TextDrawBackgroundColor(ScoreBoardBoxTD[1], 255);
+	TextDrawFont(ScoreBoardBoxTD[1], 1);
+	TextDrawLetterSize(ScoreBoardBoxTD[1], 4.299998, 10.000000);
+	TextDrawColor(ScoreBoardBoxTD[1], 255);
+	TextDrawSetOutline(ScoreBoardBoxTD[1], 0);
+	TextDrawSetProportional(ScoreBoardBoxTD[1], 1);
+	TextDrawSetShadow(ScoreBoardBoxTD[1], 1);
+
+	RoundsPlayed = TextDrawCreate(523.000000, 111.000000, "~Y~ ro~H~un~H~ds: 0/9");
+	TextDrawBackgroundColor(RoundsPlayed, 255);
+	TextDrawFont(RoundsPlayed, 3);
+	TextDrawLetterSize(RoundsPlayed, 0.269998, 1.199998);
+	TextDrawColor(RoundsPlayed, 1600086015);
+	TextDrawSetOutline(RoundsPlayed, 1);
+	TextDrawSetProportional(RoundsPlayed, 1);
+	TextDrawSetSelectable(RoundsPlayed, 0);
+
+	TeamAttackerTD = TextDrawCreate(499.000000, 83.000000, "~r~~h~~h~alpha");
+	TextDrawAlignment(TeamAttackerTD, 1);
+	TextDrawBackgroundColor(TeamAttackerTD, 0x00000000);
+	TextDrawFont(TeamAttackerTD, 1);
+	TextDrawLetterSize(TeamAttackerTD, 0.300000, 1.200000);
+	TextDrawColor(TeamAttackerTD, -1);
+	TextDrawSetOutline(TeamAttackerTD, 1);
+	TextDrawSetProportional(TeamAttackerTD, 1);
+	TextDrawSetSelectable(TeamAttackerTD, 0);
+	
+	TeamDefenderTD = TextDrawCreate(610.000000, 83.000000, "~b~~h~~h~beta");
+	TextDrawAlignment(TeamDefenderTD, 3);
+	TextDrawBackgroundColor(TeamDefenderTD, 0x00000000);
+	TextDrawFont(TeamDefenderTD, 1);
+	TextDrawLetterSize(TeamDefenderTD, 0.300000, 1.100000);
+	TextDrawColor(TeamDefenderTD, -430226433);
+	TextDrawSetOutline(TeamDefenderTD, 1);
+	TextDrawSetProportional(TeamDefenderTD, 1);
+	TextDrawSetSelectable(TeamDefenderTD, 0);
+
+	MatchVersusTD = TextDrawCreate(539.000000, 82.000000, "v~H~e~H~rs~H~us");
+	TextDrawBackgroundColor(MatchVersusTD, 255);
+	TextDrawFont(MatchVersusTD, 2);
+	TextDrawLetterSize(MatchVersusTD, 0.189998, 0.999998);
+	TextDrawColor(MatchVersusTD, 1600086015);
+	TextDrawSetOutline(MatchVersusTD, 1);
+	TextDrawSetProportional(MatchVersusTD, 1);
+	TextDrawSetSelectable(MatchVersusTD, 0);
+
+	TeamScoreText = TextDrawCreate(536.000000, 94.000000, "0     0");
+	TextDrawBackgroundColor(TeamScoreText, 255);
+	TextDrawFont(TeamScoreText, 3);
+	TextDrawLetterSize(TeamScoreText, 0.310000, 1.299996);
+	TextDrawColor(TeamScoreText, -1);
+	TextDrawSetOutline(TeamScoreText, 1);
+	TextDrawSetProportional(TeamScoreText, 1);
+	TextDrawSetSelectable(TeamScoreText, 0);
+
+	MatchScoreBoardSprite = TextDrawCreate(547.000000, 94.000000, "hud:radar_race");
+	TextDrawBackgroundColor(MatchScoreBoardSprite, 0);
+	TextDrawFont(MatchScoreBoardSprite, 4);
+	TextDrawLetterSize(MatchScoreBoardSprite, 0.379999, -0.100000);
+	TextDrawColor(MatchScoreBoardSprite, -1);
+	TextDrawSetOutline(MatchScoreBoardSprite, 1);
+	TextDrawSetProportional(MatchScoreBoardSprite, 1);
+	TextDrawUseBox(MatchScoreBoardSprite, 1);
+	TextDrawBoxColor(MatchScoreBoardSprite, 255);
+	TextDrawTextSize(MatchScoreBoardSprite, 16.000000, 16.000000);
+	TextDrawSetSelectable(MatchScoreBoardSprite, 0);
+}
+
+LoadTextDraws()
+{
+	TextDrawCreate(-1000.0, -1000.0, "_");
+
+	AnnTD = TextDrawCreate(320.000000, 120.000000, "_");
+	TextDrawBackgroundColor(AnnTD, MAIN_BACKGROUND_COLOUR);
+	TextDrawFont(AnnTD, 2);
+	TextDrawLetterSize(AnnTD, 0.449999, 2.000000);
+	TextDrawColor(AnnTD, 0xFFFFFFFF);
+	TextDrawSetOutline(AnnTD, 1);
+	TextDrawSetProportional(AnnTD, 1);
+	TextDrawAlignment(AnnTD, 2);
+
+	PauseTD = TextDrawCreate(320.000000, 415.000000, "_");
+	TextDrawBackgroundColor(PauseTD, MAIN_BACKGROUND_COLOUR);
+	TextDrawFont(PauseTD, 3);
+	TextDrawLetterSize(PauseTD, 0.300000, 1.500000);
+	TextDrawColor(PauseTD, 255);
+	TextDrawSetOutline(PauseTD, 1);
+	TextDrawSetProportional(PauseTD, 1);
+	TextDrawAlignment(PauseTD, 2);
+    
+	LoadMatchScoreTextDraws();
+	
+	SettingBox = TextDrawCreate(125.000000, 282.500000, "~n~~n~~n~~n~~n~");
+	TextDrawAlignment(SettingBox, 2);
+	TextDrawFont(SettingBox, 1);
+	TextDrawLetterSize(SettingBox, 0.31, 1.45);
+	TextDrawBackgroundColor(SettingBox,MAIN_BACKGROUND_COLOUR);
+	TextDrawColor(SettingBox, 16711935);
+	TextDrawSetOutline(SettingBox, 1);
+	TextDrawSetProportional(SettingBox, 1);
+	TextDrawSetShadow(SettingBox,0);
+	TextDrawTextSize(SettingBox, 20, 120);
+	TextDrawUseBox(SettingBox, 1);
+	TextDrawBoxColor(SettingBox, 0x00000033);
+
+	WarModeText = TextDrawCreate(125.000000, 285.000000, sprintf("%sWar\tMode:\t~r~OFF", MAIN_TEXT_COLOUR));
+	TextDrawAlignment(WarModeText, 2);
+	TextDrawFont(WarModeText, 1);
+	TextDrawLetterSize(WarModeText, 0.31, 1.45);
+	TextDrawBackgroundColor(WarModeText,MAIN_BACKGROUND_COLOUR);
+	TextDrawColor(WarModeText, 16711935);
+	TextDrawSetOutline(WarModeText, 1);
+	TextDrawSetProportional(WarModeText, 1);
+	TextDrawSetShadow(WarModeText,0);
+	TextDrawTextSize(WarModeText, 20, 150);
+	TextDrawSetSelectable(WarModeText, 1);
+
+	LeagueToggleTD = TextDrawCreate(125.000000, 300.000000, sprintf("%sGo\tLeague", MAIN_TEXT_COLOUR));
+	TextDrawAlignment(LeagueToggleTD, 2);
+	TextDrawFont(LeagueToggleTD, 1);
+	TextDrawLetterSize(LeagueToggleTD, 0.31, 1.45);
+	TextDrawBackgroundColor(LeagueToggleTD,MAIN_BACKGROUND_COLOUR);
+	TextDrawColor(LeagueToggleTD, 16711935);
+	TextDrawSetOutline(LeagueToggleTD, 1);
+	TextDrawSetProportional(LeagueToggleTD, 1);
+	TextDrawSetShadow(LeagueToggleTD,0);
+	TextDrawTextSize(LeagueToggleTD, 20, 150);
+	TextDrawSetSelectable(LeagueToggleTD, 1);
+
+	LockServerTD = TextDrawCreate(125.000000, 315.000000, sprintf("%sServer:\t~r~Unlocked", MAIN_TEXT_COLOUR));
+	TextDrawAlignment(LockServerTD, 2);
+	TextDrawFont(LockServerTD, 1);
+	TextDrawLetterSize(LockServerTD, 0.31, 1.45);
+	TextDrawBackgroundColor(LockServerTD,MAIN_BACKGROUND_COLOUR);
+	TextDrawColor(LockServerTD, 16711935);
+	TextDrawSetOutline(LockServerTD, 1);
+	TextDrawSetProportional(LockServerTD, 1);
+	TextDrawSetShadow(LockServerTD,0);
+	TextDrawTextSize(LockServerTD, 30, 200);
+	TextDrawSetSelectable(LockServerTD, 1);
+
+	CloseText = TextDrawCreate(125.000000, 330.000000, sprintf("%sClose Settings", MAIN_TEXT_COLOUR));
+	TextDrawAlignment(CloseText, 2);
+	TextDrawFont(CloseText, 1);
+	TextDrawLetterSize(CloseText, 0.31, 1.45);
+	TextDrawBackgroundColor(CloseText,MAIN_BACKGROUND_COLOUR);
+	TextDrawColor(CloseText, 16711935);
+	TextDrawSetOutline(CloseText, 1);
+	TextDrawSetProportional(CloseText, 1);
+	TextDrawSetShadow(CloseText,0);
+	TextDrawTextSize(CloseText, 30, 200);
+	TextDrawSetSelectable(CloseText, 1);
+
+//  - End Round TextDraw -
+
+
+	EN_AttackerBox = TextDrawCreate(178.500000 + ATTACKER_CHANGES_X, 176.00000 + ATTACKER_CHANGES_Y, "~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~");
+	TextDrawAlignment(EN_AttackerBox, 2);
+	TextDrawFont(EN_AttackerBox, 1);
+	TextDrawLetterSize(EN_AttackerBox, 0.31, 1.45);
+	TextDrawBackgroundColor(EN_AttackerBox,0xFF444444);
+	TextDrawColor(EN_AttackerBox, 16711935);
+	TextDrawSetOutline(EN_AttackerBox, 1);
+	TextDrawSetProportional(EN_AttackerBox, 1);
+	TextDrawSetShadow(EN_AttackerBox,0);
+	TextDrawTextSize(EN_AttackerBox, 20, 180);
+	TextDrawUseBox(EN_AttackerBox, 1);
+	TextDrawBoxColor(EN_AttackerBox, 0xFF444444);
+
+	EN_DefenderBox = TextDrawCreate(460.000000 + DEFENDER_CHANGES_X, 176.00000 + DEFENDER_CHANGES_Y, "~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~");
+	TextDrawAlignment(EN_DefenderBox, 2);
+	TextDrawFont(EN_DefenderBox, 1);
+	TextDrawLetterSize(EN_DefenderBox, 0.31, 1.45);
+	TextDrawBackgroundColor(EN_DefenderBox,0x3388FF44);
+	TextDrawColor(EN_DefenderBox, 16711935);
+	TextDrawSetOutline(EN_DefenderBox, 1);
+	TextDrawSetProportional(EN_DefenderBox, 1);
+	TextDrawSetShadow(EN_DefenderBox,0);
+	TextDrawTextSize(EN_DefenderBox, 20, 180); //20, 220
+	TextDrawUseBox(EN_DefenderBox, 1);
+	TextDrawBoxColor(EN_DefenderBox, 0x3388FF44);
+
+    RoundTextdrawsCreate();
+    
+	ResultTextdrawsCreate();
+	
+	EN_CheckPoint = TextDrawCreate(182.000000, 280.000000, "_");
+	TextDrawAlignment(EN_CheckPoint, 1);
+	TextDrawBackgroundColor(EN_CheckPoint, MAIN_BACKGROUND_COLOUR);
+	TextDrawFont(EN_CheckPoint, 1);
+	TextDrawLetterSize(EN_CheckPoint, 0.230000, 1.000000);
+	TextDrawColor(EN_CheckPoint, -1);
+	TextDrawSetOutline(EN_CheckPoint, 1);
+	TextDrawSetProportional(EN_CheckPoint, 1);
+
+//  - End of Round Textdraw -
+
+	AttHpLose = TextDrawCreate(10.000000, 436.000000, "_");
+	TextDrawBackgroundColor(AttHpLose, MAIN_BACKGROUND_COLOUR);
+	TextDrawFont(AttHpLose, 2);
+	TextDrawLetterSize(AttHpLose, 0.160000, 1.060000);
+	TextDrawColor(AttHpLose, 0x222222FF);
+	TextDrawSetOutline(AttHpLose, 1);
+	TextDrawSetProportional(AttHpLose, 1);
+	TextDrawAlignment(AttHpLose,1);
+	TextDrawSetShadow(AttHpLose, 0);
+
+	DefHpLose = TextDrawCreate(630.000000, 436.000000, "_");
+	TextDrawBackgroundColor(DefHpLose, MAIN_BACKGROUND_COLOUR);
+	TextDrawFont(DefHpLose, 2);
+	TextDrawLetterSize(DefHpLose, 0.160000, 1.060000);
+	TextDrawColor(DefHpLose, 0x222222FF);
+	TextDrawSetOutline(DefHpLose, 1);
+	TextDrawSetProportional(DefHpLose, 1);
+	TextDrawAlignment(DefHpLose,3);
+	TextDrawSetShadow(DefHpLose, 0);
+
+	TeamHpLose[0] = TextDrawCreate(170.000000, 390.000000, "_");
+	TextDrawAlignment(TeamHpLose[0], 2);
+	TextDrawFont(TeamHpLose[0], 3);
+	TextDrawLetterSize(TeamHpLose[0], 0.50000, 2.00000);
+	TextDrawBackgroundColor(TeamHpLose[0],MAIN_BACKGROUND_COLOUR);
+	TextDrawColor(TeamHpLose[0], 0x222222FF);
+	TextDrawSetOutline(TeamHpLose[0], 1);
+	TextDrawSetProportional(TeamHpLose[0], 1);
+	TextDrawSetShadow(TeamHpLose[0],0);
+
+	TeamHpLose[1] = TextDrawCreate(450.000000, 390.000000, "_");
+	TextDrawAlignment(TeamHpLose[1], 2);
+	TextDrawFont(TeamHpLose[1], 3);
+	TextDrawLetterSize(TeamHpLose[1], 0.50000, 2.00000);
+	TextDrawBackgroundColor(TeamHpLose[1],MAIN_BACKGROUND_COLOUR);
+	TextDrawColor(TeamHpLose[1], 0x222222FF);
+	TextDrawSetOutline(TeamHpLose[1], 1);
+	TextDrawSetProportional(TeamHpLose[1], 1);
+	TextDrawSetShadow(TeamHpLose[1], 0);
+	
+	DarkScreen = TextDrawCreate(727.000000, -2.000000, "~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~");
+	TextDrawBackgroundColor(DarkScreen, 255);
+	TextDrawFont(DarkScreen, 3);
+	TextDrawLetterSize(DarkScreen, 0.500000, 1.000000);
+	TextDrawColor(DarkScreen, -1);
+	TextDrawSetOutline(DarkScreen, 0);
+	TextDrawSetProportional(DarkScreen, 1);
+	TextDrawSetShadow(DarkScreen, 1);
+	TextDrawUseBox(DarkScreen, 1);
+	TextDrawBoxColor(DarkScreen, 153);
+	TextDrawTextSize(DarkScreen, -16.000000, 105.000000);
+	
+	for(new i = 0; i < MAX_TEAMS; i ++)
+	{
+		GunmenuLimitsTD[i] = TextDrawCreate(2.000000, 147.000000, " ");
+		TextDrawBackgroundColor(GunmenuLimitsTD[i], 51);
+		TextDrawFont(GunmenuLimitsTD[i], 3);
+		TextDrawLetterSize(GunmenuLimitsTD[i], 0.190000, 0.990000);
+		TextDrawColor(GunmenuLimitsTD[i], -1);
+		TextDrawSetOutline(GunmenuLimitsTD[i], 1);
+		TextDrawSetProportional(GunmenuLimitsTD[i], 1);
+	}
+	#if GTAV_SWITCH_MENU != 0
+	CreateGunSwitchGlobalTextDraws();
+	#endif
+	return 1;
+}
+
+ResultTextdrawsCreate()
+{
+	leftBG =	TextDrawCreate	(	301.200103, 	160.775039, 	"_"			);
+	TextDrawLetterSize			(	leftBG, 		0.000000, 		19.997976	);
+	TextDrawTextSize			(	leftBG, 		123.411689, 	0.000000	);
+	TextDrawAlignment			(	leftBG, 		1							);
+	TextDrawColor				(	leftBG, 		0							);
+	TextDrawUseBox				(	leftBG, 		true						);
+	TextDrawBoxColor			(	leftBG, 		0xFF736F22					);
+	TextDrawSetShadow			(	leftBG, 		0);
+	TextDrawSetOutline			(	leftBG, 		0);
+	TextDrawFont				(	leftBG, 		0);
+
+	rightBG = 	TextDrawCreate	(	478.729431, 	161.000000, 	"_"			);
+	TextDrawLetterSize			(	rightBG, 		0.000000, 		19.974430	);
+	TextDrawTextSize			(	rightBG, 		300.964538, 	0.000000	);
+	TextDrawAlignment			(	rightBG, 		1							);
+	TextDrawColor				(	rightBG, 		0							);
+	TextDrawUseBox				(	rightBG, 		true						);
+	TextDrawBoxColor			(	rightBG,		0x7391FF22					);
+	TextDrawSetShadow			(	rightBG,		0							);
+	TextDrawSetOutline			(	rightBG, 		0							);
+	TextDrawFont				(	rightBG, 		0							);
+
+	leftUpBG = 	TextDrawCreate	(	302.658935, 	152.633422, 	"_"			);
+	TextDrawLetterSize			(	leftUpBG, 		0.000000, 		1.829496	);
+	TextDrawTextSize            (	leftUpBG, 		121.435226, 	0.000000	);
+	TextDrawAlignment          	(	leftUpBG, 		1							);
+	TextDrawColor            	(	leftUpBG, 		0							);
+	TextDrawUseBox            	(	leftUpBG, 		true						);
+	TextDrawBoxColor            (	leftUpBG, 		0x00000066					);
+	TextDrawSetShadow          	(	leftUpBG, 		0							);
+	TextDrawSetOutline         	(	leftUpBG, 		0							);
+	TextDrawFont            	(	leftUpBG, 		0							);
+
+	rightUpBG = TextDrawCreate  (	480.741516, 	152.291732, 	"_"			);
+	TextDrawLetterSize          (	rightUpBG, 		0.000000, 		1.815376	);
+	TextDrawTextSize            (	rightUpBG, 		299.411682, 	0.000000	);
+	TextDrawAlignment           (	rightUpBG, 		1							);
+	TextDrawColor            	(	rightUpBG, 		0							);
+	TextDrawUseBox            	(	rightUpBG, 		true						);
+	TextDrawBoxColor            (	rightUpBG, 		0x00000066					);
+	TextDrawSetShadow          	(	rightUpBG, 		0							);
+	TextDrawSetOutline     	  	(	rightUpBG, 		0							);
+	TextDrawFont            	(	rightUpBG, 		1							);
+
+	leftHeader = TextDrawCreate	(	302.482940,		153.225158, 	"_"			);
+	TextDrawLetterSize         	(	leftHeader, 	0.000000, 		1.711848	);
+	TextDrawTextSize            (	leftHeader, 	122.211738,		0.000000	);
+	TextDrawAlignment          	(	leftHeader,		1							);
+	TextDrawColor            	(	leftHeader,		0							);
+	TextDrawUseBox            	(	leftHeader,		true						);
+	TextDrawBoxColor            (	leftHeader,		0xFF736F11					);
+	TextDrawSetShadow          	(	leftHeader,		0							);
+	TextDrawSetOutline         	(	leftHeader,		0							);
+	TextDrawFont            	(	leftHeader,		0							);
+
+	rightHeader = TextDrawCreate(	480.330291,		153.233322,		"_"			);
+	TextDrawLetterSize         	(	rightHeader,	0.000000,		1.707144	);
+	TextDrawTextSize           	(	rightHeader,	299.905853,		0.000000	);
+	TextDrawAlignment          	(	rightHeader,	1							);
+	TextDrawColor            	(	rightHeader,	860159863					);
+	TextDrawUseBox            	(	rightHeader,	true						);
+	TextDrawBoxColor            (	rightHeader,	0x7391FF11					);
+	TextDrawSetShadow          	(	rightHeader,	0							);
+	TextDrawSetOutline         	(	rightHeader,	0							);
+	TextDrawFont            	(	rightHeader,	0							);
+
+	leftULine = TextDrawCreate 	(	116.105949,		169.166824,		"-"			);
+	TextDrawLetterSize         	(	leftULine,		13.658081,		0.270249	);
+	TextDrawAlignment          	(	leftULine,		1							);
+	TextDrawColor            	(	leftULine,		0xFF0000FF							);
+	TextDrawSetShadow          	(	leftULine,		0							);
+	TextDrawSetOutline         	(	leftULine,		10							);
+	TextDrawBackgroundColor    	(	leftULine,		0xFF0000FF							);
+	TextDrawFont            	(	leftULine,		1							);
+	TextDrawSetProportional    	(	leftULine,		1							);
+
+	rightULine = TextDrawCreate	(	290.376525,		169.816665,		"-"			);
+	TextDrawLetterSize         	(	rightULine,		13.662071,		0.257999	);
+	TextDrawAlignment          	(	rightULine,		1							);
+	TextDrawColor            	(	rightULine,		0x0000FFFF							);
+	TextDrawSetShadow          	(	rightULine,		0							);
+	TextDrawSetOutline         	(	rightULine,		10							);
+	TextDrawBackgroundColor    	(	rightULine,		0x0000FFFF							);
+	TextDrawFont            	(	rightULine,		1							);
+	TextDrawSetProportional    	(	rightULine,		1							);
+
+	lowerBG = TextDrawCreate   	(	460.823425,		345.199615,		"_"			);
+	TextDrawLetterSize         	(	lowerBG,		0.000000,		4.986599	);
+	TextDrawTextSize            (	lowerBG,		144.823318,		0.000000	);
+	TextDrawAlignment          	(	lowerBG,		1							);
+	TextDrawColor            	(	lowerBG,		0							);
+	TextDrawUseBox            	(	lowerBG,		true						);
+	TextDrawBoxColor            (	lowerBG,		0x00000011					);
+	TextDrawSetShadow          	(	lowerBG,		0							);
+	TextDrawSetOutline         	(	lowerBG,		0							);
+	TextDrawFont            	(	lowerBG,		0							);
+
+	leftUpText = TextDrawCreate(	128.094100,		143.499984,		"~r~~h~~h~Attackers"	);
+	TextDrawLetterSize         	(	leftUpText,		0.225058,		1.315831	);
+	TextDrawAlignment          	(	leftUpText,		1							);
+	TextDrawColor            	(	leftUpText,		-1							);
+	TextDrawSetShadow          	(	leftUpText,		0							);
+	TextDrawSetOutline         	(	leftUpText,		1							);
+	TextDrawBackgroundColor    	(	leftUpText,		51							);
+	TextDrawFont            	(	leftUpText,		3							);
+	TextDrawSetProportional    	(	leftUpText,		1							);
+
+	rightUpText = TextDrawCreate(	436.282226,		143.499969,		"~b~~h~~h~Defenders"	);
+	TextDrawLetterSize         	(	rightUpText,	0.225058,		1.315831	);
+	TextDrawAlignment          	(	rightUpText,	1							);
+	TextDrawColor            	(	rightUpText,	-1							);
+	TextDrawSetShadow          	(	rightUpText,	0							);
+	TextDrawSetOutline         	(	rightUpText,	1							);
+	TextDrawBackgroundColor    	(	rightUpText,	51							);
+	TextDrawFont            	(	rightUpText,	3							);
+	TextDrawSetProportional    	(	rightUpText,	1							);
+
+	topTextScore = TextDrawCreate(	302.870422,		111.824943,		"_"			);//~y~~h~TCW~n~~b~~h~~h~Ateam 9 ~w~- ~r~~h~0 Bteam
+	TextDrawLetterSize         	(	topTextScore,	0.275128,		1.917916	);
+	TextDrawAlignment          	(	topTextScore,	2							);
+	TextDrawColor            	(	topTextScore,	-1							);
+	TextDrawSetShadow          	(	topTextScore,	1							);
+	TextDrawSetOutline         	(	topTextScore,	0							);
+	TextDrawBackgroundColor    	(	topTextScore,	0x00000022							);
+	TextDrawFont            	(	topTextScore,	2							);
+	TextDrawSetProportional    	(	topTextScore,	1							);
+
+	leftText = TextDrawCreate  	(	132.658905,		172.316802,		"Name___________________Kill__HP________Acc________Dmg");
+	TextDrawLetterSize         	(	leftText,		0.184588,		0.946666	);
+	TextDrawAlignment          	(	leftText,		1							);
+	TextDrawColor          		(	leftText,		-1							);
+	TextDrawSetShadow          	(	leftText,		0							);
+	TextDrawSetOutline         	(	leftText,		1							);
+	TextDrawBackgroundColor     (	leftText,		0xFF003333					);
+	TextDrawFont            	(	leftText,		1							);
+	TextDrawSetProportional    	(	leftText,		1							);
+
+	rightText = TextDrawCreate 	(	310.459045,		172.850051,		"Name___________________Kill__HP________Acc________Dmg");
+	TextDrawLetterSize         	(	rightText,		0.184588,		0.946666	);
+	TextDrawAlignment          	(	rightText,		1							);
+	TextDrawColor            	(	rightText,		-1							);
+	TextDrawSetShadow           (	rightText,		0							);
+	TextDrawSetOutline          (	rightText,		1							);
+	TextDrawBackgroundColor    	(	rightText,		0x3344FF33					);
+	TextDrawFont            	(	rightText,		1							);
+	TextDrawSetProportional     (	rightText,		1							);
+
+	lowerULine = TextDrawCreate(	129.505859,		390.541168,		"-"			);
+	TextDrawLetterSize         	(	lowerULine,		24.725660,		0.309667	);
+	TextDrawAlignment          	(	lowerULine,		1							);
+	TextDrawColor          		(	lowerULine,		-1							);
+	TextDrawSetShadow          	(	lowerULine,		0							);
+	TextDrawSetOutline         	(	lowerULine,		0							);
+	TextDrawBackgroundColor    	(	lowerULine,		-1							);
+	TextDrawFont           		(	lowerULine,		1							);
+	TextDrawSetProportional    	(	lowerULine,		1							);
+
+	teamWonHow = TextDrawCreate	(	304.187988,		345.974914,		"_"			);
+	TextDrawLetterSize         	(	teamWonHow,		0.250094,		1.130083	);
+	TextDrawAlignment          	(	teamWonHow,		2							);
+	TextDrawColor          		(	teamWonHow,		-1							);
+	TextDrawSetShadow          	(	teamWonHow,		0							);
+	TextDrawSetOutline         	(	teamWonHow,		1							);
+	TextDrawBackgroundColor    	(	teamWonHow,		30							);
+	TextDrawFont            	(	teamWonHow,		3							);
+	TextDrawSetProportional    	(	teamWonHow,		1							);
+
+	leftTop = TextDrawCreate   	(	300.694656,		362.025115,		"_"			);
+	TextDrawLetterSize         	(	leftTop,		0.18,			0.9			);
+	TextDrawAlignment          	(	leftTop,		2							);
+	TextDrawColor            	(	leftTop,		-1264229146					);
+	TextDrawSetShadow          	(	leftTop,		0							);
+	TextDrawSetOutline         	(	leftTop,		1							);
+	TextDrawBackgroundColor    	(	leftTop,		0x00000011					);
+	TextDrawFont            	(	leftTop,		1							);
+	TextDrawSetProportional    	(	leftTop,		1							);
+	TextDrawSetSelectable      	(	leftTop,		true						);
+
+	//left content
+	leftNames = TextDrawCreate	(	132.035293,		182.650009,		"_"			);
+	TextDrawLetterSize         	(	leftNames,		0.194799,		0.942583	);
+	TextDrawAlignment          	(	leftNames,		1							);
+	TextDrawColor            	(	leftNames,		-1							);
+	TextDrawSetShadow          	(	leftNames,		0							);
+	TextDrawSetOutline         	(	leftNames,		1							);
+	TextDrawBackgroundColor    	(	leftNames,		0xFF003322					);
+	TextDrawFont           		(	leftNames,		1							);
+	TextDrawSetProportional    	(	leftNames,		1							);
+	//left content
+	leftKills = TextDrawCreate	(	223.035293,		182.650009,		"_"			);
+	TextDrawLetterSize         	(	leftKills,		0.194799,		0.942583	);
+	TextDrawAlignment          	(	leftKills,		2							);
+	TextDrawColor            	(	leftKills,		-1							);
+	TextDrawSetShadow          	(	leftKills,		0							);
+	TextDrawSetOutline         	(	leftKills,		1							);
+	TextDrawBackgroundColor    	(	leftKills,		0xFF003322					);
+	TextDrawFont           		(	leftKills,		1							);
+	TextDrawSetProportional    	(	leftKills,		1							);
+	//left content
+	leftHP = TextDrawCreate		(	243.035293,		182.650009,		"_"			);
+	TextDrawLetterSize         	(	leftHP,			0.194799,		0.942583	);
+	TextDrawAlignment          	(	leftHP,			2							);
+	TextDrawColor            	(	leftHP,			-1							);
+	TextDrawSetShadow          	(	leftHP,			0							);
+	TextDrawSetOutline         	(	leftHP,			1							);
+	TextDrawBackgroundColor    	(	leftHP,			0xFF003322					);
+	TextDrawFont           		(	leftHP,			1							);
+	TextDrawSetProportional    	(	leftHP,			1							);
+
+	//left content for End MATCH (WAR)
+	leftDeaths = TextDrawCreate		(	236.035293,		182.650009,		"_"			);
+	TextDrawLetterSize         	(	leftDeaths,			0.194799,		0.942583	);
+	TextDrawAlignment          	(	leftDeaths,			2							);
+	TextDrawColor            	(	leftDeaths,			-1							);
+	TextDrawSetShadow          	(	leftDeaths,			0							);
+	TextDrawSetOutline         	(	leftDeaths,			1							);
+	TextDrawBackgroundColor    	(	leftDeaths,			0xFF003322					);
+	TextDrawFont           		(	leftDeaths,			1							);
+	TextDrawSetProportional    	(	leftDeaths,			1							);
+
+	//left content
+	leftAcc = TextDrawCreate	(	265.035293,		182.650009,		"_"			);
+	TextDrawLetterSize         	(	leftAcc,		0.194799,		0.942583	);
+	TextDrawAlignment          	(	leftAcc,		2							);
+	TextDrawColor            	(	leftAcc,		-1							);
+	TextDrawSetShadow          	(	leftAcc,		0							);
+	TextDrawSetOutline         	(	leftAcc,		1							);
+	TextDrawBackgroundColor    	(	leftAcc,		0xFF003322					);
+	TextDrawFont           		(	leftAcc,		1							);
+	TextDrawSetProportional    	(	leftAcc,		1							);
+	//left content
+	leftDmg = TextDrawCreate	(	285.035293,		182.650009,		"_"			);
+	TextDrawLetterSize         	(	leftDmg,		0.194799,		0.942583	);
+	TextDrawAlignment          	(	leftDmg,		2							);
+	TextDrawColor            	(	leftDmg,		-1							);
+	TextDrawSetShadow          	(	leftDmg,		0							);
+	TextDrawSetOutline         	(	leftDmg,		1							);
+	TextDrawBackgroundColor    	(	leftDmg,		0xFF003322					);
+	TextDrawFont           		(	leftDmg,		1							);
+	TextDrawSetProportional    	(	leftDmg,		1							);
+	//left content
+	leftPlayed = TextDrawCreate	(	248.035293,		182.650009,		"_"			);
+	TextDrawLetterSize         	(	leftPlayed,		0.194799,		0.942583	);
+	TextDrawAlignment          	(	leftPlayed,		2							);
+	TextDrawColor            	(	leftPlayed,		-1							);
+	TextDrawSetShadow          	(	leftPlayed,		0							);
+	TextDrawSetOutline         	(	leftPlayed,		1							);
+	TextDrawBackgroundColor    	(	leftPlayed,		0xFF003322					);
+	TextDrawFont           		(	leftPlayed,		1							);
+	TextDrawSetProportional    	(	leftPlayed,		1							);
+    //left content
+
+	//right content
+	rightNames = TextDrawCreate	(	310.035293,		182.650009,		"_"			);
+	TextDrawLetterSize         	(	rightNames,		0.194799,		0.942583	);
+	TextDrawAlignment          	(	rightNames,		1							);
+	TextDrawColor          		(	rightNames,		-1							);
+	TextDrawSetShadow          	(	rightNames,		0							);
+	TextDrawSetOutline         	(	rightNames,		1							);
+	TextDrawBackgroundColor    	(	rightNames,		0x3344FF22					);
+	TextDrawFont            	(	rightNames,		1							);
+	TextDrawSetProportional    	(	rightNames,		1							);
+	//right content
+	rightKills = TextDrawCreate(	400.535293,		182.650009,		"_"			);
+	TextDrawLetterSize         	(	rightKills,		0.194799,		0.942583	);
+	TextDrawAlignment          	(	rightKills,		2							);
+	TextDrawColor          		(	rightKills,		-1							);
+	TextDrawSetShadow          	(	rightKills,		0							);
+	TextDrawSetOutline         	(	rightKills,		1							);
+	TextDrawBackgroundColor    	(	rightKills,		0x3344FF22					);
+	TextDrawFont            	(	rightKills,		1							);
+	TextDrawSetProportional    	(	rightKills,		1							);
+    //right content
+	rightHP = TextDrawCreate	(	421.035293,		182.650009,		"_"			);
+	TextDrawLetterSize         	(	rightHP,		0.194799,		0.942583	);
+	TextDrawAlignment          	(	rightHP,		2							);
+	TextDrawColor          		(	rightHP,		-1							);
+	TextDrawSetShadow          	(	rightHP,		0							);
+	TextDrawSetOutline         	(	rightHP,		1							);
+	TextDrawBackgroundColor    	(	rightHP,		0x3344FF22					);
+	TextDrawFont            	(	rightHP,		1							);
+	TextDrawSetProportional    	(	rightHP,		1							);
+
+	//right content for End MATCH (WAR)
+	rightDeaths = TextDrawCreate	(	414.035293,		182.650009,		"_"			);
+	TextDrawLetterSize         	(	rightDeaths,		0.194799,		0.942583	);
+	TextDrawAlignment          	(	rightDeaths,		2							);
+	TextDrawColor          		(	rightDeaths,		-1							);
+	TextDrawSetShadow          	(	rightDeaths,		0							);
+	TextDrawSetOutline         	(	rightDeaths,		1							);
+	TextDrawBackgroundColor    	(	rightDeaths,		0x3344FF22					);
+	TextDrawFont            	(	rightDeaths,		1							);
+	TextDrawSetProportional    	(	rightDeaths,		1							);
+
+	//right content
+	rightAcc = TextDrawCreate	(	443.035293,		182.650009,		"_"			);
+	TextDrawLetterSize         	(	rightAcc,		0.194799,		0.942583	);
+	TextDrawAlignment          	(	rightAcc,		2							);
+	TextDrawColor          		(	rightAcc,		-1							);
+	TextDrawSetShadow          	(	rightAcc,		0							);
+	TextDrawSetOutline         	(	rightAcc,		1							);
+	TextDrawBackgroundColor    	(	rightAcc,		0x3344FF22					);
+	TextDrawFont            	(	rightAcc,		1							);
+	TextDrawSetProportional    	(	rightAcc,		1							);
+    //right content
+	rightDmg = TextDrawCreate	(	463.035293,		182.650009,		"_"			);
+	TextDrawLetterSize         	(	rightDmg,		0.194799,		0.942583	);
+	TextDrawAlignment          	(	rightDmg,		2							);
+	TextDrawColor          		(	rightDmg,		-1							);
+	TextDrawSetShadow          	(	rightDmg,		0							);
+	TextDrawSetOutline         	(	rightDmg,		1							);
+	TextDrawBackgroundColor    	(	rightDmg,		0x3344FF22					);
+	TextDrawFont            	(	rightDmg,		1							);
+	TextDrawSetProportional    	(	rightDmg,		1							);
+    //right content
+	rightPlayed = TextDrawCreate(	426.035293,		182.650009,		"_"			);
+	TextDrawLetterSize         	(	rightPlayed,	0.194799,		0.942583	);
+	TextDrawAlignment          	(	rightPlayed,	2							);
+	TextDrawColor          		(	rightPlayed,	-1							);
+	TextDrawSetShadow          	(	rightPlayed,	0							);
+	TextDrawSetOutline         	(	rightPlayed,	1							);
+	TextDrawBackgroundColor    	(	rightPlayed,	0x3344FF22					);
+	TextDrawFont            	(	rightPlayed,	1							);
+	TextDrawSetProportional    	(	rightPlayed,	1							);
+    //right content
+}
+
+RoundTextdrawsCreate()
+{
+	leftRedBG = TextDrawCreate		(	335.540924, 	401.283630, "-");
+	TextDrawLetterSize				(	leftRedBG, 		-28.081052, 7.287504);
+	TextDrawAlignment				(	leftRedBG, 		1							);
+	TextDrawColor					(	leftRedBG, 		0x00000022					);
+	TextDrawSetShadow				(	leftRedBG, 		-1							);
+	TextDrawSetOutline				(	leftRedBG, 		0							);
+	TextDrawBackgroundColor			(	leftRedBG, 		0xDE000044					);
+	TextDrawFont					(	leftRedBG, 		1							);
+	TextDrawSetProportional			(	leftRedBG, 		1							);
+
+	rightBlueBG = TextDrawCreate	(	311.741302, 	401.283630, "-"				);
+	TextDrawLetterSize				(	rightBlueBG, 	28.770492, 7.287504			);
+	TextDrawAlignment				(	rightBlueBG, 	1							);
+	TextDrawColor					(	rightBlueBG, 	0x00000022					);
+	TextDrawSetShadow				(	rightBlueBG, 	-1							);
+	TextDrawSetOutline				(	rightBlueBG,	0							);
+	TextDrawBackgroundColor			(	rightBlueBG, 	0x3344FF44					);
+	TextDrawFont					(	rightBlueBG, 	1							);
+	TextDrawSetProportional			(	rightBlueBG, 	1							);
+
+	timerCenterTD = TextDrawCreate	(	324.140991, 		434.872528, "~w~0:00 / ~r~~h~00");
+	TextDrawLetterSize				(	timerCenterTD, 		0.267410, 	1.349164	);
+	TextDrawTextSize				(	timerCenterTD, 		299.293579, 98.583343	);
+	TextDrawAlignment				(	timerCenterTD, 		2						);
+	TextDrawColor					(	timerCenterTD, 		-1						);
+	TextDrawSetShadow				(	timerCenterTD, 		0						);
+	TextDrawSetOutline				(	timerCenterTD, 		1						);
+	TextDrawBackgroundColor			(	timerCenterTD,	 	0x00000033						);
+	TextDrawFont					(	timerCenterTD, 		3						);
+	TextDrawSetProportional			(	timerCenterTD, 		1						);
+
+	leftTeamData = TextDrawCreate	(	254.400375, 		435.060705, "~w~_");
+	TextDrawLetterSize				(	leftTeamData, 		0.3, 1.3				);
+	TextDrawAlignment				(	leftTeamData, 		2						);
+	TextDrawColor					(	leftTeamData, 		-1						);
+	TextDrawSetShadow				(	leftTeamData, 		0						);
+	TextDrawSetOutline				(	leftTeamData, 		-1						);
+	TextDrawBackgroundColor			(	leftTeamData, 		-16777131				);
+	TextDrawFont					(	leftTeamData, 		3						);
+	TextDrawSetProportional			(	leftTeamData, 		1						);
+
+	rightTeamData = TextDrawCreate	(	388.682586, 		435.050573, "~w~_");
+	TextDrawLetterSize				(	rightTeamData, 		0.3, 1.3				);
+	TextDrawAlignment				(	rightTeamData, 		2						);
+	TextDrawColor					(	rightTeamData, 		-1						);
+	TextDrawSetShadow				(	rightTeamData, 		0						);
+	TextDrawSetOutline				(	rightTeamData, 		-1						);
+	TextDrawBackgroundColor			(	rightTeamData, 		0x3278FF33				);
+	TextDrawFont					(	rightTeamData, 		3						);
+	TextDrawSetProportional			(	rightTeamData, 		1						);
+
+//Qwerty _______________________________________________________________ ~b~~h~~h~Asdfg");
+	centerTeamNames = TextDrawCreate(	317.176452, 		423.776257, "~r~~h~~h~__- __ -");
+	TextDrawLetterSize				(	centerTeamNames, 	0.400000, 	2.200000	);
+	TextDrawAlignment				(	centerTeamNames, 	2						);
+	TextDrawColor					(	centerTeamNames, 	-1						);
+	TextDrawSetShadow				(	centerTeamNames,	0						);
+	TextDrawSetOutline				(	centerTeamNames, 	1						);
+	TextDrawBackgroundColor			(	centerTeamNames, 	0x00000033				);
+	TextDrawFont					(	centerTeamNames,	0						);
+	TextDrawSetProportional			(	centerTeamNames, 	1						);
+
+
+}
+
+LoadPlayerTextDraws(playerid)
+{
+	HealthBar[playerid] = CreatePlayerProgressBar(playerid, 547.000000, 67.000000, 64.000000, 6.000000, 0xB4191DFF, 100.000000, BAR_DIRECTION_RIGHT);
+	ArmourBar[playerid] = CreatePlayerProgressBar(playerid, 547.000000, 46.000000, 64.000000, 6.000000, 0xE1E1E1FF, 100.000000, BAR_DIRECTION_RIGHT);
+	
+	HPTextDraw_TD[playerid] = CreatePlayerTextDraw(playerid,577, 67.1, "_");
+	PlayerTextDrawBackgroundColor(playerid, HPTextDraw_TD[playerid], 0x00000044);
+	PlayerTextDrawFont(playerid, HPTextDraw_TD[playerid], 3);
+	PlayerTextDrawLetterSize(playerid, HPTextDraw_TD[playerid], 0.2600, 0.8000);
+	PlayerTextDrawColor(playerid, HPTextDraw_TD[playerid], 16711935);
+	PlayerTextDrawSetOutline(playerid, HPTextDraw_TD[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, HPTextDraw_TD[playerid], 1);
+	PlayerTextDrawSetShadow(playerid, HPTextDraw_TD[playerid],0);
+	PlayerTextDrawAlignment(playerid, HPTextDraw_TD[playerid], 2);
+
+	ArmourTextDraw[playerid] = CreatePlayerTextDraw(playerid,577, 45.1, "_");
+	PlayerTextDrawBackgroundColor(playerid, ArmourTextDraw[playerid], 0x00000044);
+	PlayerTextDrawFont(playerid, ArmourTextDraw[playerid], 3);
+	PlayerTextDrawLetterSize(playerid, ArmourTextDraw[playerid], 0.2600, 0.8000);
+	PlayerTextDrawColor(playerid, ArmourTextDraw[playerid], 16711935);
+	PlayerTextDrawSetOutline(playerid, ArmourTextDraw[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, ArmourTextDraw[playerid], 1);
+	PlayerTextDrawSetShadow(playerid, ArmourTextDraw[playerid],0);
+	PlayerTextDrawAlignment(playerid, ArmourTextDraw[playerid], 2);
+
+	BaseID_VS[playerid] = CreatePlayerTextDraw(playerid, 548.000000, 25.000000,"_");
+	PlayerTextDrawFont(playerid, BaseID_VS[playerid], 3);
+	PlayerTextDrawLetterSize(playerid, BaseID_VS[playerid], 0.26000, 1.500000);
+	PlayerTextDrawBackgroundColor(playerid, BaseID_VS[playerid],MAIN_BACKGROUND_COLOUR);
+	PlayerTextDrawColor(playerid, BaseID_VS[playerid],-65281);
+	PlayerTextDrawSetOutline(playerid, BaseID_VS[playerid],1);
+	PlayerTextDrawSetProportional(playerid, BaseID_VS[playerid], 1);
+	PlayerTextDrawSetShadow(playerid, BaseID_VS[playerid],0);
+	
+	HidePlayerProgressBar(playerid, HealthBar[playerid]);
+	HidePlayerProgressBar(playerid, ArmourBar[playerid]);
+	PlayerTextDrawHide(playerid, HPTextDraw_TD[playerid]);
+	PlayerTextDrawHide(playerid, ArmourTextDraw[playerid]);
+	PlayerTextDrawHide(playerid, BaseID_VS[playerid]);
+
+    TargetInfoData[playerid][TargetInfoTD] = CreatePlayerTextDraw(playerid, 50.000000, 285.000000, "_");
+	PlayerTextDrawBackgroundColor(playerid, TargetInfoData[playerid][TargetInfoTD], MAIN_BACKGROUND_COLOUR);
+	PlayerTextDrawFont(playerid, TargetInfoData[playerid][TargetInfoTD], 1);
+	PlayerTextDrawLetterSize(playerid, TargetInfoData[playerid][TargetInfoTD], 0.200000, 1.0);
+	PlayerTextDrawColor(playerid, TargetInfoData[playerid][TargetInfoTD], 255);
+	PlayerTextDrawSetOutline(playerid, TargetInfoData[playerid][TargetInfoTD], 1);
+	PlayerTextDrawSetProportional(playerid, TargetInfoData[playerid][TargetInfoTD], 1);
+	PlayerTextDrawTextSize(playerid, TargetInfoData[playerid][TargetInfoTD], 167.000000, 0.000000);
+
+	TD_RoundSpec[playerid] = CreatePlayerTextDraw(playerid, 330.000000, 350.000000,"_");
+	PlayerTextDrawFont(playerid, TD_RoundSpec[playerid], 1);
+	PlayerTextDrawLetterSize(playerid, TD_RoundSpec[playerid], 0.40000, 2.00000);
+	PlayerTextDrawBackgroundColor(playerid, TD_RoundSpec[playerid], MAIN_BACKGROUND_COLOUR);
+	PlayerTextDrawColor(playerid, TD_RoundSpec[playerid], -65281);
+	PlayerTextDrawSetOutline(playerid, TD_RoundSpec[playerid], 1);
+    PlayerTextDrawAlignment(playerid, TD_RoundSpec[playerid], 2);
+    PlayerTextDrawSetShadow(playerid, TD_RoundSpec[playerid], 0);
+
+	FPSPingPacket[playerid] = CreatePlayerTextDraw(playerid,502.0, 1.4, "_");
+	PlayerTextDrawBackgroundColor(playerid, FPSPingPacket[playerid], 0x00000022);
+	PlayerTextDrawFont(playerid, FPSPingPacket[playerid], 3);
+    PlayerTextDrawLetterSize(playerid, FPSPingPacket[playerid], 0.190000, 0.93000);
+	PlayerTextDrawColor(playerid, FPSPingPacket[playerid], 16711935);
+	PlayerTextDrawSetOutline(playerid, FPSPingPacket[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, FPSPingPacket[playerid], 1);
+	PlayerTextDrawSetShadow(playerid, FPSPingPacket[playerid],0);
+	PlayerTextDrawAlignment(playerid, FPSPingPacket[playerid], 1);
+
+	RoundKillDmgTDmg[playerid] = CreatePlayerTextDraw(playerid,3.000000, 403.000000, "_");
+	PlayerTextDrawFont(playerid, RoundKillDmgTDmg[playerid], 3);
+	PlayerTextDrawLetterSize(playerid, RoundKillDmgTDmg[playerid], 0.200000, 0.900000);
+	PlayerTextDrawBackgroundColor(playerid, RoundKillDmgTDmg[playerid], 0x00000022);
+	PlayerTextDrawColor(playerid, RoundKillDmgTDmg[playerid], 16711935);
+	PlayerTextDrawSetOutline(playerid, RoundKillDmgTDmg[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, RoundKillDmgTDmg[playerid], 1);
+	PlayerTextDrawSetShadow(playerid, RoundKillDmgTDmg[playerid], 0);
+
+	new Float:y = 372.0;
+	for(new i = 0; i < MAX_VISUAL_DAMAGES; i ++)
+	{
+		VisualDamage[playerid][ShownTakenDamage][i] = false;
+		VisualDamage[playerid][ShownGivenDamage][i] = false;
+		
+		DoingDamage[playerid][i] = CreatePlayerTextDraw(playerid,170.0,y,"_");
+		PlayerTextDrawFont(playerid, DoingDamage[playerid][i], 1);
+		PlayerTextDrawLetterSize(playerid, DoingDamage[playerid][i], 0.20900, 1.099);
+		PlayerTextDrawBackgroundColor(playerid, DoingDamage[playerid][i],0x00000000);
+		PlayerTextDrawColor(playerid, DoingDamage[playerid][i], 16727295);
+		PlayerTextDrawSetProportional(playerid, DoingDamage[playerid][i], 1);
+		PlayerTextDrawSetOutline(playerid, DoingDamage[playerid][i],1);
+		PlayerTextDrawSetShadow(playerid, DoingDamage[playerid][i],0);	
+		
+		GettingDamaged[playerid][i] = CreatePlayerTextDraw(playerid,380.0,y,"_");
+		PlayerTextDrawFont(playerid, GettingDamaged[playerid][i], 1);
+		PlayerTextDrawLetterSize(playerid, GettingDamaged[playerid][i], 0.20900, 1.099);
+		PlayerTextDrawBackgroundColor(playerid, GettingDamaged[playerid][i],0x00000000);
+		PlayerTextDrawColor(playerid, GettingDamaged[playerid][i], 16727295);
+		PlayerTextDrawSetProportional(playerid, GettingDamaged[playerid][i], 1);
+		PlayerTextDrawSetOutline(playerid, GettingDamaged[playerid][i],1);
+		PlayerTextDrawSetShadow(playerid, GettingDamaged[playerid][i],0);
+		
+		PlayerTextDrawShow(playerid, DoingDamage[playerid][i]);
+		PlayerTextDrawShow(playerid, GettingDamaged[playerid][i]);
+		
+		y += DAMAGE_TEXTDRAW_Y_DIFF;
+	}
+
+    WhoSpec[playerid] = CreatePlayerTextDraw(playerid, 1, 150.00000, "_");
+	PlayerTextDrawBackgroundColor(playerid, WhoSpec[playerid], MAIN_BACKGROUND_COLOUR);
+	PlayerTextDrawFont(playerid, WhoSpec[playerid], 1);
+	PlayerTextDrawLetterSize(playerid, WhoSpec[playerid], 0.180000, 0.9);
+	PlayerTextDrawColor(playerid, WhoSpec[playerid], -65281);
+	PlayerTextDrawSetOutline(playerid, WhoSpec[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, WhoSpec[playerid], 1);
+	PlayerTextDrawSetShadow(playerid, WhoSpec[playerid], 0);
+
+	SpecText[playerid][0] = CreatePlayerTextDraw(playerid, 4.333333, 354.251831 - 70.0, "LD_POKE:cd9s");
+	PlayerTextDrawLetterSize(playerid, SpecText[playerid][0], 0.000000, 0.000000);
+	PlayerTextDrawTextSize(playerid, SpecText[playerid][0], 72.000000, 75);
+	PlayerTextDrawAlignment(playerid, SpecText[playerid][0], 1);
+	PlayerTextDrawColor(playerid, SpecText[playerid][0], 0x00000033);
+	PlayerTextDrawSetShadow(playerid, SpecText[playerid][0], 0);
+	PlayerTextDrawSetOutline(playerid, SpecText[playerid][0], 0);
+	PlayerTextDrawFont(playerid, SpecText[playerid][0], 4);
+
+    SpecText[playerid][1] = CreatePlayerTextDraw(playerid, 40, 350 - 70.0, "_");
+	PlayerTextDrawFont(playerid, SpecText[playerid][1], 1);
+	PlayerTextDrawLetterSize(playerid, SpecText[playerid][1], 0.20000, 1.000000);
+	PlayerTextDrawColor(playerid, SpecText[playerid][1], -65281);
+	PlayerTextDrawBackgroundColor(playerid, SpecText[playerid][1], MAIN_BACKGROUND_COLOUR);
+	PlayerTextDrawSetOutline(playerid, SpecText[playerid][1], 1);
+	PlayerTextDrawSetShadow(playerid, SpecText[playerid][1], 0);
+	PlayerTextDrawAlignment(playerid, SpecText[playerid][1], 2);
+
+	SpecText[playerid][2] = CreatePlayerTextDraw(playerid, 80.333333, 354.251831 - 70.0, "LD_POKE:cd9s");
+	PlayerTextDrawLetterSize(playerid, SpecText[playerid][2], 0.000000, 0.000000);
+	PlayerTextDrawTextSize(playerid, SpecText[playerid][2], 58.000000, 75);
+	PlayerTextDrawAlignment(playerid, SpecText[playerid][2], 1);
+	PlayerTextDrawColor(playerid, SpecText[playerid][2], 0x00000033);
+	PlayerTextDrawSetShadow(playerid, SpecText[playerid][2], 0);
+	PlayerTextDrawSetOutline(playerid, SpecText[playerid][2], 0);
+	PlayerTextDrawFont(playerid, SpecText[playerid][2], 4);
+
+    SpecText[playerid][3] = CreatePlayerTextDraw(playerid, 85, 350 - 70.0, "_");
+	PlayerTextDrawFont(playerid, SpecText[playerid][3], 1);
+	PlayerTextDrawLetterSize(playerid, SpecText[playerid][3], 0.20000, 1.000000);
+	PlayerTextDrawColor(playerid, SpecText[playerid][3], -65281);
+	PlayerTextDrawBackgroundColor(playerid, SpecText[playerid][3], MAIN_BACKGROUND_COLOUR);
+	PlayerTextDrawSetOutline(playerid, SpecText[playerid][3], 1);
+	PlayerTextDrawSetShadow(playerid, SpecText[playerid][3], 0);
+	PlayerTextDrawAlignment(playerid, SpecText[playerid][3], 1);
+	
+   	AreaCheckTD[playerid] = CreatePlayerTextDraw(playerid,320.000000, 210.000000, "_");
+	PlayerTextDrawAlignment(playerid, AreaCheckTD[playerid], 2);
+	PlayerTextDrawBackgroundColor(playerid, AreaCheckTD[playerid], MAIN_BACKGROUND_COLOUR);
+	PlayerTextDrawFont(playerid, AreaCheckTD[playerid], 3);
+	PlayerTextDrawLetterSize(playerid, AreaCheckTD[playerid], 0.6, 3.00000);
+	PlayerTextDrawColor(playerid, AreaCheckTD[playerid], -65281);
+	PlayerTextDrawSetOutline(playerid, AreaCheckTD[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, AreaCheckTD[playerid], 1);
+	PlayerTextDrawSetShadow(playerid, AreaCheckTD[playerid], 0);
+
+	AreaCheckBG[playerid] = CreatePlayerTextDraw(playerid,645.00000, -5.000000," ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~~n~ ~n~~n~~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~~n~ ~n~~n~~n~~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~ ~n~~n~ ~n~~n~~n~ ");
+    PlayerTextDrawUseBox(playerid, AreaCheckBG[playerid], 1);
+    PlayerTextDrawTextSize(playerid, AreaCheckBG[playerid], -5, 645);
+    PlayerTextDrawBoxColor(playerid, AreaCheckBG[playerid], 0x00000044);
+	PlayerTextDrawSetOutline(playerid, AreaCheckBG[playerid],0);
+
+	DeathText[playerid][0] = CreatePlayerTextDraw(playerid,322.000000, 346.000000, "_");
+	PlayerTextDrawBackgroundColor(playerid, DeathText[playerid][0], MAIN_BACKGROUND_COLOUR);
+	PlayerTextDrawFont(playerid, DeathText[playerid][0], 1);
+	PlayerTextDrawLetterSize(playerid, DeathText[playerid][0], 0.250000, 1.2000);
+	PlayerTextDrawColor(playerid, DeathText[playerid][0], 16711935);
+	PlayerTextDrawSetOutline(playerid, DeathText[playerid][0], 1);
+	PlayerTextDrawSetProportional(playerid, DeathText[playerid][0], 1);
+	PlayerTextDrawSetShadow(playerid, DeathText[playerid][0], 0);
+	PlayerTextDrawAlignment(playerid, DeathText[playerid][0], 2);
+
+	DeathText[playerid][1] = CreatePlayerTextDraw(playerid,322, 360.000000, "_");
+	PlayerTextDrawBackgroundColor(playerid, DeathText[playerid][1], MAIN_BACKGROUND_COLOUR);
+	PlayerTextDrawFont(playerid, DeathText[playerid][1], 1);
+	PlayerTextDrawLetterSize(playerid, DeathText[playerid][1], 0.250000, 1.2000);
+	PlayerTextDrawColor(playerid, DeathText[playerid][1], 16711935);
+	PlayerTextDrawSetOutline(playerid, DeathText[playerid][1], 1);
+	PlayerTextDrawSetProportional(playerid, DeathText[playerid][1], 1);
+	PlayerTextDrawSetShadow(playerid, DeathText[playerid][1], 0);
+	PlayerTextDrawAlignment(playerid, DeathText[playerid][1], 2);
+	
+    DeathMessage[playerid][0] = CreatePlayerTextDraw(playerid, 193.000000, 157.000000, "Random says this to you");
+	PlayerTextDrawBackgroundColor(playerid, DeathMessage[playerid][0], -16776961);
+	PlayerTextDrawFont(playerid, DeathMessage[playerid][0], 3);
+	PlayerTextDrawLetterSize(playerid, DeathMessage[playerid][0], 0.280000, 1.200000);
+	PlayerTextDrawColor(playerid, DeathMessage[playerid][0], -1);
+	PlayerTextDrawSetOutline(playerid, DeathMessage[playerid][0], 1);
+	PlayerTextDrawSetProportional(playerid, DeathMessage[playerid][0], 1);
+	
+	DeathMessage[playerid][1] = CreatePlayerTextDraw(playerid, 318.000000, 177.000000, "This is my death message");
+	PlayerTextDrawAlignment(playerid, DeathMessage[playerid][1], 2);
+	PlayerTextDrawBackgroundColor(playerid, DeathMessage[playerid][1], -16776961);
+	PlayerTextDrawFont(playerid, DeathMessage[playerid][1], 2);
+	PlayerTextDrawLetterSize(playerid, DeathMessage[playerid][1], 0.270000, 1.200000);
+	PlayerTextDrawColor(playerid, DeathMessage[playerid][1], -65281);
+	PlayerTextDrawSetOutline(playerid, DeathMessage[playerid][1], 1);
+	PlayerTextDrawSetProportional(playerid, DeathMessage[playerid][1], 1);
+	PlayerTextDrawUseBox(playerid, DeathMessage[playerid][1], 1);
+	PlayerTextDrawBoxColor(playerid, DeathMessage[playerid][1], 153);
+	PlayerTextDrawTextSize(playerid, DeathMessage[playerid][1], 794.000000, 271.000000);
+	
+	CreatePlayerWeaponBindTextDraw(playerid);
+	CreateMessageBoxTextDraws(playerid);
+	#if GTAV_SWITCH_MENU != 0
+	CreateGunSwitchTextDraws(playerid);
+	#endif
+	return 1;
+}
+
+UpdateTeamNamesTextdraw()
+{
+	new str[128];
+	format(str, sizeof(str), "~r~~h~~h~%s \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ~b~~h~~h~%s", TeamName[ATTACKER], TeamName[DEFENDER]);
+	TextDrawSetString(centerTeamNames , str);
+	return 1;
+}
+
+ShowRoundStats(playerid)
+{
+	if(!RoundPaused)
+		TextDrawHideForPlayer(playerid, PauseTD);
+	else
+	{
+		TextDrawSetString(PauseTD, "~r~~h~Round Paused");
+		TextDrawShowForPlayer(playerid, PauseTD);
+	}
+	
+	TextDrawShowForPlayer(playerid,leftRedBG);
+	TextDrawShowForPlayer(playerid,rightBlueBG);
+	TextDrawShowForPlayer(playerid,timerCenterTD);
+	TextDrawShowForPlayer(playerid,leftTeamData);
+	TextDrawShowForPlayer(playerid,rightTeamData);
+	TextDrawShowForPlayer(playerid,centerTeamNames);
+}
+
+HideRoundStats(playerid)
+{
+	TextDrawHideForPlayer(playerid,leftRedBG);
+	TextDrawHideForPlayer(playerid,rightBlueBG);
+	TextDrawHideForPlayer(playerid,timerCenterTD);
+	TextDrawHideForPlayer(playerid,leftTeamData);
+	TextDrawHideForPlayer(playerid,rightTeamData);
+	TextDrawHideForPlayer(playerid,centerTeamNames);
+	if(!RoundPaused)
+		TextDrawHideForPlayer(playerid, PauseTD);
+}
+
+ShowEndRoundTextDraw(playerid) 
+{
+	TextDrawShowForPlayer( playerid, leftBG	 	); 		TextDrawShowForPlayer( playerid, rightBG    	);
+	TextDrawShowForPlayer( playerid, leftUpBG	); 		TextDrawShowForPlayer( playerid, rightUpBG  	);
+	TextDrawShowForPlayer( playerid, leftHeader );		TextDrawShowForPlayer( playerid, rightHeader 	);
+	TextDrawShowForPlayer( playerid, leftULine	); 		TextDrawShowForPlayer( playerid, rightULine 	);
+	TextDrawShowForPlayer( playerid, leftUpText ); 		TextDrawShowForPlayer( playerid, rightUpText 	);
+	TextDrawShowForPlayer( playerid, leftText	); 		TextDrawShowForPlayer( playerid, rightText	 	);
+ 	TextDrawShowForPlayer( playerid, leftTop	);		//TextDrawShowForPlayer( playerid, rightTop      	);
+ 	TextDrawShowForPlayer( playerid, lowerBG	);		TextDrawShowForPlayer( playerid, lowerULine 	);
+ 	TextDrawShowForPlayer( playerid, topTextScore);
+
+ 	//contents:
+    TextDrawShowForPlayer( playerid, leftNames	); 		TextDrawShowForPlayer( playerid, rightNames 	);
+    TextDrawShowForPlayer( playerid, leftKills	); 		TextDrawShowForPlayer( playerid, rightKills 	);
+    if(MatchEnded == false){
+		TextDrawHideForPlayer( playerid, leftDeaths );      TextDrawHideForPlayer( playerid, rightDeaths    );
+		TextDrawShowForPlayer( playerid, leftHP		); 		TextDrawShowForPlayer( playerid, rightHP		);
+	} else {
+		TextDrawHideForPlayer( playerid, leftHP 	);      TextDrawHideForPlayer( playerid, rightHP    	);
+		TextDrawShowForPlayer( playerid, leftDeaths	); 		TextDrawShowForPlayer( playerid, rightDeaths	);
+	}
+	TextDrawShowForPlayer( playerid, leftDmg	); 		TextDrawShowForPlayer( playerid, rightDmg	 	);
+    TextDrawShowForPlayer( playerid, leftAcc	); 		TextDrawShowForPlayer( playerid, rightAcc	 	);
+
+	if( MatchEnded == true )
+	{
+		TextDrawShowForPlayer( playerid, leftPlayed 	);
+		TextDrawShowForPlayer( playerid, rightPlayed	);
+
+		TextDrawHideForPlayer( playerid, teamWonHow	);
+	}
+	else
+	{
+		TextDrawShowForPlayer( playerid, teamWonHow	);
+	}
+
+	for(new i = 0; i < 3; i++) {
+		PlayerTextDrawSetString(playerid, DoingDamage[playerid][i], "_");
+		PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], "_");
+	}
+
+	PlayerTextDrawHide(playerid, DeathText[playerid][0]);
+	PlayerTextDrawHide(playerid, DeathText[playerid][1]);
+
+	Player[playerid][TextDrawOnScreen] = true;
+	return 1;
+}
+
+HideEndRoundTextDraw(playerid) 
+{
+	TextDrawHideForPlayer( playerid, leftBG	 	); 		TextDrawHideForPlayer( playerid, rightBG    	);
+	TextDrawHideForPlayer( playerid, leftUpBG	); 		TextDrawHideForPlayer( playerid, rightUpBG  	);
+	TextDrawHideForPlayer( playerid, leftHeader );		TextDrawHideForPlayer( playerid, rightHeader 	);
+	TextDrawHideForPlayer( playerid, leftULine	); 		TextDrawHideForPlayer( playerid, rightULine 	);
+	TextDrawHideForPlayer( playerid, leftUpText ); 		TextDrawHideForPlayer( playerid, rightUpText 	);
+	TextDrawHideForPlayer( playerid, leftText	); 		TextDrawHideForPlayer( playerid, rightText	 	);
+ 	TextDrawHideForPlayer( playerid, leftTop	);		//TextDrawHideForPlayer( playerid, rightTop      	);
+ 	TextDrawHideForPlayer( playerid, lowerBG	);		TextDrawHideForPlayer( playerid, lowerULine 	);
+ 	TextDrawHideForPlayer( playerid, topTextScore); 	TextDrawHideForPlayer( playerid, teamWonHow 	);
+ 	//contents:
+    TextDrawHideForPlayer( playerid, leftNames	); 		TextDrawHideForPlayer( playerid, rightNames 	);
+    TextDrawHideForPlayer( playerid, leftKills	); 		TextDrawHideForPlayer( playerid, rightKills 	);
+    TextDrawHideForPlayer( playerid, leftHP	 	); 		TextDrawHideForPlayer( playerid, rightHP	 	);
+    TextDrawHideForPlayer( playerid, leftDeaths); 		TextDrawHideForPlayer( playerid, rightDeaths	);
+    TextDrawHideForPlayer( playerid, leftDmg	); 		TextDrawHideForPlayer( playerid, rightDmg	 	);
+    TextDrawHideForPlayer( playerid, leftAcc	); 		TextDrawHideForPlayer( playerid, rightAcc	 	);
+    TextDrawHideForPlayer( playerid, leftPlayed ); 		TextDrawHideForPlayer( playerid, rightPlayed    );
+
+    Player[playerid][TextDrawOnScreen] = false;
+    return 1;
+}
+
+ShowMatchScoreBoard(playerid = -1)
+{
+	switch(playerid)
+	{
+		case -1:
+		{
+			TextDrawShowForAll(ScoreBoardBoxTD[0]);
+			TextDrawShowForAll(ScoreBoardBoxTD[1]);
+			TextDrawShowForAll(RoundsPlayed);
+			TextDrawShowForAll(TeamScoreText);
+			TextDrawShowForAll(TeamAttackerTD);
+			TextDrawShowForAll(TeamDefenderTD);
+			TextDrawShowForAll(MatchVersusTD);
+			TextDrawShowForAll(MatchScoreBoardSprite);
+		}
+		default:
+		{
+			TextDrawShowForPlayer(playerid, ScoreBoardBoxTD[0]);
+			TextDrawShowForPlayer(playerid, ScoreBoardBoxTD[1]);
+			TextDrawShowForPlayer(playerid, RoundsPlayed);
+			TextDrawShowForPlayer(playerid, TeamScoreText);
+			TextDrawShowForPlayer(playerid, TeamAttackerTD);
+			TextDrawShowForPlayer(playerid, TeamDefenderTD);
+			TextDrawShowForPlayer(playerid, MatchVersusTD);
+			TextDrawShowForPlayer(playerid, MatchScoreBoardSprite);
+		}
+	}
+}
+
+HideMatchScoreBoard(playerid = -1)
+{
+	switch(playerid)
+	{
+		case -1:
+		{
+			TextDrawHideForAll(ScoreBoardBoxTD[0]);
+			TextDrawHideForAll(ScoreBoardBoxTD[1]);
+			TextDrawHideForAll(RoundsPlayed);
+			TextDrawHideForAll(TeamScoreText);
+			TextDrawHideForAll(TeamAttackerTD);
+			TextDrawHideForAll(TeamDefenderTD);
+			TextDrawHideForAll(MatchVersusTD);
+			TextDrawHideForAll(MatchScoreBoardSprite);
+		}
+		default:
+		{
+			TextDrawHideForPlayer(playerid, ScoreBoardBoxTD[0]);
+			TextDrawHideForPlayer(playerid, ScoreBoardBoxTD[1]);
+			TextDrawHideForPlayer(playerid, RoundsPlayed);
+			TextDrawHideForPlayer(playerid, TeamScoreText);
+			TextDrawHideForPlayer(playerid, TeamAttackerTD);
+			TextDrawHideForPlayer(playerid, TeamDefenderTD);
+			TextDrawHideForPlayer(playerid, MatchVersusTD);
+			TextDrawHideForPlayer(playerid, MatchScoreBoardSprite);
+		}
+	}
+}
+
+UpdateTeamScoreTextDraw()
+{
+	TextDrawSetString(TeamScoreText, sprintf("%d     %d", TeamScore[ATTACKER], TeamScore[DEFENDER]));
+}
+
+UpdateRoundsPlayedTextDraw()
+{
+	TextDrawSetString(RoundsPlayed, sprintf( "~h~Ro~h~un~h~ds: ~h~%d/%d", CurrentRound, TotalRounds));
+}
+
+UpdateTeamNameTextDraw()
+{
+	TextDrawSetString(TeamAttackerTD, sprintf("~r~~h~~h~%s", TeamName[ATTACKER]));
+	TextDrawSetString(TeamDefenderTD, sprintf("~b~~h~~h~%s", TeamName[DEFENDER]));
+}
+
+// This finds the Y co-ordinate of the next free place for the team HP bar textdraw
+FindPlayerTeamBarY(playerid, &Float:y)
+{
+	y = TEAMBARS_BAR_START_Y; // Set the Y co-ordinate to the default value
+	foreach(new i : PlayerWithTeamBar) // Loops through all players who have a team bar created for them
+	{
+		if(!IsTeamTheSame(TeamBarsData[i][TeamBar_Team], Player[playerid][Team])) // If teams aren't the same
+			continue; // We won't make checks or we will mess up team team bars, so we skip to the next index.
+		
+		if(TeamBarsData[i][TeamBar_Y] == y) // If there's a player who got his team bar positioned at this Y co-ordinate
+		{
+			// So this Y isn't available and is already used.
+			y -= TEAMBARS_DIFF_Y; // Set Y value to the next slot/space value and repeat the checks on the next index (player who got team bar and is in the same team as playerid)
+			continue;
+		}
+		else // If this Y co-ordinate is free and not used
+			break; // We've found what we were looking for, get out of the loop now.
+	}
+}
+
+// This initializes team bars and creates their textdraws for a specific player
+// To be used when you add a player to the round for example, it should not be used for updating values
+CreatePlayerTeamBar(playerid)
+{
+	if(Iter_Contains(PlayerWithTeamBar, playerid))
+		DeletePlayerTeamBar(playerid);
+	
+	switch(Player[playerid][Team])
+	{
+		case ATTACKER:
+		{
+			new Float:y;
+			FindPlayerTeamBarY(playerid, y); // Finds a free space for textdraws to be created at
+			// Create team progress bar
+			TeamBarsData[playerid][TeamBar] = CreateProgressBar(TEAMBARS_BAR_START_X, y, 80.50, 9.19, TEAMBARS_ATTACKER_COLOR, 200.0);
+			// Create team bar textdraws
+			TeamBarsData[playerid][TeamBarText] = TextDrawCreate(TEAMBARS_TEXT_START_X, y, 
+				sprintf("~w~~h~%s ~r~~h~~h~~h~%.0f/%.0f", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
+			TextDrawBackgroundColor(TeamBarsData[playerid][TeamBarText], 51);
+			TextDrawFont(TeamBarsData[playerid][TeamBarText], 1);
+			TextDrawLetterSize(TeamBarsData[playerid][TeamBarText], 0.160000, 1.100000);
+			TextDrawColor(TeamBarsData[playerid][TeamBarText], -1);
+			TextDrawSetOutline(TeamBarsData[playerid][TeamBarText], 1);
+			TextDrawSetProportional(TeamBarsData[playerid][TeamBarText], 1);
+			
+			TeamBarsData[playerid][TeamBar_Team] = ATTACKER; // Set the team that this bar is going to be shown for
+			TeamBarsData[playerid][TeamBar_Y] = y; // Indicate that this Y pos is already taken, so that no other textdraws can be placed here
+			Iter_Add(PlayerWithTeamBar, playerid); // Add this player to the array that holds IDs of players who got team bars
+			UpdatePlayerTeamBar(playerid); // Initialize it with data
+			// Show them to who should see them
+			foreach(new i : Player)
+			{
+				if(Player[i][Playing] || Player[i][Spectating])
+				{
+					if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
+					{
+						TextDrawShowForPlayer(i, TeamBarsData[playerid][TeamBarText]);
+						ShowProgressBarForPlayer(i, TeamBarsData[playerid][TeamBar]);
+						TeamBarShownForPlayer[i][_:TeamBarsData[playerid][TeamBar]] = true;
+						UpdateProgressBar(TeamBarsData[playerid][TeamBar], i);
+					}
+				}
+			}
+		}
+		case DEFENDER:
+		{
+			new Float:y;
+			FindPlayerTeamBarY(playerid, y); // Finds a free space for textdraws to be created at
+			// Create team progress bar
+			TeamBarsData[playerid][TeamBar] = CreateProgressBar(TEAMBARS_BAR_START_X, y, 80.50, 9.19, TEAMBARS_DEFENDER_COLOR, 200.0);
+			// Create team bar textdraws
+			TeamBarsData[playerid][TeamBarText] = TextDrawCreate(TEAMBARS_TEXT_START_X, y, 
+				sprintf("~w~~h~%s ~b~~h~~h~~h~%.0f/%.0f", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
+			TextDrawBackgroundColor(TeamBarsData[playerid][TeamBarText], 51);
+			TextDrawFont(TeamBarsData[playerid][TeamBarText], 1);
+			TextDrawLetterSize(TeamBarsData[playerid][TeamBarText], 0.160000, 1.100000);
+			TextDrawColor(TeamBarsData[playerid][TeamBarText], -1);
+			TextDrawSetOutline(TeamBarsData[playerid][TeamBarText], 1);
+			TextDrawSetProportional(TeamBarsData[playerid][TeamBarText], 1);
+			
+			TeamBarsData[playerid][TeamBar_Team] = DEFENDER; // Set the team that this bar is going to be shown for
+			TeamBarsData[playerid][TeamBar_Y] = y; // Indicate that this Y pos is already taken, so that no other textdraws can be placed here
+			Iter_Add(PlayerWithTeamBar, playerid); // Add this player to the array that holds IDs of players who got team bars
+			UpdatePlayerTeamBar(playerid); // Initialize it with data
+			// Show them to who should see them
+			foreach(new i : Player)
+			{
+				if(Player[i][Playing] || Player[i][Spectating])
+				{
+					if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
+					{
+						TextDrawShowForPlayer(i, TeamBarsData[playerid][TeamBarText]);
+						ShowProgressBarForPlayer(i, TeamBarsData[playerid][TeamBar]);
+						TeamBarShownForPlayer[i][_:TeamBarsData[playerid][TeamBar]] = true;
+						UpdateProgressBar(TeamBarsData[playerid][TeamBar], i);
+					}
+				}
+			}
+		}
+	}
+	return 1;
+}
+
+// Shows team bars for a specific player
+ShowTeamBarsForPlayer(playerid)
+{
+	HideTeamBarsForPlayer(playerid);
+	if(Current == -1)
+		return 1;
+	
+	new Bar:barid;
+	foreach(new i : PlayerWithTeamBar) // Loops through all players who have a team bar created for them
+	{
+		if(!IsTeamTheSame(Player[playerid][Team], TeamBarsData[i][TeamBar_Team]))
+			continue;
+		
+		barid = TeamBarsData[i][TeamBar];
+		if(TeamBarShownForPlayer[playerid][_:barid])
+			continue;
+		
+		TeamBarShownForPlayer[playerid][_:barid] = true;
+		TextDrawShowForPlayer(playerid, TeamBarsData[i][TeamBarText]);
+		ShowProgressBarForPlayer(playerid, barid);
+		UpdateProgressBar(barid, playerid);
+	}
+	return 1;
+}
+
+// Hide a specifc team bar for a player
+TeamBarHideForPlayer(playerid, barofplayerid)
+{
+	new Bar:barid;
+	barid = TeamBarsData[barofplayerid][TeamBar];
+	
+	if(!TeamBarShownForPlayer[playerid][_:barid])
+		return;
+	
+	TeamBarShownForPlayer[playerid][_:barid] = false;
+	TextDrawHideForPlayer(playerid, TeamBarsData[barofplayerid][TeamBarText]);
+	HideProgressBarForPlayer(playerid, barid);
+}
+
+// Hides team bars for a specific player
+HideTeamBarsForPlayer(playerid)
+{
+	new Bar:barid;
+	foreach(new i : PlayerWithTeamBar) // Loops through all players who have a team bar created for them
+	{
+		if(!IsTeamTheSame(Player[playerid][Team], TeamBarsData[i][TeamBar_Team]))
+			continue;
+		
+		barid = TeamBarsData[i][TeamBar];
+		if(!TeamBarShownForPlayer[playerid][_:barid])
+			continue;
+		
+		TeamBarShownForPlayer[playerid][_:barid] = false;
+		TextDrawHideForPlayer(playerid, TeamBarsData[i][TeamBarText]);
+		HideProgressBarForPlayer(playerid, barid);
+	}
+	return 1;
+}
+
+// Hide all team bars for a player with a force (doesn't matter if they're shown or not)
+HideAllTeamBarsForPlayer(playerid)
+{
+	new Bar:barid;
+	foreach(new i : PlayerWithTeamBar) // Loops through all players who have a team bar created for them
+	{
+		barid = TeamBarsData[i][TeamBar];
+		TeamBarShownForPlayer[playerid][_:barid] = false;
+		TextDrawHideForPlayer(playerid, TeamBarsData[i][TeamBarText]);
+		HideProgressBarForPlayer(playerid, barid);
+	}
+	return 1;
+}
+
+// This deletes a player team bar
+// To be used when round ends or when a player is removed
+DeletePlayerTeamBar(playerid)
+{
+	if(!Iter_Contains(PlayerWithTeamBar, playerid))
+		return 0;
+	
+	// Delete the textdraws
+	DestroyProgressBar(TeamBarsData[playerid][TeamBar]);
+	TextDrawDestroy(TeamBarsData[playerid][TeamBarText]);
+	TeamBarsData[playerid][TeamBar_Y] = Float:INVALID_PLAYER_ID;
+	TeamBarsData[playerid][TeamBar_Team] = REFEREE;
+	Iter_Remove(PlayerWithTeamBar, playerid); // Remove this player from the array that holds IDs of players who got team bars
+	return 1;
+}
+
+// This deletes all team bars
+// Usually used when a round is ended
+DeleteAllTeamBars()
+{
+	foreach(new i : PlayerWithTeamBar) // Loops through all players who have a team bar created for them
+	{
+		// Delete the textdraws
+		DestroyProgressBar(TeamBarsData[i][TeamBar]);
+		TextDrawDestroy(TeamBarsData[i][TeamBarText]);
+		TeamBarsData[i][TeamBar_Y] = Float:INVALID_PLAYER_ID;
+		TeamBarsData[i][TeamBar_Team] = REFEREE;
+	}
+	Iter_Clear(PlayerWithTeamBar);
+	return 1;
+}
+
+// This updates a player team bar with the correct damage done and HP
+// To be used when player does damage or their health is changed
+UpdatePlayerTeamBar(playerid)
+{
+	if(!Iter_Contains(PlayerWithTeamBar, playerid)) // Check if this player has a team bar or not
+		return 0;
+	
+	if(Player[playerid][Playing])
+	{
+		switch(Player[playerid][Team])
+		{
+			case ATTACKER:
+			{
+				SetProgressBarValue(TeamBarsData[playerid][TeamBar], Player[playerid][pHealth] + Player[playerid][pArmour]);
+				switch(Player[playerid][AskingForHelp])
+				{
+					case true:
+					{
+						SetProgressBarColor(TeamBarsData[playerid][TeamBar], TEAMBARS_ATTACKER_HELP_COLOR);
+					}
+					case false:
+					{
+						SetProgressBarColor(TeamBarsData[playerid][TeamBar], TEAMBARS_ATTACKER_COLOR);
+					}
+				}
+				TextDrawSetString(TeamBarsData[playerid][TeamBarText], 
+					sprintf("~w~~h~%s ~r~~h~~h~~h~%.0f / %.0f", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
+				foreach(new i : Player)
+				{
+					if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
+					{
+						if(Player[i][Playing] || Player[i][Spectating])
+						{
+							UpdateProgressBar(TeamBarsData[playerid][TeamBar], i);
+						}
+						else
+							TeamBarHideForPlayer(i, playerid);
+					}
+					else
+					{
+						if(TeamBarShownForPlayer[i][_:TeamBarsData[playerid][TeamBar]])
+							TeamBarHideForPlayer(i, playerid);
+					}
+				}
+			}
+			case DEFENDER:
+			{
+				SetProgressBarValue(TeamBarsData[playerid][TeamBar], Player[playerid][pHealth] + Player[playerid][pArmour]);
+				switch(Player[playerid][AskingForHelp])
+				{
+					case true:
+					{
+						SetProgressBarColor(TeamBarsData[playerid][TeamBar], TEAMBARS_DEFENDER_HELP_COLOR);
+					}
+					case false:
+					{
+						SetProgressBarColor(TeamBarsData[playerid][TeamBar], TEAMBARS_DEFENDER_COLOR);
+					}
+				}
+				TextDrawSetString(TeamBarsData[playerid][TeamBarText], 
+					sprintf("~w~~h~%s ~b~~h~~h~~h~%.0f / %.0f", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
+				foreach(new i : Player)
+				{
+					if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
+					{
+						if(Player[i][Playing] || Player[i][Spectating])
+						{
+							UpdateProgressBar(TeamBarsData[playerid][TeamBar], i);
+						}
+						else
+							TeamBarHideForPlayer(i, playerid);
+					}
+					else
+					{
+						if(TeamBarShownForPlayer[i][_:TeamBarsData[playerid][TeamBar]])
+							TeamBarHideForPlayer(i, playerid);
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		switch(Player[playerid][Team])
+		{
+			case ATTACKER:
+			{
+				SetProgressBarValue(TeamBarsData[playerid][TeamBar], 0.0);
+				TextDrawSetString(TeamBarsData[playerid][TeamBarText], 
+					sprintf("~w~~h~%s ~r~~h~~h~~h~Dead / %.0f", Player[playerid][NameWithoutTag], Player[playerid][RoundDamage]));
+				foreach(new i : Player)
+				{
+					if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
+					{
+						if(Player[i][Playing] || Player[i][Spectating])
+						{
+							UpdateProgressBar(TeamBarsData[playerid][TeamBar], i);
+						}
+						else
+							TeamBarHideForPlayer(i, playerid);
+					}
+					else
+					{
+						if(TeamBarShownForPlayer[i][_:TeamBarsData[playerid][TeamBar]])
+							TeamBarHideForPlayer(i, playerid);
+					}
+				}
+			}
+			case DEFENDER:
+			{
+				SetProgressBarValue(TeamBarsData[playerid][TeamBar], 0.0);
+				TextDrawSetString(TeamBarsData[playerid][TeamBarText], 
+					sprintf("~w~~h~%s ~b~~h~~h~~h~Dead / %.0f", Player[playerid][NameWithoutTag], Player[playerid][RoundDamage]));
+				foreach(new i : Player)
+				{
+					if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
+					{
+						if(Player[i][Playing] || Player[i][Spectating])
+						{
+							UpdateProgressBar(TeamBarsData[playerid][TeamBar], i);
+						}
+						else
+							TeamBarHideForPlayer(i, playerid);
+					}
+					else
+					{
+						if(TeamBarShownForPlayer[i][_:TeamBarsData[playerid][TeamBar]])
+							TeamBarHideForPlayer(i, playerid);
+					}
+				}
+			}
+		}
+	}
+	return 1;
+}
+
+InitPlayerInterface(playerid)
+{
+	for(new i = 0; i < MAX_PLAYER_INTERFACE_ASPECTS; i ++)
+		PlayerInterface[playerid][i] = true;
+}
+
+// Toggle gamemode HUD
+TogglePlayerInterface(playerid, bool:toggle, interface = -1)
+{
+	switch(interface)
+	{
+		case -1: // all 
+		{
+			PlayerInterface[playerid][INTERFACE_SPEC] = toggle;
+			PlayerInterface[playerid][INTERFACE_NET] = toggle;
+			PlayerInterface[playerid][INTERFACE_HP] = toggle;
+			switch(toggle)
+			{
+				case false:
+				{
+					PlayerTextDrawHide(playerid, WhoSpec[playerid]);
+					PlayerTextDrawHide(playerid, FPSPingPacket[playerid]);
+					PlayerTextDrawHide(playerid, HPTextDraw_TD[playerid]);
+					PlayerTextDrawHide(playerid, ArmourTextDraw[playerid]);
+				}
+				case true:
+				{
+					PlayerTextDrawShow(playerid, WhoSpec[playerid]);
+					PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
+					PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid]);
+					PlayerTextDrawShow(playerid, ArmourTextDraw[playerid]);
+				}
+			}
+			new str[70];
+			format(str, sizeof(str), "UPDATE Players SET InterfaceSpec = %d WHERE Name = '%s'", (PlayerInterface[playerid][INTERFACE_SPEC] == true ? 1 : 0), DB_Escape(Player[playerid][Name]));
+			db_free_result(db_query(sqliteconnection, str));
+			format(str, sizeof(str), "UPDATE Players SET InterfaceNet = %d WHERE Name = '%s'", (PlayerInterface[playerid][INTERFACE_NET] == true ? 1 : 0), DB_Escape(Player[playerid][Name]));
+			db_free_result(db_query(sqliteconnection, str));
+			format(str, sizeof(str), "UPDATE Players SET InterfaceHP = %d WHERE Name = '%s'", (PlayerInterface[playerid][INTERFACE_HP] == true ? 1 : 0), DB_Escape(Player[playerid][Name]));
+			db_free_result(db_query(sqliteconnection, str));
+		}
+		case INTERFACE_SPEC:
+		{
+			PlayerInterface[playerid][INTERFACE_SPEC] = toggle;
+			switch(toggle)
+			{
+				case false:
+				{
+					PlayerTextDrawHide(playerid, WhoSpec[playerid]);
+				}
+				case true:
+				{
+					PlayerTextDrawShow(playerid, WhoSpec[playerid]);
+				}
+			}
+			new str[70];
+			format(str, sizeof(str), "UPDATE Players SET InterfaceSpec = %d WHERE Name = '%s'", (PlayerInterface[playerid][INTERFACE_SPEC] == true ? 1 : 0), DB_Escape(Player[playerid][Name]));
+			db_free_result(db_query(sqliteconnection, str));
+		}
+		case INTERFACE_NET:
+		{
+			PlayerInterface[playerid][INTERFACE_NET] = toggle;
+			switch(toggle)
+			{
+				case false:
+				{
+					PlayerTextDrawHide(playerid, FPSPingPacket[playerid]);
+				}
+				case true:
+				{
+					PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
+				}
+			}
+			new str[70];
+			format(str, sizeof(str), "UPDATE Players SET InterfaceNet = %d WHERE Name = '%s'", (PlayerInterface[playerid][INTERFACE_NET] == true ? 1 : 0), DB_Escape(Player[playerid][Name]));
+			db_free_result(db_query(sqliteconnection, str));
+		}
+		case INTERFACE_HP:
+		{
+			PlayerInterface[playerid][INTERFACE_HP] = toggle;
+			switch(toggle)
+			{
+				case false:
+				{
+					PlayerTextDrawHide(playerid, HPTextDraw_TD[playerid]);
+					PlayerTextDrawHide(playerid, ArmourTextDraw[playerid]);
+				}
+				case true:
+				{
+					PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid]);
+					PlayerTextDrawShow(playerid, ArmourTextDraw[playerid]);
+				}
+			}
+			new str[70];
+			format(str, sizeof(str), "UPDATE Players SET InterfaceHP = %d WHERE Name = '%s'", (PlayerInterface[playerid][INTERFACE_HP] == true ? 1 : 0), DB_Escape(Player[playerid][Name]));
+			db_free_result(db_query(sqliteconnection, str));
+		}
+	}
+}

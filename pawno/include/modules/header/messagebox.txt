@@ -1,0 +1,21 @@
+/*
+		MessageBox script
+*/
+
+// Message box types
+#define MAX_MSGBOX_TYPES		3
+
+#define MSGBOX_TYPE_TOP			0
+#define MSGBOX_TYPE_MIDDLE		1
+#define MSGBOX_TYPE_BOTTOM		2
+
+enum MsgBoxStruct
+{
+	PlayerText:caption_TD[MAX_MSGBOX_TYPES],
+	PlayerText:line_TD,
+	PlayerText:info_TD[MAX_MSGBOX_TYPES],
+	MsgBoxtimer[MAX_MSGBOX_TYPES]
+
+}
+
+new MsgBoxData[MAX_PLAYERS][MsgBoxStruct];

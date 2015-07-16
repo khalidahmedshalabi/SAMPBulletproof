@@ -1,0 +1,6 @@
+/*	
+	Written by Niko Boy
+	Linking function to make a new string that would
+	reformat string by replacing COL_PRIM by selected
+	color layout
+*/

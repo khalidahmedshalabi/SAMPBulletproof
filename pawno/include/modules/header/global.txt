@@ -1,0 +1,41 @@
+/*
+	Global variables
+*/
+
+new REPLACE_ToAddID[MAX_PLAYERS]; // replace with dialogs
+new ThemeChange_listitem[MAX_PLAYERS char];
+
+enum ShortcutsStruct // shortcut messages
+{
+	Shortcut1[50],
+	Shortcut2[50],
+	Shortcut3[50],
+	Shortcut4[50]
+}
+
+new PlayerShortcut[MAX_PLAYERS][ShortcutsStruct];
+new EditingShortcutOf[MAX_PLAYERS char];
+new LastClickedPlayer[MAX_PLAYERS];
+enum TargetInfoData_STRUCT
+{
+	PlayerText:TargetInfoTD,
+	TargetInfoTimer,
+	TargetInfoLastTick,
+	TargetInfoLastTarget
+}
+
+new TargetInfoData[MAX_PLAYERS][TargetInfoData_STRUCT];
+
+new ChangingSkinOfTeam[MAX_PLAYERS];
+
+#define MAX_SERVER_PASS_LENGH 6
+new WeaponStatsStr[3000];
+new ServerPass[MAX_SERVER_PASS_LENGH + 9]; // contains "password " plus the password itself
+new hostname[64];
+new AKAString[1024];
+
+new bool:PlayerOnInterface[MAX_PLAYERS char];
+new bool:AllMuted = false;
+new bool:DatabaseLoading = false;
+new AnnTimer;
+
