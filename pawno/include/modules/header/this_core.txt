@@ -3,7 +3,7 @@
 */
 
 #define GM_NAME				"Bulletproof 0.1-b9"
-#define GM_WEBSITE			""
+#define GM_WEBSITE			"www.infinite-gaming.ml/khk/bulletproofgm"
 
 #define GTAV_SWITCH_MENU	0	// Toggles the gta v switch menu (gunswitch library)
 #define MATCH_SYNC      	0   // (Beta) Uploads each match data somewhere so that it can be easily displayed in a website.

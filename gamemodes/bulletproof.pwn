@@ -77,7 +77,7 @@ native IsValidVehicle(vehicleid);
 #include "modules\src\duel.inc"
 #include "modules\src\spectate.inc"
 #include "modules\src\commands.inc"
-//#tryinclude "modules\src\antimacro.inc" // The anti sprint macros source code is not open
+#tryinclude "modules\src\antimacro.inc" // The anti sprint macros source code is not open
 #include "modules\src\messagebox.inc"
 #include "modules\src\deathcam.inc"
 #include "modules\src\gunmenu.inc"
