@@ -195,7 +195,7 @@ public OnPlayerRequestClass(playerid, classid)
 			"Login",
 			"Quit"
 		);
-		return 0;
+		return 1;
 	}
 	#endif
 	// Login player
@@ -209,7 +209,6 @@ public OnPlayerRequestClass(playerid, classid)
 		{
 		    ShowPlayerDialog(playerid, DIALOG_REGISTER, DIALOG_STYLE_PASSWORD,"{FFFFFF}Registration Dialog","{FFFFFF}Type your password below to register:","Register","Leave");
             db_free_result(result);
-            return 0;
 		}
 		else
 	 	{
@@ -231,13 +230,11 @@ public OnPlayerRequestClass(playerid, classid)
 				MessageBox(playerid, MSGBOX_TYPE_TOP, "~y~select your class", "~>~ to view next class~n~~<~ to view prev class~n~~n~(SPAWN) to select the current class", 7000);
 				LoginPlayer(playerid, res);
 			    db_free_result(res);
-			    return 1;
 			}
 			else
 			{
 				ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD,"{FFFFFF}Login Dialog","{FFFFFF}Type your password below to log in:","Login","Leave");
                 db_free_result(res);
-				return 0;
 			}
 		}
 	}
