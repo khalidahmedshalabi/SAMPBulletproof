@@ -19,7 +19,7 @@ http://www.infinite-gaming.ml/khk/bulletproofgm/
 Here's a little explaining on layout. Take into consideration that it's planned to be changed. [Know more!](https://github.com/KHKKhalid/Bulletproof-Gamemode/issues/8) 
 
 - *gamemodes\bulletproof.pwn* - this is the master, it has all SA-MP native callbacks and global code
-- *modules\src\.inc* - librares and special scripts (e.g anti macro script, match handler and etc)
+- *modules\src\.inc* - libraries and special scripts (e.g anti macro script, match handler and etc)
 - *modules\header\* - header files: variables, constants, arrays and etc.
 
 ### Little advice: writing code and compiling
