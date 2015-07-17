@@ -195,11 +195,14 @@ public OnPlayerRequestClass(playerid, classid)
 			"Login",
 			"Quit"
 		);
-		return 1;
 	}
 	#endif
 	// Login player
+	#if defined _league_included
+	else if(Player[playerid][Logged] == false)
+	#else
 	if(Player[playerid][Logged] == false)
+	#endif
 	{
 		new Query[128];
 		format(Query, sizeof(Query), "SELECT Name FROM Players WHERE Name = '%s'", DB_Escape(Player[playerid][Name]));
