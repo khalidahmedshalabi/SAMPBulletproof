@@ -4519,9 +4519,8 @@ YCMD:war(playerid, params[], help)
 	}
 	if(Current != -1) return SendErrorMessage(playerid,"Can't use this command while round is on.");
 
-	new iString[160], TeamAName[6], TeamBName[6];
-	if(sscanf(params, "sz", TeamAName, TeamBName)) return SendUsageMessage(playerid,"/war ([Team A] [Team B]) (end)");
-
+	new iString[160], TeamAName[7], TeamBName[7];
+	if(sscanf(params, "zz", TeamAName, TeamBName)) return SendUsageMessage(playerid,"/war ([Team A] [Team B]) (end)");
 	if(strcmp(TeamAName, "end", true) == 0 && isnull(TeamBName) && WarMode == true)
 	{
 		#if defined _league_included
@@ -4547,14 +4546,11 @@ YCMD:war(playerid, params[], help)
 	format(TeamName[ATTACKER_SUB], 11, "%s Sub", TeamName[ATTACKER]);
 	format(TeamName[DEFENDER], 7, TeamBName);
 	format(TeamName[DEFENDER_SUB], 11, "%s Sub", TeamName[DEFENDER]);
-
 	UpdateTeamScoreTextDraw();
 	UpdateRoundsPlayedTextDraw();
 	UpdateTeamNameTextDraw();
-
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has enabled the Match-Mode.", Player[playerid][Name]);
 	SendClientMessageToAll(-1, iString);
-	
 	UpdateTeamNamesTextdraw();
 
 	MatchRoundsStarted = 0;
