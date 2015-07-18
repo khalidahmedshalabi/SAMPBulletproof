@@ -41,7 +41,7 @@ LoadMatchScoreTextDraws()
 	TextDrawAlignment(TeamAttackerTD, 1);
 	TextDrawBackgroundColor(TeamAttackerTD, 0x00000000);
 	TextDrawFont(TeamAttackerTD, 1);
-	TextDrawLetterSize(TeamAttackerTD, 0.300000, 1.200000);
+	TextDrawLetterSize(TeamAttackerTD, 0.200000, 1.000000);
 	TextDrawColor(TeamAttackerTD, -1);
 	TextDrawSetOutline(TeamAttackerTD, 1);
 	TextDrawSetProportional(TeamAttackerTD, 1);
@@ -51,7 +51,7 @@ LoadMatchScoreTextDraws()
 	TextDrawAlignment(TeamDefenderTD, 3);
 	TextDrawBackgroundColor(TeamDefenderTD, 0x00000000);
 	TextDrawFont(TeamDefenderTD, 1);
-	TextDrawLetterSize(TeamDefenderTD, 0.300000, 1.100000);
+	TextDrawLetterSize(TeamDefenderTD, 0.200000, 1.000000);
 	TextDrawColor(TeamDefenderTD, -430226433);
 	TextDrawSetOutline(TeamDefenderTD, 1);
 	TextDrawSetProportional(TeamDefenderTD, 1);
@@ -628,7 +628,7 @@ RoundTextdrawsCreate()
 
 	rightBlueBG = TextDrawCreate	(	311.741302, 	401.283630, "-"				);
 	TextDrawLetterSize				(	rightBlueBG, 	28.770492, 7.287504			);
-	TextDrawAlignment				(	rightBlueBG, 	1							);
+	TextDrawAlignment				(	rightBlueBG, 	3							);
 	TextDrawColor					(	rightBlueBG, 	0x00000022					);
 	TextDrawSetShadow				(	rightBlueBG, 	-1							);
 	TextDrawSetOutline				(	rightBlueBG,	0							);
