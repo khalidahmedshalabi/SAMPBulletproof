@@ -628,7 +628,7 @@ RoundTextdrawsCreate()
 
 	rightBlueBG = TextDrawCreate	(	311.741302, 	401.283630, "-"				);
 	TextDrawLetterSize				(	rightBlueBG, 	28.770492, 7.287504			);
-	TextDrawAlignment				(	rightBlueBG, 	3							);
+	TextDrawAlignment				(	rightBlueBG, 	1							);
 	TextDrawColor					(	rightBlueBG, 	0x00000022					);
 	TextDrawSetShadow				(	rightBlueBG, 	-1							);
 	TextDrawSetOutline				(	rightBlueBG,	0							);
@@ -900,7 +900,7 @@ LoadPlayerTextDraws(playerid)
 UpdateTeamNamesTextdraw()
 {
 	new str[128];
-	format(str, sizeof(str), "~r~~h~~h~%s \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ~b~~h~~h~%s", TeamName[ATTACKER], TeamName[DEFENDER]);
+	format(str, sizeof(str), "~r~~h~~h~%s \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ~b~~h~~h~%s", TeamName[ATTACKER], TeamName[DEFENDER]);
 	TextDrawSetString(centerTeamNames , str);
 	return 1;
 }
