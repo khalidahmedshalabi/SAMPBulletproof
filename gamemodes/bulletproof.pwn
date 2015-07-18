@@ -368,6 +368,10 @@ public OnPlayerRequestSpawn(playerid)
 		SpawnConnectedPlayer(playerid, Player[playerid][RequestedClass]);
 		return 1;
 	}
+	else
+	{
+	    OnPlayerRequestClass(playerid, Player[playerid][RequestedClass]);
+	}
 	return 0;
 }
 
