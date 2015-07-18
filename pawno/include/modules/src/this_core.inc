@@ -27,7 +27,7 @@ InitScriptCoreSettings()
 
 CheckServerHostname()
 {
-	GetConsoleVarAsString("hostname", hostname, sizeof(hostname));
+	GetServerVarAsString("hostname", hostname, sizeof(hostname));
 	AC_FixServerHostname();
 }
 
@@ -91,9 +91,9 @@ AddToServersDatabase()
 		return;
 	
 	new ServerIP[30];
-    GetConsoleVarAsString("bind", ServerIP, sizeof(ServerIP));
+    GetServerVarAsString("bind", ServerIP, sizeof(ServerIP));
 	
-    new port = GetConsoleVarAsInt("port");
+    new port = GetServerVarAsInt("port");
 
     if(!strlen(ServerIP)) ServerIP = "noip";
 

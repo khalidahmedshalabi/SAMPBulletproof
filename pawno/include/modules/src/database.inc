@@ -30,8 +30,8 @@ LoadDatabase()
 {
 	//db_close(sqliteconnection);
 	sqliteconnection = db_open("AAD.db");
-	db_debug_openfiles();
-	db_debug_openresults();
+	//db_debug_openfiles();
+	//db_debug_openresults();
 	DatabaseLoading = true;
 	SetTimer("DatabaseDefaultReload", 100, false);
 	return 1;

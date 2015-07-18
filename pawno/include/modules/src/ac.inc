@@ -32,7 +32,7 @@ AC_FixServerHostname()
 {
 	if(strlen(hostname) == 0)
 	{
-		GetConsoleVarAsString("hostname", hostname, sizeof(hostname));
+		GetServerVarAsString("hostname", hostname, sizeof(hostname));
 	}
 	if(IsACPluginLoaded() && IsACEnabled())
 	{
