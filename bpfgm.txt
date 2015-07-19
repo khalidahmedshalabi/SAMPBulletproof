@@ -4,3 +4,4 @@ My changelog on bulletproof gamemode:
 - Added /kill command
 - Changed attackers color from red to green/lime
 - Changed main color to green/lime
+- Changed names from Alpha to Attackers
