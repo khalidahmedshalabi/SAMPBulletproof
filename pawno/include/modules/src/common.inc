@@ -74,7 +74,7 @@ CreateDeadBody(playerid, killerid, reason, Float:distance = 0.0, Float:x = 0.0, 
 	{
 		case ATTACKER:
 		{
-			color = 0xF58E8EFF;
+			color = 0x8EF590FF;
 		}
 		case DEFENDER:
 		{
@@ -1857,17 +1857,17 @@ FixVsTextDraw(exception = -1)
 			    }
 			}
 		}
-	    format(str, sizeof(str), "  ~r~~h~%d  %sVs  ~b~~h~%d", ct[0], MAIN_TEXT_COLOUR, ct[1]);
+	    format(str, sizeof(str), "  ~g~~h~%d  %sVs  ~b~~h~%d", ct[0], MAIN_TEXT_COLOUR, ct[1]);
 	}
 	else
 	{
 		if(GameType == ARENA)
 		{
-			format(str, sizeof(str), "%sArena %s(~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
+			format(str, sizeof(str), "%sArena %s(~g~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
 	    }
 		else
 		{
-	        format(str, sizeof(str), "%sBase %s(~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
+	        format(str, sizeof(str), "%sBase %s(~g~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
 	    }
 	}
 	foreach(new i : Player)

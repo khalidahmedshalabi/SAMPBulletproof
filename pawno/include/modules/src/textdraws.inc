@@ -37,7 +37,7 @@ LoadMatchScoreTextDraws()
 	TextDrawSetProportional(RoundsPlayed, 1);
 	TextDrawSetSelectable(RoundsPlayed, 0);
 
-	TeamAttackerTD = TextDrawCreate(499.000000, 83.000000, "~r~~h~~h~alpha");
+	TeamAttackerTD = TextDrawCreate(499.000000, 83.000000, "~g~~h~~h~attackers");
 	TextDrawAlignment(TeamAttackerTD, 1);
 	TextDrawBackgroundColor(TeamAttackerTD, 0x00000000);
 	TextDrawFont(TeamAttackerTD, 1);
@@ -47,7 +47,7 @@ LoadMatchScoreTextDraws()
 	TextDrawSetProportional(TeamAttackerTD, 1);
 	TextDrawSetSelectable(TeamAttackerTD, 0);
 	
-	TeamDefenderTD = TextDrawCreate(610.000000, 83.000000, "~b~~h~~h~beta");
+	TeamDefenderTD = TextDrawCreate(610.000000, 83.000000, "~b~~h~~h~defenders");
 	TextDrawAlignment(TeamDefenderTD, 3);
 	TextDrawBackgroundColor(TeamDefenderTD, 0x00000000);
 	TextDrawFont(TeamDefenderTD, 1);
@@ -293,7 +293,7 @@ ResultTextdrawsCreate()
 	TextDrawAlignment			(	leftBG, 		1							);
 	TextDrawColor				(	leftBG, 		0							);
 	TextDrawUseBox				(	leftBG, 		true						);
-	TextDrawBoxColor			(	leftBG, 		0xFF736F22					);
+	TextDrawBoxColor			(	leftBG, 		0x82FF6F22					);
 	TextDrawSetShadow			(	leftBG, 		0);
 	TextDrawSetOutline			(	leftBG, 		0);
 	TextDrawFont				(	leftBG, 		0);
@@ -337,7 +337,7 @@ ResultTextdrawsCreate()
 	TextDrawAlignment          	(	leftHeader,		1							);
 	TextDrawColor            	(	leftHeader,		0							);
 	TextDrawUseBox            	(	leftHeader,		true						);
-	TextDrawBoxColor            (	leftHeader,		0xFF736F11					);
+	TextDrawBoxColor            (	leftHeader,		0x82FF6F11					);
 	TextDrawSetShadow          	(	leftHeader,		0							);
 	TextDrawSetOutline         	(	leftHeader,		0							);
 	TextDrawFont            	(	leftHeader,		0							);
@@ -356,10 +356,10 @@ ResultTextdrawsCreate()
 	leftULine = TextDrawCreate 	(	116.105949,		169.166824,		"-"			);
 	TextDrawLetterSize         	(	leftULine,		13.658081,		0.270249	);
 	TextDrawAlignment          	(	leftULine,		1							);
-	TextDrawColor            	(	leftULine,		0xFF0000FF							);
+	TextDrawColor            	(	leftULine,		0x00FF04FF							);
 	TextDrawSetShadow          	(	leftULine,		0							);
 	TextDrawSetOutline         	(	leftULine,		10							);
-	TextDrawBackgroundColor    	(	leftULine,		0xFF0000FF							);
+	TextDrawBackgroundColor    	(	leftULine,		0x00FF04FF							);
 	TextDrawFont            	(	leftULine,		1							);
 	TextDrawSetProportional    	(	leftULine,		1							);
 
@@ -384,7 +384,7 @@ ResultTextdrawsCreate()
 	TextDrawSetOutline         	(	lowerBG,		0							);
 	TextDrawFont            	(	lowerBG,		0							);
 
-	leftUpText = TextDrawCreate(	128.094100,		143.499984,		"~r~~h~~h~Attackers"	);
+	leftUpText = TextDrawCreate(	128.094100,		143.499984,		"~g~~h~~h~Attackers"	);
 	TextDrawLetterSize         	(	leftUpText,		0.225058,		1.315831	);
 	TextDrawAlignment          	(	leftUpText,		1							);
 	TextDrawColor            	(	leftUpText,		-1							);
@@ -404,7 +404,7 @@ ResultTextdrawsCreate()
 	TextDrawFont            	(	rightUpText,	3							);
 	TextDrawSetProportional    	(	rightUpText,	1							);
 
-	topTextScore = TextDrawCreate(	302.870422,		111.824943,		"_"			);//~y~~h~TCW~n~~b~~h~~h~Ateam 9 ~w~- ~r~~h~0 Bteam
+	topTextScore = TextDrawCreate(	302.870422,		111.824943,		"_"			);//~y~~h~TCW~n~~b~~h~~h~Ateam 9 ~w~- ~g~~h~0 Bteam
 	TextDrawLetterSize         	(	topTextScore,	0.275128,		1.917916	);
 	TextDrawAlignment          	(	topTextScore,	2							);
 	TextDrawColor            	(	topTextScore,	-1							);
@@ -420,7 +420,7 @@ ResultTextdrawsCreate()
 	TextDrawColor          		(	leftText,		-1							);
 	TextDrawSetShadow          	(	leftText,		0							);
 	TextDrawSetOutline         	(	leftText,		1							);
-	TextDrawBackgroundColor     (	leftText,		0xFF003333					);
+	TextDrawBackgroundColor     (	leftText,		0x22FF0033					);
 	TextDrawFont            	(	leftText,		1							);
 	TextDrawSetProportional    	(	leftText,		1							);
 
@@ -472,7 +472,7 @@ ResultTextdrawsCreate()
 	TextDrawColor            	(	leftNames,		-1							);
 	TextDrawSetShadow          	(	leftNames,		0							);
 	TextDrawSetOutline         	(	leftNames,		1							);
-	TextDrawBackgroundColor    	(	leftNames,		0xFF003322					);
+	TextDrawBackgroundColor    	(	leftNames,		0x2FFF0022					);
 	TextDrawFont           		(	leftNames,		1							);
 	TextDrawSetProportional    	(	leftNames,		1							);
 	//left content
@@ -482,7 +482,7 @@ ResultTextdrawsCreate()
 	TextDrawColor            	(	leftKills,		-1							);
 	TextDrawSetShadow          	(	leftKills,		0							);
 	TextDrawSetOutline         	(	leftKills,		1							);
-	TextDrawBackgroundColor    	(	leftKills,		0xFF003322					);
+	TextDrawBackgroundColor    	(	leftKills,		0x2FFF0022					);
 	TextDrawFont           		(	leftKills,		1							);
 	TextDrawSetProportional    	(	leftKills,		1							);
 	//left content
@@ -492,7 +492,7 @@ ResultTextdrawsCreate()
 	TextDrawColor            	(	leftHP,			-1							);
 	TextDrawSetShadow          	(	leftHP,			0							);
 	TextDrawSetOutline         	(	leftHP,			1							);
-	TextDrawBackgroundColor    	(	leftHP,			0xFF003322					);
+	TextDrawBackgroundColor    	(	leftHP,			0x2FFF0022					);
 	TextDrawFont           		(	leftHP,			1							);
 	TextDrawSetProportional    	(	leftHP,			1							);
 
@@ -503,7 +503,7 @@ ResultTextdrawsCreate()
 	TextDrawColor            	(	leftDeaths,			-1							);
 	TextDrawSetShadow          	(	leftDeaths,			0							);
 	TextDrawSetOutline         	(	leftDeaths,			1							);
-	TextDrawBackgroundColor    	(	leftDeaths,			0xFF003322					);
+	TextDrawBackgroundColor    	(	leftDeaths,			0x2FFF0022					);
 	TextDrawFont           		(	leftDeaths,			1							);
 	TextDrawSetProportional    	(	leftDeaths,			1							);
 
@@ -514,7 +514,7 @@ ResultTextdrawsCreate()
 	TextDrawColor            	(	leftAcc,		-1							);
 	TextDrawSetShadow          	(	leftAcc,		0							);
 	TextDrawSetOutline         	(	leftAcc,		1							);
-	TextDrawBackgroundColor    	(	leftAcc,		0xFF003322					);
+	TextDrawBackgroundColor    	(	leftAcc,		0x2FFF0022					);
 	TextDrawFont           		(	leftAcc,		1							);
 	TextDrawSetProportional    	(	leftAcc,		1							);
 	//left content
@@ -524,7 +524,7 @@ ResultTextdrawsCreate()
 	TextDrawColor            	(	leftDmg,		-1							);
 	TextDrawSetShadow          	(	leftDmg,		0							);
 	TextDrawSetOutline         	(	leftDmg,		1							);
-	TextDrawBackgroundColor    	(	leftDmg,		0xFF003322					);
+	TextDrawBackgroundColor    	(	leftDmg,		0x2FFF0022					);
 	TextDrawFont           		(	leftDmg,		1							);
 	TextDrawSetProportional    	(	leftDmg,		1							);
 	//left content
@@ -534,7 +534,7 @@ ResultTextdrawsCreate()
 	TextDrawColor            	(	leftPlayed,		-1							);
 	TextDrawSetShadow          	(	leftPlayed,		0							);
 	TextDrawSetOutline         	(	leftPlayed,		1							);
-	TextDrawBackgroundColor    	(	leftPlayed,		0xFF003322					);
+	TextDrawBackgroundColor    	(	leftPlayed,		0x2FFF0022					);
 	TextDrawFont           		(	leftPlayed,		1							);
 	TextDrawSetProportional    	(	leftPlayed,		1							);
     //left content
@@ -622,7 +622,7 @@ RoundTextdrawsCreate()
 	TextDrawColor					(	leftRedBG, 		0x00000022					);
 	TextDrawSetShadow				(	leftRedBG, 		-1							);
 	TextDrawSetOutline				(	leftRedBG, 		0							);
-	TextDrawBackgroundColor			(	leftRedBG, 		0xDE000044					);
+	TextDrawBackgroundColor			(	leftRedBG, 		0x13DE0044					);
 	TextDrawFont					(	leftRedBG, 		1							);
 	TextDrawSetProportional			(	leftRedBG, 		1							);
 
@@ -668,7 +668,7 @@ RoundTextdrawsCreate()
 	TextDrawSetProportional			(	rightTeamData, 		1						);
 
 //Qwerty _______________________________________________________________ ~b~~h~~h~Asdfg");
-	centerTeamNames = TextDrawCreate(	317.176452, 		423.776257, "~r~~h~~h~__- __ -");
+	centerTeamNames = TextDrawCreate(	317.176452, 		423.776257, "~g~~h~~h~__- __ -");
 	TextDrawLetterSize				(	centerTeamNames, 	0.400000, 	2.200000	);
 	TextDrawAlignment				(	centerTeamNames, 	2						);
 	TextDrawColor					(	centerTeamNames, 	-1						);
@@ -1078,7 +1078,7 @@ UpdateRoundsPlayedTextDraw()
 
 UpdateTeamNameTextDraw()
 {
-	TextDrawSetString(TeamAttackerTD, sprintf("~r~~h~~h~%s", TeamName[ATTACKER]));
+	TextDrawSetString(TeamAttackerTD, sprintf("~g~~h~~h~%s", TeamName[ATTACKER]));
 	TextDrawSetString(TeamDefenderTD, sprintf("~b~~h~~h~%s", TeamName[DEFENDER]));
 }
 
@@ -1119,7 +1119,7 @@ CreatePlayerTeamBar(playerid)
 			TeamBarsData[playerid][TeamBar] = CreateProgressBar(TEAMBARS_BAR_START_X, y, 80.50, 9.19, TEAMBARS_ATTACKER_COLOR, 200.0);
 			// Create team bar textdraws
 			TeamBarsData[playerid][TeamBarText] = TextDrawCreate(TEAMBARS_TEXT_START_X, y, 
-				sprintf("~w~~h~%s ~r~~h~~h~~h~%.0f/%.0f", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
+				sprintf("~w~~h~%s ~g~~h~~h~~h~%.0f/%.0f", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
 			TextDrawBackgroundColor(TeamBarsData[playerid][TeamBarText], 51);
 			TextDrawFont(TeamBarsData[playerid][TeamBarText], 1);
 			TextDrawLetterSize(TeamBarsData[playerid][TeamBarText], 0.160000, 1.100000);
@@ -1316,7 +1316,7 @@ UpdatePlayerTeamBar(playerid)
 					}
 				}
 				TextDrawSetString(TeamBarsData[playerid][TeamBarText], 
-					sprintf("~w~~h~%s ~r~~h~~h~~h~%.0f / %.0f", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
+					sprintf("~w~~h~%s ~rg~h~~h~~h~%.0f / %.0f", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
 				foreach(new i : Player)
 				{
 					if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
@@ -1379,7 +1379,7 @@ UpdatePlayerTeamBar(playerid)
 			{
 				SetProgressBarValue(TeamBarsData[playerid][TeamBar], 0.0);
 				TextDrawSetString(TeamBarsData[playerid][TeamBarText], 
-					sprintf("~w~~h~%s ~r~~h~~h~~h~Dead / %.0f", Player[playerid][NameWithoutTag], Player[playerid][RoundDamage]));
+					sprintf("~w~~h~%s ~g~~h~~h~~h~Dead / %.0f", Player[playerid][NameWithoutTag], Player[playerid][RoundDamage]));
 				foreach(new i : Player)
 				{
 					if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))

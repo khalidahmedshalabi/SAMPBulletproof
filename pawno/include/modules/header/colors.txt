@@ -3,19 +3,19 @@
 */
 
 // Teams colors
-#define ATTACKER_PLAYING 		0xFF003355 	// Bright red color with 55 transparency (Range 00 - 99 - FF)
-#define ATTACKER_NOT_PLAYING 	0xFF555555 	// Orange red color
-#define ATTACKER_SUB_COLOR 		0xFFAAAA55 	// Yello red color
+#define ATTACKER_PLAYING 		0x1EBF3955 	// Bright green/lime color with 55 transparency (Range 00 - 99 - FF)
+#define ATTACKER_NOT_PLAYING 	0x74FF5555 	// Green/lime color
+#define ATTACKER_SUB_COLOR 		0xB5FFAA55 	// Yello red color
 #define DEFENDER_PLAYING 		0x3344FF55 	// Bright blue color
 #define DEFENDER_NOT_PLAYING 	0x3377FF55 	// Light blue color
 #define DEFENDER_SUB_COLOR		0xAAAAFF55 	// Very light blue color
 #define REFEREE_COLOR 			0xFFFF0055 	// Bright Yellow color
-#define ATTACKER_ASKING_HELP    0xFF777788 	// Orange red color
+#define ATTACKER_ASKING_HELP    0xA5FF7788 	// Green/lime color
 #define DEFENDER_ASKING_HELP    0x7777FF88 	// Light blue color
 #define TEAM_LEADER_COLOUR 		0xB7FFAEFF  // Light green colour
 
 // Client message color
-#define COL_PRIM    "{FF3035}" // Primary color used in client messages
+#define COL_PRIM    "{30FF33}" // Primary color used in client messages
 #define COL_SEC     "{FFFFFF}" // Secondary color used in client messages
 
 // Team text colors
