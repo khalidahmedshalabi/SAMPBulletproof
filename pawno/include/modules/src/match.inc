@@ -241,12 +241,12 @@ public GameLoopCallback()
 								case true:
 								{
 									timerColonShown = false;
-									format(str, sizeof(str), "~w~%d-%02d / ~r~~h~%d", RoundMints,	RoundSeconds, CurrentCPTime );
+									format(str, sizeof(str), "~w~%d-%02d / ~g~~h~%d", RoundMints,	RoundSeconds, CurrentCPTime );
 								}
 								case false:
 								{
 									timerColonShown = true;
-									format(str, sizeof(str), "~w~%d:%02d / ~r~~h~%d", RoundMints,	RoundSeconds, CurrentCPTime );
+									format(str, sizeof(str), "~w~%d:%02d / ~g~~h~%d", RoundMints,	RoundSeconds, CurrentCPTime );
 								}
 							}
 							if(CurrentCPTime == 0)
@@ -283,7 +283,7 @@ public GameLoopCallback()
 						if(RoundPaused == false)
 							Player[i][OutOfArena] --;
 
-						PlayerTextDrawSetString(i, AreaCheckTD[i], sprintf("%sStay in Arena. (~r~~h~%d%s)", MAIN_TEXT_COLOUR, Player[i][OutOfArena], MAIN_TEXT_COLOUR));
+						PlayerTextDrawSetString(i, AreaCheckTD[i], sprintf("%sStay in Arena. (~g~~h~%d%s)", MAIN_TEXT_COLOUR, Player[i][OutOfArena], MAIN_TEXT_COLOUR));
 
 						PlayerTextDrawShow(i, AreaCheckTD[i]);
 						PlayerTextDrawShow(i, AreaCheckBG[i]);
@@ -860,7 +860,7 @@ public UnpauseRound()
 			PlayerPlaySound(i, 1056, 0.0, 0.0, 0.0);
 			
 		new iString[40];
-		format(iString, sizeof(iString), "~g~~h~Round resuming in ~r~~h~%d", PauseCountdown);
+		format(iString, sizeof(iString), "~g~~h~Round resuming in ~g~~h~%d", PauseCountdown);
 		TextDrawSetString(PauseTD, iString);
 		TextDrawShowForAll(PauseTD);
 		UnpauseTimer = SetTimer("UnpauseRound", 1000, 0);
@@ -929,7 +929,7 @@ public LeagueAutoUnpause()
 	}
 	else
 	{
-		TextDrawSetString(PauseTD, sprintf("~r~~h~Resuming in %d", League_AutoUnpause));
+		TextDrawSetString(PauseTD, sprintf("~g~~h~Resuming in %d", League_AutoUnpause));
 	}
 	return 1;
 }
@@ -958,7 +958,7 @@ PauseRound()
 		if(GetPlayerWeapon(i) == WEAPON_PARACHUTE)
 			Player[i][ToGiveParachute] = true;
 	}
-	TextDrawSetString(PauseTD, "~r~~h~Round Paused");
+	TextDrawSetString(PauseTD, "~g~~h~Round Paused");
 	TextDrawShowForAll(PauseTD);
 	RoundPaused = true;
 	#if defined _league_included
@@ -1205,7 +1205,7 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
 
 	if(RoundPaused == true) {
 		TogglePlayerControllable(ToAddID, 0);
-		iString = "~r~~h~Round Paused";
+		iString = "~g~~h~Round Paused";
 		TextDrawSetString(PauseTD, iString);
 		TextDrawShowForAll(PauseTD);
 	}
@@ -1359,7 +1359,7 @@ public OnArenaStart(ArenaID)
 	ResetGunmenuSelections();
 
     new iString[32];
-	format(iString, sizeof(iString), "%sArena %s(~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
+	format(iString, sizeof(iString), "%sArena %s(~g~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
 	TextDrawSetString( leftTeamData, "_");
 	TextDrawSetString( rightTeamData, "_");
 	TextDrawSetString( centerTeamNames, "_");
@@ -1435,7 +1435,7 @@ public ViewArenaForPlayers()
 	}
 	
 	new iString[64];
-	format(iString,sizeof(iString),"~w~Arena starting in ~r~~h~%d ~w~seconds", ViewTimer);
+	format(iString,sizeof(iString),"~w~Arena starting in ~g~~h~%d ~w~seconds", ViewTimer);
 	TextDrawSetString( centerTeamNames, iString);
 	foreach(new i : Player) {
 	    if(Player[i][ToAddInRound] == true) {
@@ -1654,7 +1654,7 @@ public OnBaseStart(BaseID)
 	ResetGunmenuSelections();
 
     new iString[32];
-	format(iString, sizeof(iString), "%sBase %s(~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
+	format(iString, sizeof(iString), "%sBase %s(~g~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
 
 	TextDrawSetString( leftTeamData, "_");
 	TextDrawSetString( rightTeamData, "_");
@@ -1774,7 +1774,7 @@ public ViewBaseForPlayers()
 		}
 	}
 	new iString[64];
-	format(iString,sizeof(iString),"~w~Base starting in ~r~~h~%d ~w~seconds", ViewTimer);
+	format(iString,sizeof(iString),"~w~Base starting in ~g~~h~%d ~w~seconds", ViewTimer);
 	TextDrawSetString( centerTeamNames, iString);
 	switch(ViewBaseMoveCamera)
 	{
@@ -2269,9 +2269,9 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
     switch( WinID )
 	{
 	    case 0: format( iString, sizeof(iString), "~g~~h~~h~Attackers ~w~captured the ~b~~h~~h~Checkpoint");
-	    case 3: format( iString, sizeof(iString), "~g~~h~~h~~h~Attackers ~w~won by ~r~~h~%.0f hp ~w~and ~r~~h~~h~%d players alive" , ahpleft, aalive);
+	    case 3: format( iString, sizeof(iString), "~g~~h~~h~~h~Attackers ~w~won by ~g~~h~%.0f hp ~w~and ~g~~h~~h~%d players alive" , ahpleft, aalive);
 	    case 1, 2: format( iString, sizeof(iString), "~b~~h~~h~~h~Defenders ~w~won by ~b~~h~%.0f hp ~w~and ~b~~h~~h~%d players alive" ,dhpleft, dalive);
-		case 5: format( iString, sizeof(iString), "~g~~h~~h~%s ~w~captured the ~r~~h~~h~Checkpoint", TeamName[ATTACKER]);
+		case 5: format( iString, sizeof(iString), "~g~~h~~h~%s ~w~captured the ~g~~h~~h~Checkpoint", TeamName[ATTACKER]);
 		case 6: format( iString, sizeof(iString), "~b~~h~~h~%s ~w~captured the ~b~~h~~h~Checkpoint", TeamName[DEFENDER]);
 	}
 	
@@ -2390,7 +2390,7 @@ public PreMatchResults()
 	new iString[256], TopString[3][128];
 
     if(TeamScore[ATTACKER] > TeamScore[DEFENDER]) {
- 		format(iString, sizeof(iString),"%sPre-Match Results~n~~r~%s %sWon The Match~n~g~%s ~h~%d		~b~~h~%s ~h~%d", MAIN_TEXT_COLOUR, TeamName[ATTACKER], MAIN_TEXT_COLOUR, TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
+ 		format(iString, sizeof(iString),"%sPre-Match Results~n~~g~%s %sWon The Match~n~g~%s ~h~%d		~b~~h~%s ~h~%d", MAIN_TEXT_COLOUR, TeamName[ATTACKER], MAIN_TEXT_COLOUR, TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
 	} else if(TeamScore[DEFENDER] > TeamScore[ATTACKER]) {
 	    format(iString,sizeof(iString),"%sPre-Match Results~n~~b~~h~%s %sWon The Match~n~~b~~h~%s ~h~%d		~g~%s ~h~%d", MAIN_TEXT_COLOUR, TeamName[DEFENDER], MAIN_TEXT_COLOUR, TeamName[DEFENDER], TeamScore[DEFENDER], TeamName[ATTACKER], TeamScore[ATTACKER]);
 	} else {
@@ -2594,14 +2594,14 @@ public WarEnded()
 	TotalRounds = strval(iString);
 	db_free_result(res);
 
-	format(iString, sizeof(iString), "%sRounds ~r~~h~~h~%d~r~/~h~~h~%d", MAIN_TEXT_COLOUR, CurrentRound, TotalRounds);
+	format(iString, sizeof(iString), "%sRounds ~g~~h~~h~%d~g~/~h~~h~%d", MAIN_TEXT_COLOUR, CurrentRound, TotalRounds);
 	TextDrawSetString(RoundsPlayed, iString);
 
     WarMode = false;
 
     HideMatchScoreBoard();
 
-	iString = sprintf("%sWar Mode: ~r~~h~OFF", MAIN_TEXT_COLOUR);
+	iString = sprintf("%sWar Mode: ~g~~h~OFF", MAIN_TEXT_COLOUR);
 	TextDrawSetString(WarModeText, iString);
 
 	iString = "~l~Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tK\t\t\tD\t\t\tP\t\t\tAcc\t\t\tDmg";	TextDrawSetString(leftText, iString);
@@ -2774,8 +2774,8 @@ public WarEnded()
 	#endif
     SetWeaponStatsString();
 
-	TeamName[ATTACKER] = "Alpha";
-	TeamName[ATTACKER_SUB] = "Alpha Sub";
+	TeamName[ATTACKER] = "Attackers";
+	TeamName[ATTACKER_SUB] = "Attackers Sub";
 	TeamName[DEFENDER] = "Beta";
 	TeamName[DEFENDER_SUB] = "Beta Sub";
 

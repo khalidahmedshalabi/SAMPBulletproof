@@ -125,7 +125,7 @@ LoadTextDraws()
 	TextDrawUseBox(SettingBox, 1);
 	TextDrawBoxColor(SettingBox, 0x00000033);
 
-	WarModeText = TextDrawCreate(125.000000, 285.000000, sprintf("%sWar\tMode:\t~r~OFF", MAIN_TEXT_COLOUR));
+	WarModeText = TextDrawCreate(125.000000, 285.000000, sprintf("%sWar\tMode:\t~g~OFF", MAIN_TEXT_COLOUR));
 	TextDrawAlignment(WarModeText, 2);
 	TextDrawFont(WarModeText, 1);
 	TextDrawLetterSize(WarModeText, 0.31, 1.45);
@@ -149,7 +149,7 @@ LoadTextDraws()
 	TextDrawTextSize(LeagueToggleTD, 20, 150);
 	TextDrawSetSelectable(LeagueToggleTD, 1);
 
-	LockServerTD = TextDrawCreate(125.000000, 315.000000, sprintf("%sServer:\t~r~Unlocked", MAIN_TEXT_COLOUR));
+	LockServerTD = TextDrawCreate(125.000000, 315.000000, sprintf("%sServer:\t~g~Unlocked", MAIN_TEXT_COLOUR));
 	TextDrawAlignment(LockServerTD, 2);
 	TextDrawFont(LockServerTD, 1);
 	TextDrawLetterSize(LockServerTD, 0.31, 1.45);
@@ -626,9 +626,9 @@ RoundTextdrawsCreate()
 	TextDrawFont					(	leftRedBG, 		1							);
 	TextDrawSetProportional			(	leftRedBG, 		1							);
 
-	rightBlueBG = TextDrawCreate	(	311.741302, 	401.283630, "-"				);
+    rightBlueBG = TextDrawCreate	(	311.741302, 	401.283630, "-"				);
 	TextDrawLetterSize				(	rightBlueBG, 	28.770492, 7.287504			);
-	TextDrawAlignment				(	rightBlueBG, 	3							);
+	TextDrawAlignment				(	rightBlueBG, 	1							);
 	TextDrawColor					(	rightBlueBG, 	0x00000022					);
 	TextDrawSetShadow				(	rightBlueBG, 	-1							);
 	TextDrawSetOutline				(	rightBlueBG,	0							);
@@ -636,14 +636,14 @@ RoundTextdrawsCreate()
 	TextDrawFont					(	rightBlueBG, 	1							);
 	TextDrawSetProportional			(	rightBlueBG, 	1							);
 
-	timerCenterTD = TextDrawCreate	(	324.140991, 		434.872528, "~w~0:00 / ~r~~h~00");
+	timerCenterTD = TextDrawCreate	(	324.140991, 434.872528, "~w~0:00 / ~g~~h~00");
 	TextDrawLetterSize				(	timerCenterTD, 		0.267410, 	1.349164	);
 	TextDrawTextSize				(	timerCenterTD, 		299.293579, 98.583343	);
 	TextDrawAlignment				(	timerCenterTD, 		2						);
 	TextDrawColor					(	timerCenterTD, 		-1						);
 	TextDrawSetShadow				(	timerCenterTD, 		0						);
 	TextDrawSetOutline				(	timerCenterTD, 		1						);
-	TextDrawBackgroundColor			(	timerCenterTD,	 	0x00000033						);
+	TextDrawBackgroundColor			(	timerCenterTD,	 	0x00000033	    		);
 	TextDrawFont					(	timerCenterTD, 		3						);
 	TextDrawSetProportional			(	timerCenterTD, 		1						);
 
@@ -653,7 +653,7 @@ RoundTextdrawsCreate()
 	TextDrawColor					(	leftTeamData, 		-1						);
 	TextDrawSetShadow				(	leftTeamData, 		0						);
 	TextDrawSetOutline				(	leftTeamData, 		-1						);
-	TextDrawBackgroundColor			(	leftTeamData, 		-16777131				);
+	TextDrawBackgroundColor			(	leftTeamData, 		0x13DE0033				);
 	TextDrawFont					(	leftTeamData, 		3						);
 	TextDrawSetProportional			(	leftTeamData, 		1						);
 
@@ -900,7 +900,7 @@ LoadPlayerTextDraws(playerid)
 UpdateTeamNamesTextdraw()
 {
 	new str[128];
-	format(str, sizeof(str), "~r~~h~~h~%s \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ~b~~h~~h~%s", TeamName[ATTACKER], TeamName[DEFENDER]);
+	format(str, sizeof(str), "~g~~h~~h~%s \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ~b~~h~~h~%s", TeamName[ATTACKER], TeamName[DEFENDER]);
 	TextDrawSetString(centerTeamNames , str);
 	return 1;
 }
@@ -911,7 +911,7 @@ ShowRoundStats(playerid)
 		TextDrawHideForPlayer(playerid, PauseTD);
 	else
 	{
-		TextDrawSetString(PauseTD, "~r~~h~Round Paused");
+		TextDrawSetString(PauseTD, "~g~~h~Round Paused");
 		TextDrawShowForPlayer(playerid, PauseTD);
 	}
 	

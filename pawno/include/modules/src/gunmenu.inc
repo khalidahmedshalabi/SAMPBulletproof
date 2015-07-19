@@ -1,7 +1,5 @@
 /*
-
 	Guns selection script
-
 */
 
 #include "modules\header\gunmenu.txt"
@@ -10,29 +8,9 @@ LoadGunmenuData()
 {
 	// todo: use database
 	new idx = 0;
-	GunmenuData[idx][GunID] = WEAPON_KNIFE;
-	GunmenuData[idx][GunModel] = 335;
-	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
-	GunmenuData[idx][GunAmmo] = 1;
-	idx ++;
-	GunmenuData[idx][GunID] = WEAPON_GRENADE;
-	GunmenuData[idx][GunModel] = 342;
-	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
-	GunmenuData[idx][GunAmmo] = GRENADE_AMMO;
-	idx ++;
-	GunmenuData[idx][GunID] = WEAPON_TEARGAS;
-	GunmenuData[idx][GunModel] = 343;
-	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
-	GunmenuData[idx][GunAmmo] = 1;
-	idx ++;
-	GunmenuData[idx][GunID] = WEAPON_SILENCED;
-	GunmenuData[idx][GunModel] = 347;
-	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
-	GunmenuData[idx][GunAmmo] = 9999;
-	idx ++;
 	GunmenuData[idx][GunID] = WEAPON_DEAGLE;
 	GunmenuData[idx][GunModel] = 348;
-	GunmenuData[idx][GunLimit] = 1;
+	GunmenuData[idx][GunLimit] = 2;
 	GunmenuData[idx][GunAmmo] = 9999;
 	idx ++;
 	GunmenuData[idx][GunID] = WEAPON_SHOTGUN;
@@ -57,7 +35,7 @@ LoadGunmenuData()
 	idx ++;
 	GunmenuData[idx][GunID] = WEAPON_M4;
 	GunmenuData[idx][GunModel] = 356;
-	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
+	GunmenuData[idx][GunLimit] = 1;
 	GunmenuData[idx][GunAmmo] = 9999;
 	idx ++;
 	GunmenuData[idx][GunID] = WEAPON_RIFLE;
@@ -178,9 +156,9 @@ ResetPlayerGunmenu(playerid, bool:showagain)
 ShowGunmenuHelp(playerid)
 {
 	#if GTAV_SWITCH_MENU != 0
-	MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~b~~h~~h~gunmenu help", "Changed mind? Type /gunmenu again!~n~Code your own weapon key binds by using ~r~~h~/weaponbinds~n~Press ~r~~h~~k~~VEHICLE_ENTER_EXIT~ ~w~for quicker gun switching", 4000);
+	MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~b~~h~~h~gunmenu help", "Changed mind? Type /gunmenu again!~n~Code your own weapon key binds by using ~g~~h~/weaponbinds~n~Press ~g~~h~~k~~VEHICLE_ENTER_EXIT~ ~w~for quicker gun switching", 4000);
 	#else
-	MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~b~~h~~h~gunmenu help", "Changed mind? Type /gunmenu again!~n~Code your own weapon key binds by using ~r~~h~/weaponbinds", 4000);
+	MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~b~~h~~h~gunmenu help", "Changed mind? Type /gunmenu again!~n~Code your own weapon key binds by using ~g~~h~/weaponbinds", 4000);
 	#endif
 }
 
@@ -456,6 +434,11 @@ bool:IsGunSelectionOkay(playerid, weaponid, index)
 				if(DoesPlayerHaveWeapon(playerid, WEAPON_SHOTGSPA))
 				{
 					SendErrorMessage(playerid, "You cannot get spas and sniper!", messagebox_type);
+					return false;
+				}
+				else if(DoesPlayerHaveWeapon(playerid, WEAPON_DEAGLE))
+				{
+					SendErrorMessage(playerid, "You cannot get sniper and deagle!", messagebox_type);
 					return false;
 				}
 				else if(DoesPlayerHaveWeapon(playerid, WEAPON_M4))

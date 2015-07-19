@@ -14,7 +14,7 @@ TIMER(UpdateInfoForSpectators)
 	foreach(new i : AllSpectators)
 	{
 		specid = Player[i][IsSpectatingID];
-		format(specStr, sizeof(specStr),"%s%s ~r~~h~%d~n~~n~%s(%.0f) (~r~~h~%.0f%s)~n~FPS: ~r~~h~%d %sPing: ~r~~h~%d~n~%sPacket-Loss: ~r~~h~%.1f~n~%sKills: ~r~~h~%d~n~%sDamage: ~r~~h~%.0f~n~%sTotal Dmg: ~r~~h~%.0f",
+		format(specStr, sizeof(specStr),"%s%s ~g~~h~%d~n~~n~%s(%.0f) (~g~~h~%.0f%s)~n~FPS: ~g~~h~%d %sPing: ~g~~h~%d~n~%sPacket-Loss: ~g~~h~%.1f~n~%sKills: ~g~~h~%d~n~%sDamage: ~g~~h~%.0f~n~%sTotal Dmg: ~g~~h~%.0f",
 			MAIN_TEXT_COLOUR, Player[specid][Name], specid, MAIN_TEXT_COLOUR, Player[specid][pArmour], Player[specid][pHealth], MAIN_TEXT_COLOUR, GetPlayerFPS(specid), MAIN_TEXT_COLOUR, GetPlayerPing(specid), MAIN_TEXT_COLOUR, GetPlayerPacketLoss(specid), MAIN_TEXT_COLOUR, Player[specid][RoundKills], MAIN_TEXT_COLOUR, Player[specid][RoundDamage], MAIN_TEXT_COLOUR, Player[specid][TotalDamage]);
 		PlayerTextDrawSetString(i, SpecText[i][1], specStr);
 		PlayerTextDrawSetString(i, SpecText[i][3], ListWeapsSpec(specid));
@@ -80,7 +80,7 @@ ListWeapsSpec(playerid)
 		{
 			if(IsValidWeapon(wep)) // ignore some weapons like fist and bruss knuckless..etc
 			{
-				format(str, sizeof(str), "%s%s%s ~r~~h~%d~n~", str, MAIN_TEXT_COLOUR, WeaponNames[wep], ammo);
+				format(str, sizeof(str), "%s%s%s ~g~~h~%d~n~", str, MAIN_TEXT_COLOUR, WeaponNames[wep], ammo);
 			}
 		}
 	}

@@ -638,7 +638,7 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		bool:doneOfGivenDmg = false,	// Indicate whether we're done of showing given-damage textdraws or not
 		bool:doneOfTakenDmg = false,	// Indicate whether we're done of showing taken-damage textdraws or not
 		str[128],						// A string to write the damage info in
-		col[7] = "~r~~h~",				// Color of HP remaining of the damaged player (default red)
+		col[7] = "~g~~h~",				// Color of HP remaining of the damaged player (default red)
 		tick = GetTickCount(),				// Current tick count
 		Float:totHP = (Player[playerid][pHealth] + Player[playerid][pArmour]); // HP remaining of the damaged player
 	
@@ -696,7 +696,7 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 				{
 					VisualDamage[playerid][TDamageTaken][i] += amount;
 					VisualDamage[playerid][TakenDamageWeapon][i] = weaponid;
-					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%.0f%s] [%s]", 
+					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%.0f%s] [%s]", 
 						Player[issuerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i], 
 						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR, BodyPartName[bodypart]);
 					PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], str);
@@ -716,7 +716,7 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 					VisualDamage[playerid][WhoDamaging][i] = issuerid;
 					Iter_Add(PlayersDamagedBy[playerid], issuerid);
 					Iter_Add(PlayerHasTVisualDmg, playerid);
-					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%.0f%s] [%s]", 
+					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%.0f%s] [%s]", 
 						Player[issuerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i], 
 						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR, BodyPartName[bodypart]);
 					PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], str);
@@ -735,7 +735,7 @@ ShowCollisionDamageTextDraw(playerid, Float:amount, weaponid)
 {
 	new 
 		str[128], 
-		col[7] = "~r~~h~",
+		col[7] = "~g~~h~",
 		tick = GetTickCount(),
 		freeSlot = -1,
 		Float:totHP = (Player[playerid][pHealth] + Player[playerid][pArmour]);
@@ -750,7 +750,7 @@ ShowCollisionDamageTextDraw(playerid, Float:amount, weaponid)
 		{
 			VisualDamage[playerid][TDamageTaken][i] += amount; // Add to damage
 			VisualDamage[playerid][TakenDamageWeapon][i] = weaponid;
-			format(str, sizeof(str), "%s-%.0f ~r~~h~%s %s[%s~h~%.0f%s]",  // Format the string with correct damage info
+			format(str, sizeof(str), "%s-%.0f ~g~~h~%s %s[%s~h~%.0f%s]",  // Format the string with correct damage info
 				MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i], 
 				WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 			PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], str); // Update damage textdraw with correct damage info
@@ -775,7 +775,7 @@ ShowCollisionDamageTextDraw(playerid, Float:amount, weaponid)
 		VisualDamage[playerid][TakenDamageWeapon][freeSlot] = weaponid;
 		VisualDamage[playerid][WhoDamaging][freeSlot] = NO_DAMAGER_UNIQUE_ID; // This unique ID means a COLLISION (or generally non-damager damages)
 		Iter_Add(PlayerHasTVisualDmg, playerid); // Add this player to the array that holds the IDs of the players who has a taken-damage textdraw shown
-		format(str, sizeof(str), "%s-%.0f ~r~~h~%s %s[%s~h~%.0f%s]",  // Format the string with correct damage info
+		format(str, sizeof(str), "%s-%.0f ~g~~h~%s %s[%s~h~%.0f%s]",  // Format the string with correct damage info
 			MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][freeSlot], 
 			WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 		PlayerTextDrawSetString(playerid, GettingDamaged[playerid][freeSlot], str); // Update the textdraw with the correct info

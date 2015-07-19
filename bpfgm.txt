@@ -14,3 +14,8 @@ My changelog on bulletproof gamemode:
 - Edited /checkversion command
 - Changed PLAYERCLICK dialog colors from red to green/lime
 - Removed /kill command, not needed
+- Fixed sniper/deagle set
+- Fixed blue background on info textdraw while round is in progress
+- Maxium 2 deagle per team, Maxium 1 M4 per team
+- Removed Knife, Grenades, Tetragas or how the fuck is named
+- No more sniper/deagle (it has a bug)
