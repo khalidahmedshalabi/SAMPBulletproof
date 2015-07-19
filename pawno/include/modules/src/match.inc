@@ -11,11 +11,11 @@
 // Set default name for all teams
 SetTeamDefaultNames()
 {
-	TeamName[ATTACKER] = "Alpha";
-	TeamName[DEFENDER] = "Beta";
+	TeamName[ATTACKER] = "Attackers";
+	TeamName[DEFENDER] = "Defenders";
 	TeamName[REFEREE] = "Referee";
-	TeamName[ATTACKER_SUB] = "Alpha Sub";
-	TeamName[DEFENDER_SUB] = "Beta Sub";
+	TeamName[ATTACKER_SUB] = "Attackers Sub";
+	TeamName[DEFENDER_SUB] = "Defenders Sub";
 	return 1;
 }
 
@@ -2044,7 +2044,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	#endif
 	if(WinID == 0 || WinID == 3 ||  WinID == 5) 
 	{
-		format(iString, sizeof(iString), "~n~~r~~h~%s ~w~Won The Round", TeamName[ATTACKER]);
+		format(iString, sizeof(iString), "~n~~g~~h~%s ~w~Won The Round", TeamName[ATTACKER]);
 		#if defined _league_included
 		winnerid = ATTACKER;
 		#endif
@@ -2268,10 +2268,10 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 
     switch( WinID )
 	{
-	    case 0: format( iString, sizeof(iString), "~r~~h~~h~Attackers ~w~captured the ~b~~h~~h~Checkpoint");
-	    case 3: format( iString, sizeof(iString), "~r~~h~~h~~h~Attackers ~w~won by ~r~~h~%.0f hp ~w~and ~r~~h~~h~%d players alive" , ahpleft, aalive);
+	    case 0: format( iString, sizeof(iString), "~g~~h~~h~Attackers ~w~captured the ~b~~h~~h~Checkpoint");
+	    case 3: format( iString, sizeof(iString), "~g~~h~~h~~h~Attackers ~w~won by ~r~~h~%.0f hp ~w~and ~r~~h~~h~%d players alive" , ahpleft, aalive);
 	    case 1, 2: format( iString, sizeof(iString), "~b~~h~~h~~h~Defenders ~w~won by ~b~~h~%.0f hp ~w~and ~b~~h~~h~%d players alive" ,dhpleft, dalive);
-		case 5: format( iString, sizeof(iString), "~r~~h~~h~%s ~w~captured the ~r~~h~~h~Checkpoint", TeamName[ATTACKER]);
+		case 5: format( iString, sizeof(iString), "~g~~h~~h~%s ~w~captured the ~r~~h~~h~Checkpoint", TeamName[ATTACKER]);
 		case 6: format( iString, sizeof(iString), "~b~~h~~h~%s ~w~captured the ~b~~h~~h~Checkpoint", TeamName[DEFENDER]);
 	}
 	
@@ -2390,11 +2390,11 @@ public PreMatchResults()
 	new iString[256], TopString[3][128];
 
     if(TeamScore[ATTACKER] > TeamScore[DEFENDER]) {
- 		format(iString, sizeof(iString),"%sPre-Match Results~n~~r~%s %sWon The Match~n~~r~%s ~h~%d		~b~~h~%s ~h~%d", MAIN_TEXT_COLOUR, TeamName[ATTACKER], MAIN_TEXT_COLOUR, TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
+ 		format(iString, sizeof(iString),"%sPre-Match Results~n~~r~%s %sWon The Match~n~g~%s ~h~%d		~b~~h~%s ~h~%d", MAIN_TEXT_COLOUR, TeamName[ATTACKER], MAIN_TEXT_COLOUR, TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
 	} else if(TeamScore[DEFENDER] > TeamScore[ATTACKER]) {
-	    format(iString,sizeof(iString),"%sPre-Match Results~n~~b~~h~%s %sWon The Match~n~~b~~h~%s ~h~%d		~r~%s ~h~%d", MAIN_TEXT_COLOUR, TeamName[DEFENDER], MAIN_TEXT_COLOUR, TeamName[DEFENDER], TeamScore[DEFENDER], TeamName[ATTACKER], TeamScore[ATTACKER]);
+	    format(iString,sizeof(iString),"%sPre-Match Results~n~~b~~h~%s %sWon The Match~n~~b~~h~%s ~h~%d		~g~%s ~h~%d", MAIN_TEXT_COLOUR, TeamName[DEFENDER], MAIN_TEXT_COLOUR, TeamName[DEFENDER], TeamScore[DEFENDER], TeamName[ATTACKER], TeamScore[ATTACKER]);
 	} else {
-	    format(iString,sizeof(iString),"%sPre-Match Results~n~%sNo One Won The Match~n~~r~%s ~h~%d		~b~~h~%s ~h~%d", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
+	    format(iString,sizeof(iString),"%sPre-Match Results~n~%sNo One Won The Match~n~~g~%s ~h~%d		~b~~h~%s ~h~%d", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
 	}
 	TextDrawSetString(topTextScore, iString);
 	
@@ -2574,11 +2574,11 @@ public WarEnded()
 	new iString[256], TopString[3][128];
 
     if(TeamScore[ATTACKER] > TeamScore[DEFENDER]) {
- 		format(iString, sizeof(iString),"~r~%s ~w~Won The Match~n~~r~%s ~h~%d		~b~~h~%s ~h~%d", TeamName[ATTACKER], TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
+ 		format(iString, sizeof(iString),"~g~%s ~w~Won The Match~n~~g~%s ~h~%d		~b~~h~%s ~h~%d", TeamName[ATTACKER], TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
 	} else if(TeamScore[DEFENDER] > TeamScore[ATTACKER]) {
-	    format(iString,sizeof(iString),"~b~~h~%s ~w~Won The Match~n~~b~~h~%s ~h~%d		~r~%s ~h~%d", TeamName[DEFENDER], TeamName[DEFENDER], TeamScore[DEFENDER], TeamName[ATTACKER], TeamScore[ATTACKER]);
+	    format(iString,sizeof(iString),"~b~~h~%s ~w~Won The Match~n~~b~~h~%s ~h~%d		~g~%s ~h~%d", TeamName[DEFENDER], TeamName[DEFENDER], TeamScore[DEFENDER], TeamName[ATTACKER], TeamScore[ATTACKER]);
 	} else {
-	    format(iString,sizeof(iString),"~w~No One Won The Match~n~~r~%s ~h~%d		~b~~h~%s ~h~%d", TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
+	    format(iString,sizeof(iString),"~w~No One Won The Match~n~~g~%s ~h~%d		~b~~h~%s ~h~%d", TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
 	}
     TextDrawSetString(topTextScore, iString);
 

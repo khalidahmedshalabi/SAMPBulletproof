@@ -458,11 +458,6 @@ bool:IsGunSelectionOkay(playerid, weaponid, index)
 					SendErrorMessage(playerid, "You cannot get spas and sniper!", messagebox_type);
 					return false;
 				}
-				else if(DoesPlayerHaveWeapon(playerid, WEAPON_DEAGLE))
-				{
-					SendErrorMessage(playerid, "You cannot get sniper and deagle!", messagebox_type);
-					return false;
-				}
 				else if(DoesPlayerHaveWeapon(playerid, WEAPON_M4))
 				{
 					SendErrorMessage(playerid, "You cannot get sniper and M4!", messagebox_type);

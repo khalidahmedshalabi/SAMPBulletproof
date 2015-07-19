@@ -918,7 +918,7 @@ public OnPlayerText(playerid, text[])
 	{
 	    if(text[1] == 'r' || text[1] == 'R') // red
 	    {
-        	format(ChatString, sizeof(ChatString), "(%d) {FF0000}%s", playerid, text[2]);
+        	format(ChatString, sizeof(ChatString), "(%d) {15FF00}%s", playerid, text[2]);
        		SendPlayerMessageToAll(playerid, ChatString);
 			return 0;
 		}
@@ -2014,7 +2014,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 new statsSTR[4][300], namee[60], CID, Country[128];
 			    CID = LastClickedPlayer[playerid];
 
-				format(namee, sizeof(namee), "{FF3333}Player {FFFFFF}%s {FF3333}Stats", Player[CID][Name]);
+				format(namee, sizeof(namee), ""COL_PRIM"Player {FFFFFF}%s "COL_PRIM"Stats", Player[CID][Name]);
 				GetPlayerCountry(CID, Country, sizeof(Country));
 
 				new TD = Player[CID][TotalDeaths];
@@ -2023,10 +2023,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				new YC = Player[CID][ChatChannel];
 
                 GetPlayerFPS(CID);
-				format(statsSTR[0], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Country: %s\n\n{FF0000}- {FFFFFF}Round Kills: \t\t%d\t\t{FF0000}- {FFFFFF}Total Kills: \t\t%d\t\t{FF0000}- {FFFFFF}FPS: \t\t\t%d\n{FF0000}- {FFFFFF}Round Deaths: \t%.0f\t\t{FF0000}- {FFFFFF}Total Deaths: \t%d\t\t{FF0000}- {FFFFFF}Ping: \t\t\t%d\n",Country,  Player[CID][RoundKills],Player[CID][TotalKills], Player[CID][FPS], RD, TD, GetPlayerPing(CID));
-				format(statsSTR[1], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Round Damage: \t%.0f\t\t{FF0000}- {FFFFFF}Total Damage:   \t%.0f\t\t{FF0000}- {FFFFFF}Packet-Loss:   \t%.1f\n\n{FF0000}- {FFFFFF}Player Weather: \t%d\t\t{FF0000}- {FFFFFF}Chat Channel: \t%d\t\t{FF0000}- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], GetPlayerPacketLoss(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
-				format(statsSTR[2], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Player Time: \t\t%d\t\t{FF0000}- {FFFFFF}DM ID: \t\t%d\t\t{FF0000}- {FFFFFF}Hit Sound: \t\t%d\n{FF0000}- {FFFFFF}Player NetCheck: \t%s\t{FF0000}- {FFFFFF}Player Level: \t%d\t\t{FF0000}- {FFFFFF}Get Hit Sound: \t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
-				format(statsSTR[3], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Duels Won: \t\t%d\t\t{FF0000}- {FFFFFF}Duels Lost: \t\t%d", Player[CID][DuelsWon], Player[CID][DuelsLost]);
+				format(statsSTR[0], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Country: %s\n\n"COL_PRIM"- {FFFFFF}Round Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Total Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}FPS: \t\t\t%d\n"COL_PRIM"- {FFFFFF}Round Deaths: \t%.0f\t\t"COL_PRIM"- {FFFFFF}Total Deaths: \t%d\t\t"COL_PRIM"- {FFFFFF}Ping: \t\t\t%d\n",Country,  Player[CID][RoundKills],Player[CID][TotalKills], Player[CID][FPS], RD, TD, GetPlayerPing(CID));
+				format(statsSTR[1], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Round Damage: \t%.0f\t\t"COL_PRIM"- {FFFFFF}Total Damage:   \t%.0f\t\t"COL_PRIM"- {FFFFFF}Packet-Loss:   \t%.1f\n\n"COL_PRIM"- {FFFFFF}Player Weather: \t%d\t\t"COL_PRIM"- {FFFFFF}Chat Channel: \t%d\t\t"COL_PRIM"- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], GetPlayerPacketLoss(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
+				format(statsSTR[2], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Player Time: \t\t%d\t\t"COL_PRIM"- {FFFFFF}DM ID: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Hit Sound: \t\t%d\n"COL_PRIM"- {FFFFFF}Player NetCheck: \t%s\t"COL_PRIM"- {FFFFFF}Player Level: \t%d\t\t"COL_PRIM"- {FFFFFF}Get Hit Sound: \t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
+				format(statsSTR[3], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Duels Won: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Duels Lost: \t\t%d", Player[CID][DuelsWon], Player[CID][DuelsLost]);
 				new TotalStr[1200];
 				format(TotalStr, sizeof(TotalStr), "%s%s%s%s", statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3]);
 
@@ -3202,7 +3202,7 @@ YCMD:checkversion(playerid, params[])
 	    return SendErrorMessage(playerid, "Connection error. Try again later maybe!");
 
     ShowPlayerDialog(playerid, 0, DIALOG_STYLE_MSGBOX, "Version Checker",
-	 sprintf(""COL_PRIM"Server version: {FFFFFF}%s "COL_PRIM"| Newest version: {FFFFFF}%s\n"COL_PRIM"Copy version: {FFFFFF}0.1", GM_NAME, LatestVersionStr), "Okay", "");
+	 sprintf(""COL_PRIM"- {FFFFFF}Server version: \t\t%s \n"COL_PRIM"- {FFFFFF}Newest version: \t\t%s", GM_NAME, LatestVersionStr), "Okay", "");
 	return 1;
 }
 
@@ -4491,9 +4491,10 @@ YCMD:plcheck(playerid, params[], help)
 	return 1;
 }
 
-/*YCMD:league(playerid, params[], help)
+YCMD:league(playerid, params[], help)
 {
-    if(help)
+    SendErrorMessage(playerid,"League mode can't be enabled for now.");
+    /*if(help)
 	{
 	    SendCommandHelpMessage(playerid, "enable league mode.");
 	    return 1;
@@ -4506,9 +4507,9 @@ YCMD:plcheck(playerid, params[], help)
     CheckLeagueClans(playerid, TeamName[ATTACKER], TeamName[DEFENDER]);
     #else
     SendErrorMessage(playerid, sprintf("This version is not permitted to run league matches (developer version or an ugly edit). Visit %s to have the right version for this!", GM_WEBSITE));
-    #endif
+    #endif*/
 	return 1;
-}*/
+}
 
 YCMD:war(playerid, params[], help)
 {
@@ -5878,7 +5879,7 @@ YCMD:alladmins(playerid, params[], help)
 /* Changes Occurance of COL_PRIM to value contained in ColScheme */
 YCMD:chatcolor(playerid,params[], help)
 {
-	SendErrorMessage(playerid, "This command is not available in this version of gamemode.");
+	SendErrorMessage(playerid, "This command is not available.");
 	/*
     if(help)
 	{
@@ -5930,7 +5931,8 @@ YCMD:chatcolor(playerid,params[], help)
 
 YCMD:themes(playerid, params[], help)
 {
-    //if(Player[playerid][Level] < 5 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be level 5 or rcon admin.");
+    SendErrorMessage(playerid, "This command is not available.");
+    /*//if(Player[playerid][Level] < 5 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be level 5 or rcon admin.");
     if(help)
 	{
 	    SendCommandHelpMessage(playerid, "change the theme color of your server.");
@@ -5948,7 +5950,7 @@ YCMD:themes(playerid, params[], help)
 	strcat(str, "White (Background) & Purple (Text)\n");
 	strcat(str, "Black (Background) & Purple (Text)");
 
-	ShowPlayerDialog(playerid, DIALOG_THEME_CHANGE1, DIALOG_STYLE_LIST, "{0044FF} Theme colour menu", str, "Select", "Cancel");
+	ShowPlayerDialog(playerid, DIALOG_THEME_CHANGE1, DIALOG_STYLE_LIST, "{0044FF} Theme colour menu", str, "Select", "Cancel");*/
 	return 1;
 }
 
@@ -5963,11 +5965,11 @@ YCMD:defaultskins(playerid, params[], help)
 	new iString[128];
 
 	Skin[ATTACKER] = 250;
-	format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'Attacker Skin'", 53);
+	format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'Attacker Skin'", 250);
     db_free_result(db_query(sqliteconnection, iString));
 
 	Skin[DEFENDER] = 177;
-	format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'Defender Skin'", 230);
+	format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'Defender Skin'", 177);
     db_free_result(db_query(sqliteconnection, iString));
 
 	Skin[REFEREE] = 51;
@@ -7575,12 +7577,6 @@ YCMD:rb(playerid,params[], help)
 	    return 1;
 	}
     CallLocalFunction("OnPlayerCommandText", "ds", playerid, "/random base");
-	return 1;
-}
-
-YCMD:kill(playerid,params[], help)
-{
-    SetPlayerHealth(playerid, 0.0);
 	return 1;
 }
 

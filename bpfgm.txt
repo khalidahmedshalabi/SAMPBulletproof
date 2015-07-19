@@ -1,7 +1,16 @@
 My changelog on bulletproof gamemode:
 
+18/07/2015
 - Fixed PLAYERCLICK Dialog (Before: http://i.imgur.com/GbHwIYK.png Now: http://i.imgur.com/jMdlKlI.png)
 - Added /kill command
 - Changed attackers color from red to green/lime
 - Changed main color to green/lime
 - Changed names from Alpha to Attackers
+
+19/07/2015
+- You now can select Sniper/Deagle
+- League mode removed for now
+- Themes and chatcolor command removed
+- Edited /checkversion command
+- Changed PLAYERCLICK dialog colors from red to green/lime
+- Removed /kill command, not needed
