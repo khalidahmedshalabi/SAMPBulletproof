@@ -1,6 +1,0 @@
-My changelog on bulletproof gamemode:
-
-- Fixed PLAYERCLICK Dialog (Before: http://i.imgur.com/GbHwIYK.png Now: http://i.imgur.com/jMdlKlI.png)
-- Added /kill command
-- Changed attackers color from red to green/lime
-- Changed main color to green/lime

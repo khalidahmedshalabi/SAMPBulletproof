@@ -145,7 +145,6 @@ public OnPlayerConnect(playerid)
     SendClientMessage(playerid, -1, ""COL_PRIM"Don't miss our updates: {FFFFFF}/checkversion");
     SendClientMessage(playerid, -1, ""COL_PRIM"Check {FFFFFF}/changelog "COL_PRIM"out to see what's up with this version!");
     SendClientMessage(playerid, -1, ""COL_PRIM"Developers: {FFFFFF}Whitetiger"COL_PRIM" & {FFFFFF}[KHK]Khalid"COL_PRIM"");
-    SendClientMessage(playerid, -1, ""COL_PRIM"Copy Developer: {FFFFFF}[RBK]shendlaw");
     new str[128];
     format(str,sizeof(str),""COL_PRIM"Server limits:  Min FPS = {FFFFFF}%d "COL_PRIM"| Max Ping = {FFFFFF}%d "COL_PRIM"| Max PL = {FFFFFF}%.2f", Min_FPS, Max_Ping, Float:Max_Packetloss);
 	SendClientMessage(playerid, -1, str);
@@ -255,7 +254,7 @@ public OnPlayerRequestClass(playerid, classid)
 	        }
 	        case 1:
 	        {
-	            format(teamName, sizeof teamName, sprintf("~g~~h~%s", TeamName[ATTACKER]));
+	            format(teamName, sizeof teamName, sprintf("~r~~h~%s", TeamName[ATTACKER]));
 	            new ct = 0;
 	            foreach(new i : Player)
 	            {
@@ -293,7 +292,7 @@ public OnPlayerRequestClass(playerid, classid)
 			}
 			case 3:
 	        {
-	            format(teamName, sizeof teamName, sprintf("~g~~h~~h~~h~%s sub", TeamName[ATTACKER]));
+	            format(teamName, sizeof teamName, sprintf("~r~~h~~h~~h~%s sub", TeamName[ATTACKER]));
 	            new ct = 0;
 	            foreach(new i : Player)
 	            {
@@ -850,9 +849,9 @@ public OnPlayerText(playerid, text[])
 	    new ChatColor;
 	    switch(Player[playerid][Team])
 		{
-	        case REFEREE: 		ChatColor = REFEREE_COLOR;
-	        case DEFENDER: 		ChatColor = DEFENDER_PLAYING;
-	        case ATTACKER: 		ChatColor = ATTACKER_PLAYING;
+	        case REFEREE: 		ChatColor = 0xFFFF90FF;
+	        case DEFENDER: 		ChatColor = 0x0088FFFF;
+	        case ATTACKER: 		ChatColor = 0xFF2040FF;
 	        case ATTACKER_SUB: 	ChatColor = ATTACKER_SUB_COLOR;
 	        case DEFENDER_SUB: 	ChatColor = DEFENDER_SUB_COLOR;
 	        case NON:
@@ -1089,12 +1088,12 @@ public OnPlayerEnterCheckpoint(playerid)
 						Player[playerid][WasInCP] = true;
 
 						new iString[256];
-						format(iString, sizeof iString, "~g~~h~~h~Players In CP");
+						format(iString, sizeof iString, "~r~~h~~h~Players In CP");
 						foreach(new i : Player)
 						{
 						    if(Player[i][WasInCP] == true)
 							{
-						        format(iString, sizeof(iString), "%s~n~~g~~h~- %s%s", iString, MAIN_TEXT_COLOUR, Player[i][Name]);
+						        format(iString, sizeof(iString), "%s~n~~r~~h~- %s%s", iString, MAIN_TEXT_COLOUR, Player[i][Name]);
 							}
 						}
 						TextDrawSetString(EN_CheckPoint, iString);
@@ -1204,14 +1203,14 @@ public OnPlayerLeaveCheckpoint(playerid)
 				else
 				{
 				    new cpstr[256];
-					format(cpstr, sizeof cpstr, "~g~~h~~h~Players In CP");
+					format(cpstr, sizeof cpstr, "~r~~h~~h~Players In CP");
 					new ct = 0;
 					foreach(new i : PlayersInRound)
 					{
 						if(Player[i][WasInCP] == true)
 						{
 							ct ++;
-							format(cpstr, sizeof(cpstr), "%s~n~~g~~h~- %s%s", cpstr, MAIN_TEXT_COLOUR, Player[i][Name]);
+							format(cpstr, sizeof(cpstr), "%s~n~~r~~h~- %s%s", cpstr, MAIN_TEXT_COLOUR, Player[i][Name]);
 						}
 					}
 					if(ct == 0) // if it stays 0 and PlayersInCP says it's more than 0 then something must be wrong
@@ -1439,7 +1438,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	if(issuerid != INVALID_PLAYER_ID && !IsValidHitRange(playerid, issuerid, weaponid, dist) && GetPlayerTeam(issuerid) != GetPlayerTeam(playerid))
     {
     	// Weapon range exceeded
-		MessageBox(issuerid, MSGBOX_TYPE_MIDDLE, "~g~~h~hit out of range", sprintf("On: %s~n~Weapon: %s~n~Hit range: %.3f~n~Max hit range (exceeded): %.3f", Player[playerid][Name], WeaponNames[weaponid], dist, WeaponRanges[weaponid]), 3000);
+		MessageBox(issuerid, MSGBOX_TYPE_MIDDLE, "~r~~h~hit out of range", sprintf("On: %s~n~Weapon: %s~n~Hit range: %.3f~n~Max hit range (exceeded): %.3f", Player[playerid][Name], WeaponNames[weaponid], dist, WeaponRanges[weaponid]), 3000);
 	    SetFakeHealthArmour(playerid);
 		return 1;
     }
@@ -1545,7 +1544,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	if(issuerid == INVALID_PLAYER_ID && (IsBulletWeapon(weaponid) || IsMeleeWeapon(weaponid)))
 	{
 	    SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been forced to relog for having weapon bugs. {FFFFFF}(Most likely Sniper Bug)", Player[playerid][Name]));
-		MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~g~~h~Sniper Bug", "You likely to have Sniper Bug and a relog is needed", 3000);
+		MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~r~~h~Sniper Bug", "You likely to have Sniper Bug and a relog is needed", 3000);
 		SetTimerEx("OnPlayerKicked", 500, false, "i", playerid);
  		return 1;
 	}
@@ -1661,7 +1660,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 					TextDrawSetString(AttHpLose, str);
 
 					TempDamage[ATTACKER] += amount;
-					format(str, sizeof(str), "~g~~h~%.0f", TempDamage[ATTACKER]);
+					format(str, sizeof(str), "~r~~h~%.0f", TempDamage[ATTACKER]);
 					TextDrawSetString(TeamHpLose[0], str);
 
 					KillTimer(AttHpTimer);
@@ -2023,9 +2022,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				new YC = Player[CID][ChatChannel];
 
                 GetPlayerFPS(CID);
-				format(statsSTR[0], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Country: %s\n\n{FF0000}- {FFFFFF}Round Kills: \t\t%d\t\t{FF0000}- {FFFFFF}Total Kills: \t\t%d\t\t{FF0000}- {FFFFFF}FPS: \t\t\t%d\n{FF0000}- {FFFFFF}Round Deaths: \t%.0f\t\t{FF0000}- {FFFFFF}Total Deaths: \t%d\t\t{FF0000}- {FFFFFF}Ping: \t\t\t%d\n",Country,  Player[CID][RoundKills],Player[CID][TotalKills], Player[CID][FPS], RD, TD, GetPlayerPing(CID));
-				format(statsSTR[1], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Round Damage: \t%.0f\t\t{FF0000}- {FFFFFF}Total Damage:   \t%.0f\t\t{FF0000}- {FFFFFF}Packet-Loss:   \t%.1f\n\n{FF0000}- {FFFFFF}Player Weather: \t%d\t\t{FF0000}- {FFFFFF}Chat Channel: \t%d\t\t{FF0000}- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], GetPlayerPacketLoss(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
-				format(statsSTR[2], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Player Time: \t\t%d\t\t{FF0000}- {FFFFFF}DM ID: \t\t%d\t\t{FF0000}- {FFFFFF}Hit Sound: \t\t%d\n{FF0000}- {FFFFFF}Player NetCheck: \t%s\t{FF0000}- {FFFFFF}Player Level: \t%d\t\t{FF0000}- {FFFFFF}Get Hit Sound: \t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
+				format(statsSTR[0], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Country: %s\n\n{FF0000}- {FFFFFF}Round Kills: \t\t%d\t\t{FF0000}- {FFFFFF}Total Kills: \t\t%d\t\t{FF0000}- {FFFFFF}FPS: \t\t\t%d\n{FF0000}- {FFFFFF}Round Deaths: \t%.0f\t\t{FF0000}- {FFFFFF}Total Deaths: \t\t%d\t\t{FF0000}- {FFFFFF}Ping: \t\t\t%d\n",Country,  Player[CID][RoundKills],Player[CID][TotalKills], Player[CID][FPS], RD, TD, GetPlayerPing(CID));
+				format(statsSTR[1], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Round Damage: \t%.0f\t\t{FF0000}- {FFFFFF}Total Damage:   \t%.0f\t\t{FF0000}- {FFFFFF}Packet-Loss:   \t%.1f\n\n{FF0000}- {FFFFFF}Player Weather: \t%d\t\t{FF0000}- {FFFFFF}Chat Channel: \t%d\t\t\t{FF0000}- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], GetPlayerPacketLoss(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
+				format(statsSTR[2], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Player Time: \t\t%d\t\t{FF0000}- {FFFFFF}DM ID: \t\t%d\t\t{FF0000}- {FFFFFF}Hit Sound: \t\t%d\n{FF0000}- {FFFFFF}Player NetCheck: \t%s\t{FF0000}- {FFFFFF}Player Level: \t\t%d\t\t{FF0000}- {FFFFFF}Get Hit Sound: \t\t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
 				format(statsSTR[3], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Duels Won: \t\t%d\t\t{FF0000}- {FFFFFF}Duels Lost: \t\t%d", Player[CID][DuelsWon], Player[CID][DuelsLost]);
 				new TotalStr[1200];
 				format(TotalStr, sizeof(TotalStr), "%s%s%s%s", statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3]);
@@ -2242,7 +2241,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			PermLocked = false;
 
             new iString[64];
-			format(iString, sizeof(iString), "%sServer Pass: ~g~~h~%s", MAIN_TEXT_COLOUR, inputtext);
+			format(iString, sizeof(iString), "%sServer Pass: ~r~~h~%s", MAIN_TEXT_COLOUR, inputtext);
 			TextDrawSetString(LockServerTD, iString);
 
 			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has locked the server. Password: {FFFFFF}%s",Player[playerid][Name], inputtext);
@@ -2359,17 +2358,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     		TotalRounds = strval(iString);
 			db_free_result(res);
 
-			TeamName[ATTACKER] = "Attackers";
-			TeamName[ATTACKER_SUB] = "Attackers Sub";
-			TeamName[DEFENDER] = "Defenders";
-			TeamName[DEFENDER_SUB] = "Defenders Sub";
+			TeamName[ATTACKER] = "Alpha";
+			TeamName[ATTACKER_SUB] = "Alpha Sub";
+			TeamName[DEFENDER] = "Beta";
+			TeamName[DEFENDER_SUB] = "Beta Sub";
 
 			UpdateTeamScoreTextDraw();
 			UpdateRoundsPlayedTextDraw();
 			UpdateTeamNameTextDraw();
 
 
-			format(iString, sizeof iString, "%sWar Mode: ~g~OFF", MAIN_TEXT_COLOUR);
+			format(iString, sizeof iString, "%sWar Mode: ~r~OFF", MAIN_TEXT_COLOUR);
 			TextDrawSetString(WarModeText, iString);
 
 			foreach(new i : Player) {
@@ -2469,7 +2468,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			SendClientMessageToAll(-1, iString);
 
 		    WarMode = true;
-		    format(iString, sizeof iString, "%sWar Mode: ~g~ON", MAIN_TEXT_COLOUR);
+		    format(iString, sizeof iString, "%sWar Mode: ~r~ON", MAIN_TEXT_COLOUR);
 			TextDrawSetString(WarModeText, iString);
 
 			ShowMatchScoreBoard();
@@ -3016,7 +3015,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	}
 	if(clickedid == LeagueToggleTD)
 	{
-	    SendErrorMessage(playerid,"League mode can't be enabled for now.");
+	    CallLocalFunction("OnPlayerCommandText", "ds", playerid, "/league");
 		return 1;
 	}
 
@@ -3064,7 +3063,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 			iString = "password 0";
 			SendRconCommand(iString);
 
-			format(iString, sizeof iString, "%sServer: ~g~Unlocked", MAIN_TEXT_COLOUR);
+			format(iString, sizeof iString, "%sServer: ~r~Unlocked", MAIN_TEXT_COLOUR);
 			TextDrawSetString(LockServerTD, iString);
 
 			ServerLocked = false;
@@ -3124,7 +3123,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
     {
         case COMMAND_UNDEFINED:
         {
-            MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~y~~h~Unknown Command", sprintf("~g~~h~%s ~w~is an unknown command. Check /cmds, /acmds or /cmdhelp for more info!", cmdtext), 3000);
+            MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~y~~h~Unknown Command", sprintf("~r~~h~%s ~w~is an unknown command. Check /cmds, /acmds or /cmdhelp for more info!", cmdtext), 3000);
 			return COMMAND_DENIED;
 		}
 		case COMMAND_DENIED:
@@ -3202,7 +3201,7 @@ YCMD:checkversion(playerid, params[])
 	    return SendErrorMessage(playerid, "Connection error. Try again later maybe!");
 
     ShowPlayerDialog(playerid, 0, DIALOG_STYLE_MSGBOX, "Version Checker",
-	 sprintf(""COL_PRIM"Server version: {FFFFFF}%s "COL_PRIM"| Newest version: {FFFFFF}%s\n"COL_PRIM"Copy version: {FFFFFF}0.1", GM_NAME, LatestVersionStr), "Okay", "");
+	 sprintf(""COL_PRIM"Server version: {FFFFFF}%s "COL_PRIM"| Newest version: {FFFFFF}%s", GM_NAME, LatestVersionStr), "Okay", "");
 	return 1;
 }
 
@@ -4153,7 +4152,7 @@ YCMD:lock(playerid, params[], help)
 		ServerLocked = true;
 		PermLocked = false;
 
-		format(iString, sizeof(iString), "%sServer Pass: ~g~%s", MAIN_TEXT_COLOUR, params);
+		format(iString, sizeof(iString), "%sServer Pass: ~r~%s", MAIN_TEXT_COLOUR, params);
 		TextDrawSetString(LockServerTD, iString);
 
 		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has locked the server. Password: {FFFFFF}%s",Player[playerid][Name], params);
@@ -4162,7 +4161,7 @@ YCMD:lock(playerid, params[], help)
 	} else {
 
 		SendRconCommand("password 0");
-		TextDrawSetString(LockServerTD, sprintf("%sServer: ~g~Unlocked", MAIN_TEXT_COLOUR));
+		TextDrawSetString(LockServerTD, sprintf("%sServer: ~r~Unlocked", MAIN_TEXT_COLOUR));
 
 		ServerLocked = false;
 		PermLocked = false;
@@ -4186,7 +4185,7 @@ YCMD:unlock(playerid, params[], help)
 
 	new iString[128];
 	SendRconCommand("password 0");
-	TextDrawSetString(LockServerTD, sprintf("%sServer: ~g~Unlocked", MAIN_TEXT_COLOUR));
+	TextDrawSetString(LockServerTD, sprintf("%sServer: ~r~Unlocked", MAIN_TEXT_COLOUR));
 
 	ServerLocked = false;
 	PermLocked = false;
@@ -4274,7 +4273,7 @@ YCMD:view(playerid, params[], help)
 			SetPlayerPos(playerid, BCPSpawn[Round][0], BCPSpawn[Round][1], BCPSpawn[Round][2]);
 
 			Player[playerid][SpectatingType] = BASE;
-			format(iString, sizeof(iString), "%sBase ~n~%s%s (ID: ~g~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, BName[Round], Round, MAIN_TEXT_COLOUR);
+			format(iString, sizeof(iString), "%sBase ~n~%s%s (ID: ~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, BName[Round], Round, MAIN_TEXT_COLOUR);
 			PlayerTextDrawSetString(playerid, TD_RoundSpec[playerid], iString);
 
 	    	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"is spectating Base: {FFFFFF}%s (ID: %d)", Player[playerid][Name], BName[Round], Round);
@@ -4288,7 +4287,7 @@ YCMD:view(playerid, params[], help)
 			SetPlayerInterior(playerid, AInterior[Round]);
 
 			Player[playerid][SpectatingType] = ARENA;
-			format(iString, sizeof(iString), "%sArena ~n~%s%s (ID: ~g~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, AName[Round], Round, MAIN_TEXT_COLOUR);
+			format(iString, sizeof(iString), "%sArena ~n~%s%s (ID: ~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, AName[Round], Round, MAIN_TEXT_COLOUR);
 			PlayerTextDrawSetString(playerid, TD_RoundSpec[playerid], iString);
 
 	    	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"is spectating Arena: {FFFFFF}%s (ID: %d)", Player[playerid][Name], AName[Round], Round);
@@ -4491,7 +4490,7 @@ YCMD:plcheck(playerid, params[], help)
 	return 1;
 }
 
-/*YCMD:league(playerid, params[], help)
+YCMD:league(playerid, params[], help)
 {
     if(help)
 	{
@@ -4508,7 +4507,7 @@ YCMD:plcheck(playerid, params[], help)
     SendErrorMessage(playerid, sprintf("This version is not permitted to run league matches (developer version or an ugly edit). Visit %s to have the right version for this!", GM_WEBSITE));
     #endif
 	return 1;
-}*/
+}
 
 YCMD:war(playerid, params[], help)
 {
@@ -4564,7 +4563,7 @@ YCMD:war(playerid, params[], help)
 
 	WarMode = true;
 	RoundPaused = false;
-    format(iString, sizeof iString, "%sWar Mode: ~g~ON", MAIN_TEXT_COLOUR);
+    format(iString, sizeof iString, "%sWar Mode: ~r~ON", MAIN_TEXT_COLOUR);
 	TextDrawSetString(WarModeText, iString);
 
     new toTeam = ATTACKER, oppositeTeam = DEFENDER;
@@ -5962,11 +5961,11 @@ YCMD:defaultskins(playerid, params[], help)
 	}
 	new iString[128];
 
-	Skin[ATTACKER] = 250;
+	Skin[ATTACKER] = 53;
 	format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'Attacker Skin'", 53);
     db_free_result(db_query(sqliteconnection, iString));
 
-	Skin[DEFENDER] = 177;
+	Skin[DEFENDER] = 230;
 	format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'Defender Skin'", 230);
     db_free_result(db_query(sqliteconnection, iString));
 
@@ -7578,12 +7577,6 @@ YCMD:rb(playerid,params[], help)
 	return 1;
 }
 
-YCMD:kill(playerid,params[], help)
-{
-    SetPlayerHealth(playerid, 0.0);
-	return 1;
-}
-
 YCMD:random(playerid, params[], help)
 {
 	//if(Player[playerid][Level] < 1 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be a higher admin level.");
@@ -8383,7 +8376,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 							SetPlayerCameraLookAt(playerid,BCPSpawn[i][0],BCPSpawn[i][1],BCPSpawn[i][2]);
 					   		SetPlayerCameraPos(playerid,BCPSpawn[i][0]+100,BCPSpawn[i][1],BCPSpawn[i][2]+80);
 							SetPlayerPos(playerid, BCPSpawn[i][0], BCPSpawn[i][1], BCPSpawn[i][2]);
-							format(iString, sizeof(iString), "%sBase ~n~%s%s (ID: ~g~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, BName[i], i, MAIN_TEXT_COLOUR);
+							format(iString, sizeof(iString), "%sBase ~n~%s%s (ID: ~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, BName[i], i, MAIN_TEXT_COLOUR);
 							PlayerTextDrawSetString(playerid, TD_RoundSpec[playerid], iString);
 						 	break;
 						}
@@ -8407,7 +8400,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					   		SetPlayerCameraPos(playerid,BCPSpawn[i][0]+100,BCPSpawn[i][1],BCPSpawn[i][2]+80);
 							SetPlayerPos(playerid, BCPSpawn[i][0], BCPSpawn[i][1], BCPSpawn[i][2]);
 
-							format(iString, sizeof(iString), "%sBase ~n~%s%s (ID: ~g~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, BName[i], i, MAIN_TEXT_COLOUR);
+							format(iString, sizeof(iString), "%sBase ~n~%s%s (ID: ~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, BName[i], i, MAIN_TEXT_COLOUR);
 							PlayerTextDrawSetString(playerid, TD_RoundSpec[playerid], iString);
 						 	break;
 						}
@@ -8431,7 +8424,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 							SetPlayerPos(playerid, ACPSpawn[Player[playerid][SpectatingRound]][0], ACPSpawn[Player[playerid][SpectatingRound]][1], ACPSpawn[Player[playerid][SpectatingRound]][2]);
 							SetPlayerInterior(playerid, AInterior[Player[playerid][SpectatingRound]]);
 
-							format(iString, sizeof(iString), "%sArena ~n~%s%s (ID: ~g~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, AName[Player[playerid][SpectatingRound]], Player[playerid][SpectatingRound], MAIN_TEXT_COLOUR);
+							format(iString, sizeof(iString), "%sArena ~n~%s%s (ID: ~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, AName[Player[playerid][SpectatingRound]], Player[playerid][SpectatingRound], MAIN_TEXT_COLOUR);
 							PlayerTextDrawSetString(playerid, TD_RoundSpec[playerid], iString);
 						 	break;
 						}
@@ -8454,7 +8447,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 							SetPlayerPos(playerid, ACPSpawn[Player[playerid][SpectatingRound]][0], ACPSpawn[Player[playerid][SpectatingRound]][1], ACPSpawn[Player[playerid][SpectatingRound]][2]);
 							SetPlayerInterior(playerid, AInterior[Player[playerid][SpectatingRound]]);
 
-							format(iString, sizeof(iString), "%sArena ~n~%s%s (ID: ~g~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, AName[Player[playerid][SpectatingRound]], Player[playerid][SpectatingRound], MAIN_TEXT_COLOUR);
+							format(iString, sizeof(iString), "%sArena ~n~%s%s (ID: ~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, AName[Player[playerid][SpectatingRound]], Player[playerid][SpectatingRound], MAIN_TEXT_COLOUR);
 							PlayerTextDrawSetString(playerid, TD_RoundSpec[playerid], iString);
 						 	break;
 						}

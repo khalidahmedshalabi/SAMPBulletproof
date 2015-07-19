@@ -6,15 +6,15 @@
 
 SetTeamDefaultColors()
 {
-	TextColor[ATTACKER] 	= 	"{00FF1E}";
-	TextColor[ATTACKER_SUB] = 	"{AAFFAB}";
+	TextColor[ATTACKER] 	= 	"{FF0033}";
+	TextColor[ATTACKER_SUB] = 	"{FFAAAA}";
 	TextColor[DEFENDER] 	= 	"{3344FF}";
 	TextColor[DEFENDER_SUB] = 	"{AAAAFF}";
 	TextColor[REFEREE] 		= 	"{FFFF88}";
 
 	TDC[NON] 				= 	"~p~";
-	TDC[ATTACKER] 			= 	"~g~~h~";
-	TDC[ATTACKER_SUB] 		= 	"~g~~h~~h~";
+	TDC[ATTACKER] 			= 	"~r~~h~";
+	TDC[ATTACKER_SUB] 		= 	"~r~~h~~h~";
 	TDC[DEFENDER] 			= 	"~b~~h~~h~";
 	TDC[DEFENDER_SUB] 		= 	"~b~~h~~h~~h~";
 	TDC[REFEREE]			= 	"~y~~h~";
@@ -49,12 +49,12 @@ ChangeTheme(playerid, listitem)
 		}
 		case 2: // White (Background) & Red (Text)
 		{
-            format(MAIN_TEXT_COLOUR, sizeof MAIN_TEXT_COLOUR, "~g~");
+            format(MAIN_TEXT_COLOUR, sizeof MAIN_TEXT_COLOUR, "~r~");
 		    MAIN_BACKGROUND_COLOUR = 0xEEEEEE11;
 		}
 		case 3: // Black (Background) & Red (Text)
 		{
-            format(MAIN_TEXT_COLOUR, sizeof MAIN_TEXT_COLOUR, "~g~");
+            format(MAIN_TEXT_COLOUR, sizeof MAIN_TEXT_COLOUR, "~r~");
 		    MAIN_BACKGROUND_COLOUR = 0x00000011;
 		}
 		case 4: // White (Background) & Blue (Text)
