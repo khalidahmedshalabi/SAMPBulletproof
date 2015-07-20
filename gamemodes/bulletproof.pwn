@@ -1821,12 +1821,14 @@ public OnPlayerModelSelection(playerid, response, listid, modelid)
 
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
+	#if defined _league_included
 	if(dialogid == DIALOG_LEAGUE_CONFIRM)
 	{
 	    if(response)
 	    	StartLeagueMode(playerid);
 	    return 1;
 	}
+	#endif
 	if(dialogid == DIALOG_GUNMENU)
 	{
 	    OnGunmenuDialogResponse(playerid, response, listitem);
