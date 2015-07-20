@@ -4530,17 +4530,21 @@ YCMD:league(playerid, params[], help)
 	if(LeagueMode == true) return SendErrorMessage(playerid,"League-mode is already on.");
     if(WarMode == false) return SendErrorMessage(playerid,"War/match mode has to be enabled first.");
 
-	new leagueTypeStr[5];
-	if(sscanf(params, "s", leagueTypeStr))
-	    return SendUsageMessage(playerid,"/league [ft / clan]");
+	new leagueTypeStr[5], playersCount;
+	if(sscanf(params, "si", leagueTypeStr, playersCount))
+	    return SendUsageMessage(playerid,"/league [ft / clan] [match mode (players): 3, 4, 5...]");
 
 	if(strcmp(leagueTypeStr, "ft", true) == 0)
 		LeagueMatchType = LEAGUE_MATCH_TYPE_FT;
 	else if(strcmp(leagueTypeStr, "clan", true) == 0)
 		LeagueMatchType = LEAGUE_MATCH_TYPE_CLAN;
 	else
-		return SendUsageMessage(playerid,"/league [ft / clan]");
+		return SendUsageMessage(playerid,"/league [ft / clan] [match mode (players): 3, 4, 5...]");
+		
+	if(playersCount < 3)
+		return SendErrorMessage(playerid, "League matches cannot be less than 3v3");
 
+	LEAGUE_MATCH_MODE = playersCount;
     CheckLeagueClans(playerid, TeamName[ATTACKER], TeamName[DEFENDER]);
     #else
     SendErrorMessage(playerid, sprintf("This version is not permitted to run league matches (developer version or an ugly edit). Visit %s to have the right version for this!", GM_WEBSITE));
