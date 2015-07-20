@@ -7288,6 +7288,31 @@ YCMD:get(playerid,params[], help)
 	return 1;
 }
 
+YCMD:spas(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "enable/disable the spas while playing");
+	    return 1;
+	}
+	new pname[MAX_PLAYER_NAME];
+	new string[128];
+	GetPlayerName(playerid, pname, sizeof(pname));
+	if(GunmenuData[6][GunLimit] == 1)
+	{
+			GunmenuData[6][GunLimit] = 0;
+			format(string, sizeof(string), "%s has {FF3035}disabled{FFFFFF} the spas.", pname);
+			SendClientMessageToAll(-1, string);
+	}
+	else
+	{
+			GunmenuData[6][GunLimit] = 1; 
+			format(string, sizeof(string), "%s has {FF3035}enabled{FFFFFF} the spas. (1 spas/team)", pname);
+			SendClientMessageToAll(-1, string);
+	}
+	return 1;
+}
+
 
 YCMD:spec(playerid, params[], help)
 {
