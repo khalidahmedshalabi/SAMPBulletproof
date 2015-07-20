@@ -4,13 +4,13 @@
 
 #include "modules\header\version_checker.txt"
 
-InitVersionChecker(timer = true, moreinfo = false)
+InitVersionChecker(timer, moreinfo)
 {
-	if(!strcmp(hostname, "Bulletproof Home Test Server", true))
-	{
-		VersionCheckerStatus = false;
-		return 0;
-	}
+	#if defined PRE_RELEASE_VERSION
+	#pragma unused timer
+	#pragma unused moreinfo
+	VersionCheckerStatus = false;
+	#else
 	if(timer)
 	{
 		SetTimer("ReportServerVersion", 1 * 60 * 60 * 1000, true);
@@ -21,7 +21,7 @@ InitVersionChecker(timer = true, moreinfo = false)
 	}
 	VC_ConnectionFailures = 0;
 	HTTP(0, HTTP_GET, VERSION_CHECKER_VERSION_URL, "", "SaveVersionInStr");
-	return 1;
+	#endif
 }
 
 forward ReportServerVersion_Delayed();
@@ -40,7 +40,6 @@ public ReportServerVersion_Delayed()
  	{
      	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Version checker: {FFFFFF}the version used in this server is out-dated. You can visit "COL_PRIM"%s {FFFFFF}to get the latest version", GM_WEBSITE));
         SendClientMessageToAll(-1, sprintf(""COL_PRIM"Server version: {FFFFFF}%s "COL_PRIM"| Newest version: {FFFFFF}%s", GM_NAME, LatestVersionStr));
-		SendRconCommand("exit");
 	}
 	return 1;
 }

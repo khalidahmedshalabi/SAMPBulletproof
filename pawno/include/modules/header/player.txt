@@ -13,6 +13,7 @@ enum PlayerVariables
 	Name[MAX_PLAYER_NAME],
 	NameWithoutTag[MAX_PLAYER_NAME],
 	Tag[6],
+	TempTag[6],
 	bool:Logged,
 	bool:IgnoreSpawn,
 	bool:InDM,
@@ -38,7 +39,8 @@ enum PlayerVariables
 	bool:FakePacketRenovation,
 	bool:AlreadyDying,
 	bool:TempNetcheck,
-	bool:MustClanPass,
+	bool:MustLeaguePass,
+	bool:LeagueLogged,
 	#if GTAV_SWITCH_MENU != 0
 	bool:OnGunSwitch,
 	#endif

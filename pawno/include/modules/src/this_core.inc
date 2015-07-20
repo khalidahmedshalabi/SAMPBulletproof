@@ -44,7 +44,7 @@ InitScriptSecondarySettings()
 	SetTeamDefaultColors();
     SetTeamDefaultNames();
     SetAltCommands();
-	InitVersionChecker(false, true);
+	InitVersionChecker(true, true);
     InitSpectate();
 	InitVisualDamage();
 	InitGunmenu();

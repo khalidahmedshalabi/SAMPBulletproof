@@ -202,7 +202,8 @@ InitPlayer(playerid)
 	Player[playerid][GunmenuStyle] = GUNMENU_STYLE_DIALOG;
 	Player[playerid][AlreadyDying] = false;
 	Player[playerid][TempNetcheck] = false;
-	Player[playerid][MustClanPass] = false;
+	Player[playerid][MustLeaguePass] = false;
+	Player[playerid][LeagueLogged] = false;
 	Player[playerid][InDeathCamera] = false;
 	#if GTAV_SWITCH_MENU != 0
 	Player[playerid][OnGunSwitch] = false;
@@ -211,9 +212,10 @@ InitPlayer(playerid)
 	SetPlayerColor(playerid, 0xAAAAAAAA);
 	RemoveUselessObjects(playerid);
 	LoadPlayerTextDraws(playerid);
-	
+	format(Player[playerid][TempTag], 6, "");
 	for(new i = 0; i < MAX_PLAYER_BARS; i ++)
 		TeamBarShownForPlayer[playerid][_:i] = false;
+	
 	
 	InitPlayerMessageBox(playerid);
 	InitPlayerNames(playerid);
@@ -310,6 +312,10 @@ LoginPlayer(playerid, DBResult:res)
 	// Load Gunmenu Style
 	db_get_field_assoc(res, "GunmenuStyle", iString, sizeof(iString));
 	Player[playerid][GunmenuStyle] = strval(iString);
+	
+	// Load Temp Tag (used for league FT matches)
+	db_get_field_assoc(res, "TempTag", iString, sizeof(iString));
+	format(Player[playerid][TempTag], 6, "%s", iString);
 	
 	// Get current IP address
 	new IP[16];

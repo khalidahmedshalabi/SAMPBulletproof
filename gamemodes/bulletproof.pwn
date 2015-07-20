@@ -30,6 +30,13 @@
 native gpci (playerid, serial [], len);
 native IsValidVehicle(vehicleid);
 
+/*
+	If PRE_RELEASE_VERSION is defined, the version checker
+	is ignored and you can no longer worry about it. It's
+	to be commented out on releases though.
+*/
+#define PRE_RELEASE_VERSION
+
 #include <gBugFix> // Fix false vehicle entry as passenger (G (teleport/distance) bug)
 
 /*
@@ -90,25 +97,12 @@ native IsValidVehicle(vehicleid);
 main()
 {}
 
-forward CheckServerVersion();
-public CheckServerVersion()
-{
-    // Check if version is out-dated and if server owners are forced to use newest version
-	if(VersionReport == VERSION_IS_BEHIND && ForceUserToNewestVersion == true)
-	{
-	    printf("This is an out-dated version of Bulletproof GM. Upgrade please!\n%s\nServer is closing...", GM_WEBSITE);
-	    SendRconCommand("exit");
-	}
-	return 1;
-}
-
 public OnGameModeInit()
 {
     InitScriptCoreSettings();
     InitScriptCoreVariables();
 	InitScriptSecondarySettings();
 	AddToServersDatabase();
-	SetTimer("CheckServerVersion", 1000, false);
 	SetTimer("OnScriptUpdate", 1000, true); // Timer that is repeatedly called every second (will be using this for most global stuff)
 	return 1;
 }
@@ -124,6 +118,14 @@ public OnGameModeExit()
 
 public OnPlayerConnect(playerid)
 {
+    // Check if version is out-dated and if server owners are forced to use newest version
+	if(VersionReport == VERSION_IS_BEHIND && ForceUserToNewestVersion == true)
+	{
+	    SendClientMessageToAll(-1, sprintf(""COL_PRIM"Version checker: {FFFFFF}the version used in this server is out-dated. You can visit "COL_PRIM"%s {FFFFFF}to get the latest version", GM_WEBSITE));
+        SendClientMessageToAll(-1, sprintf(""COL_PRIM"Server version: {FFFFFF}%s "COL_PRIM"| Newest version: {FFFFFF}%s", GM_NAME, LatestVersionStr));
+        SetTimerEx("OnPlayerKicked", 500, false, "i", playerid);
+		return 0;
+	}
     if(DatabaseLoading == true)
     {
         ClearChatForPlayer(playerid);
@@ -137,7 +139,7 @@ public OnPlayerConnect(playerid)
 	    SendClientMessageToAll(-1, sprintf(""COL_PRIM"ID %d could't connect to the server properly. Maximum players limit exceeded!", playerid));
 	    SendClientMessageToAll(-1, sprintf("MAX PLAYERS LIMIT: %d | Ask for a special and increased limit | %s", MAX_PLAYERS, GM_WEBSITE));
 	    SetTimerEx("OnPlayerKicked", 500, false, "i", playerid);
-	    return 1;
+	    return 0;
 	}
 	// Send them welcome messages
 	SendClientMessage(playerid, -1, ""COL_PRIM"It's {FFFFFF}Bulletproof"COL_PRIM". Your bullets are fruitless. You can't take it down!");
@@ -185,7 +187,7 @@ public OnPlayerRequestClass(playerid, classid)
 
     #if defined _league_included
 	// League account login check
-	if(Player[playerid][MustClanPass] == true)
+	if(Player[playerid][MustLeaguePass] == true)
 	{
 	    ShowPlayerDialog(
 			playerid,
@@ -1819,6 +1821,12 @@ public OnPlayerModelSelection(playerid, response, listid, modelid)
 
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
+	if(dialogid == DIALOG_LEAGUE_CONFIRM)
+	{
+	    if(response)
+	    	StartLeagueMode(playerid);
+	    return 1;
+	}
 	if(dialogid == DIALOG_GUNMENU)
 	{
 	    OnGunmenuDialogResponse(playerid, response, listitem);
@@ -2954,7 +2962,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	}
 	#if defined _league_included
 	// League login dialog lock - so that players can't escape the league clan login check
-	if(Player[playerid][MustClanPass] == true)
+	if(Player[playerid][MustLeaguePass] == true)
 	{
 	    ShowPlayerDialog(
 			playerid,
@@ -4494,6 +4502,22 @@ YCMD:plcheck(playerid, params[], help)
 	return 1;
 }
 
+YCMD:leaguehelp(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "display help about league mode.");
+	    return 1;
+	}
+	new str[550];
+	strcat(str, ""COL_PRIM"How to start a league match: clan vs clan\n\n{FFFFFF}Before starting a league match between 2 clans, you have to make sure that ");
+	strcat(str, "both clans are registered in the league ("GM_WEBSITE") and players are\nregistered in those clans. ");
+ 	strcat(str, "Once done of clan/player registration, you can easily enable league mode by using /league clan\n\n\n");
+	strcat(str, ""COL_PRIM"How to start a league match: funteams (ft)\n\n{FFFFFF}Make sure players are logged into their league accounts, enable match mode, balance teams and then /league ft");
+	ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "League mode help", str, "That's cool!", "");
+	return 1;
+}
+
 YCMD:league(playerid, params[], help)
 {
     if(help)
@@ -4505,6 +4529,17 @@ YCMD:league(playerid, params[], help)
 	if(Current != -1) return SendErrorMessage(playerid,"Can't use this command while round is on.");
 	if(LeagueMode == true) return SendErrorMessage(playerid,"League-mode is already on.");
     if(WarMode == false) return SendErrorMessage(playerid,"War/match mode has to be enabled first.");
+
+	new leagueTypeStr[5];
+	if(sscanf(params, "s", leagueTypeStr))
+	    return SendUsageMessage(playerid,"/league [ft / clan]");
+
+	if(strcmp(leagueTypeStr, "ft", true) == 0)
+		LeagueMatchType = LEAGUE_MATCH_TYPE_FT;
+	else if(strcmp(leagueTypeStr, "clan", true) == 0)
+		LeagueMatchType = LEAGUE_MATCH_TYPE_CLAN;
+	else
+		return SendUsageMessage(playerid,"/league [ft / clan]");
 
     CheckLeagueClans(playerid, TeamName[ATTACKER], TeamName[DEFENDER]);
     #else
@@ -6072,6 +6107,7 @@ YCMD:setteam(playerid, params[], help)
 	if(MyVehicle != -1) {
 	    PutPlayerInVehicle(Params[0], MyVehicle, Seat);
 	}
+	SwitchTeamFix(Params[0]);
 
     new iString[150];
 	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%.0f~n~%sTotal Dmg %s%.0f", MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][TotalDamage]);

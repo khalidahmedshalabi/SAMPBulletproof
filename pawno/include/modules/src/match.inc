@@ -2336,7 +2336,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 		{
 			if(!IsEnoughPlayersForLeague(TeamName[ATTACKER], TeamName[DEFENDER]))
 			{
-				SendClientMessageToAll(-1, ""COL_PRIM"One clan doesn't have enough players to start. You have 60 seconds to be ready or this will be an RQ");
+				SendClientMessageToAll(-1, ""COL_PRIM"One team doesn't have enough players to start. You have 60 seconds to be ready or this will be an RQ");
 				if(CurrentRound == (TotalRounds - 1))
 				{
 					SetTimerEx("StartAnotherLeagueRound", 60000, false, "db", ARENA, false);

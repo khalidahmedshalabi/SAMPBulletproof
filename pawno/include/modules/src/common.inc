@@ -304,7 +304,7 @@ public SpawnConnectedPlayer(playerid, team)
 	}
 	else // League mode is enabled
 	{
-		FixPlayerLeagueTeam(playerid);
+		SpawnLeaguePlayer(playerid);
 	}
 	#endif
 
@@ -1376,6 +1376,23 @@ SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
 	ClearAnimations(playerid);
 	SetCameraBehindPlayer(playerid);
 	HideAllTeamBarsForPlayer(playerid);
+	#if defined _league_included
+	switch(Player[playerid][Team])
+	{
+		case ATTACKER:
+		{
+			format(Player[playerid][TempTag], 6, TeamName[ATTACKER]);
+		}
+		case DEFENDER:
+		{
+			format(Player[playerid][TempTag], 6, TeamName[DEFENDER]);
+		}
+		default:
+		{
+			format(Player[playerid][TempTag], 6, "");
+		}
+	}
+	#endif
 }
 
 GetTeamWithLessPlayers()
