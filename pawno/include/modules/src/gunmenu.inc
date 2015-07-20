@@ -8,6 +8,26 @@ LoadGunmenuData()
 {
 	// todo: use database
 	new idx = 0;
+	GunmenuData[idx][GunID] = WEAPON_KNIFE;
+	GunmenuData[idx][GunModel] = 335;
+	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
+	GunmenuData[idx][GunAmmo] = 0;
+	idx ++;
+	GunmenuData[idx][GunID] = WEAPON_GRENADE;
+	GunmenuData[idx][GunModel] = 342;
+	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
+	GunmenuData[idx][GunAmmo] = 0;
+	idx ++;
+	GunmenuData[idx][GunID] = WEAPON_TEARGAS;
+	GunmenuData[idx][GunModel] = 343;
+	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
+	GunmenuData[idx][GunAmmo] = 0;
+	idx ++;
+	GunmenuData[idx][GunID] = WEAPON_SILENCED;
+	GunmenuData[idx][GunModel] = 347;
+	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
+	GunmenuData[idx][GunAmmo] = 9999;
+	idx ++;
 	GunmenuData[idx][GunID] = WEAPON_DEAGLE;
 	GunmenuData[idx][GunModel] = 348;
 	GunmenuData[idx][GunLimit] = 2;

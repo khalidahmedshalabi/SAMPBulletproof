@@ -17,5 +17,5 @@ My changelog on bulletproof gamemode:
 - Fixed sniper/deagle set
 - Fixed blue background on info textdraw while round is in progress
 - Maxium 2 deagle per team, Maxium 1 M4 per team
-- Removed Knife, Grenades, Tetragas or how the fuck is named
+- Removed Knife, Grenades, Tetragas or how the fuck is named (i mean i set ammo to 0 you should be able to take knife i think i dont give a shit)
 - No more sniper/deagle (it has a bug)
