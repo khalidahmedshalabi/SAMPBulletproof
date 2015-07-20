@@ -445,23 +445,6 @@ public OnPlayerSpawn(playerid)
 	return 1;
 }
 
-forward CheckServerLock();
-public CheckServerLock()
-{
-	// See if there are no players in the server and round is not paused
-    if(Iter_Count(Player) == 0 && RoundPaused == false)
-	{
-	    // if permanent locking is disabled
-		if(!PermLocked)
-	    {
-	        // Unlock the server
-			SendRconCommand("password 0");
-			ServerLocked = false;
-		}
-	}
-	return 1;
-}
-
 public OnPlayerDisconnect(playerid, reason)
 {
 	// Handle war mode
@@ -540,8 +523,27 @@ public OnPlayerDisconnect(playerid, reason)
 		Player[playerid][LastVehicle] = -1;
 		DoNotDestroyVehicle:
 	}
-	if(ServerLocked)
-		SetTimer("CheckServerLock", 1000, false);
+	// If it's the last player in the server (server is empty now!)
+	if(Iter_Count(Player) == 1)
+	{
+	    // Server lock check
+		if(ServerLocked)
+		{
+		    // See if round is not paused
+		    if(RoundPaused == false)
+			{
+			    // if permanent locking is disabled
+				if(!PermLocked)
+			    {
+			        // Unlock the server
+					SendRconCommand("password 0");
+					ServerLocked = false;
+				}
+			}
+		}
+		// Version check
+		ReportServerVersion();
+	}
 	// Fixes the x Vs y textdraws with current team player count
 	FixVsTextDraw(playerid);
 	return 1;
