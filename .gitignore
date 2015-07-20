@@ -10,13 +10,8 @@ samp-license.txt
 server-readme.txt
 admin_command_log.txt
 crashinfo.txt
-bulletproof.pwn
-/filterscripts
-/pawno
-.gitignore
 LICENSE
 announce.exe
 samp-npc.exe
 samp-server.exe
-bpfgm.txt
 samp.ban
