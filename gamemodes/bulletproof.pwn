@@ -1,3 +1,9 @@
+/*
+
+This gamemode has been edited by shendlaw.
+
+*/
+
 #include <a_samp>
 #include <a_http>
 
