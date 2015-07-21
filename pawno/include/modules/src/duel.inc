@@ -3,10 +3,25 @@
 ResetDuellers(dueller1, dueller2)
 {
 	// Teams
+	#if defined _league_included
+	if(LeagueMode)
+	{
+		FixPlayerLeagueTeam(dueller1);
+		FixPlayerLeagueTeam(dueller2);
+	}
+	else
+	{
+		Player[dueller1][Team] = Player[dueller1][TeamBeforeDuel];
+		Player[dueller2][Team] = Player[dueller2][TeamBeforeDuel];
+		SwitchTeamFix(dueller1);
+		SwitchTeamFix(dueller2);
+	}
+	#else
 	Player[dueller1][Team] = Player[dueller1][TeamBeforeDuel];
 	Player[dueller2][Team] = Player[dueller2][TeamBeforeDuel];
     SwitchTeamFix(dueller1);
     SwitchTeamFix(dueller2);
+	#endif
 	// world bounds
 	ResetPlayerWorldBounds(dueller1);
 	ResetPlayerWorldBounds(dueller2);

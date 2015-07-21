@@ -6115,7 +6115,7 @@ YCMD:setteam(playerid, params[], help)
 	if(MyVehicle != -1) {
 	    PutPlayerInVehicle(Params[0], MyVehicle, Seat);
 	}
-	SwitchTeamFix(Params[0]);
+	SwitchTeamFix(Params[0], false, true);
 
     new iString[150];
 	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%.0f~n~%sTotal Dmg %s%.0f", MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][TotalDamage]);
@@ -6443,6 +6443,7 @@ YCMD:back(playerid, params[], help)
     if(LeagueMode)
     {
         FixPlayerLeagueTeam(playerid);
+        FixVsTextDraw();
     }
     else
     {

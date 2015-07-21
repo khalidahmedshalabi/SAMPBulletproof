@@ -212,7 +212,7 @@ InitPlayer(playerid)
 	SetPlayerColor(playerid, 0xAAAAAAAA);
 	RemoveUselessObjects(playerid);
 	LoadPlayerTextDraws(playerid);
-	format(Player[playerid][TempTag], 6, "");
+	format(Player[playerid][TempTag], 7, "");
 	for(new i = 0; i < MAX_PLAYER_BARS; i ++)
 		TeamBarShownForPlayer[playerid][_:i] = false;
 	
@@ -315,7 +315,7 @@ LoginPlayer(playerid, DBResult:res)
 	
 	// Load Temp Tag (used for league FT matches)
 	db_get_field_assoc(res, "TempTag", iString, sizeof(iString));
-	format(Player[playerid][TempTag], 6, "%s", iString);
+	format(Player[playerid][TempTag], 7, "%s", iString);
 	
 	// Get current IP address
 	new IP[16];

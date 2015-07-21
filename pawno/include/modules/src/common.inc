@@ -149,7 +149,7 @@ AddBloodEffect(Float:x, Float:y, Float:z)
 }
 
 CheckPlayerNet(playerid)
-{
+{	
 	GetPlayerFPS(playerid);
 	if(Player[playerid][FPS] < Min_FPS && Player[playerid][PauseCount] < 5 && Player[playerid][FPSCheck] == 1) 
 	{
@@ -198,7 +198,6 @@ CheckPlayerNet(playerid)
 	{
 		Player[playerid][PingKick] = 0;
 	}
-	return 1;
 }
 
 bool:IsValidWeapon(weaponid)
@@ -1226,6 +1225,7 @@ SwapTeams()
 {
 	new MyVehicle = -1;
 	new Seat;
+	new Iterator:ToFixSwitch<MAX_PLAYERS>;
 	foreach(new i : Player) {
 		if(Player[i][Team] == ATTACKER) Player[i][Team] = DEFENDER;
 		else if(Player[i][Team] == ATTACKER_SUB) Player[i][Team] = DEFENDER_SUB;
@@ -1237,11 +1237,11 @@ SwapTeams()
 		{
 			Seat = GetPlayerVehicleSeat(i);
 		}
-		SwitchTeamFix(i, false, false);
 
 		if(MyVehicle != -1) {
 		    PutPlayerInVehicle(i, MyVehicle, Seat);
 		}
+		Iter_Add(ToFixSwitch, i);
 	}
 
     for(new i=0; i < SAVE_SLOTS; ++i) {
@@ -1263,9 +1263,16 @@ SwapTeams()
 	TempName = TeamName[ATTACKER_SUB];
 	TeamName[ATTACKER_SUB] = TeamName[DEFENDER_SUB];
 	TeamName[DEFENDER_SUB] = TempName;
-
+	
 	UpdateTeamScoreTextDraw();
 	UpdateTeamNameTextDraw();
+	
+	// Fix player teams after switching
+	foreach(new i : ToFixSwitch)
+	{
+		SwitchTeamFix(i, false, false);
+	}
+	Iter_Clear(ToFixSwitch);
 
 	format(iString, sizeof(iString), "{FFFFFF}Teams are swapped - {FF0033}Attackers: {FFFFFF}%s | {3344FF}Defenders: {FFFFFF}%s", TeamName[ATTACKER], TeamName[DEFENDER]);
 	SendClientMessageToAll(-1, iString);
@@ -1381,15 +1388,15 @@ SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
 	{
 		case ATTACKER:
 		{
-			format(Player[playerid][TempTag], 6, TeamName[ATTACKER]);
+			format(Player[playerid][TempTag], 7, TeamName[ATTACKER]);
 		}
 		case DEFENDER:
 		{
-			format(Player[playerid][TempTag], 6, TeamName[DEFENDER]);
+			format(Player[playerid][TempTag], 7, TeamName[DEFENDER]);
 		}
 		default:
 		{
-			format(Player[playerid][TempTag], 6, "");
+			format(Player[playerid][TempTag], 7, "");
 		}
 	}
 	#endif

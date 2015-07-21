@@ -12,8 +12,8 @@ enum PlayerVariables
 {
 	Name[MAX_PLAYER_NAME],
 	NameWithoutTag[MAX_PLAYER_NAME],
-	Tag[6],
-	TempTag[6],
+	Tag[7],
+	TempTag[7],
 	bool:Logged,
 	bool:IgnoreSpawn,
 	bool:InDM,
