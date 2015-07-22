@@ -1377,7 +1377,7 @@ SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
 	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
 
 	ColorFix(playerid);
-	if(fixvs)
+	if(fixvs && Current == -1)
 		FixVsTextDraw();
 	SetPlayerSkin(playerid, Skin[Player[playerid][Team]]);
 	ClearAnimations(playerid);

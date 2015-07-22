@@ -236,7 +236,7 @@ InitPlayer(playerid)
 LoginPlayer(playerid, DBResult:res)
 {
     new iString[128];
-
+	
     // Load level
     db_get_field_assoc(res, "Level", iString, sizeof(iString));
     Player[playerid][Level] = strval(iString);
@@ -320,9 +320,9 @@ LoginPlayer(playerid, DBResult:res)
 	// Get current IP address
 	new IP[16];
 	GetPlayerIp(playerid, IP, sizeof(IP));
-
+	
 	// Update players table with new IP address for auto login if they reconnect.
-	format(iString, sizeof(iString), "UPDATE `Players` SET `IP` = '%s' WHERE `Name` = '%s'", IP, Player[playerid][Name]);
+	format(iString, sizeof(iString), "UPDATE `Players` SET `IP` = '%s' WHERE `Name` = '%s' AND IP != '%s' LIMIT 1", IP, Player[playerid][Name], IP);
 	db_free_result(db_query(sqliteconnection, iString));
 
     Player[playerid][Logged] = true;

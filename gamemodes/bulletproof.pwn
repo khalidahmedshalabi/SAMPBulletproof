@@ -207,7 +207,7 @@ public OnPlayerRequestClass(playerid, classid)
 	#endif
 	{
 		new Query[128];
-		format(Query, sizeof(Query), "SELECT Name FROM Players WHERE Name = '%s'", DB_Escape(Player[playerid][Name]));
+		format(Query, sizeof(Query), "SELECT Name FROM Players WHERE Name = '%s' LIMIT 1", DB_Escape(Player[playerid][Name]));
         new DBResult:result = db_query(sqliteconnection, Query);
 
 		if(!db_num_rows(result))
@@ -223,7 +223,7 @@ public OnPlayerRequestClass(playerid, classid)
 		    GetPlayerIp(playerid, IP, sizeof(IP));
 
 		    // Construct query to check if the player with the same name and IP has connected before to this server
-		    format(Query, sizeof(Query), "SELECT * FROM `Players` WHERE `Name` = '%s' AND `IP` = '%s'", DB_Escape(Player[playerid][Name]), IP);
+		    format(Query, sizeof(Query), "SELECT * FROM `Players` WHERE `Name` = '%s' AND `IP` = '%s' LIMIT 1", DB_Escape(Player[playerid][Name]), IP);
 
 		    // execute
 			new DBResult:res = db_query(sqliteconnection, Query);
@@ -1317,7 +1317,7 @@ public OnRconLoginAttempt(ip[], password[], success)
 	        Player[playerid][Level] = 5;
 	        UpdatePlayerAdminGroup(playerid);
 		}
-		format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%s'", Player[playerid][Level], DB_Escape(Player[playerid][Name]));
+		format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%s' LIMIT 1", Player[playerid][Level], DB_Escape(Player[playerid][Name]));
     	db_free_result(db_query(sqliteconnection, Str));
 		format(Str, sizeof(Str), "{FFFFFF}%s "COL_PRIM"has successfully logged into rcon and got level 5.", iName);
 		foreach(new j : Player)
@@ -2146,10 +2146,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new HashPass[140];
 		    format(HashPass, sizeof(HashPass), "%d", udb_hash(inputtext));
 
-			new query[356];
+			new query[239];
 			new IP[16];
 			GetPlayerIp(playerid, IP, sizeof(IP));
-		    format(query, sizeof(query), "INSERT INTO Players (Name, Password, Level, Weather, Time, ChatChannel, NetCheck, HitSound, GetHitSound, DWon, DLost, IP) VALUES('%s', '%s', 0, 0, 12, -1, 1, 17802, 1135, 0, 0, '%s')", DB_Escape(Player[playerid][Name]), HashPass, IP);
+		    format(query, sizeof(query), "INSERT INTO Players (Name, Password, IP) VALUES('%s', '%s', '%s')", DB_Escape(Player[playerid][Name]), HashPass, IP);
 			db_free_result(db_query(sqliteconnection, query));
 
 			MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~g~~h~register", sprintf("You've successfully registered your account with the password: %s", inputtext), 4000);
