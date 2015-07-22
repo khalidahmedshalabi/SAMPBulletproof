@@ -1317,7 +1317,7 @@ public OnRconLoginAttempt(ip[], password[], success)
 	        Player[playerid][Level] = 5;
 	        UpdatePlayerAdminGroup(playerid);
 		}
-		format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%s' LIMIT 1", Player[playerid][Level], DB_Escape(Player[playerid][Name]));
+		format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%s'", Player[playerid][Level], DB_Escape(Player[playerid][Name]));
     	db_free_result(db_query(sqliteconnection, Str));
 		format(Str, sizeof(Str), "{FFFFFF}%s "COL_PRIM"has successfully logged into rcon and got level 5.", iName);
 		foreach(new j : Player)
