@@ -2341,11 +2341,13 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 				SendClientMessageToAll(-1, ""COL_PRIM"One team doesn't have enough players to start. You have 5 minutes to be ready or this will be an RQ");
 				if(CurrentRound == (TotalRounds - 1))
 				{
-					SetTimerEx("StartAnotherLeagueRound", 300000, false, "db", ARENA, false);
+					KillTimer(LeagueRoundStarterTimer);
+					LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 300000, false, "db", ARENA, false);
 				}
 				else if(CurrentRound < (TotalRounds - 1))
 				{
-					SetTimerEx("StartAnotherLeagueRound", 300000, false, "db", BASE, false);
+					KillTimer(LeagueRoundStarterTimer);
+					LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 300000, false, "db", BASE, false);
 				}
 			}
 			else
@@ -2355,11 +2357,13 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 				SendClientMessageToAll(-1, ""COL_PRIM"Another round is automatically starting in {FFFFFF}15 seconds");
 				if(CurrentRound == (TotalRounds - 1))
 				{
-					SetTimerEx("StartAnotherLeagueRound", 15000, false, "db", ARENA, true);
+					KillTimer(LeagueRoundStarterTimer);
+					LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 15000, false, "db", ARENA, true);
 				}
 				else if(CurrentRound < (TotalRounds - 1))
 				{
-					SetTimerEx("StartAnotherLeagueRound", 15000, false, "db", BASE, true);
+					KillTimer(LeagueRoundStarterTimer);
+					LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 15000, false, "db", BASE, true);
 				}
 			}
 		}

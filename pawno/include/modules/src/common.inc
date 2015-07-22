@@ -1384,21 +1384,7 @@ SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
 	SetCameraBehindPlayer(playerid);
 	HideAllTeamBarsForPlayer(playerid);
 	#if defined _league_included
-	switch(Player[playerid][Team])
-	{
-		case ATTACKER:
-		{
-			format(Player[playerid][TempTag], 7, TeamName[ATTACKER]);
-		}
-		case DEFENDER:
-		{
-			format(Player[playerid][TempTag], 7, TeamName[DEFENDER]);
-		}
-		default:
-		{
-			format(Player[playerid][TempTag], 7, "");
-		}
-	}
+	TempLeagueTagFix(playerid);
 	#endif
 }
 

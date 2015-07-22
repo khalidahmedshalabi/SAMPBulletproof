@@ -8,6 +8,24 @@ ResetDuellers(dueller1, dueller2)
 	{
 		FixPlayerLeagueTeam(dueller1);
 		FixPlayerLeagueTeam(dueller2);
+		if(IsEnoughPlayersForLeague(TeamName[ATTACKER], TeamName[DEFENDER]))
+		{
+			SendClientMessageToAll(-1, " ");
+			SendClientMessageToAll(-1, " ");
+			SendClientMessageToAll(-1, ""COL_PRIM"Teams are ready now...");
+			SendClientMessageToAll(-1, ""COL_PRIM"A new round is automatically starting in {FFFFFF}7 seconds");
+			if(CurrentRound == (TotalRounds - 1))
+			{
+			    KillTimer(LeagueRoundStarterTimer);
+				LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 7000, false, "db", ARENA, true);
+			}
+			else if(CurrentRound < (TotalRounds - 1))
+			{
+			    KillTimer(LeagueRoundStarterTimer);
+				LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 7000, false, "db", BASE, true);
+			}
+		}
+		FixVsTextDraw();
 	}
 	else
 	{
