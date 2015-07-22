@@ -2146,7 +2146,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new HashPass[140];
 		    format(HashPass, sizeof(HashPass), "%d", udb_hash(inputtext));
 
-			new query[239];
+			new query[240];
 			new IP[16];
 			GetPlayerIp(playerid, IP, sizeof(IP));
 		    format(query, sizeof(query), "INSERT INTO Players (Name, Password, IP) VALUES('%s', '%s', '%s')", DB_Escape(Player[playerid][Name]), HashPass, IP);
