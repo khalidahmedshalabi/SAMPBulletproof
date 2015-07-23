@@ -3229,7 +3229,7 @@ YCMD:changelog(playerid, params[], help)
 	    return 1;
 	}
 	new str[1];
-	ShowPlayerDialog(playerid, DIALOG_HELPS, DIALOG_STYLE_MSGBOX,""COL_PRIM"Bulletproof Changelog", str, "OK","");
+	ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX,""COL_PRIM"Bulletproof Changelog", str, "OK","");
 	return 1;
 }
 
@@ -3252,7 +3252,7 @@ YCMD:help(playerid, params[], help)
 	strcat(HelpString, "\nRound can be paused by pressing 'Y' (for admins only).");
 	strcat(HelpString, "\nYou can request for backup from your team by pressing 'N' in round.");
 	strcat(HelpString, "\nYou can ask for pausing the round by pressing 'Y' in round.");
-	ShowPlayerDialog(playerid,DIALOG_SERVER_HELP,DIALOG_STYLE_MSGBOX,""COL_PRIM"Server Help", HelpString, "OK","");
+	ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,""COL_PRIM"Server Help", HelpString, "OK","");
 	return 1;
 }
 
@@ -3282,7 +3282,7 @@ YCMD:cmds(playerid, params[], help)
 			cmdsInLine ++;
 		}
 	}
-	ShowPlayerDialog(playerid,DIALOG_HELPS,DIALOG_STYLE_MSGBOX,""COL_PRIM"Player Commands", str, "OK","");
+	ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,""COL_PRIM"Player Commands", str, "OK","");
 	return 1;
 }
 
@@ -3319,7 +3319,7 @@ YCMD:acmds(playerid, params[], help)
    			}
 	    }
 	}
-	ShowPlayerDialog(playerid,DIALOG_HELPS,DIALOG_STYLE_MSGBOX,""COL_PRIM"Admin Commands", str, "OK","");
+	ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,""COL_PRIM"Admin Commands", str, "OK","");
 	return 1;
 }
 
@@ -4492,7 +4492,6 @@ YCMD:plcheck(playerid, params[], help)
 	if(Player[pID][NetCheck] == 0) return SendErrorMessage(playerid, "That player has netcheck disabled on him.");
 	if(Player[pID][Level] >= Player[playerid][Level] && pID != playerid) return SendErrorMessage(playerid,"That player is same or higher admin level than you.");
 
-
 	new iString[128];
 	if(Player[pID][PLCheck] == 1) {
 	    Player[pID][PLCheck] = 0;
@@ -4543,7 +4542,7 @@ YCMD:league(playerid, params[], help)
 	else if(strcmp(leagueTypeStr, "clan", true) == 0)
 		LeagueMatchType = LEAGUE_MATCH_TYPE_CLAN;
 	else
-		return SendUsageMessage(playerid,"/league [ft / clan] [match mode (players): 3, 4, 5...]");
+		return SendUsageMessage(playerid,"/league [ft / clan] [players: 3, 4, 5...]");
 		
 	if(playersCount < 3)
 		return SendErrorMessage(playerid, "League matches cannot be less than 3v3");
@@ -4974,7 +4973,7 @@ YCMD:rounds(playerid,params[], help)
 	        }
 	    }
 	}
-	ShowPlayerDialog( playerid, DIALOG_ROUND_LIST, DIALOG_STYLE_MSGBOX, "Rounds played in current/last match", str1, "Close", "" );
+	ShowPlayerDialog( playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "Rounds played in current/last match", str1, "Close", "" );
 	return 1;
 }
 
@@ -5116,7 +5115,7 @@ YCMD:pchannel(playerid, params[], help)
 			}
 		}
 
-		ShowPlayerDialog(playerid,DIALOG_CHANNEL_PLAYERS,DIALOG_STYLE_MSGBOX,"{FFFFFF}Players In Channel", iString, "Close","");
+		ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,"{FFFFFF}Players In Channel", iString, "Close","");
 	} else {
     	SendErrorMessage(playerid,"You are not in any channel.");
 	}
@@ -5469,8 +5468,8 @@ YCMD:admins(playerid, params[], help)
 		}
 	}
 
-	if(strlen(iString) < 2) ShowPlayerDialog(playerid,DIALOG_ADMINS,DIALOG_STYLE_MSGBOX,"{FFFFFF}Admins Online", "No Admins online.","Ok","");
-	else ShowPlayerDialog(playerid,DIALOG_ADMINS,DIALOG_STYLE_MSGBOX,"{FFFFFF}Admins Online", iString,"Ok","");
+	if(strlen(iString) < 2) ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,"{FFFFFF}Admins Online", "No Admins online.","Ok","");
+	else ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,"{FFFFFF}Admins Online", iString,"Ok","");
 
 	return 1;
 }
@@ -5503,7 +5502,7 @@ YCMD:serverstats(playerid, params[], help)
 	}
 	new stats[450];
 	GetNetworkStats(stats, sizeof(stats)); // get the servers networkstats
-	ShowPlayerDialog(playerid, DIALOG_SERVER_STATS, DIALOG_STYLE_MSGBOX, "Server Network Stats", stats, "Close", "");
+	ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "Server Network Stats", stats, "Close", "");
 	return 1;
 }
 
@@ -5810,14 +5809,15 @@ YCMD:reloaddb(playerid, params[], help)
 	return 1;
 }
 
-forward FakePacketRenovationEnd(playerid, Float:fakepacket);
-public FakePacketRenovationEnd(playerid, Float:fakepacket)
+forward FakePacketRenovationEnd(playerid, Float:fakepacket, bool:message);
+public FakePacketRenovationEnd(playerid, Float:fakepacket, bool:message)
 {
 	if(!Player[playerid][FakePacketRenovation] || !IsPlayerConnected(playerid))
 	    return 0;
 	    
     Player[playerid][FakePacketRenovation] = false;
-    SendClientMessageToAll(-1, sprintf(""COL_PRIM"Fake PL renovation on {FFFFFF}%s "COL_PRIM"has ended - Old: {FFFFFF}%.1f "COL_PRIM" | Current: {FFFFFF}%.1f", Player[playerid][Name], fakepacket, GetPlayerPacketLoss(playerid)));
+    if(message)
+    	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Fake PL renovation on {FFFFFF}%s "COL_PRIM"has ended - Old: {FFFFFF}%.1f "COL_PRIM" | Current: {FFFFFF}%.1f", Player[playerid][Name], fakepacket, GetPlayerPacketLoss(playerid)));
 	return 1;
 }
 
@@ -5836,7 +5836,7 @@ YCMD:fakepacket(playerid, params[], help)
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isn't connected.");
 	if(NetStats_PacketLossPercent(pID) == 0.0) return SendErrorMessage(playerid, "That player has 0.0% packet-loss");
 
-	SetTimerEx("FakePacketRenovationEnd", interv * 60 * 1000, false, "if", pID, GetPlayerPacketLoss(pID));
+	SetTimerEx("FakePacketRenovationEnd", interv * 60 * 1000, false, "ifb", pID, GetPlayerPacketLoss(pID), true);
 	Player[pID][FakePacketRenovation] = true;
 
 	new str[150];
@@ -5958,7 +5958,7 @@ YCMD:chatcolor(playerid,params[], help)
 		strcat( bigString, "\n\nHex Code need to have 6 Digits and can contain only number from 0 - 9 and letters A - F", sizeof(bigString) );
    	    strcat( bigString, "\n\t{01A2F8}You can get some color codes from websites like: Www.ColorPicker.Com \n\t\t{37B6FA}Notice: In-Game Colors might appear different from website.\n", sizeof(bigString) );
 
-		ShowPlayerDialog(playerid,DIALOG_HELPS,DIALOG_STYLE_MSGBOX, "Hints for the command.", bigString, "Close", "" );
+		ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX, "Hints for the command.", bigString, "Close", "" );
 		return 1;
 	}
     //if(Player[playerid][Level] < 5 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be level 4 or rcon admin.");
@@ -6362,7 +6362,7 @@ YCMD:aka(playerid, params[], help) {
 
 	new title[50];
 	format(title, sizeof(title), ""COL_PRIM"%s's AKA", Player[pID][Name]);
-    ShowPlayerDialog(playerid, DIALOG_AKA, DIALOG_STYLE_MSGBOX,title,AKAString,"Close","");
+    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX,title,AKAString,"Close","");
 
     return 1;
 }

@@ -1473,6 +1473,12 @@ SpawnPlayersInArena()
 		{
 	        if(Player[i][Spectating] == true) StopSpectate(i);
 
+			if(!Player[i][FakePacketRenovation] && Player[i][NetCheck] && NetStats_GetConnectedTime(i) < 300000)
+			{
+				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", i, GetPlayerPacketLoss(i), false);
+				Player[i][FakePacketRenovation] = true;
+			}
+			
 	        Player[i][Playing] = true;
 	        Player[i][WasInBase] = true;
 			Iter_Add(PlayersInRound, i);
@@ -1569,7 +1575,13 @@ public AddPlayerToArena(playerid)
 		DestroyVehicle(Player[playerid][LastVehicle]);
 		Player[playerid][LastVehicle] = -1;
 	}
-
+	
+	if(!Player[playerid][FakePacketRenovation] && Player[playerid][NetCheck] && NetStats_GetConnectedTime(playerid) < 300000)
+	{
+		SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", playerid, GetPlayerPacketLoss(playerid), false);
+		Player[playerid][FakePacketRenovation] = true;
+	}
+	
     Player[playerid][Playing] = true;
     Player[playerid][WasInBase] = true;
 	Iter_Add(PlayersInRound, playerid);
@@ -1823,6 +1835,12 @@ SpawnPlayersInBase()
             if(Player[i][Spectating] == true) 
 				StopSpectate(i);
 
+			if(!Player[i][FakePacketRenovation] && Player[i][NetCheck] && NetStats_GetConnectedTime(i) < 300000)
+			{
+				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", i, GetPlayerPacketLoss(i), false);
+				Player[i][FakePacketRenovation] = true;
+			}
+			
 	        Player[i][Playing] = true;
 	        Player[i][WasInBase] = true;
 			Iter_Add(PlayersInRound, i);
@@ -1928,6 +1946,12 @@ public AddPlayerToBase(playerid)
 		Player[playerid][RoundDeaths] = 0;
 		Player[playerid][RoundDamage] = 0;
 	    Player[playerid][shotsHit] = 0;
+	}
+	
+	if(!Player[playerid][FakePacketRenovation] && Player[playerid][NetCheck] && NetStats_GetConnectedTime(playerid) < 300000)
+	{
+		SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", playerid, GetPlayerPacketLoss(playerid), false);
+		Player[playerid][FakePacketRenovation] = true;
 	}
 
     Player[playerid][Playing] = true;

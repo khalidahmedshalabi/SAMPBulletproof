@@ -546,7 +546,7 @@ ShowTargetInfo(playerid, targetid)
 	}
 	PlayerTextDrawSetString(playerid, TargetInfoData[playerid][TargetInfoTD], str);
 	PlayerTextDrawShow(playerid, TargetInfoData[playerid][TargetInfoTD]);
-	TargetInfoData[playerid][TargetInfoLastTick] = GetTickCount() + 1000;
+	TargetInfoData[playerid][TargetInfoLastTick] = GetTickCount() + 200;
 	TargetInfoData[playerid][TargetInfoLastTarget] = targetid;
 
 	if(TargetInfoData[playerid][TargetInfoTimer] == -1)

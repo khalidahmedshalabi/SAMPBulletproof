@@ -661,6 +661,12 @@ LoadPlayerVariables(playerid)
 
 	        format(iString,sizeof(iString),""COL_PRIM"Re-added player {FFFFFF}%s. "COL_PRIM"Data fetched successfully.", Player[playerid][Name]);
 	    	SendClientMessageToAll(-1, iString);
+			
+			if(!Player[playerid][FakePacketRenovation] && Player[playerid][NetCheck] && NetStats_GetConnectedTime(playerid) < 300000)
+			{
+				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", playerid, GetPlayerPacketLoss(playerid), false);
+				Player[playerid][FakePacketRenovation] = true;
+			}
 
 			format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%.0f~n~%sTotal Dmg %s%.0f", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
 			PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
