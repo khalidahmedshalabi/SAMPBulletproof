@@ -55,6 +55,8 @@ native IsValidVehicle(vehicleid);
 	#define HTTP_DEST_LEAGUE_CHECKPLAYER		""
 	#define HTTP_DEST_LEAGUE_CHECKPLAYERPASS	""
 	#define HTTP_DEST_LEAGUE_CHECKCLANS			""
+	#define HTTP_DEST_LEAGUE_TOPPLAYERS			""
+	#define HTTP_DEST_LEAGUE_TOPCLANS			""
 #endif
 
 // Server modules (note: modules that consists of hooking have to be first)
@@ -1317,7 +1319,7 @@ public OnRconLoginAttempt(ip[], password[], success)
 	        Player[playerid][Level] = 5;
 	        UpdatePlayerAdminGroup(playerid);
 		}
-		format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%s'", Player[playerid][Level], DB_Escape(Player[playerid][Name]));
+		format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%s' AND Level != %d", Player[playerid][Level], DB_Escape(Player[playerid][Name]), Player[playerid][Level]);
     	db_free_result(db_query(sqliteconnection, Str));
 		format(Str, sizeof(Str), "{FFFFFF}%s "COL_PRIM"has successfully logged into rcon and got level 5.", iName);
 		foreach(new j : Player)
@@ -1824,6 +1826,24 @@ public OnPlayerModelSelection(playerid, response, listid, modelid)
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
 	#if defined _league_included
+	if(dialogid == DIALOG_LEAGUE_STATS)
+	{
+	    if(response)
+	    {
+			switch(listitem)
+			{
+			    case 0: // top players
+			    {
+			        ShowLeagueStatistics(playerid, LEAGUE_STATS_PLAYER);
+			    }
+			    case 1: // top clans
+			    {
+			        ShowLeagueStatistics(playerid, LEAGUE_STATS_CLAN);
+			    }
+			}
+	    }
+	    return 1;
+	}
 	if(dialogid == DIALOG_LEAGUE_CONFIRM)
 	{
 	    if(response)
@@ -4502,6 +4522,21 @@ YCMD:plcheck(playerid, params[], help)
 	}
 	SendClientMessageToAll(-1, iString);
     LogAdminCommand("plcheck", playerid, pID);
+	return 1;
+}
+
+YCMD:leaguestats(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "display league mini scoreboard.");
+	    return 1;
+	}
+	#if defined _league_included
+	ShowPlayerDialog(playerid, DIALOG_LEAGUE_STATS, DIALOG_STYLE_LIST, "League mini scoreboard", "Top 10 Players\nTop 10 Clans", "View", "Close");
+	#else
+	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
+	#endif
 	return 1;
 }
 
@@ -7892,7 +7927,7 @@ YCMD:setlevel(playerid, params[], help)
 
 	new iString[128];
 
-	format(iString, sizeof(iString), "UPDATE Players SET Level = %d WHERE Name = '%s'", LEVEL, DB_Escape(Player[GiveID][Name]));
+	format(iString, sizeof(iString), "UPDATE Players SET Level = %d WHERE Name = '%s' AND Level != %d", LEVEL, DB_Escape(Player[GiveID][Name]), LEVEL);
     db_free_result(db_query(sqliteconnection, iString));
 
 	Player[GiveID][Level] = LEVEL;
