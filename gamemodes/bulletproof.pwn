@@ -4549,8 +4549,8 @@ YCMD:leaguehelp(playerid, params[], help)
 	}
 	new str[550];
 	strcat(str, ""COL_PRIM"How to start a league match: clan vs clan\n\n{FFFFFF}Before starting a league match between 2 clans, you have to make sure that ");
-	strcat(str, "both clans are registered in the league ("GM_WEBSITE") and players are\nregistered in those clans. ");
- 	strcat(str, "Once done of clan/player registration, you can easily enable league mode by using /league clan\n\n\n");
+	strcat(str, "both clans are registered in the\nleague ("GM_WEBSITE") and players are registered in those clans.");
+ 	strcat(str, "Once done of\nclan/player registration, you can easily enable league mode by using /league clan\n\n\n");
 	strcat(str, ""COL_PRIM"How to start a league match: funteams (ft)\n\n{FFFFFF}Make sure players are logged into their league accounts, enable match mode, balance teams and then /league ft");
 	ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "League mode help", str, "That's cool!", "");
 	return 1;
