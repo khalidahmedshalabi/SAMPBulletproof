@@ -4567,6 +4567,7 @@ YCMD:league(playerid, params[], help)
 	if(Current != -1) return SendErrorMessage(playerid,"Can't use this command while round is on.");
 	if(LeagueMode == true) return SendErrorMessage(playerid,"League-mode is already on.");
     if(WarMode == false) return SendErrorMessage(playerid,"War/match mode has to be enabled first.");
+    if(isequal(TeamName[ATTACKER], TeamName[DEFENDER], true)) return SendErrorMessage(playerid, "Team names cannot be equal. Use /teamname to solve this issue!");
 
 	new leagueTypeStr[5], playersCount;
 	if(sscanf(params, "si", leagueTypeStr, playersCount))
