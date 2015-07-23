@@ -322,7 +322,7 @@ LoginPlayer(playerid, DBResult:res)
 	GetPlayerIp(playerid, IP, sizeof(IP));
 	
 	// Update players table with new IP address for auto login if they reconnect.
-	format(iString, sizeof(iString), "UPDATE `Players` SET `IP` = '%s' WHERE `Name` = '%s' AND IP != '%s' LIMIT 1", IP, Player[playerid][Name], IP);
+	format(iString, sizeof(iString), "UPDATE `Players` SET `IP` = '%s' WHERE `Name` = '%s' AND IP != '%s'", IP, Player[playerid][Name], IP);
 	db_free_result(db_query(sqliteconnection, iString));
 
     Player[playerid][Logged] = true;

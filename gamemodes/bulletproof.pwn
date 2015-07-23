@@ -209,7 +209,7 @@ public OnPlayerRequestClass(playerid, classid)
 	#endif
 	{
 		new Query[128];
-		format(Query, sizeof(Query), "SELECT Name FROM Players WHERE Name = '%s' LIMIT 1", DB_Escape(Player[playerid][Name]));
+		format(Query, sizeof(Query), "SELECT Name FROM Players WHERE Name = '%s'", DB_Escape(Player[playerid][Name]));
         new DBResult:result = db_query(sqliteconnection, Query);
 
 		if(!db_num_rows(result))
@@ -225,7 +225,7 @@ public OnPlayerRequestClass(playerid, classid)
 		    GetPlayerIp(playerid, IP, sizeof(IP));
 
 		    // Construct query to check if the player with the same name and IP has connected before to this server
-		    format(Query, sizeof(Query), "SELECT * FROM `Players` WHERE `Name` = '%s' AND `IP` = '%s' LIMIT 1", DB_Escape(Player[playerid][Name]), IP);
+		    format(Query, sizeof(Query), "SELECT * FROM `Players` WHERE `Name` = '%s' AND `IP` = '%s'", DB_Escape(Player[playerid][Name]), IP);
 
 		    // execute
 			new DBResult:res = db_query(sqliteconnection, Query);
