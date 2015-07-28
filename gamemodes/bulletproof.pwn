@@ -95,6 +95,7 @@ native IsValidVehicle(vehicleid);
 #endif
 #include "modules\src\weaponbinds.inc"
 #include "modules\src\ac.inc"
+#include "modules\src\vote.inc"
 
 main()
 {}
@@ -3373,6 +3374,103 @@ YCMD:clearadmcmd(playerid, params[], help)
 	return 1;
 }
 
+YCMD:voteadd(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "start a voting (add player to round)");
+	    return 1;
+	}
+	new pID;
+	if(sscanf(params, "i", pID))
+	    return SendUsageMessage(playerid,"/voteadd [Player ID]");
+
+	PlayerVoteAdd(playerid, pID);
+	return 1;
+}
+
+YCMD:votereadd(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "start a voting (re-add player to round)");
+	    return 1;
+	}
+	new pID;
+	if(sscanf(params, "i", pID))
+	    return SendUsageMessage(playerid,"/votereadd [Player ID]");
+
+	PlayerVoteReadd(playerid, pID);
+	return 1;
+}
+
+YCMD:voterem(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "start a voting (remove a player from round)");
+	    return 1;
+	}
+	new pID;
+	if(sscanf(params, "i", pID))
+	    return SendUsageMessage(playerid,"/voterem [Player ID]");
+
+	PlayerVoteRem(playerid, pID);
+	return 1;
+}
+
+YCMD:votekick(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "start a voting (kick a player from the server)");
+	    return 1;
+	}
+	new pID;
+	if(sscanf(params, "i", pID))
+	    return SendUsageMessage(playerid,"/votekick [Player ID]");
+
+	PlayerVoteKick(playerid, pID);
+	return 1;
+}
+
+YCMD:votenetcheck(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "start a voting (toggle netcheck on a player)");
+	    return 1;
+	}
+	new pID;
+	if(sscanf(params, "i", pID))
+	    return SendUsageMessage(playerid,"/votenetcheck [Player ID]");
+
+	PlayerVoteNetCheck(playerid, pID);
+	return 1;
+}
+
+YCMD:votepause(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "start a voting (pause round)");
+	    return 1;
+	}
+	PlayerVotePause(playerid);
+	return 1;
+}
+
+YCMD:voteunpause(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "start a voting (pause round)");
+	    return 1;
+	}
+	PlayerVoteUnpause(playerid);
+	return 1;
+}
+
 YCMD:weaponbinds(playerid, params[], help)
 {
     if(help)
@@ -6479,24 +6577,27 @@ YCMD:back(playerid, params[], help)
     if(LeagueMode)
     {
         FixPlayerLeagueTeam(playerid);
-		if(IsEnoughPlayersForLeague(TeamName[ATTACKER], TeamName[DEFENDER]))
-		{
-			SendClientMessageToAll(-1, " ");
-			SendClientMessageToAll(-1, " ");
-			SendClientMessageToAll(-1, ""COL_PRIM"Teams are ready now...");
-			SendClientMessageToAll(-1, ""COL_PRIM"A new round is automatically starting in {FFFFFF}7 seconds");
-			if(CurrentRound == (TotalRounds - 1))
+        if(Current == -1)
+        {
+			if(IsEnoughPlayersForLeague(TeamName[ATTACKER], TeamName[DEFENDER]))
 			{
-			    KillTimer(LeagueRoundStarterTimer);
-				LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 7000, false, "db", ARENA, true);
+				SendClientMessageToAll(-1, " ");
+				SendClientMessageToAll(-1, " ");
+				SendClientMessageToAll(-1, ""COL_PRIM"Teams are ready now...");
+				SendClientMessageToAll(-1, ""COL_PRIM"A new round is automatically starting in {FFFFFF}7 seconds");
+				if(CurrentRound == (TotalRounds - 1))
+				{
+				    KillTimer(LeagueRoundStarterTimer);
+					LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 7000, false, "db", ARENA, true);
+				}
+				else if(CurrentRound < (TotalRounds - 1))
+				{
+				    KillTimer(LeagueRoundStarterTimer);
+					LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 7000, false, "db", BASE, true);
+				}
 			}
-			else if(CurrentRound < (TotalRounds - 1))
-			{
-			    KillTimer(LeagueRoundStarterTimer);
-				LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 7000, false, "db", BASE, true);
-			}
-		}
-        FixVsTextDraw();
+	        FixVsTextDraw();
+   		}
     }
     else
     {
@@ -6789,9 +6890,9 @@ YCMD:add(playerid, params[], help)
 	new pID = strval(params);
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player is not connected.");
 	if(Player[pID][Playing] == true) return SendErrorMessage(playerid,"That player is already playing.");
-	if(Player[pID][Spectating] == true) StopSpectate(pID);  //no more need to ask players to do /specoff in order to add them
 	if(Player[pID][InDuel] == true) return SendErrorMessage(playerid,"That player is in a duel.");
 	if(Player[pID][Team] == ATTACKER || Player[pID][Team] == DEFENDER || Player[pID][Team] == REFEREE) {
+	    if(Player[pID][Spectating] == true) StopSpectate(pID);  //no more need to ask players to do /specoff in order to add them
 		if(GameType == BASE) AddPlayerToBase(pID);
 		else if(GameType == ARENA) AddPlayerToArena(pID);
 
@@ -8408,33 +8509,58 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		    if(!LeagueMode)
 		    {
 		    #endif
-		        if(PRESSED(65536) && RoundPaused == false)
+		        if(PRESSED(65536))
 		        {
-				    if((GetTickCount() - Player[playerid][lastChat]) < 10000)
-					{
-						SendErrorMessage(playerid,"Please wait.");
-						return 0;
-					}
-					foreach(new i : Player)
-					    PlayerPlaySound(i, 1133, 0.0, 0.0, 0.0);
-					Player[playerid][lastChat] = GetTickCount();
-					SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"is asking for a pause!", Player[playerid][Name]));
-					return 1;
-				}
-				if(PRESSED(65536) && RoundPaused == true)
-		        {
-				    if((GetTickCount() - Player[playerid][lastChat]) < 10000)
-					{
-						SendErrorMessage(playerid,"Please wait.");
-						return 0;
-					}
-					foreach(new i : Player)
-					    PlayerPlaySound(i, 1133, 0.0, 0.0, 0.0);
-					Player[playerid][lastChat] = GetTickCount();
-					SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"is asking for an unpause!", Player[playerid][Name]));
-					return 1;
+		            switch(RoundPaused)
+		            {
+		                case true:
+		                {
+		                    if((GetTickCount() - Player[playerid][lastChat]) < 10000)
+							{
+								SendErrorMessage(playerid,"Please wait.");
+								return 0;
+							}
+							foreach(new i : Player)
+							    PlayerPlaySound(i, 1133, 0.0, 0.0, 0.0);
+							Player[playerid][lastChat] = GetTickCount();
+							SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"is asking for an unpause!", Player[playerid][Name]));
+							return 1;
+		                }
+		                case false:
+		                {
+		                    if((GetTickCount() - Player[playerid][lastChat]) < 10000)
+							{
+								SendErrorMessage(playerid,"Please wait.");
+								return 0;
+							}
+							foreach(new i : Player)
+							    PlayerPlaySound(i, 1133, 0.0, 0.0, 0.0);
+							Player[playerid][lastChat] = GetTickCount();
+							SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"is asking for a pause!", Player[playerid][Name]));
+							return 1;
+		                }
+		            }
 				}
             #if defined _league_included
+			}
+			else
+			{
+			    if(PRESSED(65536))
+		        {
+		            switch(RoundPaused)
+		            {
+		                case true:
+		                {
+		                    PlayerVoteUnpause(playerid);
+							return 1;
+		                }
+		                case false:
+		                {
+		                    PlayerVotePause(playerid);
+							return 1;
+		                }
+		            }
+				}
 			}
 			#endif
 		}

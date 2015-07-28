@@ -222,6 +222,7 @@ InitPlayer(playerid)
 	InitPlayerWeaponBind(playerid);
 	LoadDefaultShortcuts(playerid);
 	InitPlayerVisualDamage(playerid);
+	InitPlayerVoting(playerid);
 	
 	noclipdata[playerid][cameramode] 	= 	CAMERA_MODE_NONE;
 	noclipdata[playerid][lrold]	   	 	= 	0;

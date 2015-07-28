@@ -1,0 +1,39 @@
+/*
+		Vote system
+*/
+
+// Vote types
+enum
+{
+	VOTE_TYPE_PAUSE,
+	VOTE_TYPE_UNPAUSE,
+	VOTE_TYPE_ADD,
+	VOTE_TYPE_READD,
+	VOTE_TYPE_REM,
+	VOTE_TYPE_KICK,
+	VOTE_TYPE_NETCHECK,
+
+	MAX_VOTE_TYPES = 7 // How many vote types we have
+}
+
+// Vote types names
+new VoteTypeNames[MAX_VOTE_TYPES][] = 
+{
+	"Pause",
+	"Unpause",
+	"Add",
+	"Readd",
+	"Rem",
+	"Kick",
+	"NetCheck"
+};
+
+enum VoteData_STRUCT
+{
+	bool:PlayerVoted[MAX_PLAYERS], // Whether a player voted or not
+	VoteCount, // How many votes we got
+	VotingOnPlayer, // On whom is this voting?
+	VotingExpireTimer // A timer for voting expiration
+}
+
+new VoteData[MAX_VOTE_TYPES][VoteData_STRUCT];

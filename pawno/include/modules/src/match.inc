@@ -922,7 +922,7 @@ public LeagueAutoUnpause()
 	
 	if(League_AutoUnpause == 0)
 	{
-		PauseCountdown = 1;
+		PauseCountdown = 4;
 		UnpauseRound();
 		KillTimer(League_AutoUnpauseTimer);
 		League_AutoUnpauseTimer = -1;
@@ -935,7 +935,7 @@ public LeagueAutoUnpause()
 }
 #endif
 
-PauseRound() 
+PauseRound(bool:leaguevote = false) 
 {
 	new airVehiclesFound = 0;
 	foreach(new g : DynamicVehicle)
@@ -962,12 +962,14 @@ PauseRound()
 	TextDrawShowForAll(PauseTD);
 	RoundPaused = true;
 	#if defined _league_included
-	if(LeagueMode)
+	if(LeagueMode && !leaguevote)
 	{
 		League_AutoUnpause = 60;
 		KillTimer(League_AutoUnpauseTimer);
 		League_AutoUnpauseTimer = SetTimer("LeagueAutoUnpause", 1000, true); 
 	}
+	#else
+	#pragma unused leaguevote
 	#endif
 }
 

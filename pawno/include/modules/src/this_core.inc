@@ -48,6 +48,7 @@ InitScriptSecondarySettings()
     InitSpectate();
 	InitVisualDamage();
 	InitGunmenu();
+	InitVoting();
 	CreateObject(3095, 268.74, 1884.21, 16.07,   0.00, 0.00, 0.00); // block area 51
 	// Match recording (rounds)
 	MatchRoundsStarted = 0;
