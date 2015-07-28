@@ -546,6 +546,8 @@ public OnPlayerDisconnect(playerid, reason)
 		}
 		// Version check
 		ReportServerVersion();
+		// Optimize and clean database
+		OptimizeDatabase();
 	}
 	// Fixes the x Vs y textdraws with current team player count
 	FixVsTextDraw(playerid);
@@ -2175,10 +2177,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new HashPass[140];
 		    format(HashPass, sizeof(HashPass), "%d", udb_hash(inputtext));
 
-			new query[240];
 			new IP[16];
 			GetPlayerIp(playerid, IP, sizeof(IP));
-		    format(query, sizeof(query), "INSERT INTO Players (Name, Password, IP) VALUES('%s', '%s', '%s')", DB_Escape(Player[playerid][Name]), HashPass, IP);
+			new day, month, year;
+			getdate(year, month, day);
+			new query[240];
+			format(query, sizeof(query), "INSERT INTO Players (Name, Password, IP, LastSeen_Day, LastSeen_Month, LastSeen_Year) VALUES('%s', '%s', '%s', %d, %d, %d)", DB_Escape(Player[playerid][Name]), HashPass, IP, day, month, year);
 			db_free_result(db_query(sqliteconnection, query));
 
 			MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~g~~h~register", sprintf("You've successfully registered your account with the password: %s", inputtext), 4000);

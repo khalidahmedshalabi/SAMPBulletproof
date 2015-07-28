@@ -64,3 +64,16 @@ public DatabaseDefaultReload()
     SetTimer("DelayedDatabaseStuff", 200, false);
 	return 1;
 }
+
+OptimizeDatabase()
+{
+	// Delete inactive accounts (3 days without logging in is considered as inactivity)
+	new currYear, currMonth, currDay;
+	getdate(currYear, currMonth, currDay);
+	new str[150];
+	format(str, sizeof str, "DELETE FROM Players WHERE (LastSeen_Year = %d AND LastSeen_Month = %d AND LastSeen_Day + 3 < %d) OR LastSeen_Year != %d OR LastSeen_Month != %d", currYear, currMonth, currDay, currYear, currMonth);
+	db_free_result(db_query(sqliteconnection, str));
+	
+	// Vacuum SQL database
+	db_free_result(db_query(sqliteconnection, "VACUUM"));
+}

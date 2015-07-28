@@ -329,7 +329,13 @@ LoginPlayer(playerid, DBResult:res)
 	// Update players table with new IP address for auto login if they reconnect.
 	format(iString, sizeof(iString), "UPDATE `Players` SET `IP` = '%s' WHERE `Name` = '%s' AND IP != '%s'", IP, Player[playerid][Name], IP);
 	db_free_result(db_query(sqliteconnection, iString));
-
+	
+	// Update last seen/logged in
+	new day, month, year;
+	getdate(year, month, day);
+	format(iString, sizeof(iString), "UPDATE `Players` SET `LastSeen_Day` = %d, `LastSeen_Month` = %d, `LastSeen_Year` = %d WHERE `Name` = '%s'", day, month, year, Player[playerid][Name]);
+	db_free_result(db_query(sqliteconnection, iString));
+	
     Player[playerid][Logged] = true;
 }
 
