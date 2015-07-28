@@ -10,7 +10,7 @@
 #define WEAPON_BIND_PRIMARY_KEY_TEXT_ALT	"SPRINT"	// alternative text
 
 #define WEAPON_BIND_TEXTDRAW_STRING_SIZE	((MAX_WEAPON_BINDS * 73) + 16)
-#define WEAPON_BIND_DIALOG_STRING_SIZE		((MAX_WEAPON_BINDS * 40) + 27)
+#define WEAPON_BIND_DIALOG_STRING_SIZE		((MAX_WEAPON_BINDS * 40) + 45)
 
 // Secondary keys values
 new const WeaponBindKeyValue[MAX_WEAPON_BINDS] = {

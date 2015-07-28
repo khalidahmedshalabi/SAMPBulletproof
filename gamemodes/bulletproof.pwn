@@ -1861,7 +1861,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 	    if(response)
 	    {
-         	new index = listitem;
+	        if(listitem == 0) // Toggle
+	        {
+				Player[playerid][WeaponBinding] = !Player[playerid][WeaponBinding];
+				new str[80];
+			    format(str, sizeof(str), "UPDATE Players SET WeaponBinding = %d WHERE Name = '%s'", (Player[playerid][WeaponBinding] == true) ? (1) : (0), DB_Escape(Player[playerid][Name]));
+			    db_free_result(db_query(sqliteconnection, str));
+	            return 1;
+	        }
+         	new index = listitem - 1;
 			WeaponBindData[playerid][ModifyingWeaponBindIndex] = index;
 			new str[140];
 			format(str, sizeof str, "Key: %s+%s\nCurrent weapon: %s\n\nType weapon name or ID below to code this key bind for it", WEAPON_BIND_PRIMARY_KEY_TEXT_ALT, WeaponBindKeyText_ALT[index], WeaponNames[WeaponBindData[playerid][BindKeyWeapon][index]]);

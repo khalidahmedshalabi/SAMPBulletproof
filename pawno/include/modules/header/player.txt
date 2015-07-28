@@ -41,6 +41,7 @@ enum PlayerVariables
 	bool:TempNetcheck,
 	bool:MustLeaguePass,
 	bool:LeagueLogged,
+	bool:WeaponBinding,
 	#if GTAV_SWITCH_MENU != 0
 	bool:OnGunSwitch,
 	#endif

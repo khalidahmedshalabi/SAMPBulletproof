@@ -66,6 +66,17 @@ ShowPlayerWeaponBindDialog(playerid)
 {
 	new str[WEAPON_BIND_DIALOG_STRING_SIZE];
 	format(str, sizeof str, "Key combination\tWeapon\n");
+	switch(Player[playerid][WeaponBinding])
+	{
+		case true:
+		{
+			format(str, sizeof str, "%s{CC0000}Disable\n", str);
+		}
+		case false:
+		{
+			format(str, sizeof str, "%s{33CC00}Enable\n", str);
+		}
+	}
 	for(new i = 0; i < MAX_WEAPON_BINDS; i ++)
 	{
 		format(str, sizeof str, "%s%s+%s\t%s\n", str, WEAPON_BIND_PRIMARY_KEY_TEXT_ALT, WeaponBindKeyText_ALT[i], WeaponNames[WeaponBindData[playerid][BindKeyWeapon][i]]);
@@ -77,6 +88,9 @@ ShowPlayerWeaponBindDialog(playerid)
 // Usually placed under OnPlayerKeyStateChange
 CheckKeysForWeaponBind(playerid, newkeys, oldkeys)
 {
+	if(!Player[playerid][WeaponBinding])
+		return 0;
+	
 	if(GetPlayerVehicleID(playerid))
 		return 0;
 	

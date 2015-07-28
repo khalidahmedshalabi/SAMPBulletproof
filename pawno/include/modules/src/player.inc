@@ -318,6 +318,10 @@ LoginPlayer(playerid, DBResult:res)
 	db_get_field_assoc(res, "TempTag", iString, sizeof(iString));
 	format(Player[playerid][TempTag], 7, "%s", iString);
 	
+	// Load Weapon Binding 
+	db_get_field_assoc(res, "WeaponBinding", iString, sizeof(iString));
+	Player[playerid][WeaponBinding] = (strval(iString) == 0 ? false : true);
+	
 	// Get current IP address
 	new IP[16];
 	GetPlayerIp(playerid, IP, sizeof(IP));
