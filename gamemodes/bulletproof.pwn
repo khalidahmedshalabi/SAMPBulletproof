@@ -6038,32 +6038,39 @@ YCMD:alladmins(playerid, params[], help)
 	    return 1;
 	}
     new DBResult:res = db_query(sqliteconnection, "SELECT * FROM Players WHERE LEVEL < 6 AND LEVEL > 0 ORDER BY Level DESC");
-	new holdStr[MAX_PLAYER_NAME];
-	new bigStr[1024];
-	new namesInLine = 0;
+    if(db_num_rows(res))
+    {
+		new holdStr[MAX_PLAYER_NAME];
+		new bigStr[1024];
+		new namesInLine = 0;
 
-	do
-	{
-	    if(namesInLine == 8)
-	    {
-	        namesInLine = 0;
-	        db_get_field_assoc(res, "Name", holdStr, sizeof(holdStr));
-			format(bigStr, sizeof bigStr, "%s\n%s", bigStr, holdStr);
-			db_get_field_assoc(res, "Level", holdStr, sizeof(holdStr));
-			format(bigStr, sizeof bigStr, "%s [%d], ", bigStr, strval(holdStr));
-	    }
-	    else
-	    {
-		    db_get_field_assoc(res, "Name", holdStr, sizeof(holdStr));
-			format(bigStr, sizeof bigStr, "%s%s", bigStr, holdStr);
-			db_get_field_assoc(res, "Level", holdStr, sizeof(holdStr));
-			format(bigStr, sizeof bigStr, "%s [%d], ", bigStr, strval(holdStr));
+		do
+		{
+		    if(namesInLine == 8)
+		    {
+		        namesInLine = 0;
+		        db_get_field_assoc(res, "Name", holdStr, sizeof(holdStr));
+				format(bigStr, sizeof bigStr, "%s\n%s", bigStr, holdStr);
+				db_get_field_assoc(res, "Level", holdStr, sizeof(holdStr));
+				format(bigStr, sizeof bigStr, "%s [%d], ", bigStr, strval(holdStr));
+		    }
+		    else
+		    {
+			    db_get_field_assoc(res, "Name", holdStr, sizeof(holdStr));
+				format(bigStr, sizeof bigStr, "%s%s", bigStr, holdStr);
+				db_get_field_assoc(res, "Level", holdStr, sizeof(holdStr));
+				format(bigStr, sizeof bigStr, "%s [%d], ", bigStr, strval(holdStr));
+			}
+			namesInLine ++;
 		}
-		namesInLine ++;
+		while(db_next_row(res));
+		db_free_result(res);
+		ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "All Server Admins", bigStr, "Okay", "");
 	}
-	while(db_next_row(res));
-	db_free_result(res);
-	ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "All Server Admins", bigStr, "Okay", "");
+	else
+	{
+	    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "All Server Admins", "No admins found...", "Okay", "");
+	}
 	return 1;
 }
 

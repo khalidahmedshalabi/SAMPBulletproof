@@ -90,13 +90,13 @@ PlayerVoteAdd(playerid, onplayerid)
 			VoteData[votetype][PlayerVoted][i] = false;
 		}
 		VoteData[votetype][PlayerVoted][playerid] = true;
-		SendClientMessageToAll(-1, sprintf(""COL_PRIM"%s has started {FFFFFF}add-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/voteadd %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s"COL_PRIM" has started {FFFFFF}add-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/voteadd %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
 	}
 	else
 	{
 		VoteData[votetype][VoteCount] ++;
 		VoteData[votetype][PlayerVoted][playerid] = true;
-		SendClientMessageToAll(-1, sprintf(""COL_PRIM"%s has added to {FFFFFF}add-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/voteadd %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s"COL_PRIM" has added to {FFFFFF}add-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/voteadd %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
 		if(VoteData[votetype][VoteCount] >= MaxVotesNeeded) // Enough people voted!
 		{
 			SendClientMessageToAll(-1, sprintf(""COL_PRIM"Voting result on {FFFFFF}%s: "COL_PRIM"added to the round!", Player[onplayerid][Name]));
@@ -165,13 +165,13 @@ PlayerVoteReadd(playerid, onplayerid)
 			VoteData[votetype][PlayerVoted][i] = false;
 		}
 		VoteData[votetype][PlayerVoted][playerid] = true;
-		SendClientMessageToAll(-1, sprintf(""COL_PRIM"%s has started {FFFFFF}readd-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/votereadd %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s"COL_PRIM" has started {FFFFFF}readd-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/votereadd %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
 	}
 	else
 	{
 		VoteData[votetype][VoteCount] ++;
 		VoteData[votetype][PlayerVoted][playerid] = true;
-		SendClientMessageToAll(-1, sprintf(""COL_PRIM"%s has added to {FFFFFF}readd-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/votereadd %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s"COL_PRIM" has added to {FFFFFF}readd-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/votereadd %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
 		if(VoteData[votetype][VoteCount] >= MaxVotesNeeded) // Enough people voted!
 		{
 			SendClientMessageToAll(-1, sprintf(""COL_PRIM"Voting result on {FFFFFF}%s: "COL_PRIM"re-added to the round!", Player[onplayerid][Name]));
@@ -248,13 +248,13 @@ PlayerVoteRem(playerid, onplayerid)
 			VoteData[votetype][PlayerVoted][i] = false;
 		}
 		VoteData[votetype][PlayerVoted][playerid] = true;
-		SendClientMessageToAll(-1, sprintf(""COL_PRIM"%s has started {FFFFFF}rem-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/voterem %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s"COL_PRIM" has started {FFFFFF}rem-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/voterem %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
 	}
 	else
 	{
 		VoteData[votetype][VoteCount] ++;
 		VoteData[votetype][PlayerVoted][playerid] = true;
-		SendClientMessageToAll(-1, sprintf(""COL_PRIM"%s has added to {FFFFFF}rem-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/voterem %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s"COL_PRIM" has added to {FFFFFF}rem-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/voterem %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
 		if(VoteData[votetype][VoteCount] >= MaxVotesNeeded) // Enough people voted!
 		{
 			SendClientMessageToAll(-1, sprintf(""COL_PRIM"Voting result on {FFFFFF}%s: "COL_PRIM"removed from the round!", Player[onplayerid][Name]));
@@ -316,13 +316,13 @@ PlayerVoteKick(playerid, onplayerid)
 			VoteData[votetype][PlayerVoted][i] = false;
 		}
 		VoteData[votetype][PlayerVoted][playerid] = true;
-		SendClientMessageToAll(-1, sprintf(""COL_PRIM"%s has started {FFFFFF}kick-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/votekick %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s"COL_PRIM" has started {FFFFFF}kick-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/votekick %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
 	}
 	else
 	{
 		VoteData[votetype][VoteCount] ++;
 		VoteData[votetype][PlayerVoted][playerid] = true;
-		SendClientMessageToAll(-1, sprintf(""COL_PRIM"%s has added to {FFFFFF}kick-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/votekick %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s"COL_PRIM" has added to {FFFFFF}kick-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/votekick %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
 		if(VoteData[votetype][VoteCount] >= MaxVotesNeeded) // Enough people voted!
 		{
 			SendClientMessageToAll(-1, sprintf(""COL_PRIM"Voting result on {FFFFFF}%s: "COL_PRIM"kicked from the server!", Player[onplayerid][Name]));
@@ -381,13 +381,13 @@ PlayerVoteNetCheck(playerid, onplayerid)
 			VoteData[votetype][PlayerVoted][i] = false;
 		}
 		VoteData[votetype][PlayerVoted][playerid] = true;
-		SendClientMessageToAll(-1, sprintf(""COL_PRIM"%s has started {FFFFFF}netcheck-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/votenetcheck %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s"COL_PRIM" has started {FFFFFF}netcheck-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/votenetcheck %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
 	}
 	else
 	{
 		VoteData[votetype][VoteCount] ++;
 		VoteData[votetype][PlayerVoted][playerid] = true;
-		SendClientMessageToAll(-1, sprintf(""COL_PRIM"%s has added to {FFFFFF}netcheck-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/votenetcheck %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s"COL_PRIM" has added to {FFFFFF}netcheck-voting "COL_PRIM"on {FFFFFF}%s "COL_PRIM"[%d/%d] [/votenetcheck %d]", Player[playerid][Name], Player[onplayerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded, onplayerid));
 		if(VoteData[votetype][VoteCount] >= MaxVotesNeeded) // Enough people voted!
 		{
 			if(Player[onplayerid][NetCheck] == 1) 
@@ -459,13 +459,13 @@ PlayerVoteUnpause(playerid)
 			VoteData[votetype][PlayerVoted][i] = false;
 		}
 		VoteData[votetype][PlayerVoted][playerid] = true;
-		SendClientMessageToAll(-1, sprintf(""COL_PRIM"%s has started {FFFFFF}unpause-voting "COL_PRIM"[%d/%d] [/voteunpause or press Y]", Player[playerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s"COL_PRIM" has started {FFFFFF}unpause-voting "COL_PRIM"[%d/%d] [/voteunpause or press Y]", Player[playerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded));
 	}
 	else
 	{
 		VoteData[votetype][VoteCount] ++;
 		VoteData[votetype][PlayerVoted][playerid] = true;
-		SendClientMessageToAll(-1, sprintf(""COL_PRIM"%s has added to {FFFFFF}pause-voting "COL_PRIM"[%d/%d] [/voteunpause or press Y]", Player[playerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s"COL_PRIM" has added to {FFFFFF}pause-voting "COL_PRIM"[%d/%d] [/voteunpause or press Y]", Player[playerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded));
 		if(VoteData[votetype][VoteCount] >= MaxVotesNeeded) // Enough people voted!
 		{
 			KillTimer(VoteData[votetype][VotingExpireTimer]);
@@ -530,13 +530,13 @@ PlayerVotePause(playerid)
 			VoteData[votetype][PlayerVoted][i] = false;
 		}
 		VoteData[votetype][PlayerVoted][playerid] = true;
-		SendClientMessageToAll(-1, sprintf(""COL_PRIM"%s has started {FFFFFF}pause-voting "COL_PRIM"[%d/%d] [/votepause or press Y]", Player[playerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s"COL_PRIM" has started {FFFFFF}pause-voting "COL_PRIM"[%d/%d] [/votepause or press Y]", Player[playerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded));
 	}
 	else
 	{
 		VoteData[votetype][VoteCount] ++;
 		VoteData[votetype][PlayerVoted][playerid] = true;
-		SendClientMessageToAll(-1, sprintf(""COL_PRIM"%s has added to {FFFFFF}pause-voting "COL_PRIM"[%d/%d] [/votepause or press Y]", Player[playerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s"COL_PRIM" has added to {FFFFFF}pause-voting "COL_PRIM"[%d/%d] [/votepause or press Y]", Player[playerid][Name], VoteData[votetype][VoteCount], MaxVotesNeeded));
 		if(VoteData[votetype][VoteCount] >= MaxVotesNeeded) // Enough people voted!
 		{
 			SendClientMessageToAll(-1, ""COL_PRIM"Pause-voting result: {FFFFFF}round has been paused!");
