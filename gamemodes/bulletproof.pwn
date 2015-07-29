@@ -35,7 +35,7 @@ native IsValidVehicle(vehicleid);
 	is ignored and you can no longer worry about it. It's
 	to be commented out on releases though.
 */
-#define PRE_RELEASE_VERSION
+//#define PRE_RELEASE_VERSION
 
 #include <gBugFix> // Fix false vehicle entry as passenger (G (teleport/distance) bug)
 
