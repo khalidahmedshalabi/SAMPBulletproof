@@ -4882,7 +4882,7 @@ YCMD:setleagueplayers(playerid, params[], help)
 	if(!LeagueMode)
 	    return SendErrorMessage(playerid, "League mode is not enabled!");
 	if(isnull(params))
-	    return SendUsageMessage(playerid, "/setleagueplayers [number]"
+	    return SendUsageMessage(playerid, "/setleagueplayers [number]");
 	new value = strval(params);
 	if(value < 3)
 	    return SendErrorMessage(playerid, "League matches cannot be less than 3v3");
