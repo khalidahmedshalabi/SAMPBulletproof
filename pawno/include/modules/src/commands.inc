@@ -4,6 +4,8 @@
 
 #include "modules\header\commands.txt"
 
+#tryinclude "modules\header\league.txt"
+
 // Set alternative names for commands (todo: replace with a custom system)
 SetAltCommands() 
 {
@@ -123,6 +125,10 @@ SetCommandLevel(command[], level, bool:updatedb)
 				Group_SetCommand(AdminGroups[i], id, false);
 			}
 		}
+		#if defined _league_included
+		// Make sure league admins/mods got access to this command as well
+		Group_SetCommand(LeaguePowerGroup, id, true);
+		#endif
 	}
 	UpdateCommandsIteratorArray(id, level); // Update the iterator array that contains all commands ID and level
 	if(updatedb)

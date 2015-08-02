@@ -57,6 +57,8 @@ native IsValidVehicle(vehicleid);
 	#define HTTP_DEST_LEAGUE_CHECKCLANS			""
 	#define HTTP_DEST_LEAGUE_TOPPLAYERS			""
 	#define HTTP_DEST_LEAGUE_TOPCLANS			""
+	#define HTTP_DEST_LEAGUE_PLAYERPOINTS       ""
+	#define HTTP_DEST_LEAGUE_LEAGUEADMINS       ""
 #endif
 
 // Server modules (note: modules that consists of hooking have to be first)
@@ -1118,7 +1120,22 @@ public OnPlayerEnterCheckpoint(playerid)
 						new Float:defPos[3];
 					    GetPlayerPos(playerid, defPos[0], defPos[1], defPos[2]);
 					    if(defPos[2] >= (BCPSpawn[Current][2] - 1.4))
+					    {
+							#if defined _league_included
+							if(LeagueMode)
+							{
+							    if(CurrentCPTime <= 10 && CurrentCPTime > 4)
+							    {
+                                    AddPlayerLeaguePoints(playerid, 100, "saving CP in rather dangerous time");
+							    }
+							    else if(CurrentCPTime <= 4)
+							    {
+							        AddPlayerLeaguePoints(playerid, 200, "saving CP in a very critical time");
+							    }
+							}
+							#endif
 					    	CurrentCPTime = ConfigCPTime + 1;
+				    	}
 						else
 						    if(CurrentCPTime < ConfigCPTime)
 						    	SendClientMessageToAll(-1, sprintf(""COL_PRIM"CP touch by {FFFFFF}%s "COL_PRIM"is denied. This might be considered as cheating or bug abusing.", Player[playerid][Name]));
@@ -1184,7 +1201,22 @@ public OnPlayerEnterCheckpoint(playerid)
 					        new Float:defPos[3];
 						    GetPlayerPos(playerid, defPos[0], defPos[1], defPos[2]);
 						    if(defPos[2] >= (ACPSpawn[Current][2] - 1.4))
+						    {
+						        #if defined _league_included
+								if(LeagueMode)
+								{
+								    if(CurrentCPTime <= 10 && CurrentCPTime > 4)
+								    {
+	                                    AddPlayerLeaguePoints(playerid, 100, "saving CP in rather dangerous time");
+								    }
+								    else if(CurrentCPTime <= 4)
+								    {
+								        AddPlayerLeaguePoints(playerid, 200, "saving CP in a very critical time");
+								    }
+								}
+								#endif
 						    	CurrentCPTime = ConfigCPTime + 1;
+					    	}
 							else
 							    if(CurrentCPTime < ConfigCPTime)
 							    	SendClientMessageToAll(-1, sprintf(""COL_PRIM"CP touch by {FFFFFF}%s "COL_PRIM"is denied. This might be considered as cheating or bug abusing.", Player[playerid][Name]));
@@ -1636,6 +1668,8 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		    if(LeagueMode)
 		    {
             	UpdateLeaguePlayerDamage(issuerid, amount, weaponid);
+            	AddPlayerLeaguePoints(issuerid, floatround(amount));
+            	AddPlayerLeaguePoints(playerid, - floatround(amount));
      		}
      		#endif
             Player[issuerid][WeaponStat][weaponid] += floatround(amount, floatround_round);
@@ -1829,19 +1863,79 @@ public OnPlayerModelSelection(playerid, response, listid, modelid)
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
 	#if defined _league_included
+	if(dialogid == DIALOG_LEAGUE_STATS_SUB)
+	{
+	    if(!response) // "Back" button
+	    {
+	        CallLocalFunction("OnPlayerCommandText", "ds", playerid, "/leaguestats");
+	    }
+	    return 1;
+	}
 	if(dialogid == DIALOG_LEAGUE_STATS)
 	{
 	    if(response)
 	    {
 			switch(listitem)
 			{
-			    case 0: // top players
+			    case 0:
 			    {
-			        ShowLeagueStatistics(playerid, LEAGUE_STATS_PLAYER);
+			        #if defined _league_included
+					ShowLeagueAdmins(playerid);
+					#else
+					SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
+					#endif
 			    }
 			    case 1: // top clans
 			    {
 			        ShowLeagueStatistics(playerid, LEAGUE_STATS_CLAN);
+			    }
+		     	case 2: // top players
+			    {
+			        ShowLeagueStatistics(playerid, LEAGUE_STATS_POINTS);
+			    }
+			    case 3:
+			    {
+			        ShowLeagueStatistics(playerid, LEAGUE_STATS_KILLS);
+			    }
+			    case 4:
+			    {
+			        ShowLeagueStatistics(playerid, LEAGUE_STATS_ROUNDS);
+			    }
+			    case 5:
+			    {
+			        ShowLeagueStatistics(playerid, LEAGUE_STATS_PUNCHES);
+			    }
+			    case 6:
+			    {
+			        ShowLeagueStatistics(playerid, LEAGUE_STATS_DAMAGE);
+			    }
+			    case 7:
+			    {
+			        ShowLeagueStatistics(playerid, LEAGUE_STATS_SNIPER);
+			    }
+			    case 8:
+			    {
+			        ShowLeagueStatistics(playerid, LEAGUE_STATS_DEAGLE);
+			    }
+			    case 9:
+			    {
+			        ShowLeagueStatistics(playerid, LEAGUE_STATS_M4);
+			    }
+			    case 10:
+			    {
+			        ShowLeagueStatistics(playerid, LEAGUE_STATS_RIFLE);
+			    }
+			    case 11:
+			    {
+			        ShowLeagueStatistics(playerid, LEAGUE_STATS_AK);
+			    }
+			    case 12:
+			    {
+			        ShowLeagueStatistics(playerid, LEAGUE_STATS_SPAS);
+			    }
+			    case 13:
+			    {
+			        ShowLeagueStatistics(playerid, LEAGUE_STATS_SHOTGUN);
 			    }
 			}
 	    }
@@ -2302,7 +2396,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	if(dialogid == DIALOG_CURRENT_TOTAL)
 	{
 	    #if defined _league_included
-	    if(LeagueMode) return SendErrorMessage(playerid, "Can't do this when league mode is enabled.");
+	    if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+	        return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	    #endif
 		if(isnull(inputtext)) return 1;
         if(!IsNumeric(inputtext)) {
@@ -2342,7 +2437,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 		if(response) {
 		    #if defined _league_included
-		    if(LeagueMode) return SendErrorMessage(playerid, "Can't do this when league mode is enabled.");
+      if(LeagueMode) return SendErrorMessage(playerid, "Can't do this when league mode is enabled.");
 		    #endif
 		    new iString[128];
 		    switch(listitem) {
@@ -2446,7 +2541,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	if(dialogid == DIALOG_ATT_NAME) {
 	    if(response) {
 	        #if defined _league_included
-	        if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+         if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
 			#endif
 	        new iString[128];
 			if(isnull(inputtext)) {
@@ -2489,7 +2584,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 	        if(isnull(inputtext)) return 1;
 	        #if defined _league_included
-	        if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+         if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
 	        #endif
 	        if(strlen(inputtext) > 6) {
 	           	SendErrorMessage(playerid,"Team name is too long.");
@@ -2530,7 +2625,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    if(response)
 		{
 		    #if defined _league_included
-		    if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+      if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
 		    #endif
 	        new iString[128];
 	        if(isnull(inputtext))
@@ -2646,14 +2741,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	            }
 	            case 1: {
 	                #if defined _league_included
-	                if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+                 if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
 	                #endif
 	                format(iString, sizeof(iString), "%sAttacker Team\n%sDefender Team", TextColor[ATTACKER], TextColor[DEFENDER]);
 	                ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_TEAM_SKIN, DIALOG_STYLE_LIST, ""COL_PRIM"Select team", iString, "OK", "Cancel");
 	            }
 				case 2: {
 				    #if defined _league_included
-				    if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+        if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
 				    #endif
 				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_AAD, DIALOG_STYLE_LIST, ""COL_PRIM"A/D Config", ""COL_PRIM"Health\n"COL_PRIM"Armour\n"COL_PRIM"Round Time\n"COL_PRIM"CP Time", "OK", "Cancel");
 				}
@@ -2662,13 +2757,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				case 4: {
 				    #if defined _league_included
-				    if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+        if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
 				    #endif
 				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_MAX_PING, DIALOG_STYLE_INPUT, ""COL_PRIM"Set max Ping", "Set the max ping:", "OK", "Cancel");
 				}
 				case 5: {
                     #if defined _league_included
-				    if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+        if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
 				    #endif
 				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_MAX_PACKET, DIALOG_STYLE_INPUT, ""COL_PRIM"Set max Packetloss", "Set the max packetloss:", "OK", "Cancel");
 				}
@@ -3096,7 +3191,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	    	ShowPlayerDialog(playerid, DIALOG_ATT_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Attacker Team Name",iString,"Next","Close");
 		} else {
 		    #if defined _league_included
-		    if(LeagueMode) return SendErrorMessage(playerid, "Can't do this when league mode is enabled.");
+		    if(LeagueMode) return SendErrorMessage(playerid, "Can't do this when league mode is enabled. Use /war end instead!");
 		    #endif
 	    	ShowPlayerDialog(playerid, DIALOG_WAR_RESET, DIALOG_STYLE_MSGBOX,""COL_PRIM"War Dialog",""COL_PRIM"Are you sure you want to turn War Mode off?","Yes","No");
 		}
@@ -3328,9 +3423,22 @@ YCMD:acmds(playerid, params[], help)
 	}
 	new str[1500], cmdsInLine;
 	strcat(str, "Use @ for admin chat");
+	#if defined _league_included
+	new level;
+	if(LeagueMode && IsLeagueMod(playerid))
+	{
+	    level = 5;
+	}
+	else
+	{
+		level = Player[playerid][Level];
+	}
+	#else
+	new level = Player[playerid][Level];
+	#endif
 	for(new i = 0; i < MAX_ADMIN_LEVELS; i ++)
 	{
-	    if(Player[playerid][Level] > i)
+	    if(level > i)
 	    {
 	        format(str, sizeof str, "%s\n\nLevel %d:\n", str, i + 1);
 	        cmdsInLine = 0;
@@ -3480,6 +3588,58 @@ YCMD:voteunpause(playerid, params[], help)
 	    return 1;
 	}
 	PlayerVoteUnpause(playerid);
+	return 1;
+}
+
+YCMD:voteendmatch(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "start a voting (end match)");
+	    return 1;
+	}
+	PlayerVoteEndMatch(playerid);
+	return 1;
+}
+
+YCMD:voterr(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "start a voting (restart round)");
+	    return 1;
+	}
+	PlayerVoteRestartRound(playerid);
+	return 1;
+}
+
+YCMD:voteswitch(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "start a voting (switch player to team with less players)");
+	    return 1;
+	}
+	new pID;
+	if(sscanf(params, "i", pID))
+	    return SendUsageMessage(playerid,"/v [Player ID]");
+
+	PlayerVoteSwitch(playerid, pID);
+	return 1;
+}
+
+YCMD:votemenu(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "start a voting (give menu to player)");
+	    return 1;
+	}
+	new pID;
+	if(sscanf(params, "i", pID))
+	    return SendUsageMessage(playerid,"/votemenu [Player ID]");
+
+	PlayerVoteMenu(playerid, pID);
 	return 1;
 }
 
@@ -4508,7 +4668,8 @@ YCMD:netcheck(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/netcheck [Player ID]");
 
@@ -4549,7 +4710,8 @@ YCMD:fpscheck(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/fpscheck [Player ID]");
 
@@ -4581,7 +4743,8 @@ YCMD:pingcheck(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/pingcheck [Player ID]");
 
@@ -4613,7 +4776,8 @@ YCMD:plcheck(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/plcheck [Player ID]");
 
@@ -4643,7 +4807,9 @@ YCMD:leaguestats(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	ShowPlayerDialog(playerid, DIALOG_LEAGUE_STATS, DIALOG_STYLE_LIST, "League mini scoreboard", "Top 10 Players\nTop 10 Clans", "View", "Close");
+	ShowPlayerDialog(playerid, DIALOG_LEAGUE_STATS, DIALOG_STYLE_LIST, "League mini scoreboard",
+		"Most Active Admins/Mods\nTop Clans\nTop Players (Points)\nTop Killers\nMost Active\nTop Punchers\nTop Damage (Overall damage)\nTop Sniper\nTop Deagler\nTop M4\nTop Rifler\nTop AK\nTop Spasser\nTop Shotgun",
+		"View", "Close");
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 	#endif
@@ -4733,6 +4899,12 @@ YCMD:war(playerid, params[], help)
     if(WarMode == true) return SendErrorMessage(playerid,"War-mode is already on.");
 	if(strlen(TeamAName) > 6 || strlen(TeamBName) > 6) return SendErrorMessage(playerid,"Team name is too long.");
 	if(strfind(TeamAName, "~") != -1 || strfind(TeamBName, "~") != -1) return SendErrorMessage(playerid,"~ not allowed.");
+	#if defined _league_included
+    if(LeagueMode)
+	{
+	    return SendErrorMessage(playerid, "Can't do this while league-mode is on.");
+	}
+	#endif
 
 	format(TeamName[ATTACKER], 7, TeamAName);
 	format(TeamName[ATTACKER_SUB], 11, "%s Sub", TeamName[ATTACKER]);
@@ -4864,7 +5036,8 @@ YCMD:tr(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/tr [Total Rounds]");
 
@@ -4890,7 +5063,8 @@ YCMD:cr(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/cr [Current Round]");
 
@@ -4932,7 +5106,8 @@ YCMD:freeze(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/freeze [Player ID]");
 
@@ -5013,7 +5188,8 @@ YCMD:unfreeze(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/freeze [Player ID]");
 
@@ -5189,7 +5365,8 @@ YCMD:replace(playerid, params[], help)
 	}
 	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 
 	new str[2048];
@@ -5402,7 +5579,8 @@ YCMD:slap(playerid,params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	if(isnull(params)) return SendUsageMessage(playerid,"/slap [Player ID]");
 
@@ -5747,7 +5925,8 @@ YCMD:allvs(playerid,params[], help)
     if(Current != -1) return SendErrorMessage(playerid,"Can't use while round is active.");
     if(isnull(params)) return SendUsageMessage(playerid,"/allvs [Team ID | 0 = Attacker, 1 = Defender] [Tag/Name]");
     #if defined _league_included
-    if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+    if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
     #endif
 
 	new toTeam, TempTeamName[6];
@@ -6238,7 +6417,8 @@ YCMD:setteam(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	new Params[2];
 	if(sscanf(params, "dd", Params[0], Params[1])) return SendUsageMessage(playerid,"/setteam [Player ID] [Team ID | 0 Att | 1 Def | 2 Ref | 3 Att_Sub | 4 Def_Sub]");
@@ -6440,7 +6620,8 @@ YCMD:rr(playerid, params[], help)
 	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
 	if(AllowStartBase == false) return SendErrorMessage(playerid,"Please wait.");
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 
 	AllowStartBase = false;
@@ -6553,7 +6734,8 @@ YCMD:setafk(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/setafk [Player ID]");
 
@@ -6639,7 +6821,8 @@ YCMD:swap(playerid, params[], help)
 	}
 	if(Current != -1) return SendErrorMessage(playerid,"Can't swap while round is active.");
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 
 	SwapTeams();
@@ -6661,7 +6844,8 @@ YCMD:balance(playerid, params[], help)
 	}
 	if(Current != -1) return SendErrorMessage(playerid,"Can't balance when round is active.");
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 
 	BalanceTeams();
@@ -6723,6 +6907,10 @@ YCMD:givemenu(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "show weapon menu to a specific player.");
 	    return 1;
 	}
+	#if defined _league_included
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
+	#endif
 	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
 	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/givemenu [Player ID]");
 
@@ -6875,7 +7063,8 @@ YCMD:addall(playerid, params[], help)
 	}
 	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 
 	foreach(new i : Player) {
@@ -6901,7 +7090,8 @@ YCMD:add(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-    if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+    if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
     #endif
 	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/add [Player ID]");
 	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
@@ -6935,7 +7125,8 @@ YCMD:readd(playerid, params[], help)
 	}
 	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
 	#if defined _league_included
-    if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+    if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
     #endif
 
 	//if(Player[playerid][Level] < 1 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be a higher admin level.");
@@ -7002,7 +7193,8 @@ YCMD:remove(playerid, params[], help)
 	}
 	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/remove [Player ID]");
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 
 	new pID = strval(params);
@@ -7034,7 +7226,8 @@ YCMD:end(playerid, params[], help)
 	if(AllowStartBase == false) return SendErrorMessage(playerid,"Please Wait.");
 	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 
 	Current = -1;
@@ -7208,7 +7401,8 @@ YCMD:healall(playerid, params[], help)
 	}
 	if(Current == -1) return SendErrorMessage(playerid,"There is no active round.");
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	
 	foreach(new i : Player) {
@@ -7234,7 +7428,8 @@ YCMD:armourall(playerid, params[], help)
 	}
 	if(Current == -1) return SendErrorMessage(playerid,"There is no active round.");
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	
 	foreach(new i : Player) {
@@ -7257,7 +7452,8 @@ YCMD:sethp(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	new pID, Amount;
 	if(sscanf(params, "id", pID, Amount)) return SendUsageMessage(playerid,"/sethp [Player ID] [Amount]");
@@ -7283,7 +7479,8 @@ YCMD:setarmour(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	new pID, Amount;
 	if(sscanf(params, "id", pID, Amount)) return SendUsageMessage(playerid,"/setarmour [Player ID] [Amount]");
@@ -7309,7 +7506,8 @@ YCMD:pause(playerid, params[], help)
 	}
 	if(Current == -1) return SendErrorMessage(playerid,"There is no active round.");
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 
 	new iString[64];
@@ -7354,7 +7552,8 @@ YCMD:unpause(playerid, params[], help)
 	//if(Player[playerid][Level] < 1 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be a higher admin level.");
 	if(RoundPaused == false) return SendErrorMessage(playerid,"Round is not paused.");
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 
 	PauseCountdown = 4;
@@ -7386,7 +7585,8 @@ YCMD:match(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled. Use /war instead maybe");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	EnableInterface(playerid);
 	return 1;
@@ -7401,7 +7601,8 @@ YCMD:goto(playerid,params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	if(isnull(params)) return SendUsageMessage(playerid,"/goto [Player ID]");
 	new gid = strval(params);
@@ -7436,7 +7637,8 @@ YCMD:get(playerid,params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 	if(isnull(params)) return SendUsageMessage(playerid,"/get [Player ID]");
 	new gid = strval(params);
@@ -8485,52 +8687,99 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
            	return 1;
         }
         // Pause/unpause or ask for pause/unpause
-		if(Player[playerid][Level] > 0)
-	    {
-	        #if defined _league_included
-	        if(LeagueMode)
-	            return 1;
-			#endif
-	            
-			if(PRESSED(65536))
+        if(PRESSED(65536))
+        {
+            #if defined _league_included
+			if(LeagueMode)
 			{
-		    	new iString[160];
-				if(RoundPaused == false)
+			    if(IsLeagueMod(playerid) || IsLeagueAdmin(playerid))
+			    {
+                    switch(RoundPaused)
+		            {
+		                case true:
+		                {
+		                    new iString[160];
+                            if((GetTickCount() - PausePressed) < 3000)
+								return SendErrorMessage(playerid,"Please Wait.");
+							if(RoundUnpausing == true) return 1;
+
+							PauseCountdown = 4;
+						    UnpauseRound();
+
+							format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has unpaused the current round.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							return 1;
+		                }
+		                case false:
+		                {
+		                    new iString[160];
+		                    if(RoundUnpausing == true) return SendErrorMessage(playerid,"Round is unpausing, please wait.");
+
+							PausePressed = GetTickCount();
+
+						    PauseRound();
+
+							format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has paused the current round.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							return 1;
+		                }
+		            }
+			    }
+			    else
+			    {
+			        switch(RoundPaused)
+		            {
+		                case true:
+		                {
+		                    PlayerVoteUnpause(playerid);
+							return 1;
+		                }
+		                case false:
+		                {
+		                    PlayerVotePause(playerid);
+							return 1;
+		                }
+		            }
+			    }
+			}
+			else
+			{
+			    if(Player[playerid][Level] > 0)
 				{
-				    if(RoundUnpausing == true) return SendErrorMessage(playerid,"Round is unpausing, please wait.");
+				    switch(RoundPaused)
+		            {
+		                case true:
+		                {
+		                    new iString[160];
+	                        if((GetTickCount() - PausePressed) < 3000)
+								return SendErrorMessage(playerid,"Please Wait.");
+							if(RoundUnpausing == true) return 1;
 
-					PausePressed = GetTickCount();
+							PauseCountdown = 4;
+						    UnpauseRound();
 
-				    PauseRound();
+							format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has unpaused the current round.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							return 1;
+		                }
+		                case false:
+		                {
+		                    new iString[160];
+		                    if(RoundUnpausing == true) return SendErrorMessage(playerid,"Round is unpausing, please wait.");
 
-					format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has paused the current round.", Player[playerid][Name]);
-					SendClientMessageToAll(-1, iString);
-					return 1;
+							PausePressed = GetTickCount();
+
+						    PauseRound();
+
+							format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has paused the current round.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							return 1;
+		                }
+		            }
 				}
 				else
 				{
-					if((GetTickCount() - PausePressed) < 3000)
-						return SendErrorMessage(playerid,"Please Wait.");
-					if(RoundUnpausing == true) return 1;
-
-					PauseCountdown = 4;
-				    UnpauseRound();
-
-					format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has unpaused the current round.", Player[playerid][Name]);
-					SendClientMessageToAll(-1, iString);
-					return 1;
-				}
-			}
-		}
-		else
-		{
-		    #if defined _league_included
-		    if(!LeagueMode)
-		    {
-		    #endif
-		        if(PRESSED(65536))
-		        {
-		            switch(RoundPaused)
+				    switch(RoundPaused)
 		            {
 		                case true:
 		                {
@@ -8560,26 +8809,72 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		                }
 		            }
 				}
-            #if defined _league_included
+			}
+			#else
+			if(Player[playerid][Level] > 0)
+			{
+			    switch(RoundPaused)
+	            {
+	                case true:
+	                {
+	                    new iString[160];
+                        if((GetTickCount() - PausePressed) < 3000)
+							return SendErrorMessage(playerid,"Please Wait.");
+						if(RoundUnpausing == true) return 1;
+
+						PauseCountdown = 4;
+					    UnpauseRound();
+
+						format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has unpaused the current round.", Player[playerid][Name]);
+						SendClientMessageToAll(-1, iString);
+						return 1;
+	                }
+	                case false:
+	                {
+	                    new iString[160];
+	                    if(RoundUnpausing == true) return SendErrorMessage(playerid,"Round is unpausing, please wait.");
+
+						PausePressed = GetTickCount();
+
+					    PauseRound();
+
+						format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has paused the current round.", Player[playerid][Name]);
+						SendClientMessageToAll(-1, iString);
+						return 1;
+	                }
+	            }
 			}
 			else
 			{
-			    if(PRESSED(65536))
-		        {
-		            switch(RoundPaused)
-		            {
-		                case true:
-		                {
-		                    PlayerVoteUnpause(playerid);
-							return 1;
-		                }
-		                case false:
-		                {
-		                    PlayerVotePause(playerid);
-							return 1;
-		                }
-		            }
-				}
+			    switch(RoundPaused)
+	            {
+	                case true:
+	                {
+	                    if((GetTickCount() - Player[playerid][lastChat]) < 10000)
+						{
+							SendErrorMessage(playerid,"Please wait.");
+							return 0;
+						}
+						foreach(new i : Player)
+						    PlayerPlaySound(i, 1133, 0.0, 0.0, 0.0);
+						Player[playerid][lastChat] = GetTickCount();
+						SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"is asking for an unpause!", Player[playerid][Name]));
+						return 1;
+	                }
+	                case false:
+	                {
+	                    if((GetTickCount() - Player[playerid][lastChat]) < 10000)
+						{
+							SendErrorMessage(playerid,"Please wait.");
+							return 0;
+						}
+						foreach(new i : Player)
+						    PlayerPlaySound(i, 1133, 0.0, 0.0, 0.0);
+						Player[playerid][lastChat] = GetTickCount();
+						SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"is asking for a pause!", Player[playerid][Name]));
+						return 1;
+	                }
+	            }
 			}
 			#endif
 		}

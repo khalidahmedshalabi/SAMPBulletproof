@@ -181,6 +181,9 @@ SpectatePlayer(playerid, specid)
 		PlayerTextDrawHide(playerid, HPTextDraw_TD[playerid]);
 		HidePlayerProgressBar(playerid, HealthBar[playerid]);
 		HidePlayerProgressBar(playerid, ArmourBar[playerid]);
+		#if defined _league_included
+		PlayerTextDrawHide(playerid, PlayerLeagueStatsTD[playerid]);
+		#endif
 	}
 	
 	// This will hide any damage textdraws shown for the spectator sooner
@@ -288,6 +291,12 @@ StopSpectate(playerid, bool:remove_iterator = true)
 	// Reset text
 	PlayerTextDrawSetString(playerid, WhoSpec[playerid], " ");
 	// Reshow HUD textdraws
+	#if defined _league_included
+	if(LeagueMode)
+	{
+		PlayerTextDrawShow(playerid, PlayerLeagueStatsTD[playerid]);
+	}
+	#endif
 	switch(PlayerInterface[playerid][INTERFACE_HP])
 	{
 		case true:

@@ -851,6 +851,11 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 forward UnpauseRound();
 public UnpauseRound()
 {
+	if(League_AutoUnpauseTimer != -1)
+	{
+		KillTimer(League_AutoUnpauseTimer);
+		League_AutoUnpauseTimer = -1;
+	}
 	RoundUnpausing = true;
 	PauseCountdown --;
 
@@ -2135,6 +2140,15 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 						dhpleft = dhpleft + (Player[i][pHealth] + Player[i][pArmour]);
 						dalive++;
 					}
+					#if defined _league_included
+					if(LeagueMode && (WinID == 0 || WinID == 6 || WinID == 5))
+					{
+						if(Player[i][WasInCP])
+						{
+							AddPlayerLeaguePoints(i, 200, "capturing the CP");
+						}
+					}
+					#endif
 				}
 
 				playerScores[index][player_Score] = floatround(Player[i][RoundDamage], floatround_round);
@@ -2153,11 +2167,8 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 				#if defined _league_included
 				if(LeagueMode)
 				{
+					// Increase rounds played in league
 					IncreasePlayerLeagueRounds(i);
-					if(Player[i][Team] == winnerid)
-						AddPlayerLeaguePoints(i, 1);
-					else
-						AddPlayerLeaguePoints(i, -1);
 				}
 				#endif
 			}
@@ -2414,188 +2425,6 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	return 1;
 }
 
-forward PreMatchResults();
-public PreMatchResults()
-{
-    ClearKillList(); // Clears the kill-list.
-
-    MatchEnded = true;
-
-	new iString[256], TopString[3][128];
-
-    if(TeamScore[ATTACKER] > TeamScore[DEFENDER]) {
- 		format(iString, sizeof(iString),"%sPre-Match Results~n~~r~%s %sWon The Match~n~~r~%s ~h~%d		~b~~h~%s ~h~%d", MAIN_TEXT_COLOUR, TeamName[ATTACKER], MAIN_TEXT_COLOUR, TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
-	} else if(TeamScore[DEFENDER] > TeamScore[ATTACKER]) {
-	    format(iString,sizeof(iString),"%sPre-Match Results~n~~b~~h~%s %sWon The Match~n~~b~~h~%s ~h~%d		~r~%s ~h~%d", MAIN_TEXT_COLOUR, TeamName[DEFENDER], MAIN_TEXT_COLOUR, TeamName[DEFENDER], TeamScore[DEFENDER], TeamName[ATTACKER], TeamScore[ATTACKER]);
-	} else {
-	    format(iString,sizeof(iString),"%sPre-Match Results~n~%sNo One Won The Match~n~~r~%s ~h~%d		~b~~h~%s ~h~%d", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
-	}
-	TextDrawSetString(topTextScore, iString);
-	
-	iString = "~l~Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tKill\t\t\t\tHP\t\t\t\tAcc\t\t\tDmg";
-	TextDrawSetString(leftText, iString);
-	TextDrawSetString(rightText, iString);
-
-	new
-	    playerScores[MAX_PLAYERS][rankingEnum],
-	    index,
-	    p,
-	    names[MAX_PLAYERS][MAX_PLAYER_NAME]
-
-	;
-
-
-	foreach(new i : Player) {
-		if(Player[i][TotalDamage] > 0) {
-			playerScores[index][player_Score] = floatround(Player[i][TotalDamage], floatround_round);
-			playerScores[index][player_Team] = Player[i][Team];
-			playerScores[index][player_Kills] = Player[i][TotalKills];
-			playerScores[index][player_Deaths] = Player[i][TotalDeaths];
-			playerScores[index][player_TPlayed] = Player[i][RoundPlayed];
-			playerScores[index][player_HP] = floatround(Player[i][pHealth] + Player[i][pArmour], floatround_round);
-
-			new Float:nTotalAccuracy;
-			if(Player[i][TotalBulletsFired] == 0) nTotalAccuracy = 0.0;
-			else nTotalAccuracy = floatmul(100.0, floatdiv(Player[i][TotalshotsHit], Player[i][TotalBulletsFired]));
-			playerScores[index][player_Acc] = floatround(nTotalAccuracy, floatround_round);
-
-			format(names[index], MAX_PLAYER_NAME, Player[i][NameWithoutTag]);
-
-		    playerScores[index++][player_ID] = i;
-		    p++;
-		}
-		if(Player[i][Spectating] == true) StopSpectate(i);
-
-		ShowEndRoundTextDraw(i);
-		if(Player[i][InDM] == false) SetPlayerVirtualWorld(i, i);
-
-	}
-	for(new i=0; i < SAVE_SLOTS; ++i) {
-		if(strlen(SaveVariables[i][pName]) > 2 && SaveVariables[i][TDamage] > 0) {
-	    	playerScores[index][player_Score] = floatround(SaveVariables[i][TDamage], floatround_round);
-	    	playerScores[index][player_Team] = SaveVariables[i][pTeam];
-	    	playerScores[index][player_Kills] = SaveVariables[i][TKills];
-	    	playerScores[index][player_Deaths] = SaveVariables[i][TDeaths];
-	    	playerScores[index][player_TPlayed] = SaveVariables[i][TPlayed];
-	    	playerScores[index][player_HP] = floatround(SaveVariables[i][gHealth] + SaveVariables[i][gArmour], floatround_round);
-
-			new Float:nTotalAccuracy;
-			if(SaveVariables[i][tBulletsShot] == 0) nTotalAccuracy = 0.0;
-			else nTotalAccuracy = floatmul(100.0, floatdiv(SaveVariables[i][tshotsHit], SaveVariables[i][tBulletsShot]));
-			playerScores[index][player_Acc] = floatround(nTotalAccuracy, floatround_round);
-
-			format(names[index], MAX_PLAYER_NAME, SaveVariables[i][pNameWithoutTag]);
-
-			index++;
-			p++;
-		}
-	}
-
-	GetPlayerHighestScores2(playerScores, names, 0, index-1);
-
-	new topkill, topkillID = -1,
-		Float: topDmg, topDmgID = -1,
-		topAcc, topAccID = -1
-	;
-
-	for(new i = 0; i != p; ++i) {
-
-		if( playerScores[i][player_Kills] > topkill && playerScores[i][player_Kills] > 0 )
-	    {
-            topkill = playerScores[i][player_Kills];
-            topkillID = i;
-	    }
-	    if( playerScores[i][player_Score] > topDmg && playerScores[i][player_Score] > 0  )
-	    {
-            topDmg = playerScores[i][player_Score];
-            topDmgID = i;
-	    }
-	    if( playerScores[i][player_Acc] > topAcc && playerScores[i][player_Acc] > 0  )
-	    {
-            topAcc = playerScores[i][player_Acc];
-            topAccID = i;
-	    }
-
-	    if(playerScores[i][player_Team] == ATTACKER) {
-	        format(AttList, sizeof(AttList), "%s~w~%s~n~", AttList, names[i]);
-		    format(AttKills, sizeof(AttKills), "%s~w~%d~n~", AttKills, playerScores[i][player_Kills]);
-	        format(AttDeaths, sizeof(AttDeaths), "%s~w~%d~n~", AttDeaths, playerScores[i][player_Deaths]);
-	        format(AttPlayed, sizeof(AttPlayed), "%s~w~%d~n~", AttPlayed, playerScores[i][player_TPlayed]);
-	        format(AttDamage, sizeof(AttDamage), "%s~w~%d~n~", AttDamage, playerScores[i][player_Score]);
-	        format(AttAcc, sizeof(AttAcc), "%s~w~%d%%~n~", AttAcc, playerScores[i][player_Acc]);
-		} else if(playerScores[i][player_Team] == DEFENDER) {
-	        format(DefList, sizeof(DefList), "%s~w~%s~n~", DefList, names[i]);
-	        format(DefKills, sizeof(DefKills), "%s~w~%d~n~", DefKills, playerScores[i][player_Kills]);
-	        format(DefDeaths, sizeof(DefDeaths), "%s~w~%d~n~", DefDeaths, playerScores[i][player_Deaths]);
-	        format(DefPlayed, sizeof(DefPlayed), "%s~w~%d~n~", DefPlayed, playerScores[i][player_TPlayed]);
-	        format(DefDamage, sizeof(DefDamage), "%s~w~%d~n~", DefDamage, playerScores[i][player_Score]);
-	        format(DefAcc, sizeof(DefAcc), "%s~w~%d%%~n~", DefAcc, playerScores[i][player_Acc]);
-		}
-
-		if(i == 0) format(TopString[0], 128, "%s1st         -         %s   	({FFFFFF}%d%s)", TextColor[playerScores[i][player_Team]], names[i], playerScores[i][player_Score], TextColor[playerScores[i][player_Team]]);
-		else if(i == 1) format(TopString[1], 128, "%s2nd         -         %s   	({FFFFFF}%d%s)", TextColor[playerScores[i][player_Team]], names[i], playerScores[i][player_Score], TextColor[playerScores[i][player_Team]]);
-		else if(i == 2) format(TopString[2], 128, "%s3rd         -         %s   	({FFFFFF}%d%s)", TextColor[playerScores[i][player_Team]], names[i], playerScores[i][player_Score], TextColor[playerScores[i][player_Team]]);
-	}
-
-	iString = "";
-
-	if( topAccID >= 0 ) format( iString, sizeof(iString) , "~w~~h~Most Kills: %s~h~~h~%s ~w~~h~%d_____", TDC[playerScores[topkillID][player_Team]], names[topkillID] , topkill  );
-	else format( iString, sizeof(iString) , "~w~~h~Most Kills: None_____" );
-	if( topDmgID >= 0 ) format( iString, sizeof(iString) , "%s~w~~h~Most Dmg: %s~h~~h~%s ~w~~h~%.0f_____", iString, TDC[playerScores[topDmgID][player_Team]], names[topDmgID] , topDmg  );
-	else format( iString, sizeof(iString) , "%s~w~~h~Most Dmg: None_____", iString );
-    if( topAccID >= 0 ) format( iString, sizeof(iString) , "%s~w~~h~Top Acc: %s~h~~h~%s ~w~~h~%d%%", iString, TDC[playerScores[topAccID][player_Team]], names[topAccID] , topAcc  );
-	else format( iString, sizeof(iString) , "%s~w~~h~Top Acc: None", iString );
-	TextDrawSetString( leftTop, iString );
-	
-	TextDrawSetString(leftPlayed, AttPlayed );
-
-	TextDrawSetString(leftNames, AttList);
-	TextDrawSetString(leftKills, AttKills);
-	TextDrawSetString(leftHP, AttDeaths);
-	TextDrawSetString(leftAcc, AttAcc);
-	TextDrawSetString(leftDmg, AttDamage);
-
-	TextDrawSetString(rightNames, DefList);
-	TextDrawSetString(rightKills, DefKills);
-	TextDrawSetString(rightHP, DefDeaths);
-	TextDrawSetString(rightAcc, DefAcc);
-	TextDrawSetString(rightDmg, DefDamage);
-
-	TextDrawSetString(rightPlayed, DefPlayed );
-
-	SendClientMessageToAll(-1, " ");
-	SendClientMessageToAll(-1, " ");
-	SendClientMessageToAll(-1, " ");
-	SendClientMessageToAll(-1, " ");
-    SendClientMessageToAll(-1, " ");
-	SendClientMessageToAll(-1, " ");
-	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
-    SendClientMessageToAll(-1, "{FFFFFF}Top Stooopids:");
-	SendClientMessageToAll(-1, TopString[0]);
-	SendClientMessageToAll(-1, TopString[1]);
-	SendClientMessageToAll(-1, TopString[2]);
-	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
-
-
-	AttList = "";
-	AttKills = "";
-	AttDeaths = "";
-	AttPlayed = "";
-	AttAcc = "";
-	AttDamage = "";
-
-	DefList = "";
-	DefKills = "";
-	DefDeaths = "";
-	DefPlayed = "";
-	DefAcc = "";
-	DefDamage = "";
-
-	PreMatchResultsShowing = false;
-    AllowStartBase = true;
-	return 1;
-}
-
 forward WarEnded();
 public WarEnded()
 {
@@ -2606,12 +2435,17 @@ public WarEnded()
     ClearKillList(); // Clears the kill-list.
 
 	new iString[256], TopString[3][128];
-
-    if(TeamScore[ATTACKER] > TeamScore[DEFENDER]) {
+	
+    if(TeamScore[ATTACKER] > TeamScore[DEFENDER]) 
+	{
  		format(iString, sizeof(iString),"~r~%s ~w~Won The Match~n~~r~%s ~h~%d		~b~~h~%s ~h~%d", TeamName[ATTACKER], TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
-	} else if(TeamScore[DEFENDER] > TeamScore[ATTACKER]) {
+	} 
+	else if(TeamScore[DEFENDER] > TeamScore[ATTACKER]) 
+	{
 	    format(iString,sizeof(iString),"~b~~h~%s ~w~Won The Match~n~~b~~h~%s ~h~%d		~r~%s ~h~%d", TeamName[DEFENDER], TeamName[DEFENDER], TeamScore[DEFENDER], TeamName[ATTACKER], TeamScore[ATTACKER]);
-	} else {
+	} 
+	else 
+	{
 	    format(iString,sizeof(iString),"~w~No One Won The Match~n~~r~%s ~h~%d		~b~~h~%s ~h~%d", TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
 	}
     TextDrawSetString(topTextScore, iString);
@@ -2650,8 +2484,10 @@ public WarEnded()
 	;
 
 
-	foreach(new i : Player) {
-		if(Player[i][TotalDamage] > 0) {
+	foreach(new i : Player) 
+	{
+		if(Player[i][TotalDamage] > 0) 
+		{
 			playerScores[index][player_Score] = floatround(Player[i][TotalDamage], floatround_round);
 			playerScores[index][player_Team] = Player[i][Team];
 			playerScores[index][player_Kills] = Player[i][TotalKills];
@@ -2791,18 +2627,53 @@ public WarEnded()
 	SendClientMessageToAll(-1, TopString[1]);
 	SendClientMessageToAll(-1, TopString[2]);
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
-
+	
 	#if defined _league_included
 	if(LeagueMode)
 	{
 		if(TeamScore[ATTACKER] > 0 || TeamScore[DEFENDER] > 0)
 		{
 			OnLeagueMatchEnd();
+			// Give points
+			if(TeamScore[ATTACKER] > TeamScore[DEFENDER]) 
+			{
+				new diff = TeamScore[ATTACKER] - TeamScore[DEFENDER];
+				new points = (diff) * 50;
+				SendClientMessageToAll(-1, sprintf(""COL_PRIM"Winners have earned {FFFFFF}%d point(s) "COL_PRIM"for winning the match with score diff: {FFFFFF}%d", points, diff));
+				foreach(new i : Player)
+				{
+					if(Player[i][Team] == ATTACKER)
+					{
+						AddPlayerLeaguePoints(i, points);
+					}
+				}
+			} 
+			else if(TeamScore[DEFENDER] > TeamScore[ATTACKER]) 
+			{
+				new diff = TeamScore[DEFENDER] - TeamScore[ATTACKER];
+				new points = (diff) * 50;
+				SendClientMessageToAll(-1, sprintf(""COL_PRIM"Winners have earned {FFFFFF}%d point(s) "COL_PRIM"for winning the match with score diff: {FFFFFF}%d", points, diff));
+				foreach(new i : Player)
+				{
+					if(Player[i][Team] == DEFENDER)
+					{
+						AddPlayerLeaguePoints(i, points);
+					}
+				}
+			}
 		}
 		else
 		{
-			SendClientMessageToAll(-1, ""COL_PRIM"League mode is now off. This match won't be uploaded to the league server.");
+			SendClientMessageToAll(-1, ""COL_PRIM"League mode is now off. This match won't be uploaded to the league database.");
 			LeagueMode = false;
+			foreach(new i : Player)
+			{
+				PlayerTextDrawHide(i, PlayerLeagueStatsTD[i]);
+				if(IsLeagueMod(i))
+				{
+					SetPlayerLeaguePowerGroup(i, false);
+				}
+			}
 		}
 	}
 	#endif

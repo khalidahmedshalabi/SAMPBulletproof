@@ -666,7 +666,9 @@ LoadPlayerVariables(playerid)
 			if(LeagueMode)
 			{
 				if(PlayersAlive[ATTACKER] >= LEAGUE_MATCH_MODE && PlayersAlive[DEFENDER] >= LEAGUE_MATCH_MODE)
-					League_AutoUnpause = 3;
+					League_AutoUnpause = 1;
+				
+				AutoRemoveCheck();
 			}
 			#endif
 

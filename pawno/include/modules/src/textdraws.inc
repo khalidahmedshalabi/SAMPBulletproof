@@ -279,6 +279,20 @@ LoadTextDraws()
 		TextDrawSetOutline(GunmenuLimitsTD[i], 1);
 		TextDrawSetProportional(GunmenuLimitsTD[i], 1);
 	}
+	
+	#if defined _league_included
+	LeagueRoundResultTD = TextDrawCreate(492.000000, 240.000000, " ");
+	TextDrawBackgroundColor(LeagueRoundResultTD, 68);
+	TextDrawFont(LeagueRoundResultTD, 1);
+	TextDrawLetterSize(LeagueRoundResultTD, 0.189999, 0.790000);
+	TextDrawColor(LeagueRoundResultTD, -1);
+	TextDrawSetOutline(LeagueRoundResultTD, 1);
+	TextDrawSetProportional(LeagueRoundResultTD, 1);
+	TextDrawUseBox(LeagueRoundResultTD, 1);
+	TextDrawBoxColor(LeagueRoundResultTD, -205);
+	TextDrawTextSize(LeagueRoundResultTD, 710.000000, 0.000000);
+	#endif
+	
 	#if GTAV_SWITCH_MENU != 0
 	CreateGunSwitchGlobalTextDraws();
 	#endif
@@ -721,7 +735,7 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawHide(playerid, ArmourTextDraw[playerid]);
 	PlayerTextDrawHide(playerid, BaseID_VS[playerid]);
 
-    TargetInfoData[playerid][TargetInfoTD] = CreatePlayerTextDraw(playerid, 50.000000, 285.000000, "_");
+    TargetInfoData[playerid][TargetInfoTD] = CreatePlayerTextDraw(playerid, 83.000000, 285.000000, "_");
 	PlayerTextDrawBackgroundColor(playerid, TargetInfoData[playerid][TargetInfoTD], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, TargetInfoData[playerid][TargetInfoTD], 1);
 	PlayerTextDrawLetterSize(playerid, TargetInfoData[playerid][TargetInfoTD], 0.200000, 1.0);
@@ -889,6 +903,9 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawBoxColor(playerid, DeathMessage[playerid][1], 153);
 	PlayerTextDrawTextSize(playerid, DeathMessage[playerid][1], 794.000000, 271.000000);
 	
+	#if defined _league_included
+	CreatePlayerLeaguePointTextDraw(playerid);
+	#endif
 	CreatePlayerWeaponBindTextDraw(playerid);
 	CreateMessageBoxTextDraws(playerid);
 	#if GTAV_SWITCH_MENU != 0
@@ -979,7 +996,14 @@ ShowEndRoundTextDraw(playerid)
 
 	PlayerTextDrawHide(playerid, DeathText[playerid][0]);
 	PlayerTextDrawHide(playerid, DeathText[playerid][1]);
-
+	
+	#if defined _league_included
+	if(LeagueMode)
+	{
+		TextDrawShowForPlayer(playerid, LeagueRoundResultTD);
+	}
+	#endif
+	
 	Player[playerid][TextDrawOnScreen] = true;
 	return 1;
 }
@@ -1004,6 +1028,10 @@ HideEndRoundTextDraw(playerid)
     TextDrawHideForPlayer( playerid, leftAcc	); 		TextDrawHideForPlayer( playerid, rightAcc	 	);
     TextDrawHideForPlayer( playerid, leftPlayed ); 		TextDrawHideForPlayer( playerid, rightPlayed    );
 
+	#if defined _league_included
+	TextDrawHideForPlayer(playerid, LeagueRoundResultTD);
+	#endif
+	
     Player[playerid][TextDrawOnScreen] = false;
     return 1;
 }

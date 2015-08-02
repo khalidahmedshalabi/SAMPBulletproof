@@ -2,6 +2,8 @@
 		Vote system
 */
 
+#define VOTE_TIMEOUT_INTERVAL	30000
+
 // Vote types
 enum
 {
@@ -12,8 +14,12 @@ enum
 	VOTE_TYPE_REM,
 	VOTE_TYPE_KICK,
 	VOTE_TYPE_NETCHECK,
+	VOTE_TYPE_ENDMATCH,
+	VOTE_TYPE_RESTARTROUND,
+	VOTE_TYPE_SWITCH,
+	VOTE_TYPE_MENU,
 
-	MAX_VOTE_TYPES = 7 // How many vote types we have
+	MAX_VOTE_TYPES = 11 // How many vote types we have
 }
 
 // Vote types names
@@ -25,7 +31,11 @@ new VoteTypeNames[MAX_VOTE_TYPES][] =
 	"Readd",
 	"Rem",
 	"Kick",
-	"NetCheck"
+	"NetCheck",
+	"Match-End",
+	"Restart-Round",
+	"Team-Switch",
+	"Gunmenu-show"
 };
 
 enum VoteData_STRUCT

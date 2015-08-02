@@ -29,6 +29,12 @@ public OnPlayerDeathCameraEnd(playerid)
 	PlayerTextDrawShow(playerid, BaseID_VS[playerid]);
 	ShowPlayerProgressBar(playerid, HealthBar[playerid]);
 	ShowPlayerProgressBar(playerid, ArmourBar[playerid]);
+	#if defined _league_included
+	if(LeagueMode)
+	{
+		PlayerTextDrawShow(playerid, PlayerLeagueStatsTD[playerid]);
+	}
+	#endif
 	return 1;
 }
 
@@ -48,6 +54,9 @@ PlayDeathCamera(playerid, Float:deathX, Float:deathY, Float:deathZ, bool:deathqu
 	PlayerTextDrawHide(playerid, HPTextDraw_TD[playerid]);
 	HidePlayerProgressBar(playerid, HealthBar[playerid]);
 	HidePlayerProgressBar(playerid, ArmourBar[playerid]);
+	#if defined _league_included
+	PlayerTextDrawHide(playerid, PlayerLeagueStatsTD[playerid]);
+	#endif
 	
 	TogglePlayerSpectating(playerid, true);
 	new randomCameraMove = random(3);

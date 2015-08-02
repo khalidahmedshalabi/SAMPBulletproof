@@ -8,7 +8,7 @@ ResetDuellers(dueller1, dueller2)
 	{
 		FixPlayerLeagueTeam(dueller1);
 		FixPlayerLeagueTeam(dueller2);
-		if(Current == -1)
+		if(Current == -1 && ((Player[dueller1][Team] == ATTACKER || Player[dueller1][Team] == DEFENDER) || (Player[dueller1][Team] == ATTACKER || Player[dueller1][Team] == DEFENDER)))
 		{
 			if(IsEnoughPlayersForLeague(TeamName[ATTACKER], TeamName[DEFENDER]))
 			{
