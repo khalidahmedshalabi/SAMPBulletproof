@@ -4867,6 +4867,56 @@ YCMD:league(playerid, params[], help)
 	return 1;
 }
 
+
+YCMD:setleagueplayers(playerid, params[], help)
+{
+	//if(Player[playerid][Level] < 1 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be a higher admin level.");
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "set league players mode (e.g 3v3, 4v4 ...)");
+	    return 1;
+	}
+	#if defined _league_included
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
+	if(!LeagueMode)
+	    return SendErrorMessage(playerid, "League mode is not enabled!");
+	if(isnull(params))
+	    return SendUsageMessage(playerid, "/setleagueplayers [number]"
+	new value = strval(params);
+	if(value < 3)
+	    return SendErrorMessage(playerid, "League matches cannot be less than 3v3");
+	if(value == LEAGUE_MATCH_MODE)
+	    return SendErrorMessage(playerid, sprintf("League mode is already set to %dv%d", value, value));
+
+	LEAGUE_MATCH_MODE = value;
+	SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has set league mode to: {FFFFFF} %d Vs. %d", value, value));
+	if(Current == -1)
+	{
+		if(IsEnoughPlayersForLeague(TeamName[ATTACKER], TeamName[DEFENDER]))
+		{
+			SendClientMessageToAll(-1, " ");
+			SendClientMessageToAll(-1, " ");
+			SendClientMessageToAll(-1, ""COL_PRIM"There are enough players in each team now to start...");
+			SendClientMessageToAll(-1, ""COL_PRIM"A new round is automatically starting in {FFFFFF}7 seconds");
+			if(CurrentRound == (TotalRounds - 1))
+			{
+				KillTimer(LeagueRoundStarterTimer);
+				LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 7000, false, "db", ARENA, true);
+			}
+			else if(CurrentRound < (TotalRounds - 1))
+			{
+				KillTimer(LeagueRoundStarterTimer);
+				LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 7000, false, "db", BASE, true);
+			}
+		}
+	}
+	#else
+	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
+	#endif
+	return 1;
+}
+
 YCMD:war(playerid, params[], help)
 {
 	//if(Player[playerid][Level] < 1 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be a higher admin level to do that.");
@@ -6019,6 +6069,10 @@ YCMD:move(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "teleport a player to another player.");
 	    return 1;
 	}
+	#if defined _league_included
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
+	#endif
     new iString[160], pID[2];
     if(sscanf(params, "dd", pID[0], pID[1])) return SendUsageMessage(playerid,"/move [PlayerToMove ID] [PlayerToMoveTo ID]");
 	if(!IsPlayerConnected(pID[0]) || !IsPlayerConnected(pID[1])) return SendErrorMessage(playerid,"One of the player IDs you used is not connected.");
