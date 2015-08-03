@@ -907,6 +907,23 @@ public OnPlayerText(playerid, text[])
 		}
 		return 0;
 	}
+	#if defined _league_included
+    // League admins chat
+	if(text[0] == '~' && IsLeagueMod(playerid))
+	{
+	    new ChatString[128];
+        format(ChatString, sizeof(ChatString), "@ League ADM Chat | %s (%d) | %s", Player[playerid][Name], playerid, text[1]);
+        foreach(new i : Player)
+		{
+            if(IsLeagueMod(i))
+			{
+                SendClientMessage(i, 0xA8FFE5FF, ChatString);
+                PlayerPlaySound(i,1137,0.0,0.0,0.0);
+			}
+		}
+		return 0;
+	}
+	#endif
 	// Channel chat
 	if(text[0] == '#' && Player[playerid][ChatChannel] != -1)
 	{
@@ -3298,7 +3315,7 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
  			return COMMAND_OK;
 	 	else
 		{
-			SendErrorMessage(playerid,"Can't use any command during AFK mode. {FFFFFF}Type /back");
+			SendErrorMessage(playerid,"Can't use any command during AFK mode. Type /back");
 			return COMMAND_DENIED;
 		}
 	}
@@ -4890,7 +4907,7 @@ YCMD:setleagueplayers(playerid, params[], help)
 	    return SendErrorMessage(playerid, sprintf("League mode is already set to %dv%d", value, value));
 
 	LEAGUE_MATCH_MODE = value;
-	SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has set league mode to: {FFFFFF} %d Vs. %d", value, value));
+	SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has set league mode to: {FFFFFF} %d Vs. %d", Player[playerid][Name], value, value));
 	if(Current == -1)
 	{
 		if(IsEnoughPlayersForLeague(TeamName[ATTACKER], TeamName[DEFENDER]))
@@ -4932,10 +4949,8 @@ YCMD:war(playerid, params[], help)
 	if(strcmp(TeamAName, "end", true) == 0 && isnull(TeamBName) && WarMode == true)
 	{
 		#if defined _league_included
-	    if(LeagueMode)
-		{
-		    return SendErrorMessage(playerid, "Can't do this while league-mode is on.");
-		}
+	    if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+	        return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 		#endif
 		SetTimer("WarEnded", 5000, 0);
 		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has set the match to end!", Player[playerid][Name]));
@@ -4949,11 +4964,9 @@ YCMD:war(playerid, params[], help)
     if(WarMode == true) return SendErrorMessage(playerid,"War-mode is already on.");
 	if(strlen(TeamAName) > 6 || strlen(TeamBName) > 6) return SendErrorMessage(playerid,"Team name is too long.");
 	if(strfind(TeamAName, "~") != -1 || strfind(TeamBName, "~") != -1) return SendErrorMessage(playerid,"~ not allowed.");
-	#if defined _league_included
-    if(LeagueMode)
-	{
-	    return SendErrorMessage(playerid, "Can't do this while league-mode is on.");
-	}
+ 	#if defined _league_included
+    if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+        return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 
 	format(TeamName[ATTACKER], 7, TeamAName);
@@ -6208,6 +6221,10 @@ YCMD:fakepacket(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "disable packet-loss status check on a player for a specific time.");
 	    return 1;
 	}
+	#if defined _league_included
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
+	#endif
 	new pID, interv;
 	if(sscanf(params, "id", pID, interv)) return SendUsageMessage(playerid,"/fakepacket [Player ID] [Time in minutes]");
 	if(interv <= 0 || interv > 5)  return SendErrorMessage(playerid,"Invalid (Min: 1 | Max: 5).");
@@ -6510,6 +6527,28 @@ YCMD:setteam(playerid, params[], help)
 
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has switched {FFFFFF}%s "COL_PRIM"to: {FFFFFF}%s", Player[playerid][Name], Player[Params[0]][Name], TeamName[Params[1]+1]);
 	SendClientMessageToAll(-1, iString);
+	#if defined _league_included
+	if(Current == -1 && LeagueMode)
+	{
+		if(IsEnoughPlayersForLeague(TeamName[ATTACKER], TeamName[DEFENDER]))
+		{
+			SendClientMessageToAll(-1, " ");
+			SendClientMessageToAll(-1, " ");
+			SendClientMessageToAll(-1, ""COL_PRIM"There are enough players in each team now to start...");
+			SendClientMessageToAll(-1, ""COL_PRIM"A new round is automatically starting in {FFFFFF}7 seconds");
+			if(CurrentRound == (TotalRounds - 1))
+			{
+				KillTimer(LeagueRoundStarterTimer);
+				LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 7000, false, "db", ARENA, true);
+			}
+			else if(CurrentRound < (TotalRounds - 1))
+			{
+				KillTimer(LeagueRoundStarterTimer);
+				LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 7000, false, "db", BASE, true);
+			}
+		}
+	}
+	#endif
 	return 1;
 }
 
@@ -6883,7 +6922,7 @@ YCMD:swap(playerid, params[], help)
 
 	new iString[64];
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has swapped the teams.", Player[playerid][Name]);
-	SendClientMessage(playerid, -1, iString);
+	SendClientMessageToAll(-1, iString);
 
 	return 1;
 }
@@ -6906,7 +6945,7 @@ YCMD:balance(playerid, params[], help)
 
 	new iString[64];
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has balanced the teams.", Player[playerid][Name]);
-	SendClientMessage(playerid, -1, iString);
+	SendClientMessageToAll(-1, iString);
 	return 1;
 }
 

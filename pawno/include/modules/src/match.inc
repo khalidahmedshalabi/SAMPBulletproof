@@ -1176,6 +1176,7 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
 	Iter_Add(PlayersInRound, ToAddID);
 
     Player[ToAddID][Team] = Player[ToReplaceID][Team];
+	SwitchTeamFix(ToAddID, false, false);
 	SetHP(ToAddID, HP[0]);
 	SetAP(ToAddID, HP[1]);
 
@@ -1234,6 +1235,7 @@ public OnPlayerInGameReplace(ToAddID, i, playerid) {
 	Iter_Add(PlayersInRound, ToAddID);
 
     Player[ToAddID][Team] = SaveVariables[i][pTeam];
+	SwitchTeamFix(ToAddID, false, false);
 	SetHP(ToAddID, SaveVariables[i][gHealth]);
 	SetAP(ToAddID, SaveVariables[i][gArmour]);
 
@@ -2666,13 +2668,10 @@ public WarEnded()
 		{
 			SendClientMessageToAll(-1, ""COL_PRIM"League mode is now off. This match won't be uploaded to the league database.");
 			LeagueMode = false;
+			SetAdminCommandsLevelForLeague(false);
 			foreach(new i : Player)
 			{
 				PlayerTextDrawHide(i, PlayerLeagueStatsTD[i]);
-				if(IsLeagueMod(i))
-				{
-					SetPlayerLeaguePowerGroup(i, false);
-				}
 			}
 		}
 	}
