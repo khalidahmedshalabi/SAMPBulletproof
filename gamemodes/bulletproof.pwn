@@ -470,10 +470,16 @@ public OnPlayerDisconnect(playerid, reason)
 		else
 			StorePlayerVariablesMin(playerid);
 	}
+	else
+	{
+	    // Reset player weapons on gunmenu
+		ResetPlayerGunmenu(playerid, false);
+	}
 	#if defined _league_included
 	if(LeagueMode)
 	{
 	    SaveLeaguePlayerData(playerid);
+	    SaveLeaguePlayerTotalPoints(playerid);
 	}
 	#endif
 	// Handle match
@@ -501,8 +507,6 @@ public OnPlayerDisconnect(playerid, reason)
 		}
 	}
 	SendClientMessageToAll(-1,iString);
-	// Reset player weapons on gunmenu
-	ResetPlayerGunmenu(playerid, false);
 	// Call OnPlayerLeaveCheckpoint to see if this player was in the checkpoint and fix issues
 	if(Current != -1)
 	{
