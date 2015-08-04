@@ -205,6 +205,7 @@ InitPlayer(playerid)
 	Player[playerid][MustLeaguePass] = false;
 	Player[playerid][LeagueLogged] = false;
 	Player[playerid][InDeathCamera] = false;
+	Player[playerid][HasDeathQuote] = false;
 	#if GTAV_SWITCH_MENU != 0
 	Player[playerid][OnGunSwitch] = false;
 	#endif
@@ -287,6 +288,8 @@ LoginPlayer(playerid, DBResult:res)
 	// Load Death Messages
 	db_get_field_assoc(res, "DeathMessage", iString, sizeof(iString));
 	format(DeathMessageStr[playerid], 64, "%s", iString);
+	if(strcmp("NO_DEATH_MESSAGE", DeathMessageStr[playerid], false) != 0)
+		Player[playerid][HasDeathQuote] = true;
 	
 	// Load Show net textdraws
 	db_get_field_assoc(res, "InterfaceNet", iString, sizeof(iString));

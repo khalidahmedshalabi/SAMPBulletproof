@@ -597,42 +597,20 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 			
 		if(reason == 47 || reason == 51 || reason == 53 || reason == 54)
 		{
-			Player[playerid][HitBy] = -1;
+			Player[playerid][HitBy] = INVALID_PLAYER_ID;
 			Player[playerid][HitWith] = -1;
 		}
 	}
-	// Fix death reasons
-	if(killerid != -1 && killerid != INVALID_PLAYER_ID && reason)
+	killerid = Player[playerid][HitBy];
+	reason = Player[playerid][HitWith];
+	Player[playerid][HitBy] = INVALID_PLAYER_ID;
+	Player[playerid][HitWith] = -1;
+	new KillerConnected = IsPlayerConnected(killerid);
+	if(!KillerConnected)
 	{
-	    if(!IsPlayerStreamedIn(killerid, playerid)) // Fake death
-	    {
-			killerid = INVALID_PLAYER_ID;
-			reason = 53;
-		}
-		else
-		{
-		    if(Player[playerid][Playing] && Player[killerid][Playing] && GetPlayerTeam(playerid) == GetPlayerTeam(killerid))
-			{
-				killerid = INVALID_PLAYER_ID;
-                reason = 53;
-			}
-			else
-			{
-				killerid = Player[playerid][HitBy];
-				reason = Player[playerid][HitWith];
-			}
-		}
-		Player[playerid][HitBy] = -1;
-		Player[playerid][HitWith] = -1;
-	}
-	if(killerid == INVALID_PLAYER_ID || killerid == -1)
-	{
-	    if(Current == -1)
-			SendDeathMessage(INVALID_PLAYER_ID, playerid, reason);
-
 	    if(Player[playerid][Playing] == true)
 		{
-            SendDeathMessage(INVALID_PLAYER_ID, playerid, reason);
+		    SendDeathMessage(INVALID_PLAYER_ID, playerid, reason);
 			Player[playerid][RoundDeaths]++;
 			Player[playerid][TotalDeaths]++;
 
@@ -642,8 +620,12 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 
             OnPlayerAmmoUpdate(playerid);
 	    }
+	    else if(Current == -1)
+	    {
+	        SendDeathMessage(INVALID_PLAYER_ID, playerid, reason);
+	    }
 	}
-	else if(killerid != INVALID_PLAYER_ID && IsPlayerConnected(killerid))
+	else if(KillerConnected)
 	{
         ShowPlayerDeathMessage(killerid, playerid);
 
@@ -707,21 +689,10 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
         PlayerTextDrawShow(playerid, DeathText[playerid][1]);
 
 	    SetTimerEx("DeathMessageF", 4000, false, "ii", killerid, playerid);
-
+		
 		if(Current == -1)
 			SendDeathMessage(killerid, playerid, reason);
-
-		ProcessDuellerDeath(playerid, killerid, reason);
-		
-		if(Player[killerid][InDM] == true)
-		{
-			SetHP(killerid, 100.0);
-			SetAP(killerid, 100.0);
-
-			Player[playerid][VWorld] = GetPlayerVirtualWorld(killerid);
-		}
-
-		if(Player[playerid][Playing] == true && Player[killerid][Playing] == true)
+		else if(Player[playerid][Playing] == true && Player[killerid][Playing] == true)
 		{
 		    #if defined _league_included
 		    if(LeagueMode)
@@ -747,6 +718,17 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 
             OnPlayerAmmoUpdate(playerid);
 		}
+		else if(Player[killerid][InDM] == true)
+		{
+			SetHP(killerid, 100.0);
+			SetAP(killerid, 100.0);
+
+			Player[playerid][VWorld] = GetPlayerVirtualWorld(killerid);
+		}
+		else if(Player[playerid][InDuel])
+		{
+		    ProcessDuellerDeath(playerid, killerid, reason);
+		}
 	}
 	new Float:x, Float:y, Float:z;
 	GetPlayerPos(playerid, x, y, z);
@@ -755,14 +737,13 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	{
 	    CreateDeadBody(playerid, killerid, reason, 0.0, x, y, z);
 	    PlayerNoLeadTeam(playerid);
-	    new bool:showdeathquote = true;
-	    if(killerid != INVALID_PLAYER_ID)
-	    {
-	        if(strcmp("NO_DEATH_MESSAGE", DeathMessageStr[killerid], false) != 0)
-	            showdeathquote = false;
-		}
 	    if(reason != WEAPON_KNIFE)
 	    {
+	        new bool:showdeathquote = true;
+	        if(KillerConnected)
+		    {
+				showdeathquote = !Player[killerid][HasDeathQuote];
+			}
 	        PlayDeathCamera(playerid, x, y, z, showdeathquote);
 	        SetTimerEx("SpectateAnyPlayerT", DEATH_CAMERA_DURATION + 500, false, "i", playerid);
 	    }

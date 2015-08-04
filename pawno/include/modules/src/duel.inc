@@ -261,9 +261,6 @@ ProcessDuellerDisconnect(playerid)
 
 ProcessDuellerDeath(playerid, killerid, reason)
 {
-	if(!Player[playerid][InDuel])
-		return;
-	
 	new str[128];
 	new Float:HP[2];
 	GetHP(killerid, HP[0]);

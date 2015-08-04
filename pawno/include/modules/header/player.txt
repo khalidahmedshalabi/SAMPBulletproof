@@ -42,6 +42,7 @@ enum PlayerVariables
 	bool:MustLeaguePass,
 	bool:LeagueLogged,
 	bool:WeaponBinding,
+	bool:HasDeathQuote,
 	#if GTAV_SWITCH_MENU != 0
 	bool:OnGunSwitch,
 	#endif
