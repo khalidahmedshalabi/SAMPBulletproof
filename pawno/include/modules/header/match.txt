@@ -53,7 +53,7 @@ new PlayersAlive[MAX_TEAMS]; // How many players are alive in each team
 new TeamHP[MAX_TEAMS]; // How much HP does a team have
 new TeamName[MAX_TEAMS][24];
 new TeamScore[MAX_TEAMS];
-new Float:TempDamage[MAX_TEAMS]; // Temporary taken-damage of each team
+new TempDamage[MAX_TEAMS]; // Temporary taken-damage of each team
 new ServerLastPlayed;  // Holds the ID of the last played round
 new ServerLastPlayedType; // Remembers the type of the last played round (base, round ..etc)
 new PlayersInCP; // How many players are capturing the checkpoint

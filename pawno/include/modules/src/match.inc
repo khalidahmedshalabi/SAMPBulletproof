@@ -1221,7 +1221,7 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
     format(iString,sizeof(iString),"{FFFFFF}%s "COL_PRIM"has replaced {FFFFFF}%s "COL_PRIM"by {FFFFFF}%s", Player[playerid][Name], Player[ToReplaceID][Name], Player[ToAddID][Name]);
 	SendClientMessageToAll(-1, iString);
 
-	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%.0f~n~%sTotal Dmg %s%.0f", MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][TotalDamage]);
+	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][TotalDamage]);
 	PlayerTextDrawSetString(ToAddID, RoundKillDmgTDmg[ToAddID], iString);
 
     RadarFix();
@@ -1284,7 +1284,7 @@ public OnPlayerInGameReplace(ToAddID, i, playerid) {
     format(iString,sizeof(iString),"{FFFFFF}%s "COL_PRIM"has replaced {FFFFFF}%s "COL_PRIM"by {FFFFFF}%s", Player[playerid][Name], SaveVariables[i][pName], Player[ToAddID][Name]);
 	SendClientMessageToAll(-1, iString);
 
-	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%.0f~n~%sTotal Dmg %s%.0f", MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][TotalDamage]);
+	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][TotalDamage]);
 	PlayerTextDrawSetString(ToAddID, RoundKillDmgTDmg[ToAddID], iString);
 
     RadarFix();
@@ -1531,7 +1531,7 @@ SpawnPlayersInArena()
 			else TogglePlayerControllable(i, 0);
             Player[i][ToAddInRound] = false;
 			
-			format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%.0f~n~%sTotal Dmg %s%.0f", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][TotalDamage]);
+			format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][TotalDamage]);
 			PlayerTextDrawSetString(i, RoundKillDmgTDmg[i], iString);
 		}
 	}
@@ -1644,7 +1644,7 @@ public AddPlayerToArena(playerid)
 
 
 	new iString[160];
-	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%.0f~n~%sTotal Dmg %s%.0f", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
+	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
 	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
 
 	RadarFix();
@@ -1897,7 +1897,7 @@ SpawnPlayersInBase()
 			else TogglePlayerControllable(i, 0);
 			Player[i][ToAddInRound] = false;
 			
-			format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%.0f~n~%sTotal Dmg %s%.0f", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][TotalDamage]);
+			format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][TotalDamage]);
 			PlayerTextDrawSetString(i, RoundKillDmgTDmg[i], iString);
 		}
 	}
@@ -2011,7 +2011,7 @@ public AddPlayerToBase(playerid)
 	ShowPlayerGunmenu(playerid, 500);
 
 	new iString[160];
-	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%.0f~n~%sTotal Dmg %s%.0f", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
+	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
 	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
 
 	RadarFix();
@@ -2153,7 +2153,16 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 					#endif
 				}
 
-				playerScores[index][player_Score] = floatround(Player[i][RoundDamage], floatround_round);
+				if(Player[i][Team] == winnerid)
+				{
+					AddPlayerLeaguePoints(i, 150);
+				}
+				else
+				{
+					AddPlayerLeaguePoints(i, -75);
+				}
+				
+				playerScores[index][player_Score] = Player[i][RoundDamage];
 				playerScores[index][player_Team] = Player[i][Team];
 				playerScores[index][player_Kills] = Player[i][RoundKills];
 				playerScores[index][player_Deaths] = Player[i][RoundDeaths];
@@ -2213,7 +2222,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	
 	for(new i=0; i < SAVE_SLOTS; ++i) {
 		if(strlen(SaveVariables[i][pName]) > 2 && Current == SaveVariables[i][RoundID] && SaveVariables[i][CheckScore] == true) {
-	    	playerScores[index][player_Score] = floatround(SaveVariables[i][RDamage], floatround_round);
+	    	playerScores[index][player_Score] = SaveVariables[i][RDamage];
 	    	playerScores[index][player_Team] = SaveVariables[i][pTeam];
 	    	playerScores[index][player_Kills] = SaveVariables[i][RKills];
 	    	playerScores[index][player_Deaths] = SaveVariables[i][RDeaths];
@@ -2490,7 +2499,7 @@ public WarEnded()
 	{
 		if(Player[i][TotalDamage] > 0) 
 		{
-			playerScores[index][player_Score] = floatround(Player[i][TotalDamage], floatround_round);
+			playerScores[index][player_Score] = Player[i][TotalDamage];
 			playerScores[index][player_Team] = Player[i][Team];
 			playerScores[index][player_Kills] = Player[i][TotalKills];
 			playerScores[index][player_Deaths] = Player[i][TotalDeaths];
@@ -2515,7 +2524,7 @@ public WarEnded()
 	}
 	for(new i=0; i < SAVE_SLOTS; ++i) {
 		if(strlen(SaveVariables[i][pName]) > 2 && SaveVariables[i][TDamage] > 0) {
-	    	playerScores[index][player_Score] = floatround(SaveVariables[i][TDamage], floatround_round);
+	    	playerScores[index][player_Score] = SaveVariables[i][TDamage];
 	    	playerScores[index][player_Team] = SaveVariables[i][pTeam];
 	    	playerScores[index][player_Kills] = SaveVariables[i][TKills];
 	    	playerScores[index][player_Deaths] = SaveVariables[i][TDeaths];
@@ -2636,33 +2645,6 @@ public WarEnded()
 		if(TeamScore[ATTACKER] > 0 || TeamScore[DEFENDER] > 0)
 		{
 			OnLeagueMatchEnd();
-			// Give points
-			if(TeamScore[ATTACKER] > TeamScore[DEFENDER]) 
-			{
-				new diff = TeamScore[ATTACKER] - TeamScore[DEFENDER];
-				new points = (diff) * 50;
-				SendClientMessageToAll(-1, sprintf(""COL_PRIM"Winners have earned {FFFFFF}%d point(s) "COL_PRIM"for winning the match with score diff: {FFFFFF}%d", points, diff));
-				foreach(new i : Player)
-				{
-					if(Player[i][Team] == ATTACKER)
-					{
-						AddPlayerLeaguePoints(i, points);
-					}
-				}
-			} 
-			else if(TeamScore[DEFENDER] > TeamScore[ATTACKER]) 
-			{
-				new diff = TeamScore[DEFENDER] - TeamScore[ATTACKER];
-				new points = (diff) * 50;
-				SendClientMessageToAll(-1, sprintf(""COL_PRIM"Winners have earned {FFFFFF}%d point(s) "COL_PRIM"for winning the match with score diff: {FFFFFF}%d", points, diff));
-				foreach(new i : Player)
-				{
-					if(Player[i][Team] == DEFENDER)
-					{
-						AddPlayerLeaguePoints(i, points);
-					}
-				}
-			}
 		}
 		else
 		{

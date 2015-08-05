@@ -706,7 +706,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 		    Player[playerid][TotalDeaths]++;
 
 			new str[150];
-			format(str, sizeof(str), "%sKills %s%d~n~%sDamage %s%.0f~n~%sTotal Dmg %s%.0f", MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][TotalDamage]);
+			format(str, sizeof(str), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][TotalDamage]);
 			PlayerTextDrawSetString(killerid, RoundKillDmgTDmg[killerid], str);
 			format(str, sizeof(str), "%s%s {FFFFFF}killed %s%s {FFFFFF}with %s [%.1f ft] [%d HP]", TextColor[Player[killerid][Team]], Player[killerid][Name], TextColor[Player[playerid][Team]], Player[playerid][Name], WeaponNames[reason],GetDistanceBetweenPlayers(killerid, playerid), (Player[killerid][pHealth] + Player[killerid][pArmour]));
 			SendClientMessageToAll(-1, str);
@@ -1122,11 +1122,11 @@ public OnPlayerEnterCheckpoint(playerid)
 							{
 							    if(CurrentCPTime <= 10 && CurrentCPTime > 4)
 							    {
-                                    AddPlayerLeaguePoints(playerid, 100, "saving CP in rather dangerous time");
+                                    AddPlayerLeaguePoints(playerid, 50, "saving CP in rather dangerous time");
 							    }
 							    else if(CurrentCPTime <= 4)
 							    {
-							        AddPlayerLeaguePoints(playerid, 200, "saving CP in a very critical time");
+							        AddPlayerLeaguePoints(playerid, 100, "saving CP in a very critical time");
 							    }
 							}
 							#endif
@@ -1662,7 +1662,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		PlayerPlaySound(issuerid, Player[issuerid][HitSound], 0.0, 0.0, 0.0);
         PlayerPlaySound(playerid, Player[playerid][GetHitSound], 0.0, 0.0, 0.0);
         
-        HandleVisualDamage(playerid, issuerid, rounded_amount, weaponid, bodypart);
+        HandleVisualDamage(playerid, issuerid, float(rounded_amount), weaponid, bodypart);
 
 		if(Player[issuerid][Playing] == true && Player[playerid][Playing] == true)
 		{
@@ -1679,7 +1679,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 			Player[issuerid][RoundDamage] += rounded_amount;
 			Player[issuerid][TotalDamage] += rounded_amount;
 			new str[160];
-			format(str, sizeof(str), "%sKills %s%d~n~%sDamage %s%.0f~n~%sTotal Dmg %s%.0f", MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][TotalDamage]);
+			format(str, sizeof(str), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][TotalDamage]);
 			PlayerTextDrawSetString(issuerid, RoundKillDmgTDmg[issuerid], str);
 		}
 	}
@@ -1688,7 +1688,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		if(GetPlayerState(playerid) != PLAYER_STATE_WASTED && Player[playerid][Spawned])
 		{
 			PlayerPlaySound(playerid, Player[playerid][GetHitSound], 0, 0, 0);
-            ShowCollisionDamageTextDraw(playerid, rounded_amount, weaponid);
+            ShowCollisionDamageTextDraw(playerid, float(rounded_amount), weaponid);
 		}
 	}
 	// If there's a round running
@@ -1709,7 +1709,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 					TextDrawSetString(AttHpLose, str);
 
 					TempDamage[ATTACKER] += rounded_amount;
-					format(str, sizeof(str), "~r~~h~%.0f", TempDamage[ATTACKER]);
+					format(str, sizeof(str), "~r~~h~%d", TempDamage[ATTACKER]);
 					TextDrawSetString(TeamHpLose[0], str);
 
 					KillTimer(AttHpTimer);
@@ -1722,7 +1722,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 					TextDrawSetString(DefHpLose, str);
 
 				    TempDamage[DEFENDER] += rounded_amount;
-					format(str,sizeof(str), "~b~~h~%.0f", TempDamage[DEFENDER]);
+					format(str,sizeof(str), "~b~~h~%d", TempDamage[DEFENDER]);
 					TextDrawSetString(TeamHpLose[1], str);
 
 			        KillTimer(DefHpTimer);
@@ -2166,7 +2166,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
                 GetPlayerFPS(CID);
 				format(statsSTR[0], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Country: %s\n\n{FF0000}- {FFFFFF}Round Kills: \t\t%d\t\t{FF0000}- {FFFFFF}Total Kills: \t\t%d\t\t{FF0000}- {FFFFFF}FPS: \t\t\t%d\n{FF0000}- {FFFFFF}Round Deaths: \t%.0f\t\t{FF0000}- {FFFFFF}Total Deaths: \t\t%d\t\t{FF0000}- {FFFFFF}Ping: \t\t\t%d\n",Country,  Player[CID][RoundKills],Player[CID][TotalKills], Player[CID][FPS], RD, TD, GetPlayerPing(CID));
-				format(statsSTR[1], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Round Damage: \t%.0f\t\t{FF0000}- {FFFFFF}Total Damage:   \t%.0f\t\t{FF0000}- {FFFFFF}Packet-Loss:   \t%.1f\n\n{FF0000}- {FFFFFF}Player Weather: \t%d\t\t{FF0000}- {FFFFFF}Chat Channel: \t%d\t\t\t{FF0000}- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], GetPlayerPacketLoss(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
+				format(statsSTR[1], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Round Damage: \t%d\t\t{FF0000}- {FFFFFF}Total Damage:   \t%d\t\t{FF0000}- {FFFFFF}Packet-Loss:   \t%.1f\n\n{FF0000}- {FFFFFF}Player Weather: \t%d\t\t{FF0000}- {FFFFFF}Chat Channel: \t%d\t\t\t{FF0000}- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], GetPlayerPacketLoss(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
 				format(statsSTR[2], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Player Time: \t\t%d\t\t{FF0000}- {FFFFFF}DM ID: \t\t%d\t\t{FF0000}- {FFFFFF}Hit Sound: \t\t%d\n{FF0000}- {FFFFFF}Player NetCheck: \t%s\t{FF0000}- {FFFFFF}Player Level: \t\t%d\t\t{FF0000}- {FFFFFF}Get Hit Sound: \t\t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
 				format(statsSTR[3], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Duels Won: \t\t%d\t\t{FF0000}- {FFFFFF}Duels Lost: \t\t%d", Player[CID][DuelsWon], Player[CID][DuelsLost]);
 				new TotalStr[1200];
@@ -4677,8 +4677,6 @@ YCMD:netcheck(playerid, params[], help)
 
 	new pID = strval(params);
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player is not connected.");
-	//if(Player[pID][Level] >= Player[playerid][Level] && pID != playerid) return SendErrorMessage(playerid,"That player is same or higher admin level than you.");
-
 
 	new iString[130];
 	if(Player[pID][NetCheck] == 1) {
@@ -4720,9 +4718,7 @@ YCMD:fpscheck(playerid, params[], help)
 	new pID = strval(params);
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player is not connected.");
 	if(Player[pID][NetCheck] == 0) return SendErrorMessage(playerid, "That player has netcheck disabled on him.");
-	if(Player[pID][Level] >= Player[playerid][Level] && pID != playerid) return SendErrorMessage(playerid,"That player is same or higher admin level than you.");
-
-
+	
 	new iString[128];
 	if(Player[pID][FPSCheck] == 1) {
 	    Player[pID][FPSCheck] = 0;
@@ -4753,9 +4749,7 @@ YCMD:pingcheck(playerid, params[], help)
 	new pID = strval(params);
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player is not connected.");
 	if(Player[pID][NetCheck] == 0) return SendErrorMessage(playerid, "That player has netcheck disabled on him.");
-	if(Player[pID][Level] >= Player[playerid][Level] && pID != playerid) return SendErrorMessage(playerid,"That player is same or higher admin level than you.");
-
-
+	
 	new iString[128];
 	if(Player[pID][PingCheck] == 1) {
 	    Player[pID][PingCheck] = 0;
@@ -4786,8 +4780,7 @@ YCMD:plcheck(playerid, params[], help)
 	new pID = strval(params);
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player is not connected.");
 	if(Player[pID][NetCheck] == 0) return SendErrorMessage(playerid, "That player has netcheck disabled on him.");
-	if(Player[pID][Level] >= Player[playerid][Level] && pID != playerid) return SendErrorMessage(playerid,"That player is same or higher admin level than you.");
-
+	
 	new iString[128];
 	if(Player[pID][PLCheck] == 1) {
 	    Player[pID][PLCheck] = 0;
@@ -5580,8 +5573,6 @@ YCMD:mute(playerid,params[], help)
 	new pID, Reason[128], iString[180];
     if(sscanf(params, "is", pID, Reason)) return SendUsageMessage(playerid,"/mute [Player ID] [Reason]");
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isnt connected.");
-	if(Player[pID][Level] >= Player[playerid][Level] && pID != playerid) return SendErrorMessage(playerid,"Can't mute someone of same or higher admin level.");
-
 
 	if(Player[pID][Mute] == true) return SendErrorMessage(playerid,"That player is already muted.");
 	//if(Player[playerid][Level] <= Player[pID][Level] && playerid != pID) return SendErrorMessage(playerid,"That player is higher admin level than you.");
@@ -5634,8 +5625,7 @@ YCMD:slap(playerid,params[], help)
 
 	new sid = strval(params);
     if(!IsPlayerConnected(sid)) return SendErrorMessage(playerid,"That player isnt connected.");
-	if(Player[sid][Level] >= Player[playerid][Level] && sid != playerid) return SendErrorMessage(playerid,"Can't slap someone of same or higher admin level.");
-
+	
     new Float:Pos[3];
 	GetPlayerPos(sid,Pos[0],Pos[1],Pos[2]);
 	SetPlayerPos(sid,Pos[0],Pos[1],Pos[2]+10);
@@ -5663,8 +5653,7 @@ YCMD:explode(playerid,params[], help)
 
 	new eid = strval(params);
   	if(!IsPlayerConnected(eid)) return SendErrorMessage(playerid,"That Player Isn't Connected.");
-	if(Player[eid][Level] >= Player[playerid][Level] && eid != playerid) return SendErrorMessage(playerid,"Can't explode someone of same or higher admin level.");
-
+	
 	new Float:Pos[3];
 	GetPlayerPos(eid, Pos[0], Pos[1], Pos[2]);
 	CreateExplosion(Pos[0], Pos[1], Pos[2], 7, 6.0);
@@ -6507,7 +6496,7 @@ YCMD:setteam(playerid, params[], help)
 	SwitchTeamFix(Params[0], false, true);
 
     new iString[150];
-	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%.0f~n~%sTotal Dmg %s%.0f", MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][TotalDamage]);
+	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][TotalDamage]);
 	PlayerTextDrawSetString(Params[0], RoundKillDmgTDmg[Params[0]], iString);
 
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has switched {FFFFFF}%s "COL_PRIM"to: {FFFFFF}%s", Player[playerid][Name], Player[Params[0]][Name], TeamName[Params[1]+1]);
@@ -7387,7 +7376,6 @@ YCMD:ban(playerid, params[], help)
 	if(sscanf(params, "ds", pID, Reason)) return SendUsageMessage(playerid,"/ban [Player ID] [Reason]");
 
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isn't connected.");
-	if(Player[pID][Level] >= Player[playerid][Level]) return SendErrorMessage(playerid,"Can't ban someone of same or higher admin level.");
 	if(strlen(Reason) > 128) return SendErrorMessage(playerid,"Reason is too big.");
 	#if defined _league_included
 	if(Player[pID][Team] != REFEREE && Player[pID][Team] != NON && LeagueMode)
@@ -7443,7 +7431,6 @@ YCMD:kick(playerid, params[], help)
 	new pID = strval(Params[0]);
 
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isn't connected.");
-	if(Player[pID][Level] >= Player[playerid][Level]) return SendErrorMessage(playerid,"Can't kick someone of same or higher admin level.");
 	#if defined _league_included
 	if(Player[pID][Team] != REFEREE && Player[pID][Team] != NON && LeagueMode)
 	    return SendErrorMessage(playerid, "When league mode is enabled, you can kick only referees!");

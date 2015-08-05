@@ -118,7 +118,7 @@ MATCHSYNC_InsertPlayer(playerid)
 	new query[256];
 	new _name[MAX_PLAYER_NAME];
 	GetPlayerName(playerid, _name, sizeof(_name));
-	format(query, sizeof(query), "INSERT INTO Players (Name, Damage, Kills, Accuracy, Rounds) VALUES ('%s', %d, %d, %d, %d)", _name, floatround(Player[playerid][TotalDamage]), Player[playerid][TotalKills], floatround(Player[playerid][TotalAccuracy]), Player[playerid][RoundPlayed]);
+	format(query, sizeof(query), "INSERT INTO Players (Name, Damage, Kills, Accuracy, Rounds) VALUES ('%s', %d, %d, %d, %d)", _name, Player[playerid][TotalDamage], Player[playerid][TotalKills], floatround(Player[playerid][TotalAccuracy]), Player[playerid][RoundPlayed]);
 	mysql_query(query);
 }
 
@@ -158,19 +158,19 @@ MATCHSYNC_UpdateAllPlayers(when)
 					    {
 					        case WHEN_MATCH_END:
 					        {
-					            if(Player[i][RoundKills] == 0 && floatround(Player[i][RoundDamage]) == 0 && floatround(Player[i][Accuracy]) == 0)
+					            if(Player[i][RoundKills] == 0 && Player[i][RoundDamage] == 0 && floatround(Player[i][Accuracy]) == 0)
 									goto skipped;
 								MATCHSYNC_Kills[i] += Player[i][TotalKills];
-								MATCHSYNC_Damage[i] += floatround(Player[i][TotalDamage]);
+								MATCHSYNC_Damage[i] += Player[i][TotalDamage];
 								MATCHSYNC_Accuracy[i] += floatround(Player[i][TotalAccuracy]); // null
 								MATCHSYNC_Rounds[i] += Player[i][RoundPlayed];
 							}
 							case WHEN_ROUND_END:
 							{
-							    if(Player[i][RoundKills] == 0 && floatround(Player[i][RoundDamage]) == 0 && floatround(Player[i][Accuracy]) == 0)
+							    if(Player[i][RoundKills] == 0 && Player[i][RoundDamage] == 0 && floatround(Player[i][Accuracy]) == 0)
 									goto skipped;
 							    MATCHSYNC_Kills[i] += Player[i][RoundKills];
-								MATCHSYNC_Damage[i] += floatround(Player[i][RoundDamage]);
+								MATCHSYNC_Damage[i] += Player[i][RoundDamage];
 								MATCHSYNC_Accuracy[i] += floatround(Player[i][Accuracy]);
 								MATCHSYNC_Rounds[i] ++;
 							}

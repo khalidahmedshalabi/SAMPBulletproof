@@ -1147,7 +1147,7 @@ CreatePlayerTeamBar(playerid)
 			TeamBarsData[playerid][TeamBar] = CreateProgressBar(TEAMBARS_BAR_START_X, y, 80.50, 9.19, TEAMBARS_ATTACKER_COLOR, 200.0);
 			// Create team bar textdraws
 			TeamBarsData[playerid][TeamBarText] = TextDrawCreate(TEAMBARS_TEXT_START_X, y, 
-				sprintf("~w~~h~%s ~r~~h~~h~~h~%d/%.0f", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
+				sprintf("~w~~h~%s ~r~~h~~h~~h~%d/%d", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
 			TextDrawBackgroundColor(TeamBarsData[playerid][TeamBarText], 51);
 			TextDrawFont(TeamBarsData[playerid][TeamBarText], 1);
 			TextDrawLetterSize(TeamBarsData[playerid][TeamBarText], 0.160000, 1.100000);
@@ -1182,7 +1182,7 @@ CreatePlayerTeamBar(playerid)
 			TeamBarsData[playerid][TeamBar] = CreateProgressBar(TEAMBARS_BAR_START_X, y, 80.50, 9.19, TEAMBARS_DEFENDER_COLOR, 200.0);
 			// Create team bar textdraws
 			TeamBarsData[playerid][TeamBarText] = TextDrawCreate(TEAMBARS_TEXT_START_X, y, 
-				sprintf("~w~~h~%s ~b~~h~~h~~h~%d/%.0f", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
+				sprintf("~w~~h~%s ~b~~h~~h~~h~%d/%d", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
 			TextDrawBackgroundColor(TeamBarsData[playerid][TeamBarText], 51);
 			TextDrawFont(TeamBarsData[playerid][TeamBarText], 1);
 			TextDrawLetterSize(TeamBarsData[playerid][TeamBarText], 0.160000, 1.100000);
@@ -1344,7 +1344,7 @@ UpdatePlayerTeamBar(playerid)
 					}
 				}
 				TextDrawSetString(TeamBarsData[playerid][TeamBarText], 
-					sprintf("~w~~h~%s ~r~~h~~h~~h~%d / %.0f", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
+					sprintf("~w~~h~%s ~r~~h~~h~~h~%d / %d", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
 				foreach(new i : Player)
 				{
 					if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
@@ -1378,7 +1378,7 @@ UpdatePlayerTeamBar(playerid)
 					}
 				}
 				TextDrawSetString(TeamBarsData[playerid][TeamBarText], 
-					sprintf("~w~~h~%s ~b~~h~~h~~h~%d / %.0f", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
+					sprintf("~w~~h~%s ~b~~h~~h~~h~%d / %d", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
 				foreach(new i : Player)
 				{
 					if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
@@ -1407,7 +1407,7 @@ UpdatePlayerTeamBar(playerid)
 			{
 				SetProgressBarValue(TeamBarsData[playerid][TeamBar], 0.0);
 				TextDrawSetString(TeamBarsData[playerid][TeamBarText], 
-					sprintf("~w~~h~%s ~r~~h~~h~~h~Dead / %.0f", Player[playerid][NameWithoutTag], Player[playerid][RoundDamage]));
+					sprintf("~w~~h~%s ~r~~h~~h~~h~Dead / %d", Player[playerid][NameWithoutTag], Player[playerid][RoundDamage]));
 				foreach(new i : Player)
 				{
 					if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
@@ -1430,7 +1430,7 @@ UpdatePlayerTeamBar(playerid)
 			{
 				SetProgressBarValue(TeamBarsData[playerid][TeamBar], 0.0);
 				TextDrawSetString(TeamBarsData[playerid][TeamBarText], 
-					sprintf("~w~~h~%s ~b~~h~~h~~h~Dead / %.0f", Player[playerid][NameWithoutTag], Player[playerid][RoundDamage]));
+					sprintf("~w~~h~%s ~b~~h~~h~~h~Dead / %d", Player[playerid][NameWithoutTag], Player[playerid][RoundDamage]));
 				foreach(new i : Player)
 				{
 					if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
