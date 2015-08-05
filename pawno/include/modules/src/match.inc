@@ -102,13 +102,13 @@ UpdateTeamPlayerCount(teamid, bool:elimination_check, exception = -1)
 		case ATTACKER:
 		{
 			new str[20];
-			format(str, sizeof str, "~w~%d__(%.0f)", PlayersAlive[ATTACKER], TeamHP[ATTACKER]);
+			format(str, sizeof str, "~w~%d__(%d)", PlayersAlive[ATTACKER], TeamHP[ATTACKER]);
 			TextDrawSetString(leftTeamData, str);
 		}
 		case DEFENDER:
 		{
 			new str[20];
-			format(str, sizeof str, "~w~(%.0f)__%d", TeamHP[DEFENDER], PlayersAlive[DEFENDER]);
+			format(str, sizeof str, "~w~(%d)__%d", TeamHP[DEFENDER], PlayersAlive[DEFENDER]);
 			TextDrawSetString(rightTeamData, str);
 		}
 	}
@@ -157,13 +157,13 @@ UpdateTeamHP(teamid, exception = -1)
 		case ATTACKER:
 		{
 			new str[20];
-			format(str, sizeof str, "~w~%d__(%.0f)", PlayersAlive[ATTACKER], TeamHP[ATTACKER]);
+			format(str, sizeof str, "~w~%d__(%d)", PlayersAlive[ATTACKER], TeamHP[ATTACKER]);
 			TextDrawSetString(leftTeamData, str);
 		}
 		case DEFENDER:
 		{
 			new str[20];
-			format(str, sizeof str, "~w~(%.0f)__%d", TeamHP[DEFENDER], PlayersAlive[DEFENDER]);
+			format(str, sizeof str, "~w~(%d)__%d", TeamHP[DEFENDER], PlayersAlive[DEFENDER]);
 			TextDrawSetString(rightTeamData, str);
 		}
 	}
@@ -290,7 +290,7 @@ public GameLoopCallback()
 
 						if(Player[i][OutOfArena] == 0) 
 						{
-							SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been removed for not staying in Arena. {FFFFFF}(%0.1f | %0.1f)", Player[i][Name], Player[i][pHealth], Player[i][pArmour]));
+							SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been removed for not staying in Arena. {FFFFFF}(%d | %d)", Player[i][Name], Player[i][pHealth], Player[i][pArmour]));
 
 							Player[i][OutOfArena] = MAX_ZONE_LIMIT_WARNINGS;
 
@@ -1158,7 +1158,7 @@ public SwapBothTeams() {
 
 forward OnPlayerReplace(ToAddID, ToReplaceID, playerid);
 public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
-    new Float:Pos[4], Float:HP[2], iString[180];
+    new Float:Pos[4], HP[2], iString[180];
 
 	GetPlayerPos(ToReplaceID, Pos[0], Pos[1], Pos[2]);
 	GetPlayerFacingAngle(ToReplaceID, Pos[3]);
@@ -2157,7 +2157,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 				playerScores[index][player_Team] = Player[i][Team];
 				playerScores[index][player_Kills] = Player[i][RoundKills];
 				playerScores[index][player_Deaths] = Player[i][RoundDeaths];
-				playerScores[index][player_HP] = floatround(Player[i][pHealth] + Player[i][pArmour], floatround_round);
+				playerScores[index][player_HP] = Player[i][pHealth] + Player[i][pArmour];
 				playerScores[index][player_Acc] = floatround(Player[i][Accuracy], floatround_round);
 
 				format(names[index], MAX_PLAYER_NAME, Player[i][NameWithoutTag]);
@@ -2217,7 +2217,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	    	playerScores[index][player_Team] = SaveVariables[i][pTeam];
 	    	playerScores[index][player_Kills] = SaveVariables[i][RKills];
 	    	playerScores[index][player_Deaths] = SaveVariables[i][RDeaths];
-			playerScores[index][player_HP] = floatround(SaveVariables[i][gHealth] + SaveVariables[i][gArmour], floatround_round);
+			playerScores[index][player_HP] = SaveVariables[i][gHealth] + SaveVariables[i][gArmour];
 			playerScores[index][player_Acc] = SaveVariables[i][iAccuracy];
 
 			format(names[index], MAX_PLAYER_NAME, SaveVariables[i][pNameWithoutTag]);
@@ -2495,7 +2495,7 @@ public WarEnded()
 			playerScores[index][player_Kills] = Player[i][TotalKills];
 			playerScores[index][player_Deaths] = Player[i][TotalDeaths];
 			playerScores[index][player_TPlayed] = Player[i][RoundPlayed];
-			playerScores[index][player_HP] = floatround(Player[i][pHealth] + Player[i][pArmour], floatround_round);
+			playerScores[index][player_HP] = Player[i][pHealth] + Player[i][pArmour];
 
 			new Float:nTotalAccuracy;
 			if(Player[i][TotalBulletsFired] == 0) nTotalAccuracy = 0.0;
@@ -2520,7 +2520,7 @@ public WarEnded()
 	    	playerScores[index][player_Kills] = SaveVariables[i][TKills];
 	    	playerScores[index][player_Deaths] = SaveVariables[i][TDeaths];
 	    	playerScores[index][player_TPlayed] = SaveVariables[i][TPlayed];
-	    	playerScores[index][player_HP] = floatround(SaveVariables[i][gHealth] + SaveVariables[i][gArmour], floatround_round);
+	    	playerScores[index][player_HP] = SaveVariables[i][gHealth] + SaveVariables[i][gArmour];
 
 			new Float:nTotalAccuracy;
 			if(SaveVariables[i][tBulletsShot] == 0) nTotalAccuracy = 0.0;

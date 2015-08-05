@@ -445,8 +445,17 @@ RecountPlayersOnCP()
 	return PlayersInCP;
 }
 
-RemoveUselessObjects(playerid)
+RemoveVendingMachinesForPlayer(playerid)
 {
+	for(new i = 0; i < sizeof(arr_VendingMachines); i ++)
+	{
+		RemoveBuildingForPlayer(playerid, arr_VendingMachines[i][e_Model], arr_VendingMachines[i][e_PosX], arr_VendingMachines[i][e_PosY], arr_VendingMachines[i][e_PosZ], 0.25);
+	}
+}
+
+RemoveUselessObjectsForPlayer(playerid)
+{
+	RemoveVendingMachinesForPlayer(playerid);
     RemoveBuildingForPlayer(playerid, 1220, 0.0, 0.0, 0.0, 6000.0); // boxes that make you lose hp
 	RemoveBuildingForPlayer(playerid, 1221, 0.0, 0.0, 0.0, 6000.0); // boxes that make you lose hp
 	RemoveBuildingForPlayer(playerid, 1230, 0.0, 0.0, 0.0, 6000.0); // boxes that make you lose hp
@@ -532,7 +541,7 @@ ShowTargetInfo(playerid, targetid)
 	GetPlayerFPS(targetid);
 	if(GetPlayerVehicleID(targetid) == 0)
 	{
-		format(str, sizeof str, "~n~~n~%sName: %s%s~n~%sPing: %s%d   %sFPS: %s%d~n~%sPL: %s%.1f   %sHP: %s%.0f",
+		format(str, sizeof str, "~n~~n~%sName: %s%s~n~%sPing: %s%d   %sFPS: %s%d~n~%sPL: %s%.1f   %sHP: %s%d",
 			MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][NameWithoutTag], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]],
 			GetPlayerPing(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][FPS], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], GetPlayerPacketLoss(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], (Player[targetid][pHealth] + Player[targetid][pArmour]));
 	}
@@ -540,7 +549,7 @@ ShowTargetInfo(playerid, targetid)
 	{
 	    new Float:vHP;
 	    GetVehicleHealth(GetPlayerVehicleID(targetid), vHP);
-        format(str, sizeof str, "~n~~n~%sName: %s%s~n~%sPing: %s%d   %sFPS: %s%d~n~%sPL: %s%.1f   %sHP: %s%.0f~n~%sVehicle HP: %s%.1f",
+        format(str, sizeof str, "~n~~n~%sName: %s%s~n~%sPing: %s%d   %sFPS: %s%d~n~%sPL: %s%.1f   %sHP: %s%d~n~%sVehicle HP: %s%.1f",
 			MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][NameWithoutTag], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]],
 			GetPlayerPing(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][FPS], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], GetPlayerPacketLoss(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], (Player[targetid][pHealth] + Player[targetid][pArmour]), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], vHP / 100);
 	}
@@ -621,8 +630,8 @@ SpawnInAntiLag(playerid) {
 	SetPlayerInterior(playerid, 	10);
 	SetPlayerVirtualWorld(playerid, 1);
 
-	SetHP(playerid,	100.0);
-	SetAP(playerid,	100.0);
+	SetHP(playerid,	100);
+	SetAP(playerid,	100);
 
     GivePlayerWeapon(playerid, SHOTGUN, 9996);
     GivePlayerWeapon(playerid, SNIPER, 	9996);

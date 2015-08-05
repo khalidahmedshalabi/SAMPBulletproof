@@ -210,8 +210,9 @@ InitPlayer(playerid)
 	Player[playerid][OnGunSwitch] = false;
 	#endif
 	
+	ResetPlayerMoney(playerid);
 	SetPlayerColor(playerid, 0xAAAAAAAA);
-	RemoveUselessObjects(playerid);
+	RemoveUselessObjectsForPlayer(playerid);
 	LoadPlayerTextDraws(playerid);
 	format(Player[playerid][TempTag], 7, "");
 	for(new i = 0; i < MAX_PLAYER_BARS; i ++)
@@ -415,8 +416,8 @@ StorePlayerVariables(playerid) {
 				GetHP(playerid, SaveVariables[i][gHealth]);
 				GetAP(playerid, SaveVariables[i][gArmour]);
 			} else {
-			    SaveVariables[i][gArmour] = 100.0;
-			    SaveVariables[i][gHealth] = 100.0;
+			    SaveVariables[i][gArmour] = 100;
+			    SaveVariables[i][gHealth] = 100;
 			}
 
 	   	    SaveVariables[i][pTeam] = Player[playerid][Team];
@@ -707,8 +708,8 @@ ResetSaveVariables(index) {
 
 	format(SaveVariables[index][pName], 24, "");
 
-	SaveVariables[index][gHealth] = 0.0;
-	SaveVariables[index][gArmour] = 0.0;
+	SaveVariables[index][gHealth] = 0;
+	SaveVariables[index][gArmour] = 0;
 	SaveVariables[index][pInterior] = 0;
 	SaveVariables[index][pVWorld] = 0;
     SaveVariables[index][pTeam] = 0;

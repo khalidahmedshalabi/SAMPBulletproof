@@ -421,8 +421,8 @@ public OnPlayerSpawn(playerid)
 	if(Player[playerid][Playing] == false && Player[playerid][InDM] == false && Player[playerid][InDuel] == false)
  	{
  	    // Adjust player HP
-		SetHP(playerid, 100.0);
-		SetAP(playerid, 100.0);
+		SetHP(playerid, 100);
+		SetAP(playerid, 100);
 
 		// Unarm players from any weapons
 		ResetPlayerWeapons(playerid);
@@ -492,17 +492,17 @@ public OnPlayerDisconnect(playerid, reason)
     switch (reason){
 		case 0:{
 			if(Player[playerid][Playing] == false) format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Timeout{757575}]",Player[playerid][Name]);
-		 	else format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Timeout{757575}] HP {FFFFFF}%.0f {757575}| Armour {FFFFFF}%.0f", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
+		 	else format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Timeout{757575}] HP {FFFFFF}%d {757575}| Armour {FFFFFF}%d", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
 		} case 1: {
 			if(Player[playerid][Playing] == false) format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Leaving{757575}]",Player[playerid][Name]);
-			else format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Leaving{757575}] HP {FFFFFF}%.0f {757575}| Armour {FFFFFF}%.0f", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
+			else format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Leaving{757575}] HP {FFFFFF}%d {757575}| Armour {FFFFFF}%d", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
 		} case 2: {
 		    if(Player[playerid][Playing] == false) {
 				if(Player[playerid][IsKicked] == true)format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Kicked{757575}]",Player[playerid][Name]);
 				else format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Banned{757575}]",Player[playerid][Name]);
 			} else {
-				if(Player[playerid][IsKicked] == true)format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Kicked{757575}] HP {FFFFFF}%.0f {757575}| Armour {FFFFFF}%.0f",Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
-				else format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Banned{757575}] HP {FFFFFF}%.0f {757575}| Armour {FFFFFF}%.0f",Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
+				if(Player[playerid][IsKicked] == true)format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Kicked{757575}] HP {FFFFFF}%d {757575}| Armour {FFFFFF}%d",Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
+				else format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Banned{757575}] HP {FFFFFF}%d {757575}| Armour {FFFFFF}%d",Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
 			}
 		}
 	}
@@ -690,9 +690,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 
 	    SetTimerEx("DeathMessageF", 4000, false, "ii", killerid, playerid);
 		
-		if(Current == -1)
-			SendDeathMessage(killerid, playerid, reason);
-		else if(Player[playerid][Playing] == true && Player[killerid][Playing] == true)
+		if(Player[playerid][Playing] == true && Player[killerid][Playing] == true)
 		{
 		    #if defined _league_included
 		    if(LeagueMode)
@@ -708,26 +706,28 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 		    Player[playerid][TotalDeaths]++;
 
 			new str[150];
-			new Float:HP[2];
-			GetHP(killerid, HP[0]);
-			GetAP(killerid, HP[1]);
 			format(str, sizeof(str), "%sKills %s%d~n~%sDamage %s%.0f~n~%sTotal Dmg %s%.0f", MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][TotalDamage]);
 			PlayerTextDrawSetString(killerid, RoundKillDmgTDmg[killerid], str);
-			format(str, sizeof(str), "%s%s {FFFFFF}killed %s%s {FFFFFF}with %s [%.1f ft] [%.0f HP]", TextColor[Player[killerid][Team]], Player[killerid][Name], TextColor[Player[playerid][Team]], Player[playerid][Name], WeaponNames[reason],GetDistanceBetweenPlayers(killerid, playerid), (HP[0] + HP[1]));
+			format(str, sizeof(str), "%s%s {FFFFFF}killed %s%s {FFFFFF}with %s [%.1f ft] [%d HP]", TextColor[Player[killerid][Team]], Player[killerid][Name], TextColor[Player[playerid][Team]], Player[playerid][Name], WeaponNames[reason],GetDistanceBetweenPlayers(killerid, playerid), (Player[killerid][pHealth] + Player[killerid][pArmour]));
 			SendClientMessageToAll(-1, str);
 
             OnPlayerAmmoUpdate(playerid);
 		}
-		else if(Player[killerid][InDM] == true)
+		else
 		{
-			SetHP(killerid, 100.0);
-			SetAP(killerid, 100.0);
+			if(Current == -1)
+				SendDeathMessage(killerid, playerid, reason);
+			if(Player[killerid][InDM] == true)
+			{
+				SetHP(killerid, 100);
+				SetAP(killerid, 100);
 
-			Player[playerid][VWorld] = GetPlayerVirtualWorld(killerid);
-		}
-		else if(Player[playerid][InDuel])
-		{
-		    ProcessDuellerDeath(playerid, killerid, reason);
+				Player[playerid][VWorld] = GetPlayerVirtualWorld(killerid);
+			}
+			else if(Player[playerid][InDuel])
+			{
+			    ProcessDuellerDeath(playerid, killerid, reason);
+			}
 		}
 	}
 	new Float:x, Float:y, Float:z;
@@ -815,12 +815,6 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	// If he's spectating, stop it
  	if(Player[playerid][Spectating])
 	    StopSpectate(playerid);
-	// If the server sees this player frozen
-    if(Player[playerid][IsFrozen])
-    {
-        // Tell the script he is not frozen anymore
-		Player[playerid][IsFrozen] = false;
-	}
 	if(Current == -1)
 		HideRoundStats(playerid);
 		
@@ -1481,26 +1475,29 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	    SetFakeHealthArmour(playerid);
 		return 1;
 	}
-	new Float:dist;
-	if(issuerid != INVALID_PLAYER_ID && !IsValidHitRange(playerid, issuerid, weaponid, dist) && GetPlayerTeam(issuerid) != GetPlayerTeam(playerid))
+    if(issuerid != INVALID_PLAYER_ID)
     {
-    	// Weapon range exceeded
-		MessageBox(issuerid, MSGBOX_TYPE_MIDDLE, "~r~~h~hit out of range", sprintf("On: %s~n~Weapon: %s~n~Hit range: %.3f~n~Max hit range (exceeded): %.3f", Player[playerid][Name], WeaponNames[weaponid], dist, WeaponRanges[weaponid]), 3000);
-	    SetFakeHealthArmour(playerid);
-		return 1;
-    }
-    if(!IsValidWeaponDamageAmount(weaponid, amount))
-    {
-    	// Invalid weapon damage amount
-	    SetFakeHealthArmour(playerid);
-		return 1;
-    }
-    if(issuerid != INVALID_PLAYER_ID && Player[issuerid][PauseCount] > 4)
-    {
-        // Trying to damage while game paused
-        SendClientMessageToAll(-1, sprintf(""COL_PRIM"Rejected damage caused by {FFFFFF}%s "COL_PRIM"as they've their game paused (timeout/lag expected or pause abuse)", Player[issuerid][Name]));
-        SetFakeHealthArmour(playerid);
-		return 1;
+        new Float:dist;
+		if(!IsValidHitRange(playerid, issuerid, weaponid, dist) && GetPlayerTeam(issuerid) != GetPlayerTeam(playerid))
+	    {
+	    	// Weapon range exceeded
+			MessageBox(issuerid, MSGBOX_TYPE_MIDDLE, "~r~~h~hit out of range", sprintf("On: %s~n~Weapon: %s~n~Hit range: %.3f~n~Max hit range (exceeded): %.3f", Player[playerid][Name], WeaponNames[weaponid], dist, WeaponRanges[weaponid]), 3000);
+		    SetFakeHealthArmour(playerid);
+			return 1;
+	    }
+	    if(Player[issuerid][PauseCount] > 4)
+	    {
+	        // Trying to damage while game paused
+	        SendClientMessageToAll(-1, sprintf(""COL_PRIM"Rejected damage caused by {FFFFFF}%s "COL_PRIM"as they've their game paused (timeout/lag expected or pause abuse)", Player[issuerid][Name]));
+	        SetFakeHealthArmour(playerid);
+			return 1;
+	    }
+	    if(!IsValidWeaponDamageAmount(weaponid, amount))
+	    {
+	    	// Invalid weapon damage amount
+		    SetFakeHealthArmour(playerid);
+			return 1;
+	    }
     }
 	// <start> HP Protection for some things
 	if(GetTickCount() <= Player[playerid][LastWasKnifed])
@@ -1515,18 +1512,39 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	    SetFakeHealthArmour(playerid);
 	    return 1;
 	}
-	if(Player[playerid][OnGunmenu] && Player[playerid][Playing]) // Player is picking weapons from the gunmenu
+	if(Player[playerid][Playing])
 	{
-	    /* Players who are picking weapons from gun-menu should not be damaged */
-    	SetFakeHealthArmour(playerid);
-    	return 1;
- 	}
-    if(Player[playerid][Playing] && (weaponid == 49 || weaponid == 50 || (weaponid == 54 && Player[playerid][pArmour] > 0.0) || (weaponid == 54 && amount <= 10)))
-    {
-        /* Cancel damage done by vehicle, explosion, heli-blades and collision (equal to or less than 10 only) */
-    	SetFakeHealthArmour(playerid);
-        return 1;
-    }
+	    if(Player[playerid][OnGunmenu]) // Player is picking weapons from the gunmenu
+		{
+		    /* Players who are picking weapons from gun-menu should not be damaged */
+	    	SetFakeHealthArmour(playerid);
+	    	return 1;
+	 	}
+	    if(weaponid == 49 || weaponid == 50 || (weaponid == 54 && Player[playerid][pArmour] > 0) || (weaponid == 54 && amount <= 10))
+	    {
+	        /* Cancel damage done by vehicle, explosion, heli-blades and collision (equal to or less than 10 only) */
+	    	SetFakeHealthArmour(playerid);
+	        return 1;
+	    }
+	    if(FallProtection == true) // If round fall protection is on and this player is in round
+		{
+			if(weaponid == 54) // If it's a collision (fell from a very high building?)
+			{
+			    SetFakeHealthArmour(playerid);
+		    	return 1;
+			}
+			else // If it's not a collision, then real fire is going on maybe; check if we should turn off protection or not
+			{
+			    if(issuerid != INVALID_PLAYER_ID) // If someone started firing real shots
+				{
+					if(Player[issuerid][Team] != Player[playerid][Team]) // They're not at the same time
+					{
+			    		FallProtection = false; // Turn fall protection off
+					}
+				}
+			}
+		}
+	}
     if(weaponid == 51 /* Explosion */ || weaponid == WEAPON_GRENADE)
     {
         // Protect against explosions (in round only)
@@ -1551,7 +1569,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
            	    amount = GRENADE_LOW_DAMAGE;
            	}
         }
-    
+
     }
     // Slit throat with a knife
     new bool:KnifeSlitThroat = false;
@@ -1570,25 +1588,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		KnifeSlitThroat = true;
 		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"is stabbing and slitting {FFFFFF}%s's "COL_PRIM"throat with a knife", Player[issuerid][Name], Player[playerid][Name]));
 	}
-    if(FallProtection == true && Player[playerid][Playing] == true) // If round fall protection is on and this player is in round
-	{
-		if(weaponid == 54) // If it's a collision (fell from a very high building?)
-		{
-		    SetFakeHealthArmour(playerid);
-	    	return 1;
-		}
-		else // If it's not a collision, then real fire is going on maybe; check if we should turn off protection or not
-		{
-		    if(issuerid != INVALID_PLAYER_ID) // If someone started firing real shots
-			{
-				if(Player[issuerid][Team] != Player[playerid][Team]) // They're not at the same time
-				{
-		    		FallProtection = false; // Turn fall protection off
-				}
-			}
-		}
-	}
-	if(issuerid == INVALID_PLAYER_ID && (IsBulletWeapon(weaponid) || IsMeleeWeapon(weaponid)))
+ 	if(issuerid == INVALID_PLAYER_ID && (IsBulletWeapon(weaponid) || IsMeleeWeapon(weaponid)))
 	{
 	    SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been forced to relog for having weapon bugs. {FFFFFF}(Most likely Sniper Bug)", Player[playerid][Name]));
 		MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~r~~h~Sniper Bug", "You likely to have Sniper Bug and a relog is needed", 3000);
@@ -1618,7 +1618,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 			return 1;
 		}
 		// If it's a referee trying to do damage
-		if(Player[issuerid][Playing] == true && (Player[issuerid][Team] == REFEREE || Player[playerid][Team] == REFEREE))
+		if(Player[issuerid][Playing] == true && Player[issuerid][Team] == REFEREE)
 		{
 		    SetFakeHealthArmour(playerid);
 			return 1;
@@ -1631,30 +1631,30 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
     Player[playerid][HitBy] = issuerid; // This is used in custom OnPlayerDeath to get the last player who caused damage on 'playerid'
  	Player[playerid][HitWith] = weaponid; // This is used in custom OnPlayerDeath to get the last weapon a player got hit with before death
 
-    amount = GetActualDamage(amount, playerid); // Fix damage if it's unreal (in other words, if damage is greater than player's health)
+    new rounded_amount = GetActualDamage(amount, playerid); // Fix damage if it's unreal (in other words, if damage is greater than player's health)
 	if(weaponid == 54) // If it's a collision (fell or something)
 	{
 	    // We deal with health only leaving armour as it is.
-	    SetHP(playerid, Player[playerid][pHealth] - amount);
+	    SetHP(playerid, Player[playerid][pHealth] - rounded_amount);
+	}
+	else if(Player[playerid][pArmour] > 0) // Still got armour and it's not a collision damager
+	{
+	    new diff = (Player[playerid][pArmour] - rounded_amount);
+		if(diff < 0)
+		{
+		    SetAP(playerid, 0);
+		    SetHP(playerid, Player[playerid][pHealth] + diff);
+		}
+		else
+		    SetAP(playerid, diff);
 	}
 	// If it's a knife kill (slitting throat)
 	else if(KnifeSlitThroat != false)
 	{
 	    SetTimerEx("ApplyKnifeDeath", 3000, false, "d", playerid);
 	}
-	else if(Player[playerid][pArmour] > 0.0) // Still got armour and it's not a collision damager
-	{
-	    new Float:diff = (Player[playerid][pArmour] - amount);
-		if(diff < 0.0)
-		{
-		    SetAP(playerid, 0.0);
-		    SetHP(playerid, Player[playerid][pHealth] + diff);
-		}
-		else
-		    SetAP(playerid, diff);
-	}
 	else // It's not a collision and the player got no armour
-	    SetHP(playerid, Player[playerid][pHealth] - amount);
+	    SetHP(playerid, Player[playerid][pHealth] - rounded_amount);
 	// <end> Health and armour handling
 
 	if(issuerid != INVALID_PLAYER_ID) // If the damager is a HUMAN
@@ -1662,22 +1662,22 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		PlayerPlaySound(issuerid, Player[issuerid][HitSound], 0.0, 0.0, 0.0);
         PlayerPlaySound(playerid, Player[playerid][GetHitSound], 0.0, 0.0, 0.0);
         
-        HandleVisualDamage(playerid, issuerid, amount, weaponid, bodypart);
+        HandleVisualDamage(playerid, issuerid, rounded_amount, weaponid, bodypart);
 
 		if(Player[issuerid][Playing] == true && Player[playerid][Playing] == true)
 		{
 			#if defined _league_included
 		    if(LeagueMode)
 		    {
-            	UpdateLeaguePlayerDamage(issuerid, amount, weaponid);
-            	AddPlayerLeaguePoints(issuerid, floatround(amount));
-            	AddPlayerLeaguePoints(playerid, - floatround(amount));
+            	UpdateLeaguePlayerDamage(issuerid, rounded_amount, weaponid);
+            	AddPlayerLeaguePoints(issuerid, rounded_amount);
+            	AddPlayerLeaguePoints(playerid, -(rounded_amount));
      		}
      		#endif
-            Player[issuerid][WeaponStat][weaponid] += floatround(amount, floatround_round);
+            Player[issuerid][WeaponStat][weaponid] += rounded_amount;
 			Player[issuerid][shotsHit] ++;
-			Player[issuerid][RoundDamage] += amount;
-			Player[issuerid][TotalDamage] += amount;
+			Player[issuerid][RoundDamage] += rounded_amount;
+			Player[issuerid][TotalDamage] += rounded_amount;
 			new str[160];
 			format(str, sizeof(str), "%sKills %s%d~n~%sDamage %s%.0f~n~%sTotal Dmg %s%.0f", MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][TotalDamage]);
 			PlayerTextDrawSetString(issuerid, RoundKillDmgTDmg[issuerid], str);
@@ -1688,7 +1688,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		if(GetPlayerState(playerid) != PLAYER_STATE_WASTED && Player[playerid][Spawned])
 		{
 			PlayerPlaySound(playerid, Player[playerid][GetHitSound], 0, 0, 0);
-            ShowCollisionDamageTextDraw(playerid, amount, weaponid);
+            ShowCollisionDamageTextDraw(playerid, rounded_amount, weaponid);
 		}
 	}
 	// If there's a round running
@@ -1708,7 +1708,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 					format(str, sizeof(str), "~w~%s", Player[playerid][NameWithoutTag]);
 					TextDrawSetString(AttHpLose, str);
 
-					TempDamage[ATTACKER] += amount;
+					TempDamage[ATTACKER] += rounded_amount;
 					format(str, sizeof(str), "~r~~h~%.0f", TempDamage[ATTACKER]);
 					TextDrawSetString(TeamHpLose[0], str);
 
@@ -1721,7 +1721,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 					format(str, sizeof(str), "~w~%s", Player[playerid][NameWithoutTag]);
 					TextDrawSetString(DefHpLose, str);
 
-				    TempDamage[DEFENDER] += amount;
+				    TempDamage[DEFENDER] += rounded_amount;
 					format(str,sizeof(str), "~b~~h~%.0f", TempDamage[DEFENDER]);
 					TextDrawSetString(TeamHpLose[1], str);
 
@@ -2918,7 +2918,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	}
 
 	if(dialogid == DIALOG_CONFIG_SET_ROUND_HEALTH) {
-        new Float:hp = floatstr(inputtext);
+        new hp = strval(inputtext);
 		if(hp <= 0 || hp > 100) {
 			SendErrorMessage(playerid,"Health value can be between 0 and 100 maximum.");
 			ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_ROUND_HEALTH, DIALOG_STYLE_INPUT, ""COL_PRIM"Round Health", ""COL_PRIM"Set round health:", "OK", "");
@@ -2928,10 +2928,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		RoundHP = hp;
 
 		new str[128];
-		format(str, sizeof(str), "%s "COL_PRIM"has changed the round health to: {FFFFFF}%0.2f", Player[playerid][Name], RoundHP);
+		format(str, sizeof(str), "%s "COL_PRIM"has changed the round health to: {FFFFFF}%d", Player[playerid][Name], RoundHP);
 		SendClientMessageToAll(-1, str);
 
-		format(str, sizeof(str), "UPDATE `Configs` SET `Value` = '%f,%f' WHERE `Option` = 'RoundHPAR'", RoundHP, RoundAR);
+		format(str, sizeof(str), "UPDATE `Configs` SET `Value` = '%d,%d' WHERE `Option` = 'RoundHPAR'", RoundHP, RoundAR);
 		db_free_result(db_query(sqliteconnection, str));
 
 		ShowConfigDialog(playerid);
@@ -2940,7 +2940,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	}
 
 	if(dialogid == DIALOG_CONFIG_SET_ROUND_ARMOUR) {
-        new Float:hp = floatstr(inputtext);
+        new hp = strval(inputtext);
 		if(hp <= 0 || hp > 100) {
 			SendErrorMessage(playerid,"Armour value can be between 0 and 100 maximum.");
 			ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_ROUND_ARMOUR, DIALOG_STYLE_INPUT, ""COL_PRIM"Round Armour", ""COL_PRIM"Set round armour:", "OK", "");
@@ -2950,10 +2950,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		RoundAR = hp;
 
 		new str[128];
-		format(str, sizeof(str), "%s "COL_PRIM"has changed the round armour to: {FFFFFF}%0.2f", Player[playerid][Name], RoundAR);
+		format(str, sizeof(str), "%s "COL_PRIM"has changed the round armour to: {FFFFFF}%d", Player[playerid][Name], RoundAR);
 		SendClientMessageToAll(-1, str);
 
-		format(str, sizeof(str), "UPDATE `Configs` SET `Value` = '%f,%f' WHERE `Option` = 'RoundHPAR'", RoundHP, RoundAR);
+		format(str, sizeof(str), "UPDATE `Configs` SET `Value` = '%d,%d' WHERE `Option` = 'RoundHPAR'", RoundHP, RoundAR);
 		db_free_result(db_query(sqliteconnection, str));
 
 		ShowConfigDialog(playerid);
@@ -6680,9 +6680,8 @@ YCMD:heal(playerid, params[], help)
 	if(Player[playerid][AntiLag] == true) return SendErrorMessage(playerid,"Can't heal in anti-lag zone.");
 	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"Can't use this command during duel.");
 
-	SetHP(playerid, 100.0);
-	SetAP(playerid, 100.0);
-
+	SetHP(playerid, 100);
+	SetAP(playerid, 100);
 	return 1;
 }
 
@@ -6848,7 +6847,7 @@ YCMD:back(playerid, params[], help)
 	Player[playerid][Team] = REFEREE;
     TogglePlayerControllable(playerid, 1);
     Player[playerid][IsAFK] = false;
-    SetHP(playerid, 100.0);
+    SetHP(playerid, 100);
 	new iString[128];
  	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"is back from AFK mode.", Player[playerid][Name]);
  	SendClientMessageToAll(-1, iString);
@@ -7249,11 +7248,11 @@ YCMD:rem(playerid, params[], help)
 	if(Player[playerid][Playing] == false) return SendErrorMessage(playerid,"You are not playing.");
 	if(ElapsedTime > 60) return SendErrorMessage(playerid,"Too late to remove yourself.");
 
-    new iString[128], Float:HP[2];
+    new iString[128], HP[2];
     GetHP(playerid, HP[0]);
     GetAP(playerid, HP[1]);
 
-    format(iString, sizeof(iString), "{FFFFFF}%s (%d) "COL_PRIM"removed himself from round. {757575}HP %.0f | Armour %.0f", Player[playerid][Name], playerid, HP[0], HP[1]);
+    format(iString, sizeof(iString), "{FFFFFF}%s (%d) "COL_PRIM"removed himself from round. {757575}HP %d | Armour %d", Player[playerid][Name], playerid, HP[0], HP[1]);
     SendClientMessageToAll(-1, iString);
 
 	RemovePlayerFromRound(playerid);
@@ -7277,14 +7276,14 @@ YCMD:remove(playerid, params[], help)
 
 	new pID = strval(params);
 
-    new iString[128], Float:HP[2];
+    new iString[128], HP[2];
     GetHP(pID, HP[0]);
     GetAP(pID, HP[1]);
 
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isn't connected.");
 	if(Player[pID][Playing] == false) return SendErrorMessage(playerid,"That player is not playing.");
 
-    format(iString, sizeof(iString), "{FFFFFF}%s (%d) "COL_PRIM"removed {FFFFFF}%s (%d) "COL_PRIM"from round. {757575}HP %.0f | Armour %.0f", Player[playerid][Name], playerid, Player[pID][Name], pID, HP[0], HP[1]);
+    format(iString, sizeof(iString), "{FFFFFF}%s (%d) "COL_PRIM"removed {FFFFFF}%s (%d) "COL_PRIM"from round. {757575}HP %d | Armour %d", Player[playerid][Name], playerid, Player[pID][Name], pID, HP[0], HP[1]);
     SendClientMessageToAll(-1, iString);
 
 	RemovePlayerFromRound(pID);
@@ -8692,12 +8691,12 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		    if(Player[playerid][Team] == ATTACKER && TeamHelp[ATTACKER] == false)
 			{
                 new iString[160];
-                new Float:totHP = Player[playerid][pHealth] + Player[playerid][pArmour];
+                new totHP = Player[playerid][pHealth] + Player[playerid][pArmour];
 				foreach(new i : Player)
 				{
 				    if((Player[i][Playing] == true || GetPlayerState(i) == PLAYER_STATE_SPECTATING) && i != playerid && Player[i][Team] == ATTACKER)
 					{
-						format(iString, sizeof(iString), "{FF6666}[HELP] {FFFFFF}%s {FF6666}needs a backup [Distance %.0f ft / HP %.0f]", Player[playerid][Name], GetDistanceBetweenPlayers(i, playerid), totHP);
+						format(iString, sizeof(iString), "{FF6666}[HELP] {FFFFFF}%s {FF6666}needs a backup [Distance %.0f ft / HP %d]", Player[playerid][Name], GetDistanceBetweenPlayers(i, playerid), totHP);
 					    SendClientMessage(i, -1, iString);
 					    PlayerPlaySound(i,1137,0.0,0.0,0.0);
 					}
@@ -8715,12 +8714,12 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			else if(Player[playerid][Team] == DEFENDER && TeamHelp[DEFENDER] == false)
 			{
                 new iString[160];
-                new Float:totHP = Player[playerid][pHealth] + Player[playerid][pArmour];
+                new totHP = Player[playerid][pHealth] + Player[playerid][pArmour];
 				foreach(new i : Player)
 				{
 				    if((Player[i][Playing] == true || GetPlayerState(i) == PLAYER_STATE_SPECTATING) && i != playerid && Player[i][Team] == DEFENDER)
 					{
-				    	format(iString, sizeof(iString), "{9999FF}[HELP] {FFFFFF}%s {9999FF}needs a backup [Distance %.0f ft / HP %.0f]", Player[playerid][Name], GetDistanceBetweenPlayers(i, playerid), totHP);
+				    	format(iString, sizeof(iString), "{9999FF}[HELP] {FFFFFF}%s {9999FF}needs a backup [Distance %.0f ft / HP %d]", Player[playerid][Name], GetDistanceBetweenPlayers(i, playerid), totHP);
 					    SendClientMessage(i, -1, iString);
 					    PlayerPlaySound(i,1137,0.0,0.0,0.0);
 					}

@@ -22,7 +22,7 @@ new bool:LobbyGuns = true;
 new bool:ServerLocked 	= false;
 new bool:PermLocked 	= false;
 
-new Float:RoundHP = 100.0, Float:RoundAR = 100.0;
+new RoundHP = 100, RoundAR = 100;
 
 new Skin[MAX_TEAMS];
 

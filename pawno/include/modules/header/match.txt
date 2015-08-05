@@ -50,7 +50,7 @@ new DefHpTimer; // Holds the ID of the timer that hides defender taken-damage in
 new UnpauseTimer; // Holds the ID of the unpause round timer
 new Current = -1; // Current round ID. -1 means there's no active round at the moment.
 new PlayersAlive[MAX_TEAMS]; // How many players are alive in each team
-new Float:TeamHP[MAX_TEAMS]; // How much HP does a team have
+new TeamHP[MAX_TEAMS]; // How much HP does a team have
 new TeamName[MAX_TEAMS][24];
 new TeamScore[MAX_TEAMS];
 new Float:TempDamage[MAX_TEAMS]; // Temporary taken-damage of each team

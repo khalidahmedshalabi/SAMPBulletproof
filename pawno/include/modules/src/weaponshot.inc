@@ -5,6 +5,25 @@
 
 #include "modules\header\weaponshot.txt"
 
+
+/*
+	Quoted from Slice who (AFAIK) created this weapon ranges array,
+	"...Note that due to various bugs, these can be exceeded, but...".
+	This function (adjusts) increases the values of this array which
+	hopefully will make them less buggy...
+
+*/
+AdjustWeaponRanges()
+{
+	for(new i = 0; i < sizeof(WeaponRanges); i ++)
+	{
+		if(WeaponRanges[i] == 0.0)
+			continue;
+		
+		WeaponRanges[i] += WEAPON_RANGES_ADD;
+	}
+}
+
 IsBulletWeapon(weaponid)
 {
 	return (WEAPON_COLT45 <= weaponid <= WEAPON_SNIPER) || weaponid == WEAPON_MINIGUN;
@@ -25,7 +44,7 @@ bool:IsValidHitRange(hittedid, hitterid, weaponid, &Float:distance)
 		new Float:x, Float:y, Float:z;
 		GetPlayerPos(hitterid, x, y, z);
 		distance = GetPlayerDistanceFromPoint(hittedid, x, y, z);
-		if(distance > WeaponRanges[weaponid] + 6.00) 
+		if(distance > WeaponRanges[weaponid]) 
 		{
 			return false;
 		}
@@ -145,13 +164,12 @@ SetFakeHealthArmour(playerid)
 	SetAP(playerid, Player[playerid][pArmour]);
 }
 
-SetHP(playerid, Float:amount)
+SetHP(playerid, amount)
 {
-	amount = float(floatround(amount, floatround_round));
 	new bool:WasPlaying = false;
 	if(Player[playerid][Playing])
 		WasPlaying = true;
-	if(amount <= 0.0)
+	if(amount <= 0)
 	{
 		if(Player[playerid][AlreadyDying])
 			return 0;
@@ -159,12 +177,11 @@ SetHP(playerid, Float:amount)
 		Player[playerid][AlreadyDying] = true;
 	    SetTimerEx("ServerOnPlayerDeath", SERVER_PlAYER_DEATH_DELAY, false, "iii", playerid, Player[playerid][HitBy], Player[playerid][HitWith]);
 	    HidePlayerProgressBar(playerid, HealthBar[playerid]);
-		Player[playerid][pHealth] = 0.0;
+		Player[playerid][pHealth] = 0;
 		SetPlayerScore(playerid, 0);
-		ResetPlayerMoney(playerid);
-		SetPlayerHealth(playerid, 65536 + 0);
+		SetPlayerHealth(playerid, 65536);
 		SetPlayerArmour(playerid, 0);
-		Player[playerid][pArmour] = 0.0;
+		Player[playerid][pArmour] = 0;
 	}
 	else
 	{
@@ -173,13 +190,10 @@ SetHP(playerid, Float:amount)
 		SetPlayerHealth(playerid, 65536 + amount);
 		if(Player[playerid][Playing])
 		{
-			SetPlayerScore(playerid, floatround(Player[playerid][pHealth] + Player[playerid][pArmour]));
-			ResetPlayerMoney(playerid);
-			GivePlayerMoney(playerid, -floatround(Player[playerid][pHealth] + Player[playerid][pArmour]));
+			SetPlayerScore(playerid, Player[playerid][pHealth] + Player[playerid][pArmour]);
 		}
 		else
 		{
-			ResetPlayerMoney(playerid);
 			if(GetPlayerScore(playerid) != 0)
 				SetPlayerScore(playerid, 0);
 		}
@@ -202,7 +216,7 @@ SetHP(playerid, Float:amount)
 	{
 		if(FallProtection == false)
 		{
-			PlayerTextDrawSetString(playerid, HPTextDraw_TD[playerid], sprintf("%s%.0f", MAIN_TEXT_COLOUR, Player[playerid][pHealth]));
+			PlayerTextDrawSetString(playerid, HPTextDraw_TD[playerid], sprintf("%s%d", MAIN_TEXT_COLOUR, Player[playerid][pHealth]));
 		}
 		else
 		{
@@ -210,30 +224,26 @@ SetHP(playerid, Float:amount)
 				PlayerTextDrawSetString(playerid, HPTextDraw_TD[playerid], sprintf("%sFall Prot.", MAIN_TEXT_COLOUR));
 			else
 			{
-				PlayerTextDrawSetString(playerid, HPTextDraw_TD[playerid], sprintf("%s%.0f", MAIN_TEXT_COLOUR, Player[playerid][pHealth]));
+				PlayerTextDrawSetString(playerid, HPTextDraw_TD[playerid], sprintf("%s%d", MAIN_TEXT_COLOUR, Player[playerid][pHealth]));
 			}
 		}
 	}
 	return 1;
 }
 
-SetAP(playerid, Float:amount)
+SetAP(playerid, amount)
 {
-	amount = float(floatround(amount, floatround_round));
 	if(amount <= 0.0)
 	{
 	    SetPlayerArmour(playerid, 0.0);
 	    HidePlayerProgressBar(playerid, ArmourBar[playerid]);
-		Player[playerid][pArmour] = 0.0;
+		Player[playerid][pArmour] = 0;
 		if(Player[playerid][Playing])
 		{
-			SetPlayerScore(playerid, floatround(Player[playerid][pHealth] + Player[playerid][pArmour]));
-			ResetPlayerMoney(playerid);
-			GivePlayerMoney(playerid, -floatround(Player[playerid][pHealth] + Player[playerid][pArmour]));
+			SetPlayerScore(playerid, Player[playerid][pHealth] + Player[playerid][pArmour]);
 		}
 		else
 		{
-			ResetPlayerMoney(playerid);
 			if(GetPlayerScore(playerid) != 0)
 				SetPlayerScore(playerid, 0);
 		}
@@ -245,9 +255,9 @@ SetAP(playerid, Float:amount)
 		SetPlayerArmour(playerid, 65536 + amount);
 		if(Player[playerid][Playing])
 		{
-			SetPlayerScore(playerid, floatround(Player[playerid][pHealth] + Player[playerid][pArmour]));
+			SetPlayerScore(playerid, Player[playerid][pHealth] + Player[playerid][pArmour]);
 			ResetPlayerMoney(playerid);
-			GivePlayerMoney(playerid, -floatround(Player[playerid][pHealth] + Player[playerid][pArmour]));
+			GivePlayerMoney(playerid, -(Player[playerid][pHealth] + Player[playerid][pArmour]));
 		}
 		else
 		{
@@ -273,7 +283,7 @@ SetAP(playerid, Float:amount)
 	{
 		if(Player[playerid][pArmour] > 0) 
 		{
-			PlayerTextDrawSetString(playerid, ArmourTextDraw[playerid], sprintf("%s~h~~h~%.0f", MAIN_TEXT_COLOUR, Player[playerid][pArmour]));
+			PlayerTextDrawSetString(playerid, ArmourTextDraw[playerid], sprintf("%s~h~~h~%d", MAIN_TEXT_COLOUR, Player[playerid][pArmour]));
 		} 
 		else 
 		{
@@ -283,13 +293,13 @@ SetAP(playerid, Float:amount)
 	return 1;
 }
 
-GetHP(playerid, &Float:health)
+GetHP(playerid, &health)
 {
 	health = Player[playerid][pHealth];
 	return 1;
 }
 
-GetAP(playerid, &Float:armour)
+GetAP(playerid, &armour)
 {
 	armour = Player[playerid][pArmour];
 	return 1;
@@ -353,7 +363,7 @@ HandleHeadshot(playerid, issuerid, weaponid)
 forward ApplyKnifeDeath(playerid);
 public ApplyKnifeDeath(playerid)
 {
-	SetHP(playerid, 0.0);
+	SetHP(playerid, 0);
 	return 1;
 }
 
@@ -459,35 +469,38 @@ a player has 30 HP and he's hit with a deagle which makes
 nearly 46 damage. Here comes the use of this function,
 it detects that and adjust the amount of damage reported
 to an actual amount (30 in our example, not 46)
+
+In addition to that, it converts the amount from a float value to an integer value.
 */
-Float:GetActualDamage(Float:amount, playerid)
+GetActualDamage(Float:amount, playerid)
 {
 	/*
 	PARAMETERS:
 	playerid is the player who got damaged.
 	amount is the amount of damage done on 'playerid' which is expected to be unreal.
 	*/
-	if(floatround(Player[playerid][pHealth], floatround_round) > 0)  // If they're not dead
+	new amt = floatround(amount, floatround_round);
+	if(Player[playerid][pHealth] > 0)  // If they're not dead
 	{
-		if(Player[playerid][pArmour] > 0.0)
+		if(Player[playerid][pArmour] > 0)
 		{
 			// If this damage is not real and has to be cut
-			if(floatround(amount, floatround_round) > floatround(Player[playerid][pHealth], floatround_round) + floatround(Player[playerid][pArmour], floatround_round))
+			if(amt > Player[playerid][pHealth] + Player[playerid][pArmour])
 			{
 				// Cut it and return the actual damage
-				return float(floatround(Player[playerid][pHealth], floatround_round) + floatround(Player[playerid][pArmour], floatround_round));
+				return (Player[playerid][pHealth] + Player[playerid][pArmour]);
 			}
 		}
 		else
 		{
-			if(floatround(amount, floatround_round) > floatround(Player[playerid][pHealth], floatround_round)) // If this damage is not real and has to be cut
+			if(amt > Player[playerid][pHealth]) // If this damage is not real and has to be cut
 			{
 				// Cut it and return the actual damage
-				return float(floatround(Player[playerid][pHealth], floatround_round));
+				return Player[playerid][pHealth];
 			}
 		}
 	}
-	return float(floatround(amount, floatround_round)); // Damage is already real, send it back!
+	return amt; // Damage is already real, send it back!
 }
 
 // Initializes iterators arrays for taken/given damage script
@@ -658,9 +671,9 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		str[128],						// A string to write the damage info in
 		col[7] = "~r~~h~",				// Color of HP remaining of the damaged player (default red)
 		tick = GetTickCount(),				// Current tick count
-		Float:totHP = (Player[playerid][pHealth] + Player[playerid][pArmour]); // HP remaining of the damaged player
+		totHP = (Player[playerid][pHealth] + Player[playerid][pArmour]); // HP remaining of the damaged player
 	
-	if(totHP >= 100.0) // If HP remaining is more than 99, then color of text shouldn't be red
+	if(totHP >= 100) // If HP remaining is more than 99, then color of text shouldn't be red
 		format(col, sizeof col, "%s", MAIN_TEXT_COLOUR); // Set it to server default text color
 	
 	for(new i = 0; i < MAX_VISUAL_DAMAGES; i ++)
@@ -677,7 +690,7 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 				{
 					VisualDamage[issuerid][TDamageGiven][i] += amount; // Add to total given damage
 					VisualDamage[issuerid][GivenDamageWeapon][i] = weaponid;
-					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%.0f%s] [%s]",  // Write correct damage info into our string
+					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%d%s] [%s]",  // Write correct damage info into our string
 						Player[playerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[issuerid][TDamageGiven][i], 
 						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR, BodyPartName[bodypart]);
 					PlayerTextDrawSetString(issuerid, DoingDamage[issuerid][i], str); // Update the textdraw with correct info
@@ -696,7 +709,7 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 					VisualDamage[issuerid][DamagingWho][i] = playerid; // Assign the ID of the damaged player to the issuer variable
 					Iter_Add(PlayersDamaged[issuerid], playerid); // Add this player to damaged players list of the issuer/damager
 					Iter_Add(PlayerHasGVisualDmg, issuerid);
-					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%.0f%s] [%s]", 
+					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%d%s] [%s]", 
 						Player[playerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[issuerid][TDamageGiven][i], 
 						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR, BodyPartName[bodypart]);
 					PlayerTextDrawSetString(issuerid, DoingDamage[issuerid][i], str); // Update the textdraw with the correct info
@@ -714,7 +727,7 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 				{
 					VisualDamage[playerid][TDamageTaken][i] += amount;
 					VisualDamage[playerid][TakenDamageWeapon][i] = weaponid;
-					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%.0f%s] [%s]", 
+					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%d%s] [%s]", 
 						Player[issuerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i], 
 						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR, BodyPartName[bodypart]);
 					PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], str);
@@ -734,7 +747,7 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 					VisualDamage[playerid][WhoDamaging][i] = issuerid;
 					Iter_Add(PlayersDamagedBy[playerid], issuerid);
 					Iter_Add(PlayerHasTVisualDmg, playerid);
-					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%.0f%s] [%s]", 
+					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%d%s] [%s]", 
 						Player[issuerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i], 
 						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR, BodyPartName[bodypart]);
 					PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], str);
@@ -756,9 +769,9 @@ ShowCollisionDamageTextDraw(playerid, Float:amount, weaponid)
 		col[7] = "~r~~h~",
 		tick = GetTickCount(),
 		freeSlot = -1,
-		Float:totHP = (Player[playerid][pHealth] + Player[playerid][pArmour]);
+		totHP = (Player[playerid][pHealth] + Player[playerid][pArmour]);
 	
-	if(totHP >= 100.0) 
+	if(totHP >= 100) 
 		format(col, sizeof col, "%s", MAIN_TEXT_COLOUR);
 	
 	for(new i = 0; i < MAX_VISUAL_DAMAGES; i ++) // Loop through all damage textdraws a single player may have
@@ -768,7 +781,7 @@ ShowCollisionDamageTextDraw(playerid, Float:amount, weaponid)
 		{
 			VisualDamage[playerid][TDamageTaken][i] += amount; // Add to damage
 			VisualDamage[playerid][TakenDamageWeapon][i] = weaponid;
-			format(str, sizeof(str), "%s-%.0f ~r~~h~%s %s[%s~h~%.0f%s]",  // Format the string with correct damage info
+			format(str, sizeof(str), "%s-%.0f ~r~~h~%s %s[%s~h~%d%s]",  // Format the string with correct damage info
 				MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i], 
 				WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 			PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], str); // Update damage textdraw with correct damage info
@@ -793,7 +806,7 @@ ShowCollisionDamageTextDraw(playerid, Float:amount, weaponid)
 		VisualDamage[playerid][TakenDamageWeapon][freeSlot] = weaponid;
 		VisualDamage[playerid][WhoDamaging][freeSlot] = NO_DAMAGER_UNIQUE_ID; // This unique ID means a COLLISION (or generally non-damager damages)
 		Iter_Add(PlayerHasTVisualDmg, playerid); // Add this player to the array that holds the IDs of the players who has a taken-damage textdraw shown
-		format(str, sizeof(str), "%s-%.0f ~r~~h~%s %s[%s~h~%.0f%s]",  // Format the string with correct damage info
+		format(str, sizeof(str), "%s-%.0f ~r~~h~%s %s[%s~h~%d%s]",  // Format the string with correct damage info
 			MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][freeSlot], 
 			WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 		PlayerTextDrawSetString(playerid, GettingDamaged[playerid][freeSlot], str); // Update the textdraw with the correct info
