@@ -152,8 +152,8 @@ InitPlayer(playerid)
 	Player[playerid][SpectatingRound] = -1;
 	InitPlayerSpectate(playerid);
 	ForgetSpectator(playerid);
-	Player[playerid][HitBy] = -1;
-	Player[playerid][HitWith] = -1;
+	Player[playerid][HitBy] = INVALID_PLAYER_ID;
+	Player[playerid][HitWith] = 47;
 	Player[playerid][HitSound] = 17802;
 	Player[playerid][GetHitSound] = 1131;
 	Player[playerid][LastEditWepLimit] = -1;

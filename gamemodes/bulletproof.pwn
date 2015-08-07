@@ -470,11 +470,8 @@ public OnPlayerDisconnect(playerid, reason)
 		else
 			StorePlayerVariablesMin(playerid);
 	}
-	else
-	{
-	    // Reset player weapons on gunmenu
-		ResetPlayerGunmenu(playerid, false);
-	}
+	// Reset player weapons on gunmenu
+	ResetPlayerGunmenu(playerid, false);
 	#if defined _league_included
 	if(LeagueMode)
 	{
@@ -598,13 +595,13 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 		if(reason == 47 || reason == 51 || reason == 53 || reason == 54)
 		{
 			Player[playerid][HitBy] = INVALID_PLAYER_ID;
-			Player[playerid][HitWith] = -1;
+			Player[playerid][HitWith] = 47;
 		}
 	}
 	killerid = Player[playerid][HitBy];
 	reason = Player[playerid][HitWith];
 	Player[playerid][HitBy] = INVALID_PLAYER_ID;
-	Player[playerid][HitWith] = -1;
+	Player[playerid][HitWith] = 47;
 	new KillerConnected = IsPlayerConnected(killerid);
 	if(!KillerConnected)
 	{
@@ -6132,6 +6129,7 @@ YCMD:deathdiss(playerid, params[], help)
 	format(DeathMessageStr[playerid], 64, "%s", params);
 	format(iString, sizeof(iString), "UPDATE `Players` SET `DeathMessage` = '%s' WHERE `Name` = '%s'", DB_Escape(params), DB_Escape(Player[playerid][Name]) );
 	db_free_result(db_query(sqliteconnection, iString));
+	Player[playerid][HasDeathQuote] = true;
 	SendClientMessage(playerid, -1, "Death diss message has been changed successfully!");
 	return 1;
 }
