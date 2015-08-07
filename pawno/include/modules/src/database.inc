@@ -71,7 +71,7 @@ OptimizeDatabase()
 	new currYear, currMonth, currDay;
 	getdate(currYear, currMonth, currDay);
 	new str[150];
-	format(str, sizeof str, "DELETE FROM Players WHERE (LastSeen_Year = %d AND LastSeen_Month = %d AND LastSeen_Day + 3 < %d) OR LastSeen_Year != %d OR LastSeen_Month != %d", currYear, currMonth, currDay, currYear, currMonth);
+	format(str, sizeof str, "DELETE FROM Players WHERE ((LastSeen_Year = %d AND LastSeen_Month = %d AND LastSeen_Day + 3 < %d) OR LastSeen_Year != %d OR LastSeen_Month != %d) AND Level < 1", currYear, currMonth, currDay, currYear, currMonth);
 	db_free_result(db_query(sqliteconnection, str));
 	
 	// Vacuum SQL database
