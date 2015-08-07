@@ -8629,10 +8629,16 @@ YCMD:int(playerid,params[], help)
 public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	// - High priority key functions
-	if(newkeys == 160 && (GetPlayerWeapon(playerid) == 0 || GetPlayerWeapon(playerid) == 1 || GetPlayerWeapon(playerid) == WEAPON_GRENADE || GetPlayerWeapon(playerid) == WEAPON_KNIFE || GetPlayerWeapon(playerid) == WEAPON_PARACHUTE) && GetPlayerVehicleID(playerid) == 0)
+	if(newkeys == 160 && GetPlayerVehicleID(playerid) == 0)
 	{
-		SyncPlayer(playerid);
-		return 1;
+	    switch(GetWeaponSlot(GetPlayerWeapon(playerid)))
+	    {
+	        case 0, 1, 8, 11:
+	        {
+	            SyncPlayer(playerid);
+	            return 1;
+	        }
+	    }
 	}
 	#if defined _antimacro_included
 	if(CheckPlayerSprintMacro(playerid, newkeys, oldkeys) == true)
