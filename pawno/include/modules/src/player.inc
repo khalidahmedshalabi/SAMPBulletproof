@@ -172,7 +172,8 @@ InitPlayer(playerid)
 	ChangingSkinOfTeam[playerid] = -1;
 	Player[playerid][LastEnterVehicleAttempt] = 0;
 	Player[playerid][RequestedClass] = NON;
-
+	Player[playerid][GunmenuModdingType] = 0;
+	Player[playerid][GunmenuModdingIndex] = 0;
 	
     Player[playerid][Logged] = false;
     Player[playerid][IgnoreSpawn] = false;

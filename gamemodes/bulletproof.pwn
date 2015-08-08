@@ -1947,6 +1947,95 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    return 1;
 	}
 	#endif
+	if(dialogid == DIALOG_GUNMENU_MODIFY_MAIN)
+	{
+		if(response)
+		{
+        	Player[playerid][GunmenuModdingIndex] = listitem;
+			ShowPlayerDialog(playerid, DIALOG_GUNMENU_MODIFY_SUB, DIALOG_STYLE_LIST, sprintf("Modifying: %s", WeaponNames[GunmenuData[listitem][GunID]]), "Weapon\nLimit\nAmmo", "Select", "Back");
+		}
+		return 1;
+	}
+	if(dialogid == DIALOG_GUNMENU_MODIFY_SUB)
+	{
+		if(response)
+		{
+		    new idx = Player[playerid][GunmenuModdingIndex];
+		    switch(listitem)
+		    {
+		        case 0:
+		        {
+		            Player[playerid][GunmenuModdingType] = GUNMENU_MOD_TYPE_WEAPON;
+					ShowPlayerDialog(playerid, DIALOG_GUNMENU_MODIFY_SET, DIALOG_STYLE_INPUT, "Changing weapon...", sprintf("Current weapon: %s\n\nType new weapon name below to change!", WeaponNames[GunmenuData[idx][GunID]]), "Set", "Cancel");
+		        }
+		        case 1:
+		        {
+		            Player[playerid][GunmenuModdingType] = GUNMENU_MOD_TYPE_LIMIT;
+					ShowPlayerDialog(playerid, DIALOG_GUNMENU_MODIFY_SET, DIALOG_STYLE_INPUT, "Changing limit...", sprintf("Current limit of %s: %d\n\nType new limit value below to change!", WeaponNames[GunmenuData[idx][GunID]], GunmenuData[idx][GunLimit]), "Set", "Cancel");
+		        }
+		        case 2:
+		        {
+		            Player[playerid][GunmenuModdingType] = GUNMENU_MOD_TYPE_AMMO;
+					ShowPlayerDialog(playerid, DIALOG_GUNMENU_MODIFY_SET, DIALOG_STYLE_INPUT, "Changing ammo...", sprintf("Current ammo of %s: %d\n\nType new limit value below to change!", WeaponNames[GunmenuData[idx][GunID]], GunmenuData[idx][GunAmmo]), "Set", "Cancel");
+		        }
+		    }
+		}
+		else
+		{
+		    CallLocalFunction("OnPlayerCommandText", "ds", playerid, "/gunmenumod");
+		}
+	    return 1;
+	}
+	if(dialogid == DIALOG_GUNMENU_MODIFY_SET)
+	{
+		if(response)
+		{
+		    new idx = Player[playerid][GunmenuModdingIndex];
+		    switch(Player[playerid][GunmenuModdingType])
+		    {
+		        case GUNMENU_MOD_TYPE_WEAPON:
+		        {
+		            new weaponID = GetWeaponID(inputtext);
+				    if(!IsValidWeapon(weaponID))
+				    {
+				        SendErrorMessage(playerid, "Invalid weapon", MSGBOX_TYPE_BOTTOM);
+                        ShowPlayerDialog(playerid, DIALOG_GUNMENU_MODIFY_SET, DIALOG_STYLE_INPUT, "Changing weapon...", sprintf("Current weapon: %s\n\nType new weapon name below to change!", WeaponNames[GunmenuData[idx][GunID]]), "Set", "Cancel");
+						return 1;
+				    }
+		            SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has changed gunmenu index: {FFFFFF}%d "COL_PRIM"from [%s] to [%s]", Player[playerid][Name], idx, WeaponNames[GunmenuData[idx][GunID]], WeaponNames[weaponID]));
+					db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Gunmenu` SET `Weapon`=%d WHERE `Weapon`=%d", weaponID, GunmenuData[idx][GunID])));
+					GunmenuData[idx][GunID] = weaponID;
+				}
+                case GUNMENU_MOD_TYPE_LIMIT:
+		        {
+                    new limit = strval(inputtext);
+				    if(limit < 0)
+				    {
+				        SendErrorMessage(playerid, "Selection limit cannot be less than 0", MSGBOX_TYPE_BOTTOM);
+                        ShowPlayerDialog(playerid, DIALOG_GUNMENU_MODIFY_SET, DIALOG_STYLE_INPUT, "Changing limit...", sprintf("Current limit of %s: %d\n\nType new limit value below to change!", WeaponNames[GunmenuData[idx][GunID]], GunmenuData[idx][GunLimit]), "Set", "Cancel");
+						return 1;
+				    }
+		            SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has changed {FFFFFF}%s "COL_PRIM"limit to {FFFFFF}%d", Player[playerid][Name], WeaponNames[GunmenuData[idx][GunID]], limit));
+					db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Gunmenu` SET `Limit`=%d WHERE `Weapon`=%d", limit, GunmenuData[idx][GunID])));
+					GunmenuData[idx][GunLimit] = limit;
+		        }
+		        case GUNMENU_MOD_TYPE_AMMO:
+		        {
+                    new ammo = strval(inputtext);
+				    if(ammo < 1 || ammo > 9999)
+				    {
+				        SendErrorMessage(playerid, "Weapon ammo must be equal to or between 1 and 9999", MSGBOX_TYPE_BOTTOM);
+                        ShowPlayerDialog(playerid, DIALOG_GUNMENU_MODIFY_SET, DIALOG_STYLE_INPUT, "Changing ammo...", sprintf("Current ammo of %s: %d\n\nType new ammo value below to change!", WeaponNames[GunmenuData[idx][GunID]], GunmenuData[idx][GunAmmo]), "Set", "Cancel");
+						return 1;
+				    }
+		            SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has changed {FFFFFF}%s "COL_PRIM"ammo to {FFFFFF}%d", Player[playerid][Name], WeaponNames[GunmenuData[idx][GunID]], ammo));
+					db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Gunmenu` SET `Ammo`=%d WHERE `Weapon`=%d", ammo, GunmenuData[idx][GunID])));
+					GunmenuData[idx][GunAmmo] = ammo;
+		        }
+		    }
+		}
+	    return 1;
+	}
 	if(dialogid == DIALOG_GUNMENU)
 	{
 	    OnGunmenuDialogResponse(playerid, response, listitem);
@@ -7062,6 +7151,17 @@ YCMD:done(playerid, params[], help)
 	}
 	else
 	    SendErrorMessage(playerid, "You're not selecting weapons from gunmenu");
+	return 1;
+}
+
+YCMD:gunmenumod(playerid, params[], help)
+{
+	if(help)
+	{
+	    SendCommandHelpMessage(playerid, "put you in gunmenu modification mode.");
+	    return 1;
+	}
+    ShowPlayerGunmenuModification(playerid);
 	return 1;
 }
 

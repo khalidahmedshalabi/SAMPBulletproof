@@ -833,7 +833,7 @@ GetWeaponIDFromModelID(modelid)
 		}
 	}
 	return weaponid;
-}
+}*/
 
 GetWeaponModelFromID(weaponid)
 {
@@ -856,7 +856,7 @@ GetWeaponModelFromID(weaponid)
 	if(weaponid == 46)
 		return 371;
 	return 0;
-}*/
+}
 
 sscanf(string[], format[], {Float,_}:...)
 {

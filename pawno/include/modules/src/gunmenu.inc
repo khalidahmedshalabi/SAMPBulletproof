@@ -8,67 +8,30 @@
 
 LoadGunmenuData()
 {
-	// todo: use database
-	new idx = 0;
-	GunmenuData[idx][GunID] = WEAPON_KNIFE;
-	GunmenuData[idx][GunModel] = 335;
-	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
-	GunmenuData[idx][GunAmmo] = 1;
-	idx ++;
-	GunmenuData[idx][GunID] = WEAPON_GRENADE;
-	GunmenuData[idx][GunModel] = 342;
-	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
-	GunmenuData[idx][GunAmmo] = GRENADE_AMMO;
-	idx ++;
-	GunmenuData[idx][GunID] = WEAPON_TEARGAS;
-	GunmenuData[idx][GunModel] = 343;
-	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
-	GunmenuData[idx][GunAmmo] = 1;
-	idx ++;
-	GunmenuData[idx][GunID] = WEAPON_SILENCED;
-	GunmenuData[idx][GunModel] = 347;
-	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
-	GunmenuData[idx][GunAmmo] = 9999;
-	idx ++;
-	GunmenuData[idx][GunID] = WEAPON_DEAGLE;
-	GunmenuData[idx][GunModel] = 348;
-	GunmenuData[idx][GunLimit] = 1;
-	GunmenuData[idx][GunAmmo] = 9999;
-	idx ++;
-	GunmenuData[idx][GunID] = WEAPON_SHOTGUN;
-	GunmenuData[idx][GunModel] = 349;
-	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
-	GunmenuData[idx][GunAmmo] = 9999;
-	idx ++;
-	GunmenuData[idx][GunID] = WEAPON_SHOTGSPA;
-	GunmenuData[idx][GunModel] = 351;
-	GunmenuData[idx][GunLimit] = 1;
-	GunmenuData[idx][GunAmmo] = 9999;
-	idx ++;
-	GunmenuData[idx][GunID] = WEAPON_MP5;
-	GunmenuData[idx][GunModel] = 353;
-	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
-	GunmenuData[idx][GunAmmo] = 9999;
-	idx ++;
-	GunmenuData[idx][GunID] = WEAPON_AK47;
-	GunmenuData[idx][GunModel] = 355;
-	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
-	GunmenuData[idx][GunAmmo] = 9999;
-	idx ++;
-	GunmenuData[idx][GunID] = WEAPON_M4;
-	GunmenuData[idx][GunModel] = 356;
-	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
-	GunmenuData[idx][GunAmmo] = 9999;
-	idx ++;
-	GunmenuData[idx][GunID] = WEAPON_RIFLE;
-	GunmenuData[idx][GunModel] = 357;
-	GunmenuData[idx][GunLimit] = MAX_PLAYERS;
-	GunmenuData[idx][GunAmmo] = 9999;
-	idx ++;
-	GunmenuData[idx][GunID] = WEAPON_SNIPER;
-	GunmenuData[idx][GunModel] = 358;
-	GunmenuData[idx][GunLimit] = 1;
-	GunmenuData[idx][GunAmmo] = 9999;
+	new 
+		str[64],
+		DBResult:res = db_query(sqliteconnection, "SELECT * FROM 'Gunmenu' ORDER BY Weapon ASC"),
+		weaponID,
+		idx = 0;
+			
+	do {
+		db_get_field_assoc(res, "Weapon", str, sizeof(str));
+		weaponID = strval(str);
+		
+		GunmenuData[idx][GunID] = weaponID;
+		GunmenuData[idx][GunModel] = GetWeaponModelFromID(weaponID);
+		
+		db_get_field_assoc(res, "Limit", str, sizeof(str));
+		GunmenuData[idx][GunLimit] = strval(str);
+		
+		db_get_field_assoc(res, "Ammo", str, sizeof(str));
+		GunmenuData[idx][GunAmmo] = strval(str);
+	    
+		idx ++;
+
+	} while(db_next_row(res) && idx < MAX_GUNMENU_GUNS);
+	
+	db_free_result(res);
 }
 
 ResetGunmenuSelections(team = -1)
@@ -142,6 +105,17 @@ InitGunmenu()
 	LoadGunmenuData();
 	ResetGunmenuSelections();
 	UpdateGunmenuLimitsTextDraw();
+}
+
+ShowPlayerGunmenuModification(playerid)
+{
+	new str[GUNMENU_LIMIT_DIALOG_SIZE];
+	format(str, sizeof str, "Weapon\tAmmo\tLimit");
+	for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
+	{
+		format(str, sizeof str, "%s\n{50EB50}%s\t%d\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][GunLimit]);
+	}
+	ShowPlayerDialog(playerid, DIALOG_GUNMENU_MODIFY_MAIN, DIALOG_STYLE_TABLIST_HEADERS, "Gunmenu Modification Mode", str, "Modify", "Cancel");
 }
 
 DestroyPlayerGunObjects(playerid)

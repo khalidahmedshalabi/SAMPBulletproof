@@ -25,6 +25,11 @@
 #define GUN_MOVING_ROUTE_DOWN		1
 #define GUN_MOVING_ROUTE_TOPLAYER	2
 
+// Gunmenu modification types
+#define GUNMENU_MOD_TYPE_WEAPON		0
+#define GUNMENU_MOD_TYPE_LIMIT		1
+#define GUNMENU_MOD_TYPE_AMMO		2
+
 enum GunmenuData_STRUCT 
 {
 	GunModel, // model id
