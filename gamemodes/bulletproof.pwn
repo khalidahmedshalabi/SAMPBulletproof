@@ -7165,6 +7165,57 @@ YCMD:gunmenumod(playerid, params[], help)
 	return 1;
 }
 
+YCMD:spas(playerid, params[], help)
+{
+	if(help)
+	{
+	    SendCommandHelpMessage(playerid, "toggle spas selection in gunmenu.");
+	}
+	// Find the index of Spas in gunmenu
+	new idx = -1;
+	for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
+	{
+	    if(GunmenuData[i][GunID] == WEAPON_SHOTGSPA)
+	    {
+			idx = i;
+			break;
+	    }
+	}
+	if(idx == -1)
+	{
+	    SendErrorMessage(playerid, "Spas doesn't exist in the gunmenu.");
+	    return 1;
+	}
+	if(GunmenuData[idx][GunLimit] > 0)
+	{
+	    SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has changed {FFFFFF}Spas "COL_PRIM"limit to {FFFFFF}0", Player[playerid][Name]));
+		db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Gunmenu` SET `Limit`=0 WHERE `Weapon`=%d", GunmenuData[idx][GunID])));
+		GunmenuData[idx][GunLimit] = 0;
+        // If there's a round in progress
+		if(Current != -1)
+		{
+		    // Loop through all players who are in round
+		    foreach(new i : PlayersInRound)
+		    {
+		        // The following code checks if this player (i) has this gun (spas)
+		        if(GunmenuData[idx][HasGun][i])
+		        {
+		            // Show them gunmenu
+		            ShowPlayerGunmenu(i, 0);
+		            SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"was automatically shown the gunmenu because they had Spas."));
+		        }
+		    }
+		}
+	}
+	else
+	{
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has changed {FFFFFF}Spas "COL_PRIM"limit to {FFFFFF}1", Player[playerid][Name]));
+		db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Gunmenu` SET `Limit`=1 WHERE `Weapon`=%d", GunmenuData[idx][GunID])));
+		GunmenuData[idx][GunLimit] = 1;
+	}
+	return 1;
+}
+
 YCMD:gunmenu(playerid, params[], help)
 {
     if(help)
