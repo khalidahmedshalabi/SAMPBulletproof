@@ -7161,6 +7161,10 @@ YCMD:gunmenumod(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "put you in gunmenu modification mode.");
 	    return 1;
 	}
+	#if defined _league_included
+    if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+        return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
+    #endif
     ShowPlayerGunmenuModification(playerid);
 	return 1;
 }
@@ -7171,6 +7175,10 @@ YCMD:spas(playerid, params[], help)
 	{
 	    SendCommandHelpMessage(playerid, "toggle spas selection in gunmenu.");
 	}
+	#if defined _league_included
+    if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+        return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
+    #endif
 	// Find the index of Spas in gunmenu
 	new idx = -1;
 	for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
