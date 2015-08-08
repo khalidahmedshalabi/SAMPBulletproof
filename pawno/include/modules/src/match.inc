@@ -278,13 +278,11 @@ public GameLoopCallback()
 				// Perform zone limit check if arena is in progress
 				if(ArenaStarted)
 				{
-					if(Player[i][PauseCount] < 2 && IsPlayerInArea(i,AMin[Current][0], AMax[Current][0], AMin[Current][1], AMax[Current][1]) != 1)
+					if(RoundPaused == false && IsPlayerInArea(i,AMin[Current][0], AMax[Current][0], AMin[Current][1], AMax[Current][1]) != 1)
 					{
-						if(RoundPaused == false)
-							Player[i][OutOfArena] --;
+						Player[i][OutOfArena] --;
 
 						PlayerTextDrawSetString(i, AreaCheckTD[i], sprintf("%sStay in Arena. (~r~~h~%d%s)", MAIN_TEXT_COLOUR, Player[i][OutOfArena], MAIN_TEXT_COLOUR));
-
 						PlayerTextDrawShow(i, AreaCheckTD[i]);
 						PlayerTextDrawShow(i, AreaCheckBG[i]);
 
