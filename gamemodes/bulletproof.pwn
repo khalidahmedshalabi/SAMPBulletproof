@@ -7535,8 +7535,7 @@ YCMD:ban(playerid, params[], help)
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isn't connected.");
 	if(strlen(Reason) > 128) return SendErrorMessage(playerid,"Reason is too big.");
 	#if defined _league_included
-	if(Player[pID][Team] != REFEREE && Player[pID][Team] != NON && LeagueMode)
-	    return SendErrorMessage(playerid, "When league mode is enabled, you can ban only referees!");
+	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
 	#endif
 
     format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has banned {FFFFFF}%s "COL_PRIM"| Reason: {FFFFFF}%s", Player[playerid][Name], Player[pID][Name], /*IP,*/ Reason);
