@@ -135,8 +135,8 @@ PositionPlayersInDuel(playerid_1, playerid_2, Float:centerx, Float:centery, size
 	new Float:tmp = float(size) / 3.0;
 	SetPlayerPosFindZ(playerid_1, centerx + tmp, centery + tmp, 1000.0);
 	SetPlayerPosFindZ(playerid_2, centerx - tmp, centery - tmp, 1000.0);
-	SetTimerEx("FixPosZ", 300, false, "i", playerid_1);
-	SetTimerEx("FixPosZ", 300, false, "i", playerid_2);
+	SetTimerEx("FixPosZ", 1000, false, "i", playerid_1);
+	SetTimerEx("FixPosZ", 1000, false, "i", playerid_2);
 	GetPlayerFacingAngle(playerid_1, tmp);
 	SetPlayerFacingAngle(playerid_2, tmp + 180.0);
 	SetCameraBehindPlayer(playerid_1);
