@@ -746,11 +746,11 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 				if(!Player[i][Playing] && !Player[i][Spectating])
 				    continue;
 
-				CreateExplosionForPlayer(i, x, y, z, 7, 10.0);
+				CreateExplosionForPlayer(i, x, y, z, 7, 14.0);
 				if(i != playerid)
 				{
 					dist = floatround(GetPlayerDistanceFromPoint(i, x, y, z));
-					if(dist <= 10)
+					if(dist <= 14)
 					{
 						damage = float((99 / dist) + randomAdd);
 						OnPlayerTakeDamage(i, playerid, damage, 47, 3);
