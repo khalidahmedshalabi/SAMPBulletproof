@@ -89,7 +89,7 @@ native IsValidVehicle(vehicleid);
 #include "modules\src\duel.inc"
 #include "modules\src\spectate.inc"
 #include "modules\src\commands.inc"
-#tryinclude "modules\src\antimacro.inc" // The anti sprint macros source code is not open
+#include "modules\src\antimacro.inc"
 #include "modules\src\messagebox.inc"
 #include "modules\src\deathcam.inc"
 #include "modules\src\gunmenu.inc"
@@ -8952,10 +8952,8 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	        }
 	    }
 	}
-	#if defined _antimacro_included
 	if(CheckPlayerSprintMacro(playerid, newkeys, oldkeys) == true)
 	    return 1;
-	#endif
 
     if(Player[playerid][TextDrawOnScreen] == true && PRESSED(4))
 	{
