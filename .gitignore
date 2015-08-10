@@ -5,6 +5,8 @@ antimacro.txt
 antimacro.inc
 league.txt
 league.inc
+shop.inc
+shop.txt
 server_log.txt
 samp-license.txt
 server-readme.txt
@@ -15,3 +17,4 @@ Bulletproof GM Release.rar
 Bulletproof GM Release
 bulletproof.amx
 heliboard.amx
+anticbug.amx

@@ -1855,9 +1855,9 @@ GetPlayerFPS(playerid) {
 
 FixVsTextDraw(exception = -1)
 {
-	new str[32];
 	if(Current == -1)
 	{
+		new str[32];
 		new ct[2];
 		foreach(new i : Player)
 		{
@@ -1877,20 +1877,9 @@ FixVsTextDraw(exception = -1)
 			}
 		}
 	    format(str, sizeof(str), "  ~r~~h~%d  %sVs  ~b~~h~%d", ct[0], MAIN_TEXT_COLOUR, ct[1]);
+		foreach(new i : Player)
+			PlayerTextDrawSetString(i, BaseID_VS[i], str);
 	}
-	else
-	{
-		if(GameType == ARENA)
-		{
-			format(str, sizeof(str), "%sArena %s(~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
-	    }
-		else
-		{
-	        format(str, sizeof(str), "%sBase %s(~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
-	    }
-	}
-	foreach(new i : Player)
-		PlayerTextDrawSetString(i, BaseID_VS[i], str);
 	return 1;
 }
 

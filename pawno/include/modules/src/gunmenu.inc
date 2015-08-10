@@ -156,6 +156,10 @@ ShowGunmenuHelp(playerid)
 	#else
 	MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~b~~h~~h~gunmenu help", "Changed mind? Type /gunmenu again!~n~Code your own weapon key binds by using ~r~~h~/weaponbinds", 4000);
 	#endif
+	#if defined _league_included
+	if(LeagueMode)
+		MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~p~~h~~h~league shop", "Type /shop to start shopping now!", 4000);
+	#endif
 }
 
 HidePlayerGunmenu(playerid)

@@ -1344,6 +1344,229 @@ public ShowPlayingPlayersGunmenu()
 // Arena System
 //------------------------------------------------------------------------------
 
+forward OnRCStart();
+public OnRCStart()
+{
+	RCArena = true;
+	new ArenaID = 72; // That's the ID of the RC arena (interior)
+	ClearKillList(); // Clears the kill-list.
+    DestroyDynamicVehicles(1); // Destroys vehicles
+	DeleteAllDeadBodies();
+	GameType = ARENA;
+	Current = ArenaID; // Current will be the ID of the base that we just started. We do this so that we can use this ID later on (e.g. check /car command for the use).
+    ClearKillList(); // Clears the kill-list.
+    ServerLastPlayed = Current;
+    ServerLastPlayedType = 0;
+
+	ElapsedTime = 0;
+	
+	TeamCapturingCP = NON;
+	PlayersInCP = 0;
+ 	ElapsedTime = 0;
+	CurrentCPTime = ConfigCPTime + 1;
+	
+	ResetGunmenuSelections();
+
+    new iString[32];
+	format(iString, sizeof(iString), "%sRC BF %s(~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
+	TextDrawSetString( leftTeamData, "_");
+	TextDrawSetString( rightTeamData, "_");
+	TextDrawSetString( centerTeamNames, "_");
+	TextDrawSetString( timerCenterTD, "_");
+	
+	CPZone = GangZoneCreate(ACPSpawn[Current][0]-50, ACPSpawn[Current][1]-50, ACPSpawn[Current][0]+50, ACPSpawn[Current][1]+50);
+	GangZoneShowForAll(CPZone, 0xFF000044);
+	
+	foreach(new i : Player)
+	{
+	    Player[i][LastVehicle] = -1;
+		Player[i][WasInCP] = false;
+
+		ShowRoundStats(i);
+		
+
+	    if(Player[i][ToAddInRound] == true)
+		{
+            HideEndRoundTextDraw(i);
+
+			if(Player[i][Spectating] == true) StopSpectate(i);
+
+			if(Player[i][InDM] == true) { //Make sure to remove player from DM, otherwise the player will have Player[playerid][Playing] = true and Player[playerid][InDM] = true, so you are saying that the player is both in Base and in DM.
+			    Player[i][InDM] = false;
+    			Player[i][DMReadd] = 0;
+			}
+
+			Player[i][AntiLag] = false;
+
+	        SetPlayerVirtualWorld(i, 2); //Set player virtual world to something different that that for lobby and DM so that they don't collide with each other. e.g. You shouldn't be able to see players in lobby or DM while you are in base.
+			TogglePlayerControllable(i, 0); //Pause players.
+
+			SetPlayerInterior(i, AInterior[Current]);
+			SetPlayerCameraLookAt(i,ACPSpawn[Current][0],ACPSpawn[Current][1],ACPSpawn[Current][2]);
+			SetPlayerCameraPos(i,ACPSpawn[Current][0]+100,ACPSpawn[Current][1],ACPSpawn[Current][2]+80);
+			SetPlayerPos(i, ACPSpawn[Current][0], ACPSpawn[Current][1], ACPSpawn[Current][2]);
+		}
+		PlayerTextDrawSetString(i, BaseID_VS[i], iString);
+	}
+	
+	ArenaZone = GangZoneCreate(AMin[Current][0],AMin[Current][1],AMax[Current][0],AMax[Current][1]);
+	format(iString, sizeof(iString), "mapname RC: %d", Current);
+	SendRconCommand(iString);
+
+	GangZoneShowForAll(ArenaZone,0x95000099);
+
+	ViewTimer = 4;
+	ViewRCForPlayers();
+
+	format(iString, sizeof(iString), "%s: %d - %s: %d", TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
+	SetGameModeText(iString);
+
+	if( WarMode == true )
+	{
+	    MatchRoundsStarted++;
+	    if( MatchRoundsStarted > 100 ) MatchRoundsStarted = 1;
+		MatchRoundsRecord[ MatchRoundsStarted - 1 ][ round__type ] = 1;
+		MatchRoundsRecord[ MatchRoundsStarted - 1 ][ round__ID ] = ArenaID;
+		MatchRoundsRecord[ MatchRoundsStarted - 1 ][ round__completed ] = false;
+	}
+}
+
+forward ViewRCForPlayers();
+public ViewRCForPlayers()
+{
+	if(ViewTimer == 0) 
+	{
+	    SpawnPlayersInRC();
+	    ResetTeamLeaders();
+	    return 1;
+	}
+	
+	new iString[64];
+	format(iString,sizeof(iString),"~w~RC starting in ~r~~h~%d ~w~seconds", ViewTimer);
+	TextDrawSetString( centerTeamNames, iString);
+	foreach(new i : Player) {
+	    if(Player[i][ToAddInRound] == true) {
+	        PlayerPlaySound(i,1139,0.0,0.0,0.0);
+			switch(ViewTimer)
+			{
+			    case 4: {
+					SetPlayerCameraLookAt(i,ACPSpawn[Current][0],ACPSpawn[Current][1],ACPSpawn[Current][2]);
+	    	   		SetPlayerCameraPos(i,ACPSpawn[Current][0],ACPSpawn[Current][1]+100,ACPSpawn[Current][2]+80);
+    			} case 3: {
+         			InterpolateCameraPos(i,ACPSpawn[Current][0],ACPSpawn[Current][1]+100,ACPSpawn[Current][2]+80, ACPSpawn[Current][0]-100,ACPSpawn[Current][1],ACPSpawn[Current][2]+80, 1000, CAMERA_MOVE);
+                    InterpolateCameraLookAt(i,ACPSpawn[Current][0],ACPSpawn[Current][1],ACPSpawn[Current][2], ACPSpawn[Current][0],ACPSpawn[Current][1],ACPSpawn[Current][2], 1000, CAMERA_MOVE);
+		   		} case 2: {
+	    	   		InterpolateCameraPos(i,ACPSpawn[Current][0]-100,ACPSpawn[Current][1],ACPSpawn[Current][2]+80, ACPSpawn[Current][0],ACPSpawn[Current][1]-100,ACPSpawn[Current][2]+80, 1000, CAMERA_MOVE);
+                    InterpolateCameraLookAt(i,ACPSpawn[Current][0],ACPSpawn[Current][1],ACPSpawn[Current][2], ACPSpawn[Current][0],ACPSpawn[Current][1],ACPSpawn[Current][2], 1000, CAMERA_MOVE);
+				} case 1: {
+					InterpolateCameraPos(i,ACPSpawn[Current][0],ACPSpawn[Current][1]-100,ACPSpawn[Current][2]+80,ACPSpawn[Current][0]+100,ACPSpawn[Current][1],ACPSpawn[Current][2]+80, 1000, CAMERA_MOVE);
+                    InterpolateCameraLookAt(i,ACPSpawn[Current][0],ACPSpawn[Current][1],ACPSpawn[Current][2], ACPSpawn[Current][0],ACPSpawn[Current][1],ACPSpawn[Current][2], 1000, CAMERA_MOVE);
+				}
+			}
+		}
+	}
+	ViewTimer--;
+	return SetTimer("ViewRCForPlayers", 1000, false);
+}
+
+SpawnPlayersInRC()
+{
+	ClearChat();
+	SendClientMessageToAll(-1, sprintf(""COL_PRIM"RC Battlefield started: {FFFFFF}%s (ID: %d)", AName[Current], Current));
+	new iString[160];
+	foreach(new i : Player) 
+	{
+	    if(Player[i][ToAddInRound] == true) 
+		{
+	        if(Player[i][Spectating] == true) StopSpectate(i);
+
+			if(!Player[i][FakePacketRenovation] && Player[i][NetCheck] && NetStats_GetConnectedTime(i) < 300000)
+			{
+				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", i, GetPlayerPacketLoss(i), false);
+				Player[i][FakePacketRenovation] = true;
+			}
+			
+	        Player[i][Playing] = true;
+	        Player[i][WasInBase] = true;
+			Iter_Add(PlayersInRound, i);
+
+			Player[i][RoundKills] = 0;
+			Player[i][RoundDeaths] = 0;
+			Player[i][RoundDamage] = 0;
+			Player[i][shotsHit] = 0;
+
+			PlayerPlaySound(i, 1057, 0, 0, 0);
+	        SetPlayerVirtualWorld(i, 2);
+	        SetPlayerInterior(i, AInterior[Current]);
+
+			SetAP(i, RoundAR);
+			SetHP(i, RoundHP);
+			CreatePlayerTeamBar(i);
+
+			switch(Player[i][Team]) {
+			    case ATTACKER: {
+       				if(AInterior[Current] == 0) SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], AAttackerSpawn[Current][0] + random(6), AAttackerSpawn[Current][1] + random(6), AAttackerSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+					else SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], AAttackerSpawn[Current][0] + random(2), AAttackerSpawn[Current][1] + random(2), AAttackerSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+
+			        SetPlayerColor(i, ATTACKER_PLAYING);
+			        SpawnPlayerEx(i);
+                    SetPlayerTeam(i, 1);
+                    ShowTeamBarsForPlayer(i);
+				} case DEFENDER: {
+				    if(AInterior[Current] == 0) SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], ADefenderSpawn[Current][0] + random(6), ADefenderSpawn[Current][1] + random(6), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+        			else SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], ADefenderSpawn[Current][0] + random(2), ADefenderSpawn[Current][1] + random(2), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+
+					SetPlayerColor(i, DEFENDER_PLAYING);
+					SpawnPlayerEx(i);
+					SetPlayerTeam(i, 2);
+			        ShowTeamBarsForPlayer(i);
+				}
+			}
+            SetCameraBehindPlayer(i);
+			if(RoundPaused == false) TogglePlayerControllable(i, 1);
+			else TogglePlayerControllable(i, 0);
+            Player[i][ToAddInRound] = false;
+			
+			format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][TotalDamage]);
+			PlayerTextDrawSetString(i, RoundKillDmgTDmg[i], iString);
+		}
+	}
+
+	RoundMints = ConfigRoundTime;
+	RoundSeconds = 0;
+	
+	if(CheckTeamElimination() != 0)
+	{
+		foreach(new i:Player)
+		{
+			ShowRoundStats(i);
+		}
+		AllowStartBase = true;
+		ArenaStarted = true;
+		UpdateTeamPlayerCount(ATTACKER, false);
+		UpdateTeamPlayerCount(DEFENDER, false);
+		UpdateTeamHP(ATTACKER);
+		UpdateTeamHP(DEFENDER);
+		UpdateTeamNamesTextdraw();
+		StartGameLoop();
+		FallProtection = true;
+		RadarFix();
+		foreach(new i : PlayersInRound)
+		{
+			ResetPlayerWeapons(i);
+			GivePlayerWeapon(i, WEAPON_M4, 9999);
+			GivePlayerWeapon(i, WEAPON_SHOTGSPA, 9999);
+			GivePlayerWeapon(i, WEAPON_DEAGLE, 9999);
+		}
+		#if defined _league_included
+		if(LeagueMode)
+		{
+			AutoRemoveCheck();
+		}
+		#endif
+	}
+}
+
 forward OnArenaStart(ArenaID);
 public OnArenaStart(ArenaID)
 {
@@ -1351,6 +1574,7 @@ public OnArenaStart(ArenaID)
     DestroyDynamicVehicles(1); // Destroys vehicles
 	DeleteAllDeadBodies();
 	GameType = ARENA;
+	RCArena = false;
 	Current = ArenaID; // Current will be the ID of the base that we just started. We do this so that we can use this ID later on (e.g. check /car command for the use).
     ClearKillList(); // Clears the kill-list.
     ServerLastPlayed = Current;
@@ -1608,7 +1832,8 @@ public AddPlayerToArena(playerid)
 
 	SetPlayerVirtualWorld(playerid, 2);
 	SetPlayerInterior(playerid, AInterior[Current]);
-	SetCPForPlayer(playerid);
+	if(!RCArena)
+		SetCPForPlayer(playerid);
 
 	switch(Player[playerid][Team]) {
 	    case ATTACKER: {
@@ -1638,7 +1863,8 @@ public AddPlayerToArena(playerid)
 	if(RoundPaused == false) TogglePlayerControllable(playerid, 1);
 	else TogglePlayerControllable(playerid, 0);
 	
-	ShowPlayerGunmenu(playerid, 500);
+	if(!RCArena)
+		ShowPlayerGunmenu(playerid, 500);
 
 
 	new iString[160];
@@ -1660,6 +1886,7 @@ public OnBaseStart(BaseID)
     DestroyDynamicVehicles(1); // Destroys vehicles
 	DeleteAllDeadBodies();
 	GameType = BASE;
+	RCArena = false;
 	Current = BaseID; // Current will be the ID of the base that we just started. We do this so that we can use this ID later on (e.g. check /car command for the use).
    	ClearKillList(); // Clears the kill-list.
     ServerLastPlayed = Current;
@@ -2178,6 +2405,14 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 				{
 					// Increase rounds played in league
 					IncreasePlayerLeagueRounds(i);
+					if(PlayerShop[i][SHOP_POINTS_DOUBLER])
+					{
+						// Double points for who bought the points doubler from league shop
+						PlayerShop[i][SHOP_POINTS_DOUBLER] = false;
+						new roundPoints = GetPlayerLeagueRoundPoints(i);
+						if(roundPoints > 0)
+							AddPlayerLeaguePoints(i, roundPoints * 2);
+					}
 				}
 				#endif
 			}

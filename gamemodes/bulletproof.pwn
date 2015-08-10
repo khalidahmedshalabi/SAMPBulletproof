@@ -67,6 +67,7 @@ native IsValidVehicle(vehicleid);
 #include "modules\src\hooking\vehicle.inc"
 #include "modules\src\hooking\commonhooking.inc"
 #tryinclude "modules\src\league.inc" // The league system source code is not open
+#tryinclude "modules\src\shop.inc"  // The league shop source code is not open
 #include "modules\src\this_core.inc"
 #include "modules\src\freecam.inc"
 #include "modules\src\common.inc"
@@ -732,6 +733,33 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	AddBloodEffect(x, y, z);
 	if(Player[playerid][Playing] == true)
 	{
+	    #if defined _league_included
+		if(LeagueMode && PlayerShop[playerid][SHOP_EXPLOSIVE_DEATH])
+		{
+		    PlayerShop[playerid][SHOP_EXPLOSIVE_DEATH] = false;
+		    new
+				dist,
+				Float:damage,
+				randomAdd = randomExInt(10, 15);
+		    foreach(new i : Player)
+		    {
+				if(!Player[i][Playing] && !Player[i][Spectating])
+				    continue;
+
+				CreateExplosionForPlayer(i, x, y, z, 7, 10.0);
+				if(i != playerid)
+				{
+					dist = floatround(GetPlayerDistanceFromPoint(i, x, y, z));
+					if(dist <= 10)
+					{
+						damage = float((99 / dist) + randomAdd);
+						OnPlayerTakeDamage(i, playerid, damage, 47, 3);
+					}
+				}
+			}
+			SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has bombed himself while dying (/shop)", Player[playerid][Name]));
+		}
+		#endif
 	    CreateDeadBody(playerid, killerid, reason, 0.0, x, y, z);
 	    PlayerNoLeadTeam(playerid);
 	    if(reason != WEAPON_KNIFE)
@@ -1509,6 +1537,19 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	    SetFakeHealthArmour(playerid);
 	    return 1;
 	}
+	if(weaponid == 51)
+    {
+        if(issuerid == INVALID_PLAYER_ID)
+        {
+	        /* Protection against explosion */
+	    	SetFakeHealthArmour(playerid);
+	        return 1;
+   		}
+   		else
+   		{
+   		    weaponid = WEAPON_GRENADE;
+   		}
+    }
 	if(Player[playerid][Playing])
 	{
 	    if(Player[playerid][OnGunmenu]) // Player is picking weapons from the gunmenu
@@ -1541,32 +1582,35 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 				}
 			}
 		}
+		#if defined _league_included
+		if(LeagueMode)
+		{
+		    if(PlayerShop[playerid][SHOP_NINJA] && weaponid == WEAPON_COLLISION && issuerid == INVALID_PLAYER_ID)
+		    {
+		        /* Player has got ninja style pack from league shop */
+		        SetFakeHealthArmour(playerid);
+		        PlayerShop[playerid][SHOP_NINJA] = false;
+				MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~p~~h~~h~ninja mode off", "You're no longer a ninja! Jump normally!", 3000);
+	    		return 1;
+		    }
+		}
+		#endif
 	}
-    if(weaponid == 51 /* Explosion */ || weaponid == WEAPON_GRENADE)
+    if(weaponid == WEAPON_GRENADE)
     {
-        // Protect against explosions (in round only)
-        if(issuerid == INVALID_PLAYER_ID && Player[playerid][Playing])
+		// Handling Grenades
+        if(amount > 60.0)
         {
-            SetFakeHealthArmour(playerid);
-        	return 1;
-        }
-        else // Handling Grenades
-        {
-            weaponid = WEAPON_GRENADE;
-            if(amount > 60.0)
-            {
-            	amount = GRENADE_HIGH_DAMAGE;
-           	}
-           	else if(amount >= 30.0)
-           	{
-           	    amount = GRENADE_MEDIUM_DAMAGE;
-           	}
-           	else if(amount < 30.0)
-           	{
-           	    amount = GRENADE_LOW_DAMAGE;
-           	}
-        }
-
+        	amount = GRENADE_HIGH_DAMAGE;
+       	}
+       	else if(amount >= 30.0)
+       	{
+       	    amount = GRENADE_MEDIUM_DAMAGE;
+       	}
+       	else if(amount < 30.0)
+       	{
+       	    amount = GRENADE_LOW_DAMAGE;
+       	}
     }
     // Slit throat with a knife
     new bool:KnifeSlitThroat = false;
@@ -1862,6 +1906,14 @@ public OnPlayerModelSelection(playerid, response, listid, modelid)
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
 	#if defined _league_included
+	if(dialogid == DIALOG_LEAGUE_SHOP)
+	{
+	    if(response)
+	    {
+	        PlayerSelectShopItem(playerid, listitem);
+	    }
+	    return 1;
+	}
 	if(dialogid == DIALOG_LEAGUE_STATS_SUB)
 	{
 	    if(!response) // "Back" button
@@ -3839,6 +3891,74 @@ YCMD:settings(playerid, params[], help)
 	return 1;
 }
 
+YCMD:shop(playerid, params[], help)
+{
+	if(help)
+	{
+	    SendCommandHelpMessage(playerid, "enter the league shop");
+	    return 1;
+	}
+	#if defined _league_included
+	ShowPlayerShopDialog(playerid);
+	#else
+	SendErrorMessage(playerid, "This version/edit of Bulletproof gamemode does not support league features!");
+	#endif
+	return 1;
+}
+
+YCMD:usebelt(playerid, params[], help)
+{
+	if(help)
+	{
+	    SendCommandHelpMessage(playerid, "bomb yourself");
+	    return 1;
+	}
+	#if defined _league_included
+	if(LeagueMode)
+	{
+	    if(!PlayerShop[playerid][SHOP_EXPLOSIVE_BELT])
+	    {
+	        return SendErrorMessage(playerid, "You have not purchased an explosive belt from league shop (/shop).");
+	    }
+	    if(!Player[playerid][Playing])
+	    {
+	        return SendErrorMessage(playerid, "You need to be playing (in round) to use the explosive belt");
+	    }
+	    PlayerShop[playerid][SHOP_EXPLOSIVE_BELT] = false;
+	    new Float:X, Float:Y, Float:Z;
+	    GetPlayerPos(playerid, X, Y, Z);
+	    new
+			dist,
+			Float:damage,
+			randomAdd = randomExInt(10, 15);
+	    foreach(new i : Player)
+	    {
+			if(!Player[i][Playing] && !Player[i][Spectating])
+			    continue;
+			    
+			CreateExplosionForPlayer(i, X, Y, Z, 7, 14.0);
+			if(i != playerid)
+			{
+				dist = floatround(GetPlayerDistanceFromPoint(i, X, Y, Z));
+				if(dist <= 14)
+				{
+					damage = float((99 / dist) + randomAdd);
+					OnPlayerTakeDamage(i, playerid, damage, 47, 3);
+				}
+			}
+		}
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has bombed himself using an explosive belt (/shop)", Player[playerid][Name]));
+	}
+	else
+	{
+	    SendErrorMessage(playerid, "League mode has to be enabled!");
+	}
+	#else
+	SendErrorMessage(playerid, "This version/edit of Bulletproof gamemode does not support league features!");
+	#endif
+	return 1;
+}
+
 YCMD:remgun(playerid, params[], help)
 {
 	if(help)
@@ -5020,7 +5140,7 @@ YCMD:war(playerid, params[], help)
 		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has set the match to end!", Player[playerid][Name]));
 		SendClientMessageToAll(-1, ""COL_PRIM"Preparing End Match Results..");
 		SendClientMessageToAll(-1, ""COL_PRIM"If you missed the results screen by hiding the current textdraws, type {FFFFFF}/showagain");
-        SendClientMessageToAll(-1, ""COL_PRIM"Type {FFFFFF}/weaponstats "COL_PRIM"to see a list of players weapon statistics.");
+		SendClientMessageToAll(-1, ""COL_PRIM"Type {FFFFFF}/weaponstats "COL_PRIM"to see a list of players weapon statistics.");
 
 		return 1;
 	} else if(isnull(TeamBName)) return SendUsageMessage(playerid,"/war ([Team A] [Team B]) (end)");
@@ -5782,6 +5902,7 @@ YCMD:fixcp(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "re-load the checkpoint for you.");
 	    return 1;
 	}
+	if(RCArena == true) return SendErrorMessage(playerid, "There are no checkpoints in RC arenas!");
 	if(Player[playerid][Playing])
 	{
         SetTimerEx("SetCPForPlayer", 1000, false, "i", playerid);
@@ -6188,7 +6309,31 @@ YCMD:jetpack(playerid,params[], help)
 	    SendCommandHelpMessage(playerid, "spawn a jetpack.");
 	    return 1;
 	}
-	if(Player[playerid][Playing] == true) return SendErrorMessage(playerid,"Can't use this command in round.");
+	if(Player[playerid][Playing] == true)
+	{
+	    #if defined _league_included
+	    return SendErrorMessage(playerid,"Can't use this command in round.");
+		#else
+		if(LeagueMode)
+		{
+		    if(!PlayerShop[playerid][Jetpack])
+		    {
+		        return SendErrorMessage(playerid, "You have not purchased a jetpack from league shop (/shop)!");
+		    }
+		    else
+		    {
+		        PlayerShop[playerid][Jetpack] = false;
+		        SetPlayerSpecialAction(playerid, 2);
+		        SendClientMessageToAll(-1, sprintf("{FFFFF}%s "COL_PRIM"has spawned a jetpack from league shop (/shop)", Player[playerid][Name]));
+		        return 1;
+		    }
+		}
+		else
+		{
+		    return SendErrorMessage(playerid,"Can't use this command in round.");
+		}
+		#endif
+	}
 
     new pID = strval(params);
 	if(isnull(params)) pID = playerid;
@@ -7233,7 +7378,7 @@ YCMD:gunmenu(playerid, params[], help)
 	}
 	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
 	if(Player[playerid][Playing] == false) return SendErrorMessage(playerid,"You are not playing.");
-
+	if(RCArena == true) return SendErrorMessage(playerid, "You cannot get gunmenu in RC arenas");
 	if(ElapsedTime <= 30 && Player[playerid][Team] != REFEREE)
 	{
 	    new iString[128];
@@ -8352,9 +8497,17 @@ YCMD:start(playerid, params[], help)
 	sscanf(params, "ss", Params[0], Params[1]);
 
 	if(isnull(Params[0]) || IsNumeric(Params[0])) return
-	SendUsageMessage(playerid,"/start [base | arena | last] [ID]");
+	SendUsageMessage(playerid,"/start [base | arena | rc | last] [ID]");
 
-	if(!strcmp(Params[0], "last", true))
+	if(!strcmp(Params[0], "rc", true))
+	{
+	    AllowStartBase = false; // Make sure other player or you yourself is not able to start base on top of another base.
+		SetTimer("OnRCStart", 2000, false);
+
+		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has started RC Battlefield round (Interior: 72)", Player[playerid][Name]);
+		SendClientMessageToAll(-1, iString);
+	}
+	else if(!strcmp(Params[0], "last", true))
 	{
 		if(ServerLastPlayed > -1 && ServerLastPlayedType > -1)
 		{
@@ -8396,11 +8549,10 @@ YCMD:start(playerid, params[], help)
 		else
 		    return SendErrorMessage(playerid, "No bases/arenas have been played lately!");
 	}
-
-	if(strcmp(Params[0], "base", true) == 0) CommandID = 1;
+	else if(strcmp(Params[0], "base", true) == 0) CommandID = 1;
 	else if(strcmp(Params[0], "arena", true) == 0) CommandID = 2;
 	else return
-	SendUsageMessage(playerid,"/start [base | arena | last] [ID]");
+	SendUsageMessage(playerid,"/start [base | arena | rc | last] [ID]");
 
 	if(!IsNumeric(Params[1])) return SendErrorMessage(playerid,"Base/Arena ID can only be numerical.");
 

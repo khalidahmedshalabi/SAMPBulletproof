@@ -345,8 +345,10 @@ LoginPlayer(playerid, DBResult:res)
 }
 
 StorePlayerVariablesMin(playerid) {
-    for(new i = 0; i < SAVE_SLOTS; i ++){
-	   	if(strlen(SaveVariables[i][pName]) < 2) {
+    for(new i = 0; i < SAVE_SLOTS; i ++)
+	{
+	   	if(strlen(SaveVariables[i][pName]) < 2) 
+		{
 	   	    SaveVariables[i][pTeam] 	= 	Player[playerid][Team];
 	   	    SaveVariables[i][RKills]   	=  	Player[playerid][RoundKills];
 			SaveVariables[i][RDeaths]  	= 	Player[playerid][RoundDeaths];
@@ -355,6 +357,16 @@ StorePlayerVariablesMin(playerid) {
 			SaveVariables[i][TDeaths]  	= 	Player[playerid][TotalDeaths];
 			SaveVariables[i][TDamage] 	= 	Player[playerid][TotalDamage];
 			SaveVariables[i][TPlayed]   =   Player[playerid][RoundPlayed];
+			
+			#if defined _league_included
+			PlayerShopSaves[i][SHOP_POINTS_DOUBLER] = PlayerShop[playerid][SHOP_POINTS_DOUBLER];
+			PlayerShopSaves[i][SHOP_EXPLOSIVE_BELT] = PlayerShop[playerid][SHOP_EXPLOSIVE_BELT];
+			PlayerShopSaves[i][SHOP_EXPLOSIVE_DEATH] = PlayerShop[playerid][SHOP_EXPLOSIVE_DEATH];
+			PlayerShopSaves[i][SHOP_JETPACK] = PlayerShop[playerid][SHOP_JETPACK];
+			PlayerShopSaves[i][SHOP_CHAINSAW] = PlayerShop[playerid][SHOP_CHAINSAW];
+			PlayerShopSaves[i][SHOP_SPRAYCAN] = PlayerShop[playerid][SHOP_SPRAYCAN];
+			PlayerShopSaves[i][SHOP_NINJA] = PlayerShop[playerid][SHOP_NINJA];
+			#endif
 
 			OnPlayerAmmoUpdate(playerid);
 			SaveVariables[i][iAccuracy] =   floatround(Player[playerid][Accuracy], floatround_round);
@@ -432,6 +444,17 @@ StorePlayerVariables(playerid) {
 			SaveVariables[i][TDeaths]  	= 	Player[playerid][TotalDeaths];
 			SaveVariables[i][TDamage] 	= 	Player[playerid][TotalDamage];
 			SaveVariables[i][TPlayed]   =   Player[playerid][RoundPlayed];
+			
+			#if defined _league_included
+			PlayerShopSaves[i][SHOP_POINTS_DOUBLER] = PlayerShop[playerid][SHOP_POINTS_DOUBLER];
+			PlayerShopSaves[i][SHOP_EXPLOSIVE_BELT] = PlayerShop[playerid][SHOP_EXPLOSIVE_BELT];
+			PlayerShopSaves[i][SHOP_EXPLOSIVE_DEATH] = PlayerShop[playerid][SHOP_EXPLOSIVE_DEATH];
+			PlayerShopSaves[i][SHOP_JETPACK] = PlayerShop[playerid][SHOP_JETPACK];
+			PlayerShopSaves[i][SHOP_CHAINSAW] = PlayerShop[playerid][SHOP_CHAINSAW];
+			PlayerShopSaves[i][SHOP_SPRAYCAN] = PlayerShop[playerid][SHOP_SPRAYCAN];
+			PlayerShopSaves[i][SHOP_NINJA] = PlayerShop[playerid][SHOP_NINJA];
+			#endif
+			
 			OnPlayerAmmoUpdate(playerid);
 			SaveVariables[i][iAccuracy] =  floatround(Player[playerid][Accuracy], floatround_round);
 			SaveVariables[i][tshotsHit] =   Player[playerid][TotalshotsHit];
@@ -499,6 +522,25 @@ LoadPlayerVariables(playerid)
                 Player[playerid][Accuracy]      	=   SaveVariables[i][iAccuracy];
 			 	Player[playerid][TotalshotsHit]		=	SaveVariables[i][tshotsHit];
 			 	Player[playerid][TotalBulletsFired] = 	SaveVariables[i][tBulletsShot];
+				
+				#if defined _league_included
+				PlayerShop[playerid][SHOP_POINTS_DOUBLER] = PlayerShopSaves[i][SHOP_POINTS_DOUBLER];
+				PlayerShop[playerid][SHOP_EXPLOSIVE_BELT] = PlayerShopSaves[i][SHOP_EXPLOSIVE_BELT];
+				PlayerShop[playerid][SHOP_EXPLOSIVE_DEATH] = PlayerShopSaves[i][SHOP_EXPLOSIVE_DEATH];
+				PlayerShop[playerid][SHOP_JETPACK] = PlayerShopSaves[i][SHOP_JETPACK];
+				PlayerShop[playerid][SHOP_CHAINSAW] = PlayerShopSaves[i][SHOP_CHAINSAW];
+				PlayerShop[playerid][SHOP_SPRAYCAN] = PlayerShopSaves[i][SHOP_SPRAYCAN];
+				PlayerShop[playerid][SHOP_NINJA] = PlayerShopSaves[i][SHOP_NINJA];
+				
+				if(PlayerShop[playerid][SHOP_CHAINSAW])
+				{
+					GivePlayerWeapon(playerid, WEAPON_CHAINSAW, 1);
+				}
+				if(PlayerShop[playerid][SHOP_SPRAYCAN])
+				{
+					GivePlayerWeapon(playerid, WEAPON_SPRAYCAN, 9999);
+				}
+				#endif
 
 			 	for(new j = 0; j < 55; j ++)
     				Player[playerid][WeaponStat][j] = SaveVariables[i][WeaponStat][j];
@@ -734,6 +776,16 @@ ResetSaveVariables(index) {
 	SaveVariables[index][SavedGrenadeAmmo] = 0;
 	for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
 		SaveVariables[index][HadGunmenuGun][i] = false;
+	
+	#if defined _league_included
+	PlayerShopSaves[index][SHOP_POINTS_DOUBLER] = false;
+	PlayerShopSaves[index][SHOP_EXPLOSIVE_BELT] = false;
+	PlayerShopSaves[index][SHOP_EXPLOSIVE_DEATH] = false;
+	PlayerShopSaves[index][SHOP_JETPACK] = false;
+	PlayerShopSaves[index][SHOP_CHAINSAW] = false;
+	PlayerShopSaves[index][SHOP_SPRAYCAN] = false;
+	PlayerShopSaves[index][SHOP_NINJA] = false;
+	#endif
 }
 
 ClearPlayerVariables()

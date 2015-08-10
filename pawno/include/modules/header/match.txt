@@ -34,6 +34,7 @@ new bool:FallProtection = false; // True means players HP is protected against i
 new bool:TeamHelp[MAX_TEAMS]; // Whether a team is asking for help or not
 new bool:IsBasePlayed[MAX_BASES]; // Whether a base is played or not
 new bool:IsArenaPlayed[MAX_ARENAS]; // Whether an arena is played or not
+new bool:RCArena = false; // RC Battlefield arena, a new simple type of minigames
 new PausePressed; // A tick count when the last time pause command (or button) was used (or pressed)
 new GameLoop = -1; // The ID of the timer that handles everything about the current active round
 new PauseAirVehicles_Timer;
