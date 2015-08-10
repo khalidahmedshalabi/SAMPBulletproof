@@ -1865,6 +1865,13 @@ public AddPlayerToArena(playerid)
 	
 	if(!RCArena)
 		ShowPlayerGunmenu(playerid, 500);
+	else
+	{
+		ResetPlayerWeapons(playerid);
+		GivePlayerWeapon(playerid, WEAPON_M4, 9999);
+		GivePlayerWeapon(playerid, WEAPON_SHOTGSPA, 9999);
+		GivePlayerWeapon(playerid, WEAPON_DEAGLE, 9999);
+	}
 
 
 	new iString[160];
