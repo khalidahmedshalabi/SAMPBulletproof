@@ -158,7 +158,7 @@ ShowGunmenuHelp(playerid)
 	#endif
 	#if defined _league_included
 	if(LeagueMode)
-		MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~p~~h~~h~league shop", "Type /shop to start shopping now!", 4000);
+		MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~p~~h~~h~league shop", "Type /shop to start shopping now!", 7000);
 	#endif
 }
 

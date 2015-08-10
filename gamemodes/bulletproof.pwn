@@ -7735,8 +7735,8 @@ YCMD:kick(playerid, params[], help)
 
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isn't connected.");
 	#if defined _league_included
-	if(Player[pID][Team] != REFEREE && Player[pID][Team] != NON && LeagueMode)
-	    return SendErrorMessage(playerid, "When league mode is enabled, you can kick only referees!");
+	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
+ 		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
 
 	new bool:GiveReason;
