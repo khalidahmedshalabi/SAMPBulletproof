@@ -2384,7 +2384,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 					}
 					#endif
 				}
-
+				#if defined _league_included
 				if(Player[i][Team] == winnerid)
 				{
 					AddPlayerLeaguePoints(i, 150);
@@ -2393,7 +2393,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 				{
 					AddPlayerLeaguePoints(i, -75);
 				}
-				
+				#endif
 				playerScores[index][player_Score] = Player[i][RoundDamage];
 				playerScores[index][player_Team] = Player[i][Team];
 				playerScores[index][player_Kills] = Player[i][RoundKills];

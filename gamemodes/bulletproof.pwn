@@ -6313,18 +6313,18 @@ YCMD:jetpack(playerid,params[], help)
 	}
 	if(Player[playerid][Playing] == true)
 	{
-	    #if defined _league_included
+	    #if !defined _league_included
 	    return SendErrorMessage(playerid,"Can't use this command in round.");
 		#else
 		if(LeagueMode)
 		{
-		    if(!PlayerShop[playerid][Jetpack])
+		    if(!PlayerShop[playerid][SHOP_JETPACK])
 		    {
 		        return SendErrorMessage(playerid, "You have not purchased a jetpack from league shop (/shop)!");
 		    }
 		    else
 		    {
-		        PlayerShop[playerid][Jetpack] = false;
+		        PlayerShop[playerid][SHOP_JETPACK] = false;
 		        SetPlayerSpecialAction(playerid, 2);
 		        SendClientMessageToAll(-1, sprintf("{FFFFF}%s "COL_PRIM"has spawned a jetpack from league shop (/shop)", Player[playerid][Name]));
 		        return 1;

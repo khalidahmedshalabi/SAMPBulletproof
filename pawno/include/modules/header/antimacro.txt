@@ -3,7 +3,7 @@
 */
 
 // Core
-#define ANTIMACRO_MAX_WARNINGS			2		// Maximum warnings, punishment after that
+#define ANTIMACRO_MAX_WARNINGS			3		// Maximum warnings, punishment after that
 #define ANTIMACRO_MIN_SPEED				40		// We don't need to check a player for macros if he's sprinting with such a speed
 #define ANTIMACRO_MIN_SPEED_DIFF		0		// A player may not be checked for macros if the difference between his old speed and new speed is below this
 #define ANTIMACRO_SPRINT_KEY_LIMIT		65		// Least acceptable time difference between each sprint key hit (in milliseconds)
