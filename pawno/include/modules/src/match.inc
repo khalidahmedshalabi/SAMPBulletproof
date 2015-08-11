@@ -849,11 +849,13 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 forward UnpauseRound();
 public UnpauseRound()
 {
+	#if defined _league_included
 	if(League_AutoUnpauseTimer != -1)
 	{
 		KillTimer(League_AutoUnpauseTimer);
 		League_AutoUnpauseTimer = -1;
 	}
+	#endif
 	RoundUnpausing = true;
 	PauseCountdown --;
 
