@@ -24,6 +24,17 @@ ShowConfigDialog(playerid) {
 	strcat(string, "\n"COL_PRIM"Max Ping");
 	strcat(string, "\n"COL_PRIM"Max Packetloss");
 	strcat(string, "\n"COL_PRIM"Min FPS");
+	
+	new isrestricted = 0;
+	for(new i=0;i<sizeof(GroupAccessPassword);i++)
+	{
+		if(strlen(GroupAccessPassword[i])>0) isrestricted = 1;
+	}
+	if(isrestricted == 1) {
+		strcat(string, "\n{FF6666}Access restricted");
+	} else {
+		strcat(string, "\n{66FF66}Access unrestricted");
+	}
 
 	if(ServerLocked == true) {
 		strcat(string, "\n{FF6666}Server Locked");
