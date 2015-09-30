@@ -148,9 +148,13 @@ public OnPlayerConnect(playerid)
 	    return 0;
 	}
 	// Send them welcome messages
-    SendClientMessage(playerid, -1, ""COL_PRIM"Get started: {FFFFFF}/help "COL_PRIM"and {FFFFFF}/cmds");
-    new str[128];
-    format(str,sizeof(str),""COL_PRIM"Server limits:  Min FPS = {FFFFFF}%d "COL_PRIM"| Max Ping = {FFFFFF}%d "COL_PRIM"| Max PL = {FFFFFF}%.2f", Min_FPS, Max_Ping, Float:Max_Packetloss);
+	SendClientMessage(playerid, -1, ""COL_PRIM"It's {FFFFFF}Bulletproof"COL_PRIM". Your bullets are fruitless. You can't take it down!");
+    	SendClientMessage(playerid, -1, ""COL_PRIM"Get started: {FFFFFF}/help "COL_PRIM"and {FFFFFF}/cmds");
+    	SendClientMessage(playerid, -1, ""COL_PRIM"Don't miss our updates: {FFFFFF}/checkversion");
+	SendClientMessage(playerid, -1, ""COL_PRIM"Check {FFFFFF}/changelog "COL_PRIM"out to see what's up with this version!");
+	SendClientMessage(playerid, -1, ""COL_PRIM"Developers: {FFFFFF}Whitetiger"COL_PRIM" & {FFFFFF}[KHK]Khalid"COL_PRIM"");
+    	new str[128];
+    	format(str,sizeof(str),""COL_PRIM"Server limits:  Min FPS = {FFFFFF}%d "COL_PRIM"| Max Ping = {FFFFFF}%d "COL_PRIM"| Max PL = {FFFFFF}%.2f", Min_FPS, Max_Ping, Float:Max_Packetloss);
 	SendClientMessage(playerid, -1, str);
 	
 	// Initialize the new player
@@ -361,7 +365,7 @@ public OnPlayerRequestClass(playerid, classid)
 
 public OnPlayerRequestSpawn(playerid)
 {
-	if(Player[playerid][Spawned)
+	if(Player[playerid][Spawned])
 	{
 	    SendErrorMessage(playerid, "Encountered an error. Switch to another class using ~<~ and ~>~ and then click the SPAWN button!");
 	    return 0;
