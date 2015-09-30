@@ -148,11 +148,7 @@ public OnPlayerConnect(playerid)
 	    return 0;
 	}
 	// Send them welcome messages
-	SendClientMessage(playerid, -1, ""COL_PRIM"It's {FFFFFF}Bulletproof"COL_PRIM". Your bullets are fruitless. You can't take it down!");
     SendClientMessage(playerid, -1, ""COL_PRIM"Get started: {FFFFFF}/help "COL_PRIM"and {FFFFFF}/cmds");
-    SendClientMessage(playerid, -1, ""COL_PRIM"Don't miss our updates: {FFFFFF}/checkversion");
-    SendClientMessage(playerid, -1, ""COL_PRIM"Check {FFFFFF}/changelog "COL_PRIM"out to see what's up with this version!");
-    SendClientMessage(playerid, -1, ""COL_PRIM"Developers: {FFFFFF}Whitetiger"COL_PRIM" & {FFFFFF}[KHK]Khalid"COL_PRIM"");
     new str[128];
     format(str,sizeof(str),""COL_PRIM"Server limits:  Min FPS = {FFFFFF}%d "COL_PRIM"| Max Ping = {FFFFFF}%d "COL_PRIM"| Max PL = {FFFFFF}%.2f", Min_FPS, Max_Ping, Float:Max_Packetloss);
 	SendClientMessage(playerid, -1, str);
@@ -365,13 +361,24 @@ public OnPlayerRequestClass(playerid, classid)
 
 public OnPlayerRequestSpawn(playerid)
 {
-	if(Player[playerid][Spawned])
+	if(Player[playerid][Spawned)
 	{
 	    SendErrorMessage(playerid, "Encountered an error. Switch to another class using ~<~ and ~>~ and then click the SPAWN button!");
 	    return 0;
 	}
-	if(Player[playerid][Logged] == true)
+	if(Player[playerid][Logged] == true) 
 	{
+		new groupID = Player[playerid][RequestedClass]-1;
+		new tempstr[5], enteredPW[25];
+
+		format(tempstr,5,"ga_%d", groupID);
+		GetPVarString(playerid, tempstr, enteredPW, 25);
+		if(strlen(GroupAccessPassword[groupID])>0 && (strcmp(enteredPW,GroupAccessPassword[groupID]) != 0 || isnull(enteredPW)))
+		{
+			ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Please enter the group password:", "Submit", "Cancel");
+		    return 0;
+		}
+		
 	    HideMessageBox(playerid, MSGBOX_TYPE_TOP);
 		SpawnConnectedPlayer(playerid, Player[playerid][RequestedClass]);
 		return 1;
@@ -1359,7 +1366,6 @@ public OnRconLoginAttempt(ip[], password[], success)
         SendClientMessageToAll(-1, Str);
 
         Player[playerid][RconTry]++;
-		SendClientMessage(playerid, -1, "Wrong password one more time will get you kicked.");
 
 		if(Player[playerid][RconTry] >= 2){
 			format(Str, sizeof(Str), "{FFFFFF}%s "COL_PRIM"has been kicked for several fail attempts to log into rcon", iName);
@@ -1367,16 +1373,20 @@ public OnRconLoginAttempt(ip[], password[], success)
 			SetTimerEx("OnPlayerKicked", 500, false, "i", playerid);
 			return 1;
 		}
+		else SendClientMessage(playerid, -1, "Wrong password one more time will get you kicked.");
     }
 	else
 	{
-	    format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%s' AND Level != %d", Player[playerid][Level], DB_Escape(Player[playerid][Name]), Player[playerid][Level]);
+     	format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%s' AND Level != %d", Player[playerid][Level], DB_Escape(Player[playerid][Name]), Player[playerid][Level]);
     	db_free_result(db_query(sqliteconnection, Str));
         if(Player[playerid][Level] != 5)
         {
 	        Player[playerid][Level] = 5;
 	        UpdatePlayerAdminGroup(playerid);
-	        format(Str, sizeof(Str), "{FFFFFF}%s "COL_PRIM"has successfully logged into rcon and got level 5.", iName);
+			format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%s'", Player[playerid][Level], DB_Escape(Player[playerid][Name]));
+    		db_free_result(db_query(sqliteconnection, Str));
+    		
+    		format(Str, sizeof(Str), "{FFFFFF}%s "COL_PRIM"has successfully logged into rcon and got level 5.", iName);
 		}
 		else
 		    format(Str, sizeof(Str), "{FFFFFF}%s "COL_PRIM"has successfully logged into rcon.", iName);
@@ -2916,6 +2926,43 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_MIN_FPS, DIALOG_STYLE_INPUT, ""COL_PRIM"Set Minimum FPS", "Set the minimum FPS:", "OK", "Cancel");
 				}
 				case 7: {
+				    new string[1700];
+					string = "";
+
+					if(strlen(GroupAccessPassword[0]) > 0) {
+					    strcat(string, "{FF6666}ALPHA");
+	 				} else {
+	 				    strcat(string, "{66FF66}ALPHA");
+	 				}
+
+					if(strlen(GroupAccessPassword[1]) > 0) {
+					    strcat(string, "\n{FF6666}BETA");
+	 				} else {
+	 				    strcat(string, "\n{66FF66}BETA");
+	 				}
+
+	 				if(strlen(GroupAccessPassword[2]) > 0) {
+					    strcat(string, "\n{FF6666}ALPHA SUB");
+	 				} else {
+	 				    strcat(string, "\n{66FF66}ALPHA SUB");
+	 				}
+
+	 				if(strlen(GroupAccessPassword[3]) > 0) {
+					    strcat(string, "\n{FF6666}BETA SUB");
+	 				} else {
+	 				    strcat(string, "\n{66FF66}BETA SUB");
+	 				}
+
+	 				if(strlen(GroupAccessPassword[4]) > 0) {
+					    strcat(string, "\n{FF6666}REFEREE");
+	 				} else {
+	 				    strcat(string, "\n{66FF66}REFEREE");
+	 				}
+
+	 				ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA, DIALOG_STYLE_LIST, ""COL_PRIM"Config Settings", string, "OK", "Cancel");
+	 				return 1;
+				}
+				case 8: {
 				    if(!ServerLocked) {
 				        ShowPlayerDialog(playerid, DIALOG_SERVER_PASS, DIALOG_STYLE_INPUT,""COL_PRIM"Server Password",""COL_PRIM"Enter server password below:", "Ok","Close");
 				    } else {
@@ -2924,7 +2971,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				        PermLocked = false;
 				    }
 				}
-				case 8: {
+				case 9: {
 				    if(AntiSpam == false) {
 					    AntiSpam = true;
 	    				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"anti-spam.", Player[playerid][Name]);
@@ -2936,7 +2983,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
                     ShowConfigDialog(playerid);
 				}
-				case 9: {
+				case 10: {
 				    #if defined _league_included
 				    if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
 				    #endif
@@ -2951,7 +2998,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
                     ShowConfigDialog(playerid);
 				}
-				case 10: {
+				case 11: {
 				    #if defined _league_included
 				    if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
 				    #endif
@@ -2966,7 +3013,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
                     ShowConfigDialog(playerid);
 				}
-				case 11: {
+				case 12: {
 					if(LobbyGuns == true) {
 						LobbyGuns = false;
 				    	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"guns in lobby.", Player[playerid][Name]);
@@ -2978,7 +3025,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
 				    ShowConfigDialog(playerid);
 				}
-				case 12: {
+				case 13: {
 				    if(ShortCuts == false) {
 					    ShortCuts = true;
 	    				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"shortcut team messages.", Player[playerid][Name]);
@@ -2990,7 +3037,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
                     ShowConfigDialog(playerid);
 				}
-				case 13: {
+				case 14: {
 					if(ChangeName == false)
 					{
 					    ChangeName = true;
@@ -3013,6 +3060,76 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        }
 	    }
 	    return 1;
+	}
+	
+
+	if(dialogid == DIALOG_CONFIG_SET_GA) {
+	    if(!response) return ShowConfigDialog(playerid);
+	    switch(listitem)
+	    {
+	        case 0: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_ALPHA, DIALOG_STYLE_INPUT, ""COL_PRIM"ALPHA PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
+	        case 1: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_BETA, DIALOG_STYLE_INPUT, ""COL_PRIM"BETA PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
+	        case 2: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_ASUB, DIALOG_STYLE_INPUT, ""COL_PRIM"ALPHA SUB PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
+	        case 3: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_BSUB, DIALOG_STYLE_INPUT, ""COL_PRIM"BETA SUB PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
+	        case 4: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_REF, DIALOG_STYLE_INPUT, ""COL_PRIM"REFEREE PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
+	    }
+	} 
+	
+	if(dialogid == DIALOG_CONFIG_SET_GA_ALPHA && response) {
+	    format(GroupAccessPassword[0], 25, "%s", inputtext);
+	    new str[128];
+		format(str, sizeof(str), "%s "COL_PRIM"has changed the alpha group access", Player[playerid][Name]);
+		SendClientMessageToAll(-1, str);
+	    return ShowConfigDialog(playerid);
+	}
+	
+	if(dialogid == DIALOG_CONFIG_SET_GA_BETA && response) {
+	    format(GroupAccessPassword[1], 25, "%s", inputtext);
+	    new str[128];
+		format(str, sizeof(str), "%s "COL_PRIM"has changed the beta group access", Player[playerid][Name]);
+		SendClientMessageToAll(-1, str);
+	    return ShowConfigDialog(playerid);
+	}
+	
+	if(dialogid == DIALOG_CONFIG_SET_GA_ASUB && response) {
+	    format(GroupAccessPassword[2], 25, "%s", inputtext);
+	    new str[128];
+		format(str, sizeof(str), "%s "COL_PRIM"has changed the alpha sub group access", Player[playerid][Name]);
+		SendClientMessageToAll(-1, str);
+	    return ShowConfigDialog(playerid);
+	}
+	
+	if(dialogid == DIALOG_CONFIG_SET_GA_BSUB && response) {
+	    format(GroupAccessPassword[3], 25, "%s", inputtext);
+	    new str[128];
+		format(str, sizeof(str), "%s "COL_PRIM"has changed the beta sub group access", Player[playerid][Name]);
+		SendClientMessageToAll(-1, str);
+	    return ShowConfigDialog(playerid);
+	}
+	
+	if(dialogid == DIALOG_GROUPACCESS && response && strlen(inputtext))
+	{
+	    new groupID = Player[playerid][RequestedClass]-1;
+		new tempstr[5];
+	
+	    if(strcmp(inputtext,GroupAccessPassword[groupID])!=0)
+		{
+			return ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Your entered password was invalid.\n\nPlease enter the group password:", "Submit", "Cancel");
+  		}
+  		
+  		format(tempstr,5,"ga_%d", groupID);
+  		SetPVarString(playerid, tempstr, inputtext);
+  		OnPlayerRequestSpawn(playerid);
+  		
+	    return 1;
+	}
+	
+	if(dialogid == DIALOG_CONFIG_SET_GA_REF && response) {
+	    format(GroupAccessPassword[4], 25, "%s", inputtext);
+	    new str[128];
+		format(str, sizeof(str), "%s "COL_PRIM"has changed the referee group access", Player[playerid][Name]);
+		SendClientMessageToAll(-1, str);
+	    return ShowConfigDialog(playerid);
 	}
 
 	if(dialogid == DIALOG_CONFIG_SET_TEAM_SKIN) {
@@ -6146,7 +6263,7 @@ YCMD:minfps(playerid, params[], help)
 	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/minfps [Minimum FPS]");
 
 	new iPacket = strval(params);
-	if(iPacket < 40 || iPacket > 90) return SendErrorMessage(playerid,"FPS limit can be between 40 and 90 maximum.");
+	if(iPacket < 20 || iPacket > 90) return SendErrorMessage(playerid,"FPS limit can be between 20 and 90 maximum.");
 
 	Min_FPS = iPacket;
 
@@ -9257,6 +9374,13 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			#endif
 		}
 	}
+	if(Current == -1 && Player[playerid][Playing] == false && LobbyGuns == false && PRESSED(4))
+	{
+	    SendErrorMessage(playerid,"DM is disabled in the lobby");
+	    TogglePlayerControllable(playerid, 0);
+	    TogglePlayerControllable(playerid, 1);
+		return 0;
+ 	}
 	// - Low priority key functions
     CheckKnifeSync(playerid, newkeys);
 	    
