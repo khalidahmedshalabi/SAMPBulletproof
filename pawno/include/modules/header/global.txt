@@ -33,6 +33,7 @@ new WeaponStatsStr[3000];
 new ServerPass[MAX_SERVER_PASS_LENGH + 9]; // contains "password " plus the password itself
 new hostname[64];
 new AKAString[1024];
+new GroupAccessPassword[5][25];
 
 new bool:PlayerOnInterface[MAX_PLAYERS char];
 new bool:AllMuted = false;
