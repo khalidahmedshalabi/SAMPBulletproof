@@ -372,18 +372,17 @@ public OnPlayerRequestSpawn(playerid)
 	}
 	if(Player[playerid][Logged] == true) 
 	{
-		new groupID = Player[playerid][RequestedClass]-1;
-		new tempstr[5], enteredPW[25];
-
-		format(tempstr,5,"ga_%d", groupID);
-		GetPVarString(playerid, tempstr, enteredPW, 25);
-		if(strlen(GroupAccessPassword[groupID])>0 && (strcmp(enteredPW,GroupAccessPassword[groupID]) != 0 || isnull(enteredPW)))
-		{
-			ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Please enter the group password:", "Submit", "Cancel");
-		    return 0;
+	    if(Player[playerid][RequestedClass] > 0) // If the requested class is a valid class, not auto-assign
+	    {
+			new groupID = Player[playerid][RequestedClass] - 1;
+			if(strlen(GroupAccessPassword[groupID]) > 0 && (strcmp(RequestedGroupPass[playerid][groupID], GroupAccessPassword[groupID]) != 0 || isnull(RequestedGroupPass[playerid][groupID])))
+			{
+				ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Please enter the group password:", "Submit", "Cancel");
+                OnPlayerRequestClass(playerid, Player[playerid][RequestedClass]);
+				return 0;
+			}
 		}
-		
-	    HideMessageBox(playerid, MSGBOX_TYPE_TOP);
+		HideMessageBox(playerid, MSGBOX_TYPE_TOP);
 		SpawnConnectedPlayer(playerid, Player[playerid][RequestedClass]);
 		return 1;
 	}
@@ -2930,39 +2929,52 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_MIN_FPS, DIALOG_STYLE_INPUT, ""COL_PRIM"Set Minimum FPS", "Set the minimum FPS:", "OK", "Cancel");
 				}
 				case 7: {
-				    new string[1700];
-					string = "";
+				    new string[90];
 
-					if(strlen(GroupAccessPassword[0]) > 0) {
-					    strcat(string, "{FF6666}ALPHA");
-	 				} else {
-	 				    strcat(string, "{66FF66}ALPHA");
+					if(strlen(GroupAccessPassword[0]) > 0)
+					{
+						format(string, sizeof string, "{FF6666}%s", TeamName[ATTACKER]);
+	 				}
+				 	else
+				 	{
+				 	    format(string, sizeof string, "{66FF66}%s", TeamName[ATTACKER]);
 	 				}
 
-					if(strlen(GroupAccessPassword[1]) > 0) {
-					    strcat(string, "\n{FF6666}BETA");
-	 				} else {
-	 				    strcat(string, "\n{66FF66}BETA");
+					if(strlen(GroupAccessPassword[1]) > 0)
+					{
+						format(string, sizeof string, "%s\n{FF6666}%s", string, TeamName[DEFENDER]);
+	 				}
+				 	else
+				 	{
+				 	    format(string, sizeof string, "%s\n{66FF66}%s", string, TeamName[DEFENDER]);
 	 				}
 
-	 				if(strlen(GroupAccessPassword[2]) > 0) {
-					    strcat(string, "\n{FF6666}ALPHA SUB");
-	 				} else {
-	 				    strcat(string, "\n{66FF66}ALPHA SUB");
+	 				if(strlen(GroupAccessPassword[2]) > 0)
+					{
+						format(string, sizeof string, "%s\n{FF6666}%s Sub", string, TeamName[ATTACKER]);
+	 				}
+				 	else
+				 	{
+				 	    format(string, sizeof string, "%s\n{66FF66}%s Sub", string, TeamName[ATTACKER]);
 	 				}
 
-	 				if(strlen(GroupAccessPassword[3]) > 0) {
-					    strcat(string, "\n{FF6666}BETA SUB");
-	 				} else {
-	 				    strcat(string, "\n{66FF66}BETA SUB");
+	 				if(strlen(GroupAccessPassword[3]) > 0)
+					{
+						format(string, sizeof string, "%s\n{FF6666}%s Sub", string, TeamName[DEFENDER]);
+	 				}
+				 	else
+				 	{
+				 	    format(string, sizeof string, "%s\n{66FF66}%s Sub", string, TeamName[DEFENDER]);
 	 				}
 
-	 				if(strlen(GroupAccessPassword[4]) > 0) {
-					    strcat(string, "\n{FF6666}REFEREE");
-	 				} else {
-	 				    strcat(string, "\n{66FF66}REFEREE");
+	 				if(strlen(GroupAccessPassword[4]) > 0)
+					{
+						format(string, sizeof string, "%s\n{FF6666}Referee", string);
 	 				}
-
+				 	else
+				 	{
+				 	    format(string, sizeof string, "%s\n{66FF66}Referee", string);
+	 				}
 	 				ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA, DIALOG_STYLE_LIST, ""COL_PRIM"Config Settings", string, "OK", "Cancel");
 	 				return 1;
 				}
@@ -3077,10 +3089,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        case 3: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_BSUB, DIALOG_STYLE_INPUT, ""COL_PRIM"BETA SUB PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
 	        case 4: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_REF, DIALOG_STYLE_INPUT, ""COL_PRIM"REFEREE PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
 	    }
+	    return 1;
 	} 
 	
 	if(dialogid == DIALOG_CONFIG_SET_GA_ALPHA && response) {
-	    format(GroupAccessPassword[0], 25, "%s", inputtext);
+	    if(strlen(inputtext) > MAX_GROUP_ACCESS_PASSWORD_LENGTH)
+	    {
+	        SendErrorMessage(playerid, "The password you entered is quite long. Try again with a shorter one!", MSGBOX_TYPE_BOTTOM);
+	        return ShowConfigDialog(playerid);
+	    }
+	    format(GroupAccessPassword[0], MAX_GROUP_ACCESS_PASSWORD_LENGTH, "%s", inputtext);
 	    new str[128];
 		format(str, sizeof(str), "%s "COL_PRIM"has changed the alpha group access", Player[playerid][Name]);
 		SendClientMessageToAll(-1, str);
@@ -3088,7 +3106,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	}
 	
 	if(dialogid == DIALOG_CONFIG_SET_GA_BETA && response) {
-	    format(GroupAccessPassword[1], 25, "%s", inputtext);
+		if(strlen(inputtext) > MAX_GROUP_ACCESS_PASSWORD_LENGTH)
+	    {
+	        SendErrorMessage(playerid, "The password you entered is quite long. Try again with a shorter one!", MSGBOX_TYPE_BOTTOM);
+	        return ShowConfigDialog(playerid);
+	    }
+	    format(GroupAccessPassword[1], MAX_GROUP_ACCESS_PASSWORD_LENGTH, "%s", inputtext);
 	    new str[128];
 		format(str, sizeof(str), "%s "COL_PRIM"has changed the beta group access", Player[playerid][Name]);
 		SendClientMessageToAll(-1, str);
@@ -3096,7 +3119,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	}
 	
 	if(dialogid == DIALOG_CONFIG_SET_GA_ASUB && response) {
-	    format(GroupAccessPassword[2], 25, "%s", inputtext);
+        if(strlen(inputtext) > MAX_GROUP_ACCESS_PASSWORD_LENGTH)
+	    {
+	        SendErrorMessage(playerid, "The password you entered is quite long. Try again with a shorter one!", MSGBOX_TYPE_BOTTOM);
+	        return ShowConfigDialog(playerid);
+	    }
+		format(GroupAccessPassword[2], MAX_GROUP_ACCESS_PASSWORD_LENGTH, "%s", inputtext);
 	    new str[128];
 		format(str, sizeof(str), "%s "COL_PRIM"has changed the alpha sub group access", Player[playerid][Name]);
 		SendClientMessageToAll(-1, str);
@@ -3104,7 +3132,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	}
 	
 	if(dialogid == DIALOG_CONFIG_SET_GA_BSUB && response) {
-	    format(GroupAccessPassword[3], 25, "%s", inputtext);
+        if(strlen(inputtext) > MAX_GROUP_ACCESS_PASSWORD_LENGTH)
+	    {
+	        SendErrorMessage(playerid, "The password you entered is quite long. Try again with a shorter one!", MSGBOX_TYPE_BOTTOM);
+	        return ShowConfigDialog(playerid);
+	    }
+		format(GroupAccessPassword[3], MAX_GROUP_ACCESS_PASSWORD_LENGTH, "%s", inputtext);
 	    new str[128];
 		format(str, sizeof(str), "%s "COL_PRIM"has changed the beta sub group access", Player[playerid][Name]);
 		SendClientMessageToAll(-1, str);
@@ -3114,22 +3147,24 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	if(dialogid == DIALOG_GROUPACCESS && response && strlen(inputtext))
 	{
 	    new groupID = Player[playerid][RequestedClass]-1;
-		new tempstr[5];
 	
 	    if(strcmp(inputtext,GroupAccessPassword[groupID])!=0)
 		{
 			return ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Your entered password was invalid.\n\nPlease enter the group password:", "Submit", "Cancel");
   		}
   		
-  		format(tempstr,5,"ga_%d", groupID);
-  		SetPVarString(playerid, tempstr, inputtext);
-  		OnPlayerRequestSpawn(playerid);
-  		
+  		format(RequestedGroupPass[playerid][groupID], MAX_GROUP_ACCESS_PASSWORD_LENGTH, "%s", inputtext);
+	  	OnPlayerRequestSpawn(playerid);
 	    return 1;
 	}
 	
 	if(dialogid == DIALOG_CONFIG_SET_GA_REF && response) {
-	    format(GroupAccessPassword[4], 25, "%s", inputtext);
+	    if(strlen(inputtext) > MAX_GROUP_ACCESS_PASSWORD_LENGTH)
+	    {
+	        SendErrorMessage(playerid, "The password you entered is quite long. Try again with a shorter one!", MSGBOX_TYPE_BOTTOM);
+	        return ShowConfigDialog(playerid);
+	    }
+	    format(GroupAccessPassword[4], MAX_GROUP_ACCESS_PASSWORD_LENGTH, "%s", inputtext);
 	    new str[128];
 		format(str, sizeof(str), "%s "COL_PRIM"has changed the referee group access", Player[playerid][Name]);
 		SendClientMessageToAll(-1, str);

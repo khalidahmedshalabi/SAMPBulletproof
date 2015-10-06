@@ -26,14 +26,18 @@ ShowConfigDialog(playerid) {
 	strcat(string, "\n"COL_PRIM"Min FPS");
 	
 	new isrestricted = 0;
-	for(new i=0;i<sizeof(GroupAccessPassword);i++)
+	for(new i = 0; i < sizeof(GroupAccessPassword);i ++)
 	{
-		if(strlen(GroupAccessPassword[i])>0) isrestricted = 1;
+		if(strlen(GroupAccessPassword[i]) > 0)
+		{
+			isrestricted = 1;
+			break;
+		}
 	}
 	if(isrestricted == 1) {
-		strcat(string, "\n{FF6666}Access restricted");
+		strcat(string, "\n{FF6666}Group Access restricted");
 	} else {
-		strcat(string, "\n{66FF66}Access unrestricted");
+		strcat(string, "\n{66FF66}Group Access unrestricted");
 	}
 
 	if(ServerLocked == true) {
