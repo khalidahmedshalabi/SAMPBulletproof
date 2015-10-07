@@ -3092,7 +3092,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    return 1;
 	} 
 	
-	if(dialogid == DIALOG_CONFIG_SET_GA_ALPHA && response) {
+	if(dialogid == DIALOG_CONFIG_SET_GA_ALPHA)
+	{
+	    if(!response) return ShowConfigDialog(playerid);
 	    if(strlen(inputtext) > MAX_GROUP_ACCESS_PASSWORD_LENGTH)
 	    {
 	        SendErrorMessage(playerid, "The password you entered is quite long. Try again with a shorter one!", MSGBOX_TYPE_BOTTOM);
@@ -3105,7 +3107,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    return ShowConfigDialog(playerid);
 	}
 	
-	if(dialogid == DIALOG_CONFIG_SET_GA_BETA && response) {
+	if(dialogid == DIALOG_CONFIG_SET_GA_BETA)
+	{
+	    if(!response) return ShowConfigDialog(playerid);
 		if(strlen(inputtext) > MAX_GROUP_ACCESS_PASSWORD_LENGTH)
 	    {
 	        SendErrorMessage(playerid, "The password you entered is quite long. Try again with a shorter one!", MSGBOX_TYPE_BOTTOM);
@@ -3118,7 +3122,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    return ShowConfigDialog(playerid);
 	}
 	
-	if(dialogid == DIALOG_CONFIG_SET_GA_ASUB && response) {
+	if(dialogid == DIALOG_CONFIG_SET_GA_ASUB)
+	{
+	    if(!response) return ShowConfigDialog(playerid);
         if(strlen(inputtext) > MAX_GROUP_ACCESS_PASSWORD_LENGTH)
 	    {
 	        SendErrorMessage(playerid, "The password you entered is quite long. Try again with a shorter one!", MSGBOX_TYPE_BOTTOM);
@@ -3131,7 +3137,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    return ShowConfigDialog(playerid);
 	}
 	
-	if(dialogid == DIALOG_CONFIG_SET_GA_BSUB && response) {
+	if(dialogid == DIALOG_CONFIG_SET_GA_BSUB)
+	{
+	    if(!response) return ShowConfigDialog(playerid);
         if(strlen(inputtext) > MAX_GROUP_ACCESS_PASSWORD_LENGTH)
 	    {
 	        SendErrorMessage(playerid, "The password you entered is quite long. Try again with a shorter one!", MSGBOX_TYPE_BOTTOM);
@@ -3144,8 +3152,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    return ShowConfigDialog(playerid);
 	}
 	
-	if(dialogid == DIALOG_GROUPACCESS && response && strlen(inputtext))
+	if(dialogid == DIALOG_GROUPACCESS)
 	{
+	    if(!response || !strlen(inputtext)) return ShowConfigDialog(playerid);
 	    new groupID = Player[playerid][RequestedClass]-1;
 	
 	    if(strcmp(inputtext,GroupAccessPassword[groupID])!=0)
@@ -3158,7 +3167,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    return 1;
 	}
 	
-	if(dialogid == DIALOG_CONFIG_SET_GA_REF && response) {
+	if(dialogid == DIALOG_CONFIG_SET_GA_REF && response)
+	{
+	    if(!response) return ShowConfigDialog(playerid);
 	    if(strlen(inputtext) > MAX_GROUP_ACCESS_PASSWORD_LENGTH)
 	    {
 	        SendErrorMessage(playerid, "The password you entered is quite long. Try again with a shorter one!", MSGBOX_TYPE_BOTTOM);
