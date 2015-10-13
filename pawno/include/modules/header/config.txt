@@ -21,6 +21,7 @@ new bool:ShortCuts = false;
 new bool:LobbyGuns = true;
 new bool:ServerLocked 	= false;
 new bool:PermLocked 	= false;
+new bool:DefendersSeeVehiclesBlips	=	true;
 
 new RoundHP = 100, RoundAR = 100;
 

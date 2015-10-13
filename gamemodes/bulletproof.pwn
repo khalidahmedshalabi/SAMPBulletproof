@@ -3074,6 +3074,34 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 				    ShowConfigDialog(playerid);
 				}
+				case 15:
+				{
+				    if(!IsACPluginLoaded())
+					{
+						SendErrorMessage(playerid, "Anticheat plugin is not loaded.", MSGBOX_TYPE_BOTTOM);
+						ShowConfigDialog(playerid);
+					}
+					else if(!IsACEnabled())
+					{
+						SendErrorMessage(playerid, "Anticheat is not enabled.", MSGBOX_TYPE_BOTTOM);
+						ShowConfigDialog(playerid);
+					}
+					else
+					{
+					    if(DefendersSeeVehiclesBlips == false)
+						{
+						    DefendersSeeVehiclesBlips = true;
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"defenders see vehicle blips{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+						}
+						else
+						{
+						    DefendersSeeVehiclesBlips = false;
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"defenders see vehicle blips{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+						}
+					}
+				}
 	        }
 	    }
 	    return 1;

@@ -1740,6 +1740,8 @@ SpawnPlayersInArena()
 			        SpawnPlayerEx(i);
                     SetPlayerTeam(i, 1);
                     ShowTeamBarsForPlayer(i);
+					if(IsACPluginLoaded() && IsACEnabled())
+						TogglePlayerVehicleBlips(i, true);
 				} case DEFENDER: {
 				    if(AInterior[Current] == 0) SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], ADefenderSpawn[Current][0] + random(6), ADefenderSpawn[Current][1] + random(6), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
         			else SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], ADefenderSpawn[Current][0] + random(2), ADefenderSpawn[Current][1] + random(2), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
@@ -1748,6 +1750,8 @@ SpawnPlayersInArena()
 					SpawnPlayerEx(i);
 					SetPlayerTeam(i, 2);
 			        ShowTeamBarsForPlayer(i);
+					if(IsACPluginLoaded() && IsACEnabled())
+						TogglePlayerVehicleBlips(i, DefendersSeeVehiclesBlips);
 				}
 			}
             SetCameraBehindPlayer(i);
@@ -1847,6 +1851,8 @@ public AddPlayerToArena(playerid)
 
             SetPlayerTeam(playerid, 1);
             ShowTeamBarsForPlayer(playerid);
+			if(IsACPluginLoaded() && IsACEnabled())
+				TogglePlayerVehicleBlips(playerid, true);
 		} case DEFENDER: {
 		    SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], ADefenderSpawn[Current][0] + random(2), ADefenderSpawn[Current][1] + random(2), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 
@@ -1854,6 +1860,8 @@ public AddPlayerToArena(playerid)
 	        SetPlayerColor(playerid, DEFENDER_PLAYING);
 	        SetPlayerTeam(playerid, 2);
 	        ShowTeamBarsForPlayer(playerid);
+			if(IsACPluginLoaded() && IsACEnabled())
+				TogglePlayerVehicleBlips(playerid, DefendersSeeVehiclesBlips);
 		} case REFEREE: {
 	        SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], ACPSpawn[Current][0] + random(2), ACPSpawn[Current][1] + random(2), ACPSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 			SpawnPlayerEx(playerid);
@@ -2114,6 +2122,8 @@ SpawnPlayersInBase()
            			SetPlayerMapIcon(i, 59, BAttackerSpawn[Current][0], BAttackerSpawn[Current][1], BAttackerSpawn[Current][2], 59, 0, MAPICON_GLOBAL);
                     SetPlayerTeam(i, ATTACKER);
                     ShowTeamBarsForPlayer(i);
+					if(IsACPluginLoaded() && IsACEnabled())
+						TogglePlayerVehicleBlips(i, true);
 				} case DEFENDER: {
 			        if(BInterior[Current] == 0) SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], BDefenderSpawn[Current][0] + random(6), BDefenderSpawn[Current][1] + random(6), BDefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 					else  SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], BDefenderSpawn[Current][0] + random(2), BDefenderSpawn[Current][1] + random(2), BDefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
@@ -2124,6 +2134,8 @@ SpawnPlayersInBase()
 					SpawnPlayerEx(i);
 			        SetPlayerTeam(i, DEFENDER);
 			        ShowTeamBarsForPlayer(i);
+					if(IsACPluginLoaded() && IsACEnabled())
+						TogglePlayerVehicleBlips(i, DefendersSeeVehiclesBlips);
 				}
 			}
 
@@ -2221,6 +2233,8 @@ public AddPlayerToBase(playerid)
    			SetPlayerMapIcon(playerid, 59, BAttackerSpawn[Current][0], BAttackerSpawn[Current][1], BAttackerSpawn[Current][2], 59, 0, MAPICON_GLOBAL);
             SetPlayerTeam(playerid, ATTACKER);
             ShowTeamBarsForPlayer(playerid);
+			if(IsACPluginLoaded() && IsACEnabled())
+				TogglePlayerVehicleBlips(playerid, true);
 		} case DEFENDER: {
 	        SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], BDefenderSpawn[Current][0] + random(2), BDefenderSpawn[Current][1] + random(2), BDefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 			SpawnPlayerEx(playerid);
@@ -2228,6 +2242,8 @@ public AddPlayerToBase(playerid)
 	        SetPlayerColor(playerid, DEFENDER_PLAYING);
 	        SetPlayerTeam(playerid, DEFENDER);
 	        ShowTeamBarsForPlayer(playerid);
+			if(IsACPluginLoaded() && IsACEnabled())
+				TogglePlayerVehicleBlips(playerid, DefendersSeeVehiclesBlips);
 		} case REFEREE: {
 	        SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], BCPSpawn[Current][0] + random(2), BCPSpawn[Current][1] + random(2), BCPSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 			SpawnPlayerEx(playerid);
@@ -2433,6 +2449,8 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 			Player[i][WeaponPicked] = 0;
 			Player[i][TimesSpawned] = 0;
 			RemovePlayerMapIcon(i, 59);
+			if(IsACPluginLoaded() && IsACEnabled())
+				TogglePlayerVehicleBlips(i, true);
 
 			PlayerTextDrawHide(i, AreaCheckTD[i]);
 			PlayerTextDrawHide(i, AreaCheckBG[i]);
