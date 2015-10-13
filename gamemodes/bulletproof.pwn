@@ -97,7 +97,7 @@ native IsValidVehicle(vehicleid);
 #include "modules\src\gunswitch.inc"
 #endif
 #include "modules\src\weaponbinds.inc"
-#include "modules\src\ac.inc"
+#include "modules\src\ac_addons.inc"
 #include "modules\src\vote.inc"
 
 main()

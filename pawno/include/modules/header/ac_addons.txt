@@ -1,0 +1,14 @@
+/*
+		AC-related work
+*/
+
+#define SCREENSHOT_TAKE_INTERVAL_LIMIT		2000	// Least acceptable time between taking several screenshots.
+#define SCREENSHOT_TAKE_MAX_WARNINGS		2		// How many times a player should be warned for abusing F8 before being kicked.
+
+enum PlayerACData_STRUCT
+{
+	LastTakenScreenshot,
+	ScreenshotWarnings
+}
+
+new PlayerACData[MAX_PLAYERS][PlayerACData_STRUCT];
