@@ -1924,12 +1924,9 @@ QuitDM(playerid)
     return 1;
 }
 
-IsEven(integer)
-{
-	if(integer % 2 == 0)
-		 return 1; // even
-	return 0; // odd
-}
+// Checks whether an integer is even or odd
+#define IsOdd(%0) ((%0)&1)
+#define IsEven(%0) (!IsOdd(%0))
 
 IsSafeGametext(text[])
 {
@@ -1939,7 +1936,7 @@ IsSafeGametext(text[])
 		if(text[i] == '~')
 			cnt ++;
 	}
-	if(IsEven(cnt) == 0)
+	if(!IsEven(cnt))
 		return 0;
 	return 1;
 }
