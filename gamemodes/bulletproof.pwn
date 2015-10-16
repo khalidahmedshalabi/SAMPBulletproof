@@ -1145,6 +1145,8 @@ public OnPlayerEnterCheckpoint(playerid)
 						}
 						TextDrawSetString(EN_CheckPoint, iString);
 						TextDrawShowForAll(EN_CheckPoint);
+						TextDrawColor(timerCircleTD, 0xFF616133);
+						TextDrawShowForAll(timerCircleTD);
 
 					}
 					case DEFENDER:
@@ -1203,6 +1205,14 @@ public OnPlayerEnterCheckpoint(playerid)
 						}
 						TextDrawSetString(EN_CheckPoint, iString);
 						TextDrawShowForAll(EN_CheckPoint);
+						switch(Player[playerid][Team])
+						{
+						    case ATTACKER:
+						        TextDrawColor(timerCircleTD, 0xFF616133);
+							case DEFENDER:
+							    TextDrawColor(timerCircleTD, 0x9698FF33);
+						}
+						TextDrawShowForAll(timerCircleTD);
 			        }
 					default: // cp is being taken by some team
 					{
@@ -1276,6 +1286,8 @@ public OnPlayerLeaveCheckpoint(playerid)
 				    PlayersInCP = 0;
 				    CurrentCPTime = ConfigCPTime + 1;
 				    TextDrawHideForAll(EN_CheckPoint);
+                    TextDrawColor(timerCircleTD, 0x00000033);
+					TextDrawShowForAll(timerCircleTD);
 				}
 				else
 				{
@@ -1313,6 +1325,8 @@ public OnPlayerLeaveCheckpoint(playerid)
 				    PlayersInCP = 0;
 				    CurrentCPTime = ConfigCPTime + 1;
 				    TextDrawHideForAll(EN_CheckPoint);
+				    TextDrawColor(timerCircleTD, 0x00000033);
+					TextDrawShowForAll(timerCircleTD);
 				}
 				else
 				{

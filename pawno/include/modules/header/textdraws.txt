@@ -63,7 +63,7 @@ new Text: LeagueRoundResultTD;
 
 new Text:leftRedBG;
 new Text:rightBlueBG;
-new Text:timerCenterTD, bool:timerColonShown = false;
+new Text:timerCenterTD, Text:timerCircleTD, bool:timerColonShown = false;
 new Text:leftTeamData;
 new Text:rightTeamData;
 new Text:centerTeamNames;
