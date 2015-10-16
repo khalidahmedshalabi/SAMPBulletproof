@@ -256,12 +256,9 @@ SetAP(playerid, amount)
 		if(Player[playerid][Playing])
 		{
 			SetPlayerScore(playerid, Player[playerid][pHealth] + Player[playerid][pArmour]);
-			ResetPlayerMoney(playerid);
-			GivePlayerMoney(playerid, -(Player[playerid][pHealth] + Player[playerid][pArmour]));
 		}
 		else
 		{
-			ResetPlayerMoney(playerid);
 			if(GetPlayerScore(playerid) != 0)
 				SetPlayerScore(playerid, 0);
 		}
