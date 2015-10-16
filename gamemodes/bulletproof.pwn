@@ -6829,12 +6829,12 @@ YCMD:defaultskins(playerid, params[], help)
 	}
 	new iString[128];
 
-	Skin[ATTACKER] = 53;
-	format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'Attacker Skin'", 53);
+	Skin[ATTACKER] = 170;
+	format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'Attacker Skin'", 170);
     db_free_result(db_query(sqliteconnection, iString));
 
-	Skin[DEFENDER] = 230;
-	format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'Defender Skin'", 230);
+	Skin[DEFENDER] = 177;
+	format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'Defender Skin'", 177);
     db_free_result(db_query(sqliteconnection, iString));
 
 	Skin[REFEREE] = 51;
