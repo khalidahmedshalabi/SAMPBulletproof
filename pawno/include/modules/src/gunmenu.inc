@@ -233,6 +233,10 @@ ShowGunmenuDialog(playerid)
 				{
 					format(str, sizeof str, "%s\n{DB5858}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
 				}
+				else if(GunmenuData[i][GunLimit] <= 0) // not available
+				{
+					format(str, sizeof str, "%s\n{696969}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
+				}
 				else // available
 				{
 					format(str, sizeof str, "%s\n{50EB50}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
@@ -502,6 +506,12 @@ bool:IsGunSelectionOkay(playerid, weaponid, index)
 		}
 		case ARENA:
 		{
+			// Check if limit exceeded
+			if(GunmenuData[index][TimesSelected][team] == GunmenuData[index][GunLimit])
+			{
+				SendErrorMessage(playerid, sprintf("This weapon is no longer available because limit has exceeded. [%d/%d]", GunmenuData[index][GunLimit], GunmenuData[index][GunLimit]), messagebox_type);
+				return false;
+			}
 			// Make sure players won't have Spas in Arenas
 			if(weaponid == WEAPON_SHOTGSPA)
 			{
