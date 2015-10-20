@@ -5,8 +5,9 @@
 #define GM_NAME				"Bulletproof 0.1-RC2"
 #define GM_WEBSITE			"www.infinite-gaming.ml/khk/bulletproofgm"
 
-#define GTAV_SWITCH_MENU	0	// Toggles the gta v switch menu (gunswitch library)
-#define MATCH_SYNC      	0   // (Beta) Uploads each match data somewhere so that it can be easily displayed in a website.
+#define GTAV_SWITCH_MENU			0	// Toggles the gta v switch menu (gunswitch library)
+#define MATCH_SYNC      			0   // (Beta) Uploads each match data somewhere so that it can be easily displayed in a website.
+#define SAFE_GAMETEXT_AUTO_CHECK	0 	// When enabled, most of textdraw and gametext functions are hooked to automatically reject unsafe use of tildes.
 
 // Limits
 #define MAX_TEAMS 			6

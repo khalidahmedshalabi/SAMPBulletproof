@@ -3,6 +3,10 @@
 		No more crash due to bad use of '~' character
 */
 
+#include "modules\header\this_core.txt"
+
+#if SAFE_GAMETEXT_AUTO_CHECK != 0
+
 #include "modules\header\hooking\safegametext.txt"
 
 // Hooked some functions to reject unsafe game-texts.
@@ -101,3 +105,5 @@ stock _HOOKED_PlayerTextDrawSetString(playerid, PlayerText:text, string[])
 #endif
 
 #define PlayerTextDrawSetString _HOOKED_PlayerTextDrawSetString
+
+#endif 
