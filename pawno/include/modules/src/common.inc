@@ -441,6 +441,8 @@ RecountPlayersOnCP()
 		TeamCapturingCP = NON;
 	    CurrentCPTime = ConfigCPTime + 1;
 	    TextDrawHideForAll(EN_CheckPoint);
+		TextDrawColor(timerCircleTD, 0x00000033);
+		TextDrawShowForAll(timerCircleTD);
 	}
 	return PlayersInCP;
 }
