@@ -37,7 +37,7 @@ SendErrorMessage(playerid, text[], messagebox_type = MSGBOX_TYPE_MIDDLE)
 {
 	if(messagebox_type < 0 || messagebox_type == MAX_MSGBOX_TYPES)
 		return 0;
-	PlayerPlaySound(playerid, 5206, 0.0, 0.0, 0.0);
+	PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
 	MessageBox(playerid, messagebox_type, "~r~~h~Error", text, 5000);
 	return 1;
 }
