@@ -507,9 +507,9 @@ bool:IsGunSelectionOkay(playerid, weaponid, index)
 		case ARENA:
 		{
 			// Check if limit exceeded
-			if(GunmenuData[index][TimesSelected][team] == GunmenuData[index][GunLimit])
+			if(GunmenuData[index][GunLimit] <= 0)
 			{
-				SendErrorMessage(playerid, sprintf("This weapon is no longer available because limit has exceeded. [%d/%d]", GunmenuData[index][GunLimit], GunmenuData[index][GunLimit]), messagebox_type);
+				SendErrorMessage(playerid, "This weapon is disabled", messagebox_type);
 				return false;
 			}
 			// Make sure players won't have Spas in Arenas
