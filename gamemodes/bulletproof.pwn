@@ -2701,6 +2701,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			HideMatchScoreBoard();
 
 			WarMode = false;
+			ToggleLeagueServer(false);
 
 			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has disabled the Match-Mode.", Player[playerid][Name]);
 			SendClientMessageToAll(-1, iString);
@@ -2911,14 +2912,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	            }
 	            case 1: {
 	                #if defined _league_included
-                 if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+                 	if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
 	                #endif
 	                format(iString, sizeof(iString), "%sAttacker Team\n%sDefender Team", TextColor[ATTACKER], TextColor[DEFENDER]);
 	                ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_TEAM_SKIN, DIALOG_STYLE_LIST, ""COL_PRIM"Select team", iString, "OK", "Cancel");
 	            }
 				case 2: {
 				    #if defined _league_included
-        if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+    				if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
 				    #endif
 				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_AAD, DIALOG_STYLE_LIST, ""COL_PRIM"A/D Config", ""COL_PRIM"Health\n"COL_PRIM"Armour\n"COL_PRIM"Round Time\n"COL_PRIM"CP Time", "OK", "Cancel");
 				}
@@ -2927,13 +2928,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				case 4: {
 				    #if defined _league_included
-        if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+        			if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
 				    #endif
 				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_MAX_PING, DIALOG_STYLE_INPUT, ""COL_PRIM"Set max Ping", "Set the max ping:", "OK", "Cancel");
 				}
 				case 5: {
                     #if defined _league_included
-        if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+        			if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
 				    #endif
 				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_MAX_PACKET, DIALOG_STYLE_INPUT, ""COL_PRIM"Set max Packetloss", "Set the max packetloss:", "OK", "Cancel");
 				}
@@ -3115,6 +3116,31 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							SendClientMessageToAll(-1, iString);
 						}
 					}
+				}
+				case 16:
+				{
+				    #if defined _league_included
+				    //if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+				    if(WarMode == true && LeagueServer != true) return SendErrorMessage(playerid, "Can't use this when match mode is on.");
+				    if(Current != -1) return SendErrorMessage(playerid, "Can't use this while a round is in progress.");
+				    switch(LeagueServer)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"league server{FFFFFF} option (type /ready to start a league match).", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							ToggleLeagueServer(true);
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"league server{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							ToggleLeagueServer(false);
+						}
+				    }
+					#else
+					SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
+					#endif
 				}
 	        }
 	    }
@@ -5242,6 +5268,30 @@ YCMD:leaguehelp(playerid, params[], help)
  	strcat(str, "Once done of\nclan/player registration, you can easily enable league mode by using /league clan\n\n\n");
 	strcat(str, ""COL_PRIM"How to start a league match: funteams (ft)\n\n{FFFFFF}Make sure players are logged into their league accounts, enable match mode, balance teams and then /league ft");
 	ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "League mode help", str, "That's cool!", "");
+	return 1;
+}
+
+YCMD:ready(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "request join to a league match.");
+	    return 1;
+	}
+    #if defined _league_included
+    if(LeagueServer != true) return SendErrorMessage(playerid,"This command is disabled. League server option has to be enabled from configs first.");
+    if(Current != -1) return SendErrorMessage(playerid,"Can't use this command while round is on.");
+    if(WarMode == true && LeagueServer != true) return SendErrorMessage(playerid,"Can't use this command while match mode is on.");
+	if(LeagueMode == true) return SendErrorMessage(playerid,"League-mode is already on.");
+	if(!Player[playerid][LeagueLogged]) return SendErrorMessage(playerid,"You're not logged into your league account or you don't have one.");
+	if(Player[playerid][Team] != ATTACKER && Player[playerid][Team] != DEFENDER)
+	    return SendErrorMessage(playerid, "You gotta be in either attacker or defender team to do this.");
+
+	PlayerVoteReadyLeague(playerid);
+	
+    #else
+    SendErrorMessage(playerid, sprintf("This version is not permitted to run league matches (developer version or an ugly edit). Visit %s to have the right version for this!", GM_WEBSITE));
+    #endif
 	return 1;
 }
 

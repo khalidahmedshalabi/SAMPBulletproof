@@ -2917,6 +2917,7 @@ public WarEnded()
 			}
 		}
 	}
+	RestartLeagueReadySystem();
 	#endif
     SetWeaponStatsString();
 

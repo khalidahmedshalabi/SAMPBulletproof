@@ -84,7 +84,12 @@ ShowConfigDialog(playerid) {
 	if(DefendersSeeVehiclesBlips == true)
 		strcat(string, "\n{66FF66}Defenders see vehicle blips [Disable]");
 	else
-		strcat(string, "\n{66FF66}Defenders don't see vehicle blips [Enable]");
+		strcat(string, "\n{FF6666}Defenders don't see vehicle blips [Enable]");
+	
+	if(LeagueServer == true)
+		strcat(string, "\n{66FF66}League server features [Disable]");
+	else
+		strcat(string, "\n{FF6666}League server features [Enable]");
 
     ShowPlayerDialog(playerid, DIALOG_CONFIG, DIALOG_STYLE_LIST, ""COL_PRIM"Config Settings", string, "OK", "Cancel");
     return 1;
