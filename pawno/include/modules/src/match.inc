@@ -1366,6 +1366,8 @@ public OnRCStart()
 	PlayersInCP = 0;
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
+	TextDrawColor(timerCircleTD, 0x00000033);
+	TextDrawShowForAll(timerCircleTD);
 	
 	ResetGunmenuSelections();
 
@@ -1588,6 +1590,8 @@ public OnArenaStart(ArenaID)
 	PlayersInCP = 0;
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
+	TextDrawColor(timerCircleTD, 0x00000033);
+	TextDrawShowForAll(timerCircleTD);
 	
 	ResetGunmenuSelections();
 
@@ -1913,6 +1917,8 @@ public OnBaseStart(BaseID)
 	PlayersInCP = 0;
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
+	TextDrawColor(timerCircleTD, 0x00000033);
+	TextDrawShowForAll(timerCircleTD);
 	
 	ResetGunmenuSelections();
 
