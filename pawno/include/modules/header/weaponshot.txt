@@ -45,7 +45,7 @@ new
 	Iterator:PlayerHasTVisualDmg<MAX_PLAYERS>,				// This array holds the IDs of the players who has a taken-damage textdraw shown for them
 	Iterator:PlayerHasGVisualDmg<MAX_PLAYERS>;				// This array holds the IDs of the players who has a given-damage textdraw shown for them
 	
-new const Float:WEAPON_RANGES_ADD = 12.0;	
+new const Float:WEAPON_RANGES_ADD = 14.0;	
 	
 // Weapon max hitting ranges from Slice's weapon-config inc 
 // Source: https://github.com/oscar-broman/samp-weapon-config
