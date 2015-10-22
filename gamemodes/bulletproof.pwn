@@ -358,6 +358,10 @@ public OnPlayerDisconnect(playerid, reason)
 	// Reset player weapons on gunmenu
 	ResetPlayerGunmenu(playerid, false);
 	#if defined _league_included
+	if(LeagueServer && !LeagueMode)
+	{
+	    UpdateLeagueReadyTextDraw();
+	}
 	if(LeagueMode)
 	{
 	    SaveLeaguePlayerData(playerid);
@@ -7047,6 +7051,7 @@ YCMD:changename(playerid,params[], help)
 				else
 					Player[playerid][NameWithoutTag] = Player[playerid][Name];
 
+                UpdateLeagueReadyTextDraw();
 				#if defined _league_included
                 CheckPlayerLeagueRegister(playerid);
                 #endif

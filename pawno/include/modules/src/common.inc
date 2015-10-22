@@ -421,7 +421,10 @@ public SpawnConnectedPlayer(playerid, team)
 	
 	#if defined _league_included
 	if(LeagueServer)
+	{
 		UpdateLeagueReadyTextDraw();
+		TextDrawShowForPlayer(playerid, LeagueReadyTD);
+	}
 	#endif
 	if(WarMode == true)
 	{
