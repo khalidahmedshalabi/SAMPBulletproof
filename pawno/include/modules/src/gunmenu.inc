@@ -408,7 +408,7 @@ bool:IsGunSelectionOkay(playerid, weaponid, index)
 		case BASE:
 		{
 			// Check if limit exceeded
-			if(GunmenuData[index][TimesSelected][team] == GunmenuData[index][GunLimit])
+			if(GunmenuData[index][TimesSelected][team] >= GunmenuData[index][GunLimit])
 			{
 				SendErrorMessage(playerid, sprintf("This weapon is no longer available because limit has exceeded. [%d/%d]", GunmenuData[index][GunLimit], GunmenuData[index][GunLimit]), messagebox_type);
 				return false;
