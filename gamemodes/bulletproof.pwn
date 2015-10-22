@@ -360,7 +360,7 @@ public OnPlayerDisconnect(playerid, reason)
 	#if defined _league_included
 	if(LeagueServer && !LeagueMode)
 	{
-	    UpdateLeagueReadyTextDraw();
+	    UpdateLeagueReadyTextDraw(playerid);
 	}
 	if(LeagueMode)
 	{
@@ -5159,6 +5159,7 @@ YCMD:leaguestats(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
+	SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"is checking the statistics of league {FFFFFF}(/leaguestats)"));
 	ShowPlayerDialog(playerid, DIALOG_LEAGUE_STATS, DIALOG_STYLE_LIST, "League mini scoreboard",
 		"Most Active Admins/Mods\nTop Clans\nTop Players (Points)\nTop Killers\nMost Active\nTop Punchers\nTop Damage (Overall damage)\nTop Sniper\nTop Deagler\nTop M4\nTop Rifler\nTop AK\nTop Spasser\nTop Shotgun",
 		"View", "Close");
