@@ -61,8 +61,6 @@ InitScriptSecondarySettings()
 	}
 	format(MAIN_TEXT_COLOUR, sizeof MAIN_TEXT_COLOUR, "~l~");
     MAIN_BACKGROUND_COLOUR = 0xEEEEEE33;
-	
-	AddClasses();
 
 	teamskinlist = LoadModelSelectionMenu("skins.txt");
 	return 1;
@@ -75,16 +73,6 @@ InitScriptCoreVariables()
     ServerLastPlayedType = -1;
     Current = -1;
 	return 1;
-}
-
-AddClasses()
-{
-	AddPlayerClass(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); // auto-assign
-	AddPlayerClass(Skin[ATTACKER], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); // attacker
-	AddPlayerClass(Skin[DEFENDER], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); // defender
-	AddPlayerClass(Skin[ATTACKER_SUB], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); // attacker sub
-	AddPlayerClass(Skin[DEFENDER_SUB], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); // defender sub
-	AddPlayerClass(Skin[REFEREE], 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); // referee
 }
 
 AddToServersDatabase()

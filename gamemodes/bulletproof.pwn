@@ -178,9 +178,9 @@ public OnPlayerConnect(playerid)
 
 public OnPlayerRequestClass(playerid, classid)
 {
+	TogglePlayerSpectating(playerid, true);
 	// Initialize class selection mode
 	Player[playerid][Team] = NON;
-	Player[playerid][RequestedClass] = classid;
     SetPlayerColor(playerid, 0xAAAAAAAA);
     Player[playerid][Spawned] = false;
 
@@ -238,10 +238,10 @@ public OnPlayerRequestClass(playerid, classid)
 			// If result returns any registered users with the same name and IP that have connected to this server before, log them in
 			if(db_num_rows(res))
 			{
-			    MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~g~~h~Auto-login", "You've been automatically logged in (IP is the same as last login)", 4000);
-				MessageBox(playerid, MSGBOX_TYPE_TOP, "~y~select your class", "~>~ to view next class~n~~<~ to view prev class~n~~n~(SPAWN) to select the current class", 7000);
+			    MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~g~~h~Auto-login", "You've been automatically logged in (IP is the same as last login)", 4000);
 				LoginPlayer(playerid, res);
 			    db_free_result(res);
+			    ShowPlayerClassSelection(playerid);
 			}
 			else
 			{
@@ -252,145 +252,18 @@ public OnPlayerRequestClass(playerid, classid)
 	}
 	else
 	{
-	    new teamName[23], teamInfo[128];
-	    switch(classid)
-	    {
-	        case 0:
-	        {
-	            format(teamName, sizeof teamName, "~p~~h~auto-assign");
-	            format(teamInfo, sizeof teamInfo, "Auto-assign to the team with less players count");
-	            SetPlayerSkin(playerid, 0);
-	        }
-	        case 1:
-	        {
-	            format(teamName, sizeof teamName, sprintf("~r~~h~%s", TeamName[ATTACKER]));
-	            new ct = 0;
-	            foreach(new i : Player)
-	            {
-	                if(Player[i][Team] != ATTACKER)
-	                    continue;
-
-					if(ct == 4)
-					{
-					    format(teamInfo, sizeof teamInfo, "%s...", teamInfo);
-					    break;
-					}
-					format(teamInfo, sizeof teamInfo, "%s%s~n~", teamInfo, Player[i][NameWithoutTag]);
-					ct ++;
-				}
-				SetPlayerSkin(playerid, Skin[ATTACKER]);
-			}
-			case 2:
-	        {
-	            format(teamName, sizeof teamName, sprintf("~b~~h~%s", TeamName[DEFENDER]));
-	            new ct = 0;
-	            foreach(new i : Player)
-	            {
-	                if(Player[i][Team] != DEFENDER)
-	                    continue;
-
-					if(ct == 4)
-					{
-					    format(teamInfo, sizeof teamInfo, "%s...", teamInfo);
-					    break;
-					}
-					format(teamInfo, sizeof teamInfo, "%s%s~n~", teamInfo, Player[i][NameWithoutTag]);
-					ct ++;
-				}
-				SetPlayerSkin(playerid, Skin[DEFENDER]);
-			}
-			case 3:
-	        {
-	            format(teamName, sizeof teamName, sprintf("~r~~h~~h~~h~%s sub", TeamName[ATTACKER]));
-	            new ct = 0;
-	            foreach(new i : Player)
-	            {
-	                if(Player[i][Team] != ATTACKER_SUB)
-	                    continue;
-
-					if(ct == 4)
-					{
-					    format(teamInfo, sizeof teamInfo, "%s...", teamInfo);
-					    break;
-					}
-					format(teamInfo, sizeof teamInfo, "%s%s~n~", teamInfo, Player[i][NameWithoutTag]);
-					ct ++;
-				}
-				SetPlayerSkin(playerid, Skin[ATTACKER_SUB]);
-			}
-			case 4:
-	        {
-	            format(teamName, sizeof teamName, sprintf("~b~~h~~h~%s sub", TeamName[DEFENDER]));
-             	new ct = 0;
-	            foreach(new i : Player)
-	            {
-	                if(Player[i][Team] != DEFENDER_SUB)
-	                    continue;
-
-					if(ct == 4)
-					{
-					    format(teamInfo, sizeof teamInfo, "%s...", teamInfo);
-					    break;
-					}
-					format(teamInfo, sizeof teamInfo, "%s%s~n~", teamInfo, Player[i][NameWithoutTag]);
-					ct ++;
-				}
-				SetPlayerSkin(playerid, Skin[DEFENDER_SUB]);
-			}
-			case 5:
-	        {
-	            format(teamName, sizeof teamName, "~y~~h~%s referee");
-             	new ct = 0;
-	            foreach(new i : Player)
-	            {
-	                if(Player[i][Team] != REFEREE)
-	                    continue;
-
-					if(ct == 4)
-					{
-					    format(teamInfo, sizeof teamInfo, "%s...", teamInfo);
-					    break;
-					}
-					format(teamInfo, sizeof teamInfo, "%s%s~n~", teamInfo, Player[i][NameWithoutTag]);
-					ct ++;
-				}
-				SetPlayerSkin(playerid, Skin[REFEREE]);
-			}
-	    }
-	    if(strlen(teamInfo) == 0)
-	        teamInfo = " ";
-	    MessageBox(playerid, MSGBOX_TYPE_TOP, teamName, teamInfo, 5000);
+	    ShowPlayerClassSelection(playerid);
 	}
 	return 1;
 }
 
 public OnPlayerRequestSpawn(playerid)
 {
-	if(Player[playerid][Spawned])
+	if(Player[playerid][Logged] == true)
 	{
-	    SendErrorMessage(playerid, "Encountered an error. Switch to another class using ~<~ and ~>~ and then click the SPAWN button!");
-	    return 0;
+	
 	}
-	if(Player[playerid][Logged] == true) 
-	{
-	    if(Player[playerid][RequestedClass] > 0) // If the requested class is a valid class, not auto-assign
-	    {
-			new groupID = Player[playerid][RequestedClass] - 1;
-			if(strlen(GroupAccessPassword[groupID]) > 0 && (strcmp(RequestedGroupPass[playerid][groupID], GroupAccessPassword[groupID]) != 0 || isnull(RequestedGroupPass[playerid][groupID])))
-			{
-				ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Please enter the group password:", "Submit", "Cancel");
-                OnPlayerRequestClass(playerid, Player[playerid][RequestedClass]);
-				return 0;
-			}
-		}
-		HideMessageBox(playerid, MSGBOX_TYPE_TOP);
-		SpawnConnectedPlayer(playerid, Player[playerid][RequestedClass]);
-		return 1;
-	}
-	else
-	{
-	    OnPlayerRequestClass(playerid, Player[playerid][RequestedClass]);
-	}
+	OnPlayerRequestClass(playerid, 0);
 	return 0;
 }
 
@@ -2449,9 +2322,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			format(query, sizeof(query), "INSERT INTO Players (Name, Password, IP, LastSeen_Day, LastSeen_Month, LastSeen_Year) VALUES('%s', '%s', '%s', %d, %d, %d)", DB_Escape(Player[playerid][Name]), HashPass, IP, day, month, year);
 			db_free_result(db_query(sqliteconnection, query));
 
-			MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~g~~h~register", sprintf("You've successfully registered your account with the password: %s", inputtext), 4000);
-            MessageBox(playerid, MSGBOX_TYPE_TOP, "~y~select your class", "~>~ to view next class~n~~<~ to view prev class~n~~n~(SPAWN) to select the current class", 7000);
-
+			MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~g~~h~register", sprintf("You've successfully registered your account with the password: %s", inputtext), 4000);
+            
+            ShowPlayerClassSelection(playerid);
+            
 			Player[playerid][Level] = 0;
 			Player[playerid][Weather] = MainWeather;
 			Player[playerid][Time] = MainTime;
@@ -2519,7 +2393,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(db_num_rows(res))
 			{
 				LoginPlayer(playerid, res);
-				MessageBox(playerid, MSGBOX_TYPE_TOP, "~y~select your class", "~>~ to view next class~n~~<~ to view prev class~n~~n~(SPAWN) to select the current class", 7000);
+				ShowPlayerClassSelection(playerid);
 			}
 			else
 			{
@@ -2965,7 +2839,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				 	    format(string, sizeof string, "%s\n{66FF66}%s", string, TeamName[DEFENDER]);
 	 				}
 
-	 				if(strlen(GroupAccessPassword[2]) > 0)
+                    if(strlen(GroupAccessPassword[2]) > 0)
+					{
+						format(string, sizeof string, "%s\n{FF6666}Referee", string);
+	 				}
+				 	else
+				 	{
+				 	    format(string, sizeof string, "%s\n{66FF66}Referee", string);
+	 				}
+
+	 				if(strlen(GroupAccessPassword[3]) > 0)
 					{
 						format(string, sizeof string, "%s\n{FF6666}%s Sub", string, TeamName[ATTACKER]);
 	 				}
@@ -2974,22 +2857,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				 	    format(string, sizeof string, "%s\n{66FF66}%s Sub", string, TeamName[ATTACKER]);
 	 				}
 
-	 				if(strlen(GroupAccessPassword[3]) > 0)
+	 				if(strlen(GroupAccessPassword[4]) > 0)
 					{
 						format(string, sizeof string, "%s\n{FF6666}%s Sub", string, TeamName[DEFENDER]);
 	 				}
 				 	else
 				 	{
 				 	    format(string, sizeof string, "%s\n{66FF66}%s Sub", string, TeamName[DEFENDER]);
-	 				}
-
-	 				if(strlen(GroupAccessPassword[4]) > 0)
-					{
-						format(string, sizeof string, "%s\n{FF6666}Referee", string);
-	 				}
-				 	else
-				 	{
-				 	    format(string, sizeof string, "%s\n{66FF66}Referee", string);
 	 				}
 	 				ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA, DIALOG_STYLE_LIST, ""COL_PRIM"Config Settings", string, "OK", "Cancel");
 	 				return 1;
@@ -3154,10 +3028,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        case 0: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_ALPHA, DIALOG_STYLE_INPUT, ""COL_PRIM"ALPHA PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
 	        case 1: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_BETA, DIALOG_STYLE_INPUT, ""COL_PRIM"BETA PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
-	        case 2: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_ASUB, DIALOG_STYLE_INPUT, ""COL_PRIM"ALPHA SUB PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
-	        case 3: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_BSUB, DIALOG_STYLE_INPUT, ""COL_PRIM"BETA SUB PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
-	        case 4: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_REF, DIALOG_STYLE_INPUT, ""COL_PRIM"REFEREE PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
-	    }
+            case 2: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_REF, DIALOG_STYLE_INPUT, ""COL_PRIM"REFEREE PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
+		    case 3: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_ASUB, DIALOG_STYLE_INPUT, ""COL_PRIM"ALPHA SUB PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
+	        case 4: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_BSUB, DIALOG_STYLE_INPUT, ""COL_PRIM"BETA SUB PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
+     	}
 	    return 1;
 	} 
 	
@@ -3191,6 +3065,21 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    return ShowConfigDialog(playerid);
 	}
 	
+	if(dialogid == DIALOG_CONFIG_SET_GA_REF && response)
+	{
+	    if(!response) return ShowConfigDialog(playerid);
+	    if(strlen(inputtext) > MAX_GROUP_ACCESS_PASSWORD_LENGTH)
+	    {
+	        SendErrorMessage(playerid, "The password you entered is quite long. Try again with a shorter one!", MSGBOX_TYPE_BOTTOM);
+	        return ShowConfigDialog(playerid);
+	    }
+	    format(GroupAccessPassword[2], MAX_GROUP_ACCESS_PASSWORD_LENGTH, "%s", inputtext);
+	    new str[128];
+		format(str, sizeof(str), "%s "COL_PRIM"has changed the referee group access", Player[playerid][Name]);
+		SendClientMessageToAll(-1, str);
+	    return ShowConfigDialog(playerid);
+	}
+	
 	if(dialogid == DIALOG_CONFIG_SET_GA_ASUB)
 	{
 	    if(!response) return ShowConfigDialog(playerid);
@@ -3199,7 +3088,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        SendErrorMessage(playerid, "The password you entered is quite long. Try again with a shorter one!", MSGBOX_TYPE_BOTTOM);
 	        return ShowConfigDialog(playerid);
 	    }
-		format(GroupAccessPassword[2], MAX_GROUP_ACCESS_PASSWORD_LENGTH, "%s", inputtext);
+		format(GroupAccessPassword[3], MAX_GROUP_ACCESS_PASSWORD_LENGTH, "%s", inputtext);
 	    new str[128];
 		format(str, sizeof(str), "%s "COL_PRIM"has changed the alpha sub group access", Player[playerid][Name]);
 		SendClientMessageToAll(-1, str);
@@ -3214,7 +3103,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        SendErrorMessage(playerid, "The password you entered is quite long. Try again with a shorter one!", MSGBOX_TYPE_BOTTOM);
 	        return ShowConfigDialog(playerid);
 	    }
-		format(GroupAccessPassword[3], MAX_GROUP_ACCESS_PASSWORD_LENGTH, "%s", inputtext);
+		format(GroupAccessPassword[4], MAX_GROUP_ACCESS_PASSWORD_LENGTH, "%s", inputtext);
 	    new str[128];
 		format(str, sizeof(str), "%s "COL_PRIM"has changed the beta sub group access", Player[playerid][Name]);
 		SendClientMessageToAll(-1, str);
@@ -3223,34 +3112,22 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	
 	if(dialogid == DIALOG_GROUPACCESS)
 	{
-	    if(!response || !strlen(inputtext)) return ShowConfigDialog(playerid);
-	    new groupID = Player[playerid][RequestedClass]-1;
+	    if(!response)
+		{
+			ShowPlayerClassSelection(playerid);
+ 			return 1;
+		}
+	    new groupID = Player[playerid][RequestedClass];
 	
-	    if(strcmp(inputtext,GroupAccessPassword[groupID])!=0)
+	    if(strcmp(inputtext,GroupAccessPassword[groupID])!=0 || strlen(inputtext) == 0)
 		{
 			return ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Your entered password was invalid.\n\nPlease enter the group password:", "Submit", "Cancel");
   		}
-  		
-  		format(RequestedGroupPass[playerid][groupID], MAX_GROUP_ACCESS_PASSWORD_LENGTH, "%s", inputtext);
-	  	OnPlayerRequestSpawn(playerid);
+  		RequestedGroupPass[playerid][groupID] = "";
+	  	SpawnConnectedPlayer(playerid, groupID + 1);
 	    return 1;
 	}
 	
-	if(dialogid == DIALOG_CONFIG_SET_GA_REF && response)
-	{
-	    if(!response) return ShowConfigDialog(playerid);
-	    if(strlen(inputtext) > MAX_GROUP_ACCESS_PASSWORD_LENGTH)
-	    {
-	        SendErrorMessage(playerid, "The password you entered is quite long. Try again with a shorter one!", MSGBOX_TYPE_BOTTOM);
-	        return ShowConfigDialog(playerid);
-	    }
-	    format(GroupAccessPassword[4], MAX_GROUP_ACCESS_PASSWORD_LENGTH, "%s", inputtext);
-	    new str[128];
-		format(str, sizeof(str), "%s "COL_PRIM"has changed the referee group access", Player[playerid][Name]);
-		SendClientMessageToAll(-1, str);
-	    return ShowConfigDialog(playerid);
-	}
-
 	if(dialogid == DIALOG_CONFIG_SET_TEAM_SKIN) {
 	    if(response)
 		{
@@ -3426,7 +3303,21 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		return 1;
 	}
-
+    if(dialogid == DIALOG_TEAM_SELECTION)
+	{
+		if(response)
+		{
+		    new groupID = listitem;
+		    if(strlen(GroupAccessPassword[groupID]) > 0 && (strcmp(RequestedGroupPass[playerid][groupID], GroupAccessPassword[groupID]) != 0 || isnull(RequestedGroupPass[playerid][groupID])))
+			{
+			    Player[playerid][RequestedClass] = listitem;
+				ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Please enter the group password:", "Submit", "Cancel");
+                return 1;
+			}
+			SpawnConnectedPlayer(playerid, listitem + 1);
+		}
+		return 1;
+	}
 	if(dialogid == DIALOG_SWITCH_TEAM_CLASS)
 	{
 	    if(response)

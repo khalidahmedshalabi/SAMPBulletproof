@@ -215,9 +215,57 @@ stock GetPlayerSpeed(playerid)
     return floatround(velocity[3]);
 }
 
+ShowPlayerClassSelection(playerid)
+{
+	new
+		str[320],
+		ct[5];
+
+	foreach(new i : Player)
+	{
+		if(i == playerid)
+			continue;
+			
+		switch(Player[i][Team])
+		{
+			case ATTACKER:
+			{
+				ct[0] ++;
+			}
+			case DEFENDER:
+			{
+				ct[1] ++;
+			}
+			case REFEREE:
+			{
+				ct[2] ++;
+			}
+			case ATTACKER_SUB:
+			{
+				ct[3] ++;
+			}
+			case DEFENDER_SUB:
+			{
+				ct[4] ++;
+			}
+		}
+	}
+	format(str, sizeof(str),
+		"Team\tAccessibility\tMembers Count\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d",
+		TextColor[ATTACKER], TeamName[ATTACKER], strlen(GroupAccessPassword[ATTACKER - 1]) > 0 ? ("{FF6666}Locked (password required)") : ("{66FF66}Open"), ct[0],
+		TextColor[DEFENDER], TeamName[DEFENDER], strlen(GroupAccessPassword[DEFENDER - 1]) > 0 ? ("{FF6666}Locked (password required)") : ("{66FF66}Open"), ct[1],
+		TextColor[REFEREE], TeamName[REFEREE], strlen(GroupAccessPassword[REFEREE - 1]) > 0 ? ("{FF6666}Locked (password required)") : ("{66FF66}Open"), ct[2],
+		TextColor[ATTACKER_SUB], TeamName[ATTACKER_SUB], strlen(GroupAccessPassword[ATTACKER_SUB - 1]) > 0 ? ("{FF6666}Locked (password required)") : ("{66FF66}Open"), ct[3],
+		TextColor[DEFENDER_SUB], TeamName[DEFENDER_SUB], strlen(GroupAccessPassword[DEFENDER_SUB - 1]) > 0 ? ("{FF6666}Locked (password required)") : ("{66FF66}Open"), ct[4]);
+
+	ShowPlayerDialog(playerid, DIALOG_TEAM_SELECTION, DIALOG_STYLE_TABLIST_HEADERS, "Team Selection", str, "Spawn", "");
+}
+
 forward SpawnConnectedPlayer(playerid, team);
 public SpawnConnectedPlayer(playerid, team)
 {
+	Player[playerid][IgnoreSpawn] = true;
+	TogglePlayerSpectating(playerid, false);
 	#if defined _league_included
     if(LeagueMode == false)
 	{
@@ -282,20 +330,20 @@ public SpawnConnectedPlayer(playerid, team)
 			}
 			case 3:
 			{
-				Player[playerid][Team] = ATTACKER_SUB;
-				SetPlayerColor(playerid, ATTACKER_SUB_COLOR);
+				Player[playerid][Team] = REFEREE;
+				SetPlayerColor(playerid, REFEREE_COLOR);
 				SwitchTeamFix(playerid, false, false);
 			}
 			case 4:
 			{
-				Player[playerid][Team] = DEFENDER_SUB;
-				SetPlayerColor(playerid, DEFENDER_SUB_COLOR);
+				Player[playerid][Team] = ATTACKER_SUB;
+				SetPlayerColor(playerid, ATTACKER_SUB_COLOR);
 				SwitchTeamFix(playerid, false, false);
 			}
 			case 5:
 			{
-				Player[playerid][Team] = REFEREE;
-				SetPlayerColor(playerid, REFEREE_COLOR);
+				Player[playerid][Team] = DEFENDER_SUB;
+				SetPlayerColor(playerid, DEFENDER_SUB_COLOR);
 				SwitchTeamFix(playerid, false, false);
 			}
 		}
