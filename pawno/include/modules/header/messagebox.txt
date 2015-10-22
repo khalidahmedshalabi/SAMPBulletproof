@@ -12,7 +12,6 @@
 enum MsgBoxStruct
 {
 	PlayerText:caption_TD[MAX_MSGBOX_TYPES],
-	PlayerText:line_TD,
 	PlayerText:info_TD[MAX_MSGBOX_TYPES],
 	MsgBoxtimer[MAX_MSGBOX_TYPES]
 
