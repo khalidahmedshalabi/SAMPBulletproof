@@ -3114,18 +3114,55 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 	    if(!response)
 		{
-			ShowPlayerClassSelection(playerid);
+		    if(!Player[playerid][Spawned])
+				ShowPlayerClassSelection(playerid);
  			return 1;
 		}
 	    new groupID = Player[playerid][RequestedClass];
 	
 	    if(strcmp(inputtext,GroupAccessPassword[groupID])!=0 || strlen(inputtext) == 0)
 		{
-			return ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Your entered password was invalid.\n\nPlease enter the group password:", "Submit", "Cancel");
+			return ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Wrong password.\n\nPlease enter the group password:", "Submit", "Cancel");
   		}
-  		RequestedGroupPass[playerid][groupID] = "";
-	  	SpawnConnectedPlayer(playerid, groupID + 1);
-	    return 1;
+  		if(Player[playerid][Spawned])
+  		{
+  		    switch(Player[playerid][RequestedClass])
+			{
+	            case 0:
+				{
+      				SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
+            		Player[playerid][Team] = ATTACKER;
+				}
+				case 1:
+				{
+				    SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
+				    Player[playerid][Team] = DEFENDER;
+				}
+				case 2:
+				{
+				    SetPlayerColor(playerid, REFEREE_COLOR);
+				    Player[playerid][Team] = REFEREE;
+				}
+				case 3:
+				{
+				    SetPlayerColor(playerid, ATTACKER_SUB_COLOR);
+				    Player[playerid][Team] = ATTACKER_SUB;
+				}
+
+				case 4:
+				{
+				    SetPlayerColor(playerid, DEFENDER_SUB_COLOR);
+				    Player[playerid][Team] = DEFENDER_SUB;
+				}
+			}
+			SwitchTeamFix(playerid);
+  		}
+  		else
+  		{
+  			RequestedGroupPass[playerid][groupID] = "";
+	  		SpawnConnectedPlayer(playerid, groupID + 1);
+		}
+		return 1;
 	}
 	
 	if(dialogid == DIALOG_CONFIG_SET_TEAM_SKIN) {
@@ -3279,24 +3316,44 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		return 1;
 	}
 
-	if(dialogid == DIALOG_SWITCH_TEAM) {
-	    if(response) {
-	        switch(listitem) {
-	            case 0: {
+	if(dialogid == DIALOG_SWITCH_TEAM)
+	{
+	    if(response)
+		{
+		    new groupID = listitem;
+		    if(strlen(GroupAccessPassword[groupID]) > 0 && (strcmp(RequestedGroupPass[playerid][groupID], GroupAccessPassword[groupID]) != 0 || isnull(RequestedGroupPass[playerid][groupID])))
+			{
+			    Player[playerid][RequestedClass] = listitem;
+				ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Please enter the group password:", "Submit", "Cancel");
+                return 1;
+			}
+	        switch(listitem)
+			{
+	            case 0:
+				{
       				SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
             		Player[playerid][Team] = ATTACKER;
-				} case 1: {
-				    SetPlayerColor(playerid, ATTACKER_SUB_COLOR);
-				    Player[playerid][Team] = ATTACKER_SUB;
-				} case 2: {
+				}
+				case 1:
+				{
 				    SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
 				    Player[playerid][Team] = DEFENDER;
-				} case 3: {
-				    SetPlayerColor(playerid, DEFENDER_SUB_COLOR);
-				    Player[playerid][Team] = DEFENDER_SUB;
-				} case 4: {
+				}
+				case 2:
+				{
 				    SetPlayerColor(playerid, REFEREE_COLOR);
 				    Player[playerid][Team] = REFEREE;
+				}
+				case 3:
+				{
+				    SetPlayerColor(playerid, ATTACKER_SUB_COLOR);
+				    Player[playerid][Team] = ATTACKER_SUB;
+				}
+				
+				case 4:
+				{
+				    SetPlayerColor(playerid, DEFENDER_SUB_COLOR);
+				    Player[playerid][Team] = DEFENDER_SUB;
 				}
 			}
 			SwitchTeamFix(playerid);
@@ -3315,49 +3372,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 return 1;
 			}
 			SpawnConnectedPlayer(playerid, listitem + 1);
-		}
-		return 1;
-	}
-	if(dialogid == DIALOG_SWITCH_TEAM_CLASS)
-	{
-	    if(response)
-		{
-	        switch(listitem)
-			{
-	            case 0:
-				{
-      				SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
-            		Player[playerid][Team] = ATTACKER;
-				}
-				case 1:
-				{
-				    SetPlayerColor(playerid, ATTACKER_SUB_COLOR);
-				    Player[playerid][Team] = ATTACKER_SUB;
-				}
-				case 2:
-				{
-				    SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
-				    Player[playerid][Team] = DEFENDER;
-				}
-				case 3:
-				{
-				    SetPlayerColor(playerid, DEFENDER_SUB_COLOR);
-				    Player[playerid][Team] = DEFENDER_SUB;
-				}
-				case 4:
-				{
-				    SetPlayerColor(playerid, REFEREE_COLOR);
-				    Player[playerid][Team] = REFEREE;
-				}
-			}
-			SwitchTeamFix(playerid);
-			SpawnPlayer(playerid);
-		}
-		else
-		{
-		    new iString[128];
-			format(iString, sizeof(iString), "%s%s\n%s%s Sub\n%s%s\n%s%s Sub\n%sReferee", TextColor[ATTACKER], TeamName[ATTACKER], TextColor[ATTACKER_SUB], TeamName[ATTACKER], TextColor[DEFENDER], TeamName[DEFENDER], TextColor[DEFENDER_SUB], TeamName[DEFENDER], TextColor[REFEREE]);
-			ShowPlayerDialog(playerid, DIALOG_SWITCH_TEAM_CLASS, DIALOG_STYLE_LIST, "{FFFFFF}Team Selection",iString, "Select", "Exit");
 		}
 		return 1;
 	}
@@ -7254,7 +7268,7 @@ YCMD:back(playerid, params[], help)
     else
     {
     #endif
-		format(iString, sizeof(iString), "%s%s\n%s%s Sub\n%s%s\n%s%s Sub\n%sReferee", TextColor[ATTACKER], TeamName[ATTACKER], TextColor[ATTACKER_SUB], TeamName[ATTACKER], TextColor[DEFENDER], TeamName[DEFENDER], TextColor[DEFENDER_SUB], TeamName[DEFENDER], TextColor[REFEREE]);
+		format(iString, sizeof(iString), "%s%s\n%s%s\n%sReferee\n%s%s Sub\n%s%s Sub", TextColor[ATTACKER], TeamName[ATTACKER], TextColor[DEFENDER], TeamName[DEFENDER], TextColor[REFEREE], TextColor[ATTACKER_SUB], TeamName[ATTACKER], TextColor[DEFENDER_SUB], TeamName[DEFENDER]);
 		ShowPlayerDialog(playerid, DIALOG_SWITCH_TEAM, DIALOG_STYLE_LIST, "{FFFFFF}Team Selection",iString, "Select", "");
     #if defined _league_included
 	}
@@ -7321,7 +7335,7 @@ YCMD:switch(playerid, params[], help)
 	if(Player[playerid][Spectating] == true) StopSpectate(playerid);
 
 	new iString[128];
-	format(iString, sizeof(iString), "%s%s\n%s%s Sub\n%s%s\n%s%s Sub\n%sReferee", TextColor[ATTACKER], TeamName[ATTACKER], TextColor[ATTACKER_SUB], TeamName[ATTACKER], TextColor[DEFENDER], TeamName[DEFENDER], TextColor[DEFENDER_SUB], TeamName[DEFENDER], TextColor[REFEREE]);
+	format(iString, sizeof(iString), "%s%s\n%s%s\n%sReferee\n%s%s Sub\n%s%s Sub", TextColor[ATTACKER], TeamName[ATTACKER], TextColor[DEFENDER], TeamName[DEFENDER], TextColor[REFEREE], TextColor[ATTACKER_SUB], TeamName[ATTACKER], TextColor[DEFENDER_SUB], TeamName[DEFENDER]);
 	ShowPlayerDialog(playerid, DIALOG_SWITCH_TEAM, DIALOG_STYLE_LIST, "{FFFFFF}Team Selection",iString, "Select", "Exit");
     return 1;
 }
