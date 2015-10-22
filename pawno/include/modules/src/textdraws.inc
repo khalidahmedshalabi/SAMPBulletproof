@@ -787,8 +787,8 @@ LoadPlayerTextDraws(playerid)
 		
 		DoingDamage[playerid][i] = CreatePlayerTextDraw(playerid,170.0,y,"_");
 		PlayerTextDrawFont(playerid, DoingDamage[playerid][i], 1);
-		PlayerTextDrawLetterSize(playerid, DoingDamage[playerid][i], 0.20900, 1.099);
-		PlayerTextDrawBackgroundColor(playerid, DoingDamage[playerid][i],0x00000000);
+		PlayerTextDrawLetterSize(playerid, DoingDamage[playerid][i], 0.20000, 1.000);
+		PlayerTextDrawBackgroundColor(playerid, DoingDamage[playerid][i],0x00000022);
 		PlayerTextDrawColor(playerid, DoingDamage[playerid][i], 16727295);
 		PlayerTextDrawSetProportional(playerid, DoingDamage[playerid][i], 1);
 		PlayerTextDrawSetOutline(playerid, DoingDamage[playerid][i],1);
@@ -796,8 +796,8 @@ LoadPlayerTextDraws(playerid)
 		
 		GettingDamaged[playerid][i] = CreatePlayerTextDraw(playerid,380.0,y,"_");
 		PlayerTextDrawFont(playerid, GettingDamaged[playerid][i], 1);
-		PlayerTextDrawLetterSize(playerid, GettingDamaged[playerid][i], 0.20900, 1.099);
-		PlayerTextDrawBackgroundColor(playerid, GettingDamaged[playerid][i],0x00000000);
+		PlayerTextDrawLetterSize(playerid, GettingDamaged[playerid][i], 0.20000, 1.000);
+		PlayerTextDrawBackgroundColor(playerid, GettingDamaged[playerid][i],0x00000022);
 		PlayerTextDrawColor(playerid, GettingDamaged[playerid][i], 16727295);
 		PlayerTextDrawSetProportional(playerid, GettingDamaged[playerid][i], 1);
 		PlayerTextDrawSetOutline(playerid, GettingDamaged[playerid][i],1);
