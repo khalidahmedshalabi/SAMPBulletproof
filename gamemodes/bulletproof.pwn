@@ -6255,7 +6255,7 @@ YCMD:maxpacket(playerid, params[], help)
 	if(isnull(params)) return SendUsageMessage(playerid,"/maxpacket [Maximum Packetloss]");
 
 	new Float:iPacket = floatstr(params);
-	if(iPacket <= 0 || iPacket > 4) return SendErrorMessage(playerid,"Packetloss value can be between 0 and 4 maximum.");
+	if(iPacket <= 0 || iPacket > 10) return SendErrorMessage(playerid,"Packetloss value can be between 0 and 10 maximum.");
 
 	Max_Packetloss = iPacket;
 
@@ -6283,7 +6283,7 @@ YCMD:maxping(playerid, params[], help)
 	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/maxping [Maximum Ping]");
 
 	new iPacket = strval(params);
-	if(iPacket <= 0 || iPacket > 400) return SendErrorMessage(playerid,"Ping limit can be between 0 and 400 maximum.");
+	if(iPacket <= 0 || iPacket > 500) return SendErrorMessage(playerid,"Ping limit can be between 0 and 500 maximum.");
 
 	Max_Ping = iPacket;
 
