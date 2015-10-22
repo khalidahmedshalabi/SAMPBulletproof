@@ -157,14 +157,14 @@ public OnPlayerConnect(playerid)
 	new str[128];
 	format(str,sizeof(str),""COL_PRIM"Server limits:  Min FPS = {FFFFFF}%d "COL_PRIM"| Max Ping = {FFFFFF}%d "COL_PRIM"| Max PL = {FFFFFF}%.2f", Min_FPS, Max_Ping, Float:Max_Packetloss);
 	SendClientMessage(playerid, -1, str);
-	
+
 	// Initialize the new player
 	InitPlayer(playerid);
 	#if defined _league_included
 	CheckPlayerLeagueRegister(playerid);
 	#endif
 	CheckPlayerAKA(playerid);
-	
+
 	// Tell everyone that he's connected
 	str = "";
     GetPlayerCountry(playerid, str, sizeof(str));
@@ -261,7 +261,7 @@ public OnPlayerRequestSpawn(playerid)
 {
 	if(Player[playerid][Logged] == true)
 	{
-	
+
 	}
 	OnPlayerRequestClass(playerid, 0);
 	return 0;
@@ -277,10 +277,10 @@ public OnPlayerSpawn(playerid)
 	    return 1;
 	}
 	// If they're in a DM
-	if(Player[playerid][DMReadd] > 0) 
+	if(Player[playerid][DMReadd] > 0)
 	{
 	    // Re-spawn them there
-	    SpawnInDM(playerid, Player[playerid][DMReadd]); 
+	    SpawnInDM(playerid, Player[playerid][DMReadd]);
 	    return 1;
 	}
 	// If they're in Anti lag zone
@@ -445,7 +445,7 @@ public OnPlayerDisconnect(playerid, reason)
 public OnPlayerDeath(playerid, killerid, reason)
 {
 	// todo: test if this callback should be used under any weird circumstances. e.g: falling from a large cliff, exploding while driving a car, etc...
-	
+
     if(Player[playerid][AlreadyDying] == true)
         return 1; // Stop! Server-sided death system is already handling this.
 
@@ -476,7 +476,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	{
 	    if(reason == 255)
 			reason = 53;
-			
+
 		if(reason == 47 || reason == 51 || reason == 53 || reason == 54)
 		{
 			Player[playerid][HitBy] = INVALID_PLAYER_ID;
@@ -571,7 +571,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
         PlayerTextDrawShow(playerid, DeathText[playerid][1]);
 
 	    SetTimerEx("DeathMessageF", 4000, false, "ii", killerid, playerid);
-		
+
 		if(Player[playerid][Playing] == true && Player[killerid][Playing] == true)
 		{
 		    #if defined _league_included
@@ -726,7 +726,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	    StopSpectate(playerid);
 	if(Current == -1)
 		HideRoundStats(playerid);
-		
+
 	if(!Player[playerid][InDeathCamera])
 	{
 		OnPlayerSpawn(playerid);
@@ -830,7 +830,7 @@ public OnPlayerText(playerid, text[])
 		}
 	    return 0;
 	}
-	
+
 	// Colorful text
 	new ChatString[128];
 	if(text[0] == '^')
@@ -1053,7 +1053,7 @@ public OnPlayerEnterCheckpoint(playerid)
 			{
 			    if(!ArenaStarted)
 			        return 1;
-			        
+
                 switch(TeamCapturingCP)
 			    {
 			        case NON: // no one is taking CP
@@ -1181,7 +1181,7 @@ public OnPlayerLeaveCheckpoint(playerid)
 							goto thatWasWrong;
 					}
 					TextDrawSetString(EN_CheckPoint, cpstr);
-					
+
 					thatWasWrong:
 				}
 			}
@@ -1276,7 +1276,7 @@ public OnRconLoginAttempt(ip[], password[], success)
 	        UpdatePlayerAdminGroup(playerid);
 			format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%s'", Player[playerid][Level], DB_Escape(Player[playerid][Name]));
     		db_free_result(db_query(sqliteconnection, Str));
-    		
+
     		format(Str, sizeof(Str), "{FFFFFF}%s "COL_PRIM"has successfully logged into rcon and got level 5.", iName);
 		}
 		else
@@ -1570,7 +1570,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
  	}
  	// <start> Health and armour handling
  	if(weaponid == -1)
-		weaponid = Player[playerid][HitWith]; 
+		weaponid = Player[playerid][HitWith];
 
     Player[playerid][HitBy] = issuerid; // This is used in custom OnPlayerDeath to get the last player who caused damage on 'playerid'
  	Player[playerid][HitWith] = weaponid; // This is used in custom OnPlayerDeath to get the last weapon a player got hit with before death
@@ -1605,7 +1605,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	{
 		PlayerPlaySound(issuerid, Player[issuerid][HitSound], 0.0, 0.0, 0.0);
         PlayerPlaySound(playerid, Player[playerid][GetHitSound], 0.0, 0.0, 0.0);
-        
+
         HandleVisualDamage(playerid, issuerid, float(rounded_amount), weaponid, bodypart);
 
 		if(Player[issuerid][Playing] == true && Player[playerid][Playing] == true)
@@ -2028,7 +2028,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				weaponid = strval(inputtext);
 			else
 			    weaponid = GetWeaponID(inputtext);
-			    
+
 			if(weaponid == 0 || IsValidWeapon(weaponid))
 			{
 			    new index = WeaponBindData[playerid][ModifyingWeaponBindIndex];
@@ -2206,10 +2206,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				new YC = Player[CID][ChatChannel];
 
                 GetPlayerFPS(CID);
-				format(statsSTR[0], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Country: %s\n\n{FF0000}- {FFFFFF}Round Kills: \t\t%d\t\t{FF0000}- {FFFFFF}Total Kills: \t\t%d\t\t{FF0000}- {FFFFFF}FPS: \t\t\t%d\n{FF0000}- {FFFFFF}Round Deaths: \t%.0f\t\t{FF0000}- {FFFFFF}Total Deaths: \t\t%d\t\t{FF0000}- {FFFFFF}Ping: \t\t\t%d\n",Country,  Player[CID][RoundKills],Player[CID][TotalKills], Player[CID][FPS], RD, TD, GetPlayerPing(CID));
-				format(statsSTR[1], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Round Damage: \t%d\t\t{FF0000}- {FFFFFF}Total Damage:   \t%d\t\t{FF0000}- {FFFFFF}Packet-Loss:   \t%.1f\n\n{FF0000}- {FFFFFF}Player Weather: \t%d\t\t{FF0000}- {FFFFFF}Chat Channel: \t%d\t\t\t{FF0000}- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], GetPlayerPacketLoss(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
-				format(statsSTR[2], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Player Time: \t\t%d\t\t{FF0000}- {FFFFFF}DM ID: \t\t%d\t\t{FF0000}- {FFFFFF}Hit Sound: \t\t%d\n{FF0000}- {FFFFFF}Player NetCheck: \t%s\t{FF0000}- {FFFFFF}Player Level: \t\t%d\t\t{FF0000}- {FFFFFF}Get Hit Sound: \t\t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
-				format(statsSTR[3], sizeof(statsSTR[]), "{FF0000}- {FFFFFF}Duels Won: \t\t%d\t\t{FF0000}- {FFFFFF}Duels Lost: \t\t%d", Player[CID][DuelsWon], Player[CID][DuelsLost]);
+				format(statsSTR[0], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Country: %s\n\n"COL_PRIM"- {FFFFFF}Round Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Total Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}FPS: \t\t\t%d\n"COL_PRIM"- {FFFFFF}Round Deaths: \t%.0f\t\t"COL_PRIM"- {FFFFFF}Total Deaths: \t%d\t\t"COL_PRIM"- {FFFFFF}Ping: \t\t\t%d\n",Country,Player[CID][RoundKills],Player[CID][TotalKills], Player[CID][FPS], RD, TD, GetPlayerPing(CID));
+				format(statsSTR[1], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Round Damage: \t%d\t\t"COL_PRIM"- {FFFFFF}Total Damage:   \t%d\t\t"COL_PRIM"- {FFFFFF}Packet-Loss:   \t%.1f\n\n"COL_PRIM"- {FFFFFF}Player Weather: \t%d\t\t"COL_PRIM"- {FFFFFF}Chat Channel: \t%d\t\t"COL_PRIM"- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], GetPlayerPacketLoss(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
+				format(statsSTR[2], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Player Time: \t\t%d\t\t"COL_PRIM"- {FFFFFF}DM ID: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Hit Sound: \t\t%d\n"COL_PRIM"- {FFFFFF}Player NetCheck: \t%s\t"COL_PRIM"- {FFFFFF}Player Level: \t%d\t\t"COL_PRIM"- {FFFFFF}Get Hit Sound: \t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
+				format(statsSTR[3], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Duels Won: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Duels Lost: \t\t%d", Player[CID][DuelsWon], Player[CID][DuelsLost]);
 				new TotalStr[1200];
 				format(TotalStr, sizeof(TotalStr), "%s%s%s%s", statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3]);
 
@@ -2323,9 +2323,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			db_free_result(db_query(sqliteconnection, query));
 
 			MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~g~~h~register", sprintf("You've successfully registered your account with the password: %s", inputtext), 4000);
-            
+
             ShowPlayerClassSelection(playerid);
-            
+
 			Player[playerid][Level] = 0;
 			Player[playerid][Weather] = MainWeather;
 			Player[playerid][Time] = MainTime;
@@ -2499,7 +2499,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					UpdateTeamScoreTextDraw();
 					UpdateRoundsPlayedTextDraw();
 					UpdateTeamNameTextDraw();
-					
+
 					UpdateTeamNamesTextdraw();
 
 					ClearPlayerVariables();
@@ -2575,7 +2575,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			HideMatchScoreBoard();
 
 			WarMode = false;
+			#if defined _league_included
 			ToggleLeagueServer(false);
+			#endif
 
 			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has disabled the Match-Mode.", Player[playerid][Name]);
 			SendClientMessageToAll(-1, iString);
@@ -2611,7 +2613,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
   	 		UpdateTeamScoreTextDraw();
 			UpdateRoundsPlayedTextDraw();
 			UpdateTeamNameTextDraw();
-		    
+
 		    UpdateTeamNamesTextdraw();
 
 			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has set attacker team name to: {FFFFFF}%s", Player[playerid][Name], TeamName[ATTACKER]);
@@ -2650,7 +2652,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			UpdateTeamScoreTextDraw();
 			UpdateRoundsPlayedTextDraw();
 			UpdateTeamNameTextDraw();
-		    
+
 		    UpdateTeamNamesTextdraw();
 
 			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has set defender team name to: {FFFFFF}%s", Player[playerid][Name], TeamName[DEFENDER]);
@@ -3020,7 +3022,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    }
 	    return 1;
 	}
-	
+
 
 	if(dialogid == DIALOG_CONFIG_SET_GA) {
 	    if(!response) return ShowConfigDialog(playerid);
@@ -3033,8 +3035,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        case 4: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_GA_BSUB, DIALOG_STYLE_INPUT, ""COL_PRIM"BETA SUB PASSWORD", ""COL_PRIM"Set the password or leave empty to clear:", "OK", "Cancel"); }
      	}
 	    return 1;
-	} 
-	
+	}
+
 	if(dialogid == DIALOG_CONFIG_SET_GA_ALPHA)
 	{
 	    if(!response) return ShowConfigDialog(playerid);
@@ -3049,7 +3051,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		SendClientMessageToAll(-1, str);
 	    return ShowConfigDialog(playerid);
 	}
-	
+
 	if(dialogid == DIALOG_CONFIG_SET_GA_BETA)
 	{
 	    if(!response) return ShowConfigDialog(playerid);
@@ -3064,7 +3066,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		SendClientMessageToAll(-1, str);
 	    return ShowConfigDialog(playerid);
 	}
-	
+
 	if(dialogid == DIALOG_CONFIG_SET_GA_REF && response)
 	{
 	    if(!response) return ShowConfigDialog(playerid);
@@ -3079,7 +3081,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		SendClientMessageToAll(-1, str);
 	    return ShowConfigDialog(playerid);
 	}
-	
+
 	if(dialogid == DIALOG_CONFIG_SET_GA_ASUB)
 	{
 	    if(!response) return ShowConfigDialog(playerid);
@@ -3094,7 +3096,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		SendClientMessageToAll(-1, str);
 	    return ShowConfigDialog(playerid);
 	}
-	
+
 	if(dialogid == DIALOG_CONFIG_SET_GA_BSUB)
 	{
 	    if(!response) return ShowConfigDialog(playerid);
@@ -3109,7 +3111,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		SendClientMessageToAll(-1, str);
 	    return ShowConfigDialog(playerid);
 	}
-	
+
 	if(dialogid == DIALOG_GROUPACCESS)
 	{
 	    if(!response)
@@ -3119,7 +3121,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
  			return 1;
 		}
 	    new groupID = Player[playerid][RequestedClass];
-	
+
 	    if(strcmp(inputtext,GroupAccessPassword[groupID])!=0 || strlen(inputtext) == 0)
 		{
 			return ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Wrong password.\n\nPlease enter the group password:", "Submit", "Cancel");
@@ -3164,7 +3166,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		return 1;
 	}
-	
+
 	if(dialogid == DIALOG_CONFIG_SET_TEAM_SKIN) {
 	    if(response)
 		{
@@ -3349,7 +3351,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    SetPlayerColor(playerid, ATTACKER_SUB_COLOR);
 				    Player[playerid][Team] = ATTACKER_SUB;
 				}
-				
+
 				case 4:
 				{
 				    SetPlayerColor(playerid, DEFENDER_SUB_COLOR);
@@ -3404,7 +3406,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 		{
 			if(!GunSwitchData[playerid][GunSwitchSlotShown][i])
 				continue;
-				
+
 			if(GunSwitchData[playerid][GunSlotTextDraw][i] == playertextid)
 			{
 			    index = i;
@@ -3415,7 +3417,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
         	SetPlayerArmedWeapon(playerid, GetWeaponIDFromModelID(GunSwitchData[playerid][GunSwitchModelID][index]));
 		else
 		    SetPlayerArmedWeapon(playerid, 0);
-		    
+
 		DisablePlayerGunSwitchInterface(playerid);
     }
     #endif
@@ -3953,7 +3955,7 @@ YCMD:hud(playerid, params[], help)
 
 	if(hudid < -1 || hudid == MAX_PLAYER_INTERFACE_ASPECTS)
 	    return SendErrorMessage(playerid, "Invalid HUD ID");
-	    
+
     new bool:toggle;
 	if(strcmp(toggleStr, "on", true) == 0)
 		toggle = true;
@@ -3961,7 +3963,7 @@ YCMD:hud(playerid, params[], help)
 		toggle = false;
 	else
 		return SendUsageMessage(playerid,"/hud [HUD ID] [on / off]~n~~n~HUD IDs:~n~0 = spectators~n~1 = net stats~n~2 = hp percent");
-		
+
 	TogglePlayerInterface(playerid, toggle, hudid);
 	return 1;
 }
@@ -4080,7 +4082,7 @@ YCMD:usebelt(playerid, params[], help)
 	    {
 			if(!Player[i][Playing] && !Player[i][Spectating])
 			    continue;
-			    
+
 			CreateExplosionForPlayer(i, X, Y, Z, 7, 14.0);
 			if(i != playerid)
 			{
@@ -4113,7 +4115,7 @@ YCMD:remgun(playerid, params[], help)
 	}
 	if(GetPlayerWeapon(playerid) == 0)
 	    return SendErrorMessage(playerid, "You wanna remove your hand? Visit a doctor, we don't do surgery here!");
-	    
+
 	RemovePlayerWeapon(playerid, GetPlayerWeapon(playerid));
 	SendClientMessage(playerid, -1, sprintf("Removed %s from your gun inventory!", WeaponNames[GetPlayerWeapon(playerid)]));
 	return 1;
@@ -4440,7 +4442,7 @@ YCMD:duel(playerid, params[], help)
 	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"You are already dueling someone.");
 	if(Player[invitedid][challengerid] == playerid) return SendErrorMessage(playerid,"You have already invited that player for duel. Let him accept or deny your previous invite.");    //duelspamfix
 	if(invitedid == playerid) return SendErrorMessage(playerid,"Can't duel with yourself.");
-	
+
 	if(isnull(duelarena) || IsNumeric(duelarena)) return
 	SendUsageMessage(playerid,"/duel [Player ID] [default/custom] [area size] [Weapon 1] [Weapon 2]~n~~n~[custom] to play in your current zone~n~[default] for default duel arena");
 
@@ -4504,7 +4506,7 @@ YCMD:no(playerid, params[], help)
 	}
 	if(Player[playerid][InDuel] == true)
 		return SendErrorMessage(playerid,"You are in a duel anyway");
-		
+
 	new pID;
 	pID = Player[playerid][challengerid];
 
@@ -4629,7 +4631,7 @@ YCMD:base(playerid, params[], help)
 
 	switch(CommandID) {
 	    case 1: {
-	        
+
 	        /*format(iString, sizeof(iString), "SELECT ID FROM Bases ORDER BY `ID` DESC LIMIT 1");
 			new DBResult:res = db_query(sqliteconnection, iString);
 
@@ -4745,7 +4747,7 @@ YCMD:base(playerid, params[], help)
 
 			format(iString, sizeof(iString), "DELETE FROM Bases WHERE ID = %d", baseid);
 			db_free_result(db_query(sqliteconnection, iString));
-			
+
 			BExist[baseid] = false;
 
 			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has deleted {FFFFFF}Base ID: %d", Player[playerid][Name], baseid);
@@ -5069,7 +5071,7 @@ YCMD:fpscheck(playerid, params[], help)
 	new pID = strval(params);
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player is not connected.");
 	if(Player[pID][NetCheck] == 0) return SendErrorMessage(playerid, "That player has netcheck disabled on him.");
-	
+
 	new iString[128];
 	if(Player[pID][FPSCheck] == 1) {
 	    Player[pID][FPSCheck] = 0;
@@ -5100,7 +5102,7 @@ YCMD:pingcheck(playerid, params[], help)
 	new pID = strval(params);
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player is not connected.");
 	if(Player[pID][NetCheck] == 0) return SendErrorMessage(playerid, "That player has netcheck disabled on him.");
-	
+
 	new iString[128];
 	if(Player[pID][PingCheck] == 1) {
 	    Player[pID][PingCheck] = 0;
@@ -5131,7 +5133,7 @@ YCMD:plcheck(playerid, params[], help)
 	new pID = strval(params);
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player is not connected.");
 	if(Player[pID][NetCheck] == 0) return SendErrorMessage(playerid, "That player has netcheck disabled on him.");
-	
+
 	new iString[128];
 	if(Player[pID][PLCheck] == 1) {
 	    Player[pID][PLCheck] = 0;
@@ -5195,7 +5197,7 @@ YCMD:ready(playerid, params[], help)
 	    return SendErrorMessage(playerid, "You gotta be in either attacker or defender team to do this.");
 
 	PlayerVoteReadyLeague(playerid);
-	
+
     #else
     SendErrorMessage(playerid, sprintf("This version is not permitted to run league matches (developer version or an ugly edit). Visit %s to have the right version for this!", GM_WEBSITE));
     #endif
@@ -5225,7 +5227,7 @@ YCMD:league(playerid, params[], help)
 		LeagueMatchType = LEAGUE_MATCH_TYPE_CLAN;
 	else
 		return SendUsageMessage(playerid,"/league [ft / clan] [players: 3, 4, 5...]");
-		
+
 	if(playersCount < 3)
 		return SendErrorMessage(playerid, "League matches cannot be less than 3v3");
 
@@ -5350,7 +5352,7 @@ YCMD:war(playerid, params[], help)
 	new
     	MyVehicle = -1,
 		Seat;
-		
+
 	foreach(new i : Player)
 	{
 	    for(new j = 0; j < 55; j ++)
@@ -5361,7 +5363,7 @@ YCMD:war(playerid, params[], help)
 		Player[i][RoundPlayed] = 0;
 	    Player[i][TotalBulletsFired] = 0;
 	    Player[i][TotalshotsHit] = 0;
-	    
+
 		if(Player[i][InDuel] == true || Player[i][IsAFK])
 	        continue;
 
@@ -5436,7 +5438,7 @@ YCMD:teamname(playerid, params[], help)
 			SendClientMessageToAll(-1, iString);
 	    }
 	}
-	
+
 	UpdateTeamNamesTextdraw();
 	UpdateTeamNameTextDraw();
 	return 1;
@@ -6000,7 +6002,7 @@ YCMD:slap(playerid,params[], help)
 
 	new sid = strval(params);
     if(!IsPlayerConnected(sid)) return SendErrorMessage(playerid,"That player isnt connected.");
-	
+
     new Float:Pos[3];
 	GetPlayerPos(sid,Pos[0],Pos[1],Pos[2]);
 	SetPlayerPos(sid,Pos[0],Pos[1],Pos[2]+10);
@@ -6028,7 +6030,7 @@ YCMD:explode(playerid,params[], help)
 
 	new eid = strval(params);
   	if(!IsPlayerConnected(eid)) return SendErrorMessage(playerid,"That Player Isn't Connected.");
-	
+
 	new Float:Pos[3];
 	GetPlayerPos(eid, Pos[0], Pos[1], Pos[2]);
 	CreateExplosion(Pos[0], Pos[1], Pos[2], 7, 6.0);
@@ -6346,7 +6348,7 @@ YCMD:allvs(playerid,params[], help)
 	sscanf(params, "is", toTeam, TempTeamName);
     if(toTeam < 0 || toTeam > 1)
 		return SendErrorMessage(playerid,"Available teams: 0 for attacker and 1 for defender");
-    
+
     switch(toTeam)
     {
         case 0:
@@ -6354,7 +6356,7 @@ YCMD:allvs(playerid,params[], help)
 		case 1:
 		    toTeam = DEFENDER;
     }
-    
+
 	new oppositeTeam;
 	switch(toTeam)
 	{
@@ -6367,7 +6369,7 @@ YCMD:allvs(playerid,params[], help)
 		ct[2],
     	MyVehicle = -1,
 		Seat;
-		
+
 	ct[0] = 0;
 	ct[1] = 0;
 	foreach(new i : Player)
@@ -6581,7 +6583,7 @@ public FakePacketRenovationEnd(playerid, Float:fakepacket, bool:message)
 {
 	if(!Player[playerid][FakePacketRenovation] || !IsPlayerConnected(playerid))
 	    return 0;
-	    
+
     Player[playerid][FakePacketRenovation] = false;
     if(message)
     	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Fake PL renovation on {FFFFFF}%s "COL_PRIM"has ended - Old: {FFFFFF}%.1f "COL_PRIM" | Current: {FFFFFF}%.1f", Player[playerid][Name], fakepacket, GetPlayerPacketLoss(playerid)));
@@ -7571,11 +7573,11 @@ YCMD:gunmenustyle(playerid, params[], help)
 	}
 	if(Player[playerid][OnGunmenu])
 		return SendErrorMessage(playerid,"You cannot change style while selecting from gunmenu.");
-		
+
 	new styleStr[7];
 	if(sscanf(params, "s", styleStr))
 	    return SendUsageMessage(playerid,"/gunmenustyle [dialog / object]");
-	    
+
     new style;
 	if(strcmp(styleStr, "dialog", true) == 0)
 		style = GUNMENU_STYLE_DIALOG;
@@ -7583,7 +7585,7 @@ YCMD:gunmenustyle(playerid, params[], help)
 		style = GUNMENU_STYLE_OBJECT;
 	else
 		return SendUsageMessage(playerid,"/gunmenustyle [dialog / object]");
-		
+
 	Player[playerid][GunmenuStyle] = style;
    	db_free_result(db_query(sqliteconnection, sprintf("UPDATE Players SET GunmenuStyle = %d WHERE Name = '%s'", style, DB_Escape(Player[playerid][Name]))));
    	SendClientMessage(playerid, -1, sprintf("Changed gunmenu style to: %s", styleStr));
@@ -7938,7 +7940,7 @@ YCMD:healall(playerid, params[], help)
 	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
  		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
-	
+
 	foreach(new i : Player) {
 	    if(Player[i][Playing] == true) {
 	        SetHP(i, RoundHP);
@@ -7965,7 +7967,7 @@ YCMD:armourall(playerid, params[], help)
 	if(LeagueMode && !(IsLeagueMod(playerid) || IsLeagueAdmin(playerid)))
  		return SendErrorMessage(playerid, "You do not have league admin/mod power to do this.");
 	#endif
-	
+
 	foreach(new i : Player) {
 	    if(Player[i][Playing] == true) {
 	        SetAP(i, 100);
@@ -8499,7 +8501,7 @@ YCMD:v(playerid, params[], help)
 	}
 	AddVehicleComponent(MyVehicle, 1025); // Offroad wheels
 	AddVehicleComponent(MyVehicle, 1087); // Hydraulics
-	
+
 	if(Player[playerid][Playing] == true) {
 		new iString[84];
 		format(iString, sizeof(iString), "%s%s{FFFFFF} has spawned a(n) %s%s",TextColor[Player[playerid][Team]], Player[playerid][Name], TextColor[Player[playerid][Team]], aVehicleNames[veh-400]);
@@ -8608,7 +8610,7 @@ YCMD:randomint(playerid, params[], help)
 	new Params[64], iString[160], CommandID;
 	sscanf(params, "s", Params);
 	if(isnull(Params) || IsNumeric(Params)) return
-	
+
 	SendUsageMessage(playerid,"/randomint [base | arena]");
 
 	if(strcmp(Params, "base", true) == 0) CommandID = 1;
@@ -9433,7 +9435,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
  	}
 	// - Low priority key functions
     CheckKnifeSync(playerid, newkeys);
-	    
+
     if(CheckKeysForWeaponBind(playerid, newkeys, oldkeys) == 1)
 	    return 1;
 
@@ -9589,7 +9591,7 @@ forward OnScriptUpdate();
 public OnScriptUpdate()
 {
     CheckVisualDamageTextDraws(); // This basically hides damage textdraws that should be hidden
-    
+
     foreach(new i : Player)
 	{
 	    // AFK Variable Update
