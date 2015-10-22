@@ -3373,6 +3373,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			SpawnConnectedPlayer(playerid, listitem + 1);
 		}
+		else
+		    ShowPlayerClassSelection(playerid);
 		return 1;
 	}
 	#if defined _league_included
