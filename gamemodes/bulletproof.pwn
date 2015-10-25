@@ -9606,7 +9606,7 @@ public OnScriptUpdate()
 		// Update net info textdraws
 		GetPlayerFPS(i);
 		if(PlayerInterface[i][INTERFACE_NET])
-  			PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS: %s%d__%sPing: %s%d__%sPacketLoss: %s%.1f%%", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][FPS], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], GetPlayerPing(i), MAIN_TEXT_COLOUR, TDC[Player[i][Team]], GetPlayerPacketLoss(i)));
+  			PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS %s%d %sPing %s%d %sPacketLoss %s%.1f%%", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][FPS], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], GetPlayerPing(i), MAIN_TEXT_COLOUR, TDC[Player[i][Team]], GetPlayerPacketLoss(i)));
 	}
 	return 1;
 }
