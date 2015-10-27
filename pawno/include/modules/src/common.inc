@@ -1845,6 +1845,7 @@ SyncPlayer(playerid)
 	SetPlayerArmedWeapon(playerid, CurrWep);
 	// Update tick count
 	Player[playerid][LastTimeSynced] = GetTickCount();
+	PlayerPlaySound(playerid, 1139, 0.0, 0.0, 0.0);
 	return 1;
 }
 

@@ -2609,7 +2609,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
     SendClientMessageToAll(-1, " ");
 	SendClientMessageToAll(-1, " ");
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
-    SendClientMessageToAll(-1, "{FFFFFF}Top Stooopids:");
+    SendClientMessageToAll(-1, "{FFFFFF}Top Players:");
 	SendClientMessageToAll(-1, TopString[0]);
 	SendClientMessageToAll(-1, TopString[1]);
 	SendClientMessageToAll(-1, TopString[2]);
@@ -2899,7 +2899,7 @@ public WarEnded()
     SendClientMessageToAll(-1, " ");
 	SendClientMessageToAll(-1, " ");
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
-    SendClientMessageToAll(-1, "{FFFFFF}Top Stooopids:");
+    SendClientMessageToAll(-1, "{FFFFFF}Top Players:");
 	SendClientMessageToAll(-1, TopString[0]);
 	SendClientMessageToAll(-1, TopString[1]);
 	SendClientMessageToAll(-1, TopString[2]);

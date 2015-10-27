@@ -99,6 +99,7 @@ native IsValidVehicle(vehicleid);
 #include "modules\src\weaponbinds.inc"
 #include "modules\src\ac_addons.inc"
 #include "modules\src\vote.inc"
+#include "modules\src\weaponpickup.inc"
 
 main()
 {}
@@ -153,7 +154,7 @@ public OnPlayerConnect(playerid)
 	SendClientMessage(playerid, -1, ""COL_PRIM"Don't miss our updates: {FFFFFF}/checkversion");
 	SendClientMessage(playerid, -1, ""COL_PRIM"Check {FFFFFF}/changelog "COL_PRIM"out to see what's up with this version!");
 	SendClientMessage(playerid, -1, ""COL_PRIM"Developers: {FFFFFF}Whitetiger"COL_PRIM" & {FFFFFF}[KHK]Khalid"COL_PRIM"");
-	SendClientMessage(playerid, -1, ""COL_PRIM"Contributors on GitHub: {FFFFFF}ApplePieLife"COL_PRIM", {FFFFFF}JamesCullum");
+	SendClientMessage(playerid, -1, ""COL_PRIM"Contributors on GitHub: {FFFFFF}ApplePieLife"COL_PRIM", {FFFFFF}JamesCullum"COL_PRIM", {FFFFFF}[RBK]shendlaw");
 	new str[128];
 	format(str,sizeof(str),""COL_PRIM"Server limits:  Min FPS = {FFFFFF}%d "COL_PRIM"| Max Ping = {FFFFFF}%d "COL_PRIM"| Max PL = {FFFFFF}%.2f", Min_FPS, Max_Ping, Float:Max_Packetloss);
 	SendClientMessage(playerid, -1, str);
@@ -1679,6 +1680,11 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		    }
 		}
  	}
+ 	DestroyObject (PlayerObj[playerid]);
+ 	KillTimer (ObjTimer [playerid]);
+ 	PlayerObj [playerid] = CreateObject ( GetWeaponModel (weaponid), 0, 0, 0, 0, 0, 0);
+ 	AttachObjectToPlayer(PlayerObj [playerid], playerid, 0, 0, 1.35, 0, 0, 0);
+ 	ObjTimer [playerid] = SetTimerEx("DestroyPlayerObj", 2000, 0, "i", playerid);
 	return 1;
 }
 
