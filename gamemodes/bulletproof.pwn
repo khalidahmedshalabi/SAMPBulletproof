@@ -99,7 +99,7 @@ native IsValidVehicle(vehicleid);
 #include "modules\src\weaponbinds.inc"
 #include "modules\src\ac_addons.inc"
 #include "modules\src\vote.inc"
-#include "modules\src\weaponpickup.inc"
+#include "modules\src\gunonhead.inc"
 
 main()
 {}
@@ -1680,11 +1680,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		    }
 		}
  	}
- 	DestroyObject (PlayerObj[playerid]);
- 	KillTimer (ObjTimer [playerid]);
- 	PlayerObj [playerid] = CreateObject ( GetWeaponModel (weaponid), 0, 0, 0, 0, 0, 0);
- 	AttachObjectToPlayer(PlayerObj [playerid], playerid, 0, 0, 1.35, 0, 0, 0);
- 	ObjTimer [playerid] = SetTimerEx("DestroyPlayerObj", 2000, 0, "i", playerid);
+ 	CreateGunObjectOnHead(playerid, weaponid);
 	return 1;
 }
 
