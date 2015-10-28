@@ -7056,8 +7056,8 @@ YCMD:changename(playerid,params[], help)
 				else
 					Player[playerid][NameWithoutTag] = Player[playerid][Name];
 
-                UpdateLeagueReadyTextDraw();
 				#if defined _league_included
+				UpdateLeagueReadyTextDraw();
                 CheckPlayerLeagueRegister(playerid);
                 #endif
 			    return 1;
