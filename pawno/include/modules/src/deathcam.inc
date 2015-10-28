@@ -46,7 +46,7 @@ PlayDeathCamera(playerid, Float:deathX, Float:deathY, Float:deathZ, bool:deathqu
 	if(deathquote)
 	{
 		new randWarQuote = random(MAX_WAR_QUOTES);
-		MessageBox(playerid, MSGBOX_TYPE_MIDDLE, sprintf("~r~~h~%s's ~h~quotes..", WarQuotesAuthors[randWarQuote]), WarQuotes[randWarQuote], DEATH_CAMERA_DURATION);
+		MessageBox(playerid, MSGBOX_TYPE_MIDDLE, sprintf("~r~~h~~h~%s", WarQuotesAuthors[randWarQuote]), WarQuotes[randWarQuote], DEATH_CAMERA_DURATION);
 	}
 	
 	// Hide some HUD textdraws

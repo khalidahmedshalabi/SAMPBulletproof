@@ -29,8 +29,8 @@ LoadMatchScoreTextDraws()
 	TextDrawSetShadow(ScoreBoardBoxTD[1], 1);
 
 	RoundsPlayed = TextDrawCreate(523.000000, 111.000000, "~Y~ ro~H~un~H~ds: 0/9");
-	TextDrawBackgroundColor(RoundsPlayed, 255);
-	TextDrawFont(RoundsPlayed, 3);
+	TextDrawBackgroundColor(RoundsPlayed, 0x00000033);
+	TextDrawFont(RoundsPlayed, 1);
 	TextDrawLetterSize(RoundsPlayed, 0.269998, 1.199998);
 	TextDrawColor(RoundsPlayed, 1600086015);
 	TextDrawSetOutline(RoundsPlayed, 1);
@@ -656,7 +656,7 @@ RoundTextdrawsCreate()
 
 	PauseTD = TextDrawCreate(324.000000, 413.000000, "_");
 	TextDrawBackgroundColor(PauseTD, MAIN_BACKGROUND_COLOUR);
-	TextDrawFont(PauseTD, 3);
+	TextDrawFont(PauseTD, 1);
 	TextDrawLetterSize(PauseTD, 0.200000, 1.500000);
 	TextDrawColor(PauseTD, 255);
 	TextDrawSetOutline(PauseTD, 1);
@@ -711,7 +711,7 @@ LoadPlayerTextDraws(playerid)
 	
 	HPTextDraw_TD[playerid] = CreatePlayerTextDraw(playerid,577, 67.1, "_");
 	PlayerTextDrawBackgroundColor(playerid, HPTextDraw_TD[playerid], 0x00000044);
-	PlayerTextDrawFont(playerid, HPTextDraw_TD[playerid], 3);
+	PlayerTextDrawFont(playerid, HPTextDraw_TD[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, HPTextDraw_TD[playerid], 0.2600, 0.8000);
 	PlayerTextDrawColor(playerid, HPTextDraw_TD[playerid], 16711935);
 	PlayerTextDrawSetOutline(playerid, HPTextDraw_TD[playerid], 1);
@@ -721,7 +721,7 @@ LoadPlayerTextDraws(playerid)
 
 	ArmourTextDraw[playerid] = CreatePlayerTextDraw(playerid,577, 45.1, "_");
 	PlayerTextDrawBackgroundColor(playerid, ArmourTextDraw[playerid], 0x00000044);
-	PlayerTextDrawFont(playerid, ArmourTextDraw[playerid], 3);
+	PlayerTextDrawFont(playerid, ArmourTextDraw[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, ArmourTextDraw[playerid], 0.2600, 0.8000);
 	PlayerTextDrawColor(playerid, ArmourTextDraw[playerid], 16711935);
 	PlayerTextDrawSetOutline(playerid, ArmourTextDraw[playerid], 1);
@@ -730,7 +730,7 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawAlignment(playerid, ArmourTextDraw[playerid], 2);
 
 	BaseID_VS[playerid] = CreatePlayerTextDraw(playerid, 548.000000, 25.000000,"_");
-	PlayerTextDrawFont(playerid, BaseID_VS[playerid], 3);
+	PlayerTextDrawFont(playerid, BaseID_VS[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, BaseID_VS[playerid], 0.26000, 1.500000);
 	PlayerTextDrawBackgroundColor(playerid, BaseID_VS[playerid],MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawColor(playerid, BaseID_VS[playerid],-65281);
@@ -923,8 +923,8 @@ LoadPlayerTextDraws(playerid)
 
 UpdateTeamNamesTextdraw()
 {
-	new str[139];
-	format(str, sizeof(str), "~r~~h~~h~%s \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ~b~~h~~h~%s", TeamName[ATTACKER], TeamName[DEFENDER]);
+	new str[159];
+	format(str, sizeof(str), "~r~~h~~h~%s \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ~b~~h~~h~%s", TeamName[ATTACKER], TeamName[DEFENDER]);
 	TextDrawSetString(centerTeamNames , str);
 	return 1;
 }
