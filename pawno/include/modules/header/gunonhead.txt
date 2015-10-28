@@ -1,0 +1,6 @@
+/*
+		Weapon pickup on player head when taking damage
+*/
+
+new PlayerHeadGunObj[MAX_PLAYERS]; //Weapon object on player head when takes hit
+new HeadGunObjTimer[MAX_PLAYERS]; //Weapon object on player head when takes hit
