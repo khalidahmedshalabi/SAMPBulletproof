@@ -420,8 +420,11 @@ public SpawnConnectedPlayer(playerid, team)
 	ShowPlayerProgressBar(playerid, ArmourBar[playerid]);
 	
 	#if defined _league_included
-	if(LeagueServer)
+	if(LeagueServer && !LeagueMode)
+	{
 		UpdateLeagueReadyTextDraw();
+		TextDrawShowForPlayer(playerid, LeagueReadyTD);
+	}
 	#endif
 	if(WarMode == true)
 	{
