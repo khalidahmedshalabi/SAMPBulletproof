@@ -42,6 +42,7 @@ new const WarQuotesAuthors[MAX_WAR_QUOTES][23] = {
 };
 
 
+/*
 // Credits for this vending machines array: Slice
 enum E_VENDING_MACHINE
 {
@@ -143,7 +144,7 @@ stock const Float:arr_VendingMachines[][E_VENDING_MACHINE] =
 	{1776, 17, -33.87, -186.76, 1003.63, 0.00, 0.00, 180.00, -33.89, -185.76},
 	{1775, 17, -32.44, -186.69, 1003.63, 0.00, 0.00, 180.00, -32.46, -185.69},
 	{1775, 16, -35.72, -140.22, 1003.63, 0.00, 0.00, 180.00, -35.74, -139.22}
-};
+};*/
 
 enum SAZONE_MAIN { //Betamaster
 		SAZONE_NAME[28],

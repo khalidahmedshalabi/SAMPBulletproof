@@ -537,11 +537,6 @@ RemoveVendingMachinesForPlayer(playerid)
 	RemoveBuildingForPlayer(playerid, 1775, 0.0, 0.0, 0.0, 20000.0); // CJ_SPRUNK1
 	RemoveBuildingForPlayer(playerid, 1776, 0.0, 0.0, 0.0, 20000.0); // CJ_CANDYVENDOR
 	RemoveBuildingForPlayer(playerid, 1977, 0.0, 0.0, 0.0, 20000.0); // vendin3
-	
-	for(new i = 0; i < sizeof(arr_VendingMachines); i ++)
-	{
-		RemoveBuildingForPlayer(playerid, arr_VendingMachines[i][e_Model], arr_VendingMachines[i][e_PosX], arr_VendingMachines[i][e_PosY], arr_VendingMachines[i][e_PosZ], 1.0);
-	}
 }
 
 RemoveUselessObjectsForPlayer(playerid)
