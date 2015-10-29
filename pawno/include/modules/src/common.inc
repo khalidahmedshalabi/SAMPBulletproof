@@ -646,36 +646,6 @@ IsValidSound(soundid) {
 	return 0;
 }
 
-DB_Escape(text[]){
-	new
-		ret[MAX_INI_ENTRY_TEXT * 2],
-		ch,
-		i,
-		j;
-	while ((ch = text[i++]) && j < sizeof (ret))
-	{
-		if (ch == '\'')
-		{
-			if (j < sizeof (ret) - 2)
-			{
-				ret[j++] = '\'';
-				ret[j++] = '\'';
-			}
-		}
-		else if (j < sizeof (ret))
-		{
-			ret[j++] = ch;
-		}
-		else
-		{
-			j++;
-		}
-	}
-	ret[sizeof (ret) - 1] = '\0';
-	return ret;
-}
-
-
 
 SpawnInAntiLag(playerid) {
 

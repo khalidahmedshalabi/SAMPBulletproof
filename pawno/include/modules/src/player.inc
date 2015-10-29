@@ -33,7 +33,7 @@ GetPlayerAKA(playerid)
 }
 
 MatchAKA(playerid) {
-    AKAString = "";
+    AKAString[0] = EOS;
 	AKAString = GetPlayerAKA(playerid);
 
 	new idx;
@@ -57,7 +57,7 @@ CheckPlayerAKA(playerid)
 	{
 		new str[16];
 		GetPlayerIp(playerid, str, sizeof(str));
-	    AKAString = "";
+	    AKAString[0] = EOS;
 	    AKAString = GetPlayerAKA(playerid);
 	    new add[MAX_PLAYER_NAME+1];
 	    format(add, sizeof(add), ",%s", Player[playerid][Name]);
@@ -66,7 +66,7 @@ CheckPlayerAKA(playerid)
 		else strcat(AKAString, add[1]);
 
 		new query[128];
-		format(query, sizeof(query), "UPDATE `AKAs` SET `Names` = '%s' WHERE `IP` = '%s'", DB_Escape(AKAString), str);
+		format(query, sizeof(query), "UPDATE `AKAs` SET `Names` = '%q' WHERE `IP` = '%s'", AKAString, str);
 		db_free_result(db_query(sqliteconnection, query));
 	}
 }

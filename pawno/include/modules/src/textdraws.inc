@@ -1497,11 +1497,11 @@ TogglePlayerInterface(playerid, bool:toggle, interface = -1)
 				}
 			}
 			new str[70];
-			format(str, sizeof(str), "UPDATE Players SET InterfaceSpec = %d WHERE Name = '%s'", (PlayerInterface[playerid][INTERFACE_SPEC] == true ? 1 : 0), DB_Escape(Player[playerid][Name]));
+			format(str, sizeof(str), "UPDATE Players SET InterfaceSpec = %d WHERE Name = '%q'", (PlayerInterface[playerid][INTERFACE_SPEC] == true ? 1 : 0), Player[playerid][Name]);
 			db_free_result(db_query(sqliteconnection, str));
-			format(str, sizeof(str), "UPDATE Players SET InterfaceNet = %d WHERE Name = '%s'", (PlayerInterface[playerid][INTERFACE_NET] == true ? 1 : 0), DB_Escape(Player[playerid][Name]));
+			format(str, sizeof(str), "UPDATE Players SET InterfaceNet = %d WHERE Name = '%q'", (PlayerInterface[playerid][INTERFACE_NET] == true ? 1 : 0), Player[playerid][Name]);
 			db_free_result(db_query(sqliteconnection, str));
-			format(str, sizeof(str), "UPDATE Players SET InterfaceHP = %d WHERE Name = '%s'", (PlayerInterface[playerid][INTERFACE_HP] == true ? 1 : 0), DB_Escape(Player[playerid][Name]));
+			format(str, sizeof(str), "UPDATE Players SET InterfaceHP = %d WHERE Name = '%q'", (PlayerInterface[playerid][INTERFACE_HP] == true ? 1 : 0), Player[playerid][Name]);
 			db_free_result(db_query(sqliteconnection, str));
 		}
 		case INTERFACE_SPEC:
@@ -1519,7 +1519,7 @@ TogglePlayerInterface(playerid, bool:toggle, interface = -1)
 				}
 			}
 			new str[70];
-			format(str, sizeof(str), "UPDATE Players SET InterfaceSpec = %d WHERE Name = '%s'", (PlayerInterface[playerid][INTERFACE_SPEC] == true ? 1 : 0), DB_Escape(Player[playerid][Name]));
+			format(str, sizeof(str), "UPDATE Players SET InterfaceSpec = %d WHERE Name = '%q'", (PlayerInterface[playerid][INTERFACE_SPEC] == true ? 1 : 0), Player[playerid][Name]);
 			db_free_result(db_query(sqliteconnection, str));
 		}
 		case INTERFACE_NET:
@@ -1537,7 +1537,7 @@ TogglePlayerInterface(playerid, bool:toggle, interface = -1)
 				}
 			}
 			new str[70];
-			format(str, sizeof(str), "UPDATE Players SET InterfaceNet = %d WHERE Name = '%s'", (PlayerInterface[playerid][INTERFACE_NET] == true ? 1 : 0), DB_Escape(Player[playerid][Name]));
+			format(str, sizeof(str), "UPDATE Players SET InterfaceNet = %d WHERE Name = '%q'", (PlayerInterface[playerid][INTERFACE_NET] == true ? 1 : 0), Player[playerid][Name]);
 			db_free_result(db_query(sqliteconnection, str));
 		}
 		case INTERFACE_HP:
@@ -1557,7 +1557,7 @@ TogglePlayerInterface(playerid, bool:toggle, interface = -1)
 				}
 			}
 			new str[70];
-			format(str, sizeof(str), "UPDATE Players SET InterfaceHP = %d WHERE Name = '%s'", (PlayerInterface[playerid][INTERFACE_HP] == true ? 1 : 0), DB_Escape(Player[playerid][Name]));
+			format(str, sizeof(str), "UPDATE Players SET InterfaceHP = %d WHERE Name = '%q'", (PlayerInterface[playerid][INTERFACE_HP] == true ? 1 : 0), Player[playerid][Name]);
 			db_free_result(db_query(sqliteconnection, str));
 		}
 	}
