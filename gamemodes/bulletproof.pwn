@@ -118,7 +118,7 @@ public OnGameModeExit()
 {
 	db_close(sqliteconnection);
 	#if MATCH_SYNC == 1
-	mysql_close();
+		mysql_close();
 	#endif
 	return 1;
 }
@@ -162,8 +162,9 @@ public OnPlayerConnect(playerid)
 	// Initialize the new player
 	InitPlayer(playerid);
 	#if defined _league_included
-	CheckPlayerLeagueRegister(playerid);
+		CheckPlayerLeagueRegister(playerid);
 	#endif
+		
 	CheckPlayerAKA(playerid);
 
 	// Tell everyone that he's connected
