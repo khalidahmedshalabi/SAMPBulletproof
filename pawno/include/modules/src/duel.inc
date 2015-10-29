@@ -76,9 +76,9 @@ UpdateDuellersStats(winner, loser)
 	printf("duel debug: len: %d", strlen(str));
 	SendClientMessageToAll(-1, str);
 	// database
-	format(str, sizeof(str), "UPDATE Players SET DLost = %d WHERE Name = '%s'", Player[loser][DuelsLost], DB_Escape(Player[loser][Name]));
+	format(str, sizeof(str), "UPDATE Players SET DLost = %d WHERE Name = '%q'", Player[loser][DuelsLost], Player[loser][Name]);
 	db_free_result(db_query(sqliteconnection, str));
-	format(str, sizeof(str), "UPDATE Players SET DWon = %d WHERE Name = '%s'", Player[winner][DuelsWon], DB_Escape(Player[winner][Name]));
+	format(str, sizeof(str), "UPDATE Players SET DWon = %d WHERE Name = '%q'", Player[winner][DuelsWon], Player[winner][Name]);
 	db_free_result(db_query(sqliteconnection, str));
 }
 

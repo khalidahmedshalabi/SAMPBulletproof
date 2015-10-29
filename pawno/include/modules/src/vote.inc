@@ -411,7 +411,7 @@ PlayerVoteNetCheck(playerid, onplayerid)
 				Player[onplayerid][PingCheck] = 0;
 				Player[onplayerid][PLCheck] = 0;
 				SendClientMessageToAll(-1, sprintf(""COL_PRIM"Voting result on {FFFFFF}%s: "COL_PRIM"disabled Net-Check!", Player[onplayerid][Name]));
-				db_free_result(db_query(sqliteconnection, sprintf("UPDATE Players SET NetCheck = 0 WHERE Name = '%s'", DB_Escape(Player[onplayerid][Name]))));
+				db_free_result(db_query(sqliteconnection, sprintf("UPDATE Players SET NetCheck = 0 WHERE Name = '%q'", Player[onplayerid][Name])));
 			} 
 			else 
 			{
@@ -420,7 +420,7 @@ PlayerVoteNetCheck(playerid, onplayerid)
 				Player[onplayerid][PingCheck] = 1;
 				Player[onplayerid][PLCheck] = 1;
 				SendClientMessageToAll(-1, sprintf(""COL_PRIM"Voting result on {FFFFFF}%s: "COL_PRIM"enabled Net-Check!", Player[onplayerid][Name]));
-				db_free_result(db_query(sqliteconnection, sprintf("UPDATE Players SET NetCheck = 1 WHERE Name = '%s'", DB_Escape(Player[onplayerid][Name]))));
+				db_free_result(db_query(sqliteconnection, sprintf("UPDATE Players SET NetCheck = 1 WHERE Name = '%q'", Player[onplayerid][Name])));
 			}
 			KillTimer(VoteData[votetype][VotingExpireTimer]);
 			ResetVoting(votetype, false);
