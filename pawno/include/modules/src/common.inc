@@ -37,8 +37,21 @@ SendErrorMessage(playerid, text[], messagebox_type = MSGBOX_TYPE_MIDDLE)
 {
 	if(messagebox_type < 0 || messagebox_type == MAX_MSGBOX_TYPES)
 		return 0;
-	PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
-	MessageBox(playerid, messagebox_type, "~r~~h~Error", text, 5000);
+	
+	switch(messagebox_type)
+	{
+		case MSGBOX_TYPE_MIDDLE:
+		{
+			new str[145];
+			format(str, sizeof(str), "{CC0000}ERROR: {FFFFFF}%s", text);
+			SendClientMessage(playerid, -1, str);
+		}
+		default:
+		{
+			PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+			MessageBox(playerid, messagebox_type, "~r~~h~Error", text, 5000);
+		}
+	}
 	return 1;
 }
 
@@ -46,8 +59,21 @@ SendUsageMessage(playerid, text[], messagebox_type = MSGBOX_TYPE_MIDDLE)
 {
 	if(messagebox_type < 0 || messagebox_type == MAX_MSGBOX_TYPES)
 		return 0;
-	PlayerPlaySound(playerid, 5202, 0.0, 0.0, 0.0);
-	MessageBox(playerid, messagebox_type, "~b~~h~Correct Syntax", text, 5000);
+	
+	switch(messagebox_type)
+	{
+		case MSGBOX_TYPE_MIDDLE:
+		{
+			new str[145];
+			format(str, sizeof(str), "{0000CC}USAGE: {FFFFFF}%s", text);
+			SendClientMessage(playerid, -1, str);
+		}
+		default:
+		{
+			PlayerPlaySound(playerid, 5202, 0.0, 0.0, 0.0);
+			MessageBox(playerid, messagebox_type, "~b~~h~Correct Syntax", text, 5000);
+		}
+	}
 	return 1;
 }
 
@@ -1822,7 +1848,6 @@ SyncPlayer(playerid)
 	SetPlayerArmedWeapon(playerid, CurrWep);
 	// Update tick count
 	Player[playerid][LastTimeSynced] = GetTickCount();
-	PlayerPlaySound(playerid, 1139, 0.0, 0.0, 0.0);
 	return 1;
 }
 
