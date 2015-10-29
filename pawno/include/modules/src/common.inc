@@ -504,9 +504,17 @@ RecountPlayersOnCP()
 
 RemoveVendingMachinesForPlayer(playerid)
 {
+	RemoveBuildingForPlayer(playerid, 955, 0.0, 0.0, 0.0, 20000.0); // CJ_EXT_SPRUNK
+	RemoveBuildingForPlayer(playerid, 956, 0.0, 0.0, 0.0, 20000.0); // CJ_EXT_CANDY
+	RemoveBuildingForPlayer(playerid, 1209, 0.0, 0.0, 0.0, 20000.0); // vendmach
+	RemoveBuildingForPlayer(playerid, 1302, 0.0, 0.0, 0.0, 20000.0); // vendmachfd
+	RemoveBuildingForPlayer(playerid, 1775, 0.0, 0.0, 0.0, 20000.0); // CJ_SPRUNK1
+	RemoveBuildingForPlayer(playerid, 1776, 0.0, 0.0, 0.0, 20000.0); // CJ_CANDYVENDOR
+	RemoveBuildingForPlayer(playerid, 1977, 0.0, 0.0, 0.0, 20000.0); // vendin3
+	
 	for(new i = 0; i < sizeof(arr_VendingMachines); i ++)
 	{
-		RemoveBuildingForPlayer(playerid, arr_VendingMachines[i][e_Model], arr_VendingMachines[i][e_PosX], arr_VendingMachines[i][e_PosY], arr_VendingMachines[i][e_PosZ], 0.25);
+		RemoveBuildingForPlayer(playerid, arr_VendingMachines[i][e_Model], arr_VendingMachines[i][e_PosX], arr_VendingMachines[i][e_PosY], arr_VendingMachines[i][e_PosZ], 1.0);
 	}
 }
 
