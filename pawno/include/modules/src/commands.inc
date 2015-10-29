@@ -131,7 +131,7 @@ SetCommandLevel(command[], level, bool:updatedb)
 	{
 		// The command's got a new level now, tell the database about that too?
 		new str[COMMAND_SQL_QUERY_SIZE];
-		format(str, sizeof(str), "UPDATE Commands SET Level = %d WHERE Command = '%s'", level, DB_Escape(command));
+		format(str, sizeof(str), "UPDATE Commands SET Level = %d WHERE Command = '%q'", level, command);
 		db_free_result(db_query(sqliteconnection, str));
 	}
 	return 1;
@@ -143,7 +143,7 @@ SetCommandLevel(command[], level, bool:updatedb)
 CreateCommandConfig(cmd[], level)
 {
 	new query[COMMAND_SQL_QUERY_SIZE], DBResult:result;
-	format(query, sizeof query, "SELECT Level FROM Commands WHERE Command='%s'", DB_Escape(cmd));
+	format(query, sizeof query, "SELECT Level FROM Commands WHERE Command='%q'", cmd);
 	result = db_query(sqliteconnection, query);
 	if(db_num_rows(result)) // if the command already exists
 	{
@@ -156,7 +156,7 @@ CreateCommandConfig(cmd[], level)
 	else // if it doesn't exist
 	{
 		// insert it into the database
-		format(query, sizeof query, "INSERT INTO Commands (Command, Level) VALUES ('%s', %d)", DB_Escape(cmd), level);
+		format(query, sizeof query, "INSERT INTO Commands (Command, Level) VALUES ('%q', %d)", cmd, level);
 		db_free_result(db_query(sqliteconnection, query));
 		SetCommandLevel(cmd, level, false);
 	}

@@ -167,7 +167,7 @@ public OnPlayerConnect(playerid)
 	CheckPlayerAKA(playerid);
 
 	// Tell everyone that he's connected
-	str = "";
+	str[0] = EOS;
     GetPlayerCountry(playerid, str, sizeof(str));
 	format(str, sizeof(str), "{FFFFFF}%s {757575}(ID: %d) has connected [{FFFFFF}%s{757575}]", Player[playerid][Name], playerid, str);
     SendClientMessageToAll(-1, str);
@@ -215,7 +215,7 @@ public OnPlayerRequestClass(playerid, classid)
 	#endif
 	{
 		new Query[128];
-		format(Query, sizeof(Query), "SELECT Name FROM Players WHERE Name = '%s'", DB_Escape(Player[playerid][Name]));
+		format(Query, sizeof(Query), "SELECT Name FROM Players WHERE Name = '%q'", Player[playerid][Name]);
         new DBResult:result = db_query(sqliteconnection, Query);
 
 		if(!db_num_rows(result))
@@ -231,7 +231,7 @@ public OnPlayerRequestClass(playerid, classid)
 		    GetPlayerIp(playerid, IP, sizeof(IP));
 
 		    // Construct query to check if the player with the same name and IP has connected before to this server
-		    format(Query, sizeof(Query), "SELECT * FROM `Players` WHERE `Name` = '%s' AND `IP` = '%s'", DB_Escape(Player[playerid][Name]), IP);
+		    format(Query, sizeof(Query), "SELECT * FROM `Players` WHERE `Name` = '%q' AND `IP` = '%q'", Player[playerid][Name], IP);
 
 		    // execute
 			new DBResult:res = db_query(sqliteconnection, Query);
@@ -1273,13 +1273,13 @@ public OnRconLoginAttempt(ip[], password[], success)
     }
 	else
 	{
-     	format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%s' AND Level != %d", Player[playerid][Level], DB_Escape(Player[playerid][Name]), Player[playerid][Level]);
+     	format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%q' AND Level != %d", Player[playerid][Level], Player[playerid][Name], Player[playerid][Level]);
     	db_free_result(db_query(sqliteconnection, Str));
         if(Player[playerid][Level] != 5)
         {
 	        Player[playerid][Level] = 5;
 	        UpdatePlayerAdminGroup(playerid);
-			format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%s'", Player[playerid][Level], DB_Escape(Player[playerid][Name]));
+			format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%q'", Player[playerid][Level], Player[playerid][Name]);
     		db_free_result(db_query(sqliteconnection, Str));
 
     		format(Str, sizeof(Str), "{FFFFFF}%s "COL_PRIM"has successfully logged into rcon and got level 5.", iName);
@@ -2010,7 +2010,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        {
 				Player[playerid][WeaponBinding] = !Player[playerid][WeaponBinding];
 				new str[80];
-			    format(str, sizeof(str), "UPDATE Players SET WeaponBinding = %d WHERE Name = '%s'", (Player[playerid][WeaponBinding] == true) ? (1) : (0), DB_Escape(Player[playerid][Name]));
+			    format(str, sizeof(str), "UPDATE Players SET WeaponBinding = %d WHERE Name = '%q'", (Player[playerid][WeaponBinding] == true) ? (1) : (0), Player[playerid][Name]);
 			    db_free_result(db_query(sqliteconnection, str));
 	            return 1;
 	        }
@@ -2040,7 +2040,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			    new index = WeaponBindData[playerid][ModifyingWeaponBindIndex];
 			    WeaponBindData[playerid][BindKeyWeapon][index] = weaponid;
 			    new str[80];
-			    format(str, sizeof(str), "UPDATE Players SET WeaponBind%d = %d WHERE Name = '%s'", index, weaponid, DB_Escape(Player[playerid][Name]));
+			    format(str, sizeof(str), "UPDATE Players SET WeaponBind%d = %d WHERE Name = '%q'", index, weaponid, Player[playerid][Name]);
 			    db_free_result(db_query(sqliteconnection, str));
 			    UpdatePlayerWeaponBindTextDraw(playerid);
 			}
@@ -2325,7 +2325,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new day, month, year;
 			getdate(year, month, day);
 			new query[240];
-			format(query, sizeof(query), "INSERT INTO Players (Name, Password, IP, LastSeen_Day, LastSeen_Month, LastSeen_Year) VALUES('%s', '%s', '%s', %d, %d, %d)", DB_Escape(Player[playerid][Name]), HashPass, IP, day, month, year);
+			format(query, sizeof(query), "INSERT INTO Players (Name, Password, IP, LastSeen_Day, LastSeen_Month, LastSeen_Year) VALUES('%q', '%q', '%q', %d, %d, %d)", Player[playerid][Name], HashPass, IP, day, month, year);
 			db_free_result(db_query(sqliteconnection, query));
 
 			MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~g~~h~register", sprintf("You've successfully registered your account with the password: %s", inputtext), 4000);
@@ -2393,7 +2393,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			format(HashPass, sizeof(HashPass), "%d", udb_hash(inputtext));
 
             new Query[256];
-			format(Query, sizeof(Query), "SELECT * FROM `Players` WHERE `Name` = '%s' AND `Password` = '%s'", DB_Escape(Player[playerid][Name]), HashPass);
+			format(Query, sizeof(Query), "SELECT * FROM `Players` WHERE `Name` = '%q' AND `Password` = '%q'", Player[playerid][Name], HashPass);
 		    new DBResult:res = db_query(sqliteconnection, Query);
 
 			if(db_num_rows(res))
@@ -3989,7 +3989,7 @@ YCMD:deleteacc(playerid, params[], help)
 
     if(strlen(str) > MAX_PLAYER_NAME) return SendErrorMessage(playerid,"Maximum name length: 24 characters.");
 
-    db_free_result(db_query(sqliteconnection, sprintf("DELETE FROM Players WHERE Name = '%s'", DB_Escape(str))));
+    db_free_result(db_query(sqliteconnection, sprintf("DELETE FROM Players WHERE Name = '%q'", str)));
     SendClientMessage(playerid, -1, "Query executed.");
 	return 1;
 }
@@ -4012,7 +4012,7 @@ YCMD:setacclevel(playerid, params[], help)
 
     new iString[128];
 
-	format(iString, sizeof(iString), "UPDATE Players SET Level = %d WHERE Name = '%s'", lev, DB_Escape(str));
+	format(iString, sizeof(iString), "UPDATE Players SET Level = %d WHERE Name = '%q'", lev, str);
     db_free_result(db_query(sqliteconnection, iString));
 
     SendClientMessage(playerid, -1, "Query executed.");
@@ -4572,7 +4572,7 @@ YCMD:limit(playerid, params[], help)
 					Player[i][Weather] = 0;
 					SetPlayerWeather(i, Player[i][Weather]);
 
-					format(iString, sizeof(iString), "UPDATE Players SET Weather = %d WHERE Name = '%s'", Player[i][Weather], DB_Escape(Player[i][Name]));
+					format(iString, sizeof(iString), "UPDATE Players SET Weather = %d WHERE Name = '%q'", Player[i][Weather], Player[i][Name]);
 				    db_free_result(db_query(sqliteconnection, iString));
 				}
 			}
@@ -4589,7 +4589,7 @@ YCMD:limit(playerid, params[], help)
 				    Player[i][Time] = 12;
 				    SetPlayerTime(playerid, Player[i][Time], 12);
 
-					format(iString, sizeof(iString), "UPDATE Players SET Time = %d WHERE Name = '%s'", Player[i][Time], DB_Escape(Player[i][Name]));
+					format(iString, sizeof(iString), "UPDATE Players SET Time = %d WHERE Name = '%q'", Player[i][Time], Player[i][Name]);
 				    db_free_result(db_query(sqliteconnection, iString));
 				}
 			}
@@ -5053,7 +5053,7 @@ YCMD:netcheck(playerid, params[], help)
 	}
 	SendClientMessageToAll(-1, iString);
 
-	format(iString, sizeof(iString), "UPDATE Players SET NetCheck = %d WHERE Name = '%s'", Player[pID][NetCheck], DB_Escape(Player[pID][Name]));
+	format(iString, sizeof(iString), "UPDATE Players SET NetCheck = %d WHERE Name = '%q'", Player[pID][NetCheck], Player[pID][Name]);
     db_free_result(db_query(sqliteconnection, iString));
 
     LogAdminCommand("netcheck", playerid, pID);
@@ -5894,7 +5894,7 @@ YCMD:cchannel(playerid, params[], help)
 
 	Player[playerid][ChatChannel] = Channel;
 
-	format(iString, sizeof(iString), "UPDATE Players SET ChatChannel = %d WHERE Name = '%s'", Channel, DB_Escape(Player[playerid][Name]));
+	format(iString, sizeof(iString), "UPDATE Players SET ChatChannel = %d WHERE Name = '%q'", Channel, Player[playerid][Name]);
     db_free_result(db_query(sqliteconnection, iString));
 
 	foreach(new i : Player) {
@@ -6538,8 +6538,9 @@ YCMD:deathdiss(playerid, params[], help)
 	if(strlen(params) >= 64) return SendErrorMessage(playerid,"Too long!");
 
 	new iString[128];
-	format(DeathMessageStr[playerid], 64, "%s", params);
-	format(iString, sizeof(iString), "UPDATE `Players` SET `DeathMessage` = '%s' WHERE `Name` = '%s'", DB_Escape(params), DB_Escape(Player[playerid][Name]) );
+	strcat(DeathMessageStr[playerid], params, 64);
+
+	format(iString, sizeof(iString), "UPDATE `Players` SET `DeathMessage` = '%q' WHERE `Name` = '%q'", params, Player[playerid][Name]);
 	db_free_result(db_query(sqliteconnection, iString));
 	Player[playerid][HasDeathQuote] = true;
 	SendClientMessage(playerid, -1, "Death diss message has been changed successfully!");
@@ -6565,7 +6566,7 @@ YCMD:fightstyle(playerid, params[], help)
 	Player[playerid][FightStyle] = FightStyleIDs[fsID];
 	SetPlayerFightingStyle(playerid, Player[playerid][FightStyle]);
 	new iString[128];
-	format(iString, sizeof(iString), "UPDATE `Players` SET `FightStyle` = '%d' WHERE `Name` = '%s'", Player[playerid][FightStyle], DB_Escape(Player[playerid][Name]) );
+	format(iString, sizeof(iString), "UPDATE `Players` SET `FightStyle` = '%d' WHERE `Name` = '%q'", Player[playerid][FightStyle], Player[playerid][Name]);
 	db_free_result(db_query(sqliteconnection, iString));
 	SendClientMessage(playerid, -1, sprintf(""COL_PRIM"FightStyle changed to: {FFFFFF}%s", FightStyleNames[fsID]));
 	return 1;
@@ -6990,7 +6991,7 @@ YCMD:changepass(playerid, params[], help)
 	format(HashPass, sizeof(HashPass), "%d", udb_hash(params));
 
 	new iString[356];
-	format(iString, sizeof(iString), "UPDATE Players SET Password = '%s' WHERE Name = '%s'", HashPass, DB_Escape(Player[playerid][Name]));
+	format(iString, sizeof(iString), "UPDATE Players SET Password = '%q' WHERE Name = '%q'", HashPass, Player[playerid][Name]);
     db_free_result(db_query(sqliteconnection, iString));
 
 	format(HashPass, sizeof(HashPass), "Your password is changed to: %s", params);
@@ -7025,7 +7026,7 @@ YCMD:changename(playerid,params[], help)
 				DBResult: result
 			;
 
-			format( iString, sizeof(iString), "SELECT * FROM `Players` WHERE `Name` = '%s'", DB_Escape(params) );
+			format( iString, sizeof(iString), "SELECT * FROM `Players` WHERE `Name` = '%q'", params);
 			result = db_query(sqliteconnection, iString);
 
 			if(db_num_rows(result) > 0)
@@ -7043,7 +7044,7 @@ YCMD:changename(playerid,params[], help)
 				format(iString, sizeof(iString),">> {FFFFFF}%s "COL_PRIM"has changed name to {FFFFFF}%s",Player[playerid][Name],params);
 				SendClientMessageToAll(-1,iString);
 
-				format(iString, sizeof(iString), "UPDATE `Players` SET `Name` = '%s' WHERE `Name` = '%s'", DB_Escape(params), DB_Escape(Player[playerid][Name]) );
+				format(iString, sizeof(iString), "UPDATE `Players` SET `Name` = '%q' WHERE `Name` = '%q'", params, Player[playerid][Name]);
 				db_free_result(db_query(sqliteconnection, iString));
 
 				format( Player[playerid][Name], MAX_PLAYER_NAME, "%s", params );
@@ -7167,7 +7168,7 @@ YCMD:aka(playerid, params[], help) {
     }
     if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player is not connected.");
 
-    AKAString = "";
+    AKAString[0] = EOS;
 	AKAString = GetPlayerAKA(pID);
 	format(AKAString, sizeof(AKAString), "{FFFFFF}%s", AKAString);
 
@@ -7595,7 +7596,7 @@ YCMD:gunmenustyle(playerid, params[], help)
 		return SendUsageMessage(playerid,"/gunmenustyle [dialog / object]");
 
 	Player[playerid][GunmenuStyle] = style;
-   	db_free_result(db_query(sqliteconnection, sprintf("UPDATE Players SET GunmenuStyle = %d WHERE Name = '%s'", style, DB_Escape(Player[playerid][Name]))));
+   	db_free_result(db_query(sqliteconnection, sprintf("UPDATE Players SET GunmenuStyle = %d WHERE Name = '%q'", style, Player[playerid][Name])));
    	SendClientMessage(playerid, -1, sprintf("Changed gunmenu style to: %s", styleStr));
 	return 1;
 }
@@ -8801,7 +8802,7 @@ YCMD:setlevel(playerid, params[], help)
 
 	new iString[128];
 
-	format(iString, sizeof(iString), "UPDATE Players SET Level = %d WHERE Name = '%s' AND Level != %d", LEVEL, DB_Escape(Player[GiveID][Name]), LEVEL);
+	format(iString, sizeof(iString), "UPDATE Players SET Level = %d WHERE Name = '%q' AND Level != %d", LEVEL, Player[GiveID][Name], LEVEL);
     db_free_result(db_query(sqliteconnection, iString));
 
 	Player[GiveID][Level] = LEVEL;
@@ -8833,7 +8834,7 @@ YCMD:weather(playerid,params[], help)
     new iString[128];
 
 
-	format(iString, sizeof(iString), "UPDATE Players SET Weather = %d WHERE Name = '%s'", myweather, DB_Escape(Player[playerid][Name]));
+	format(iString, sizeof(iString), "UPDATE Players SET Weather = %d WHERE Name = '%q'", myweather, Player[playerid][Name]);
     db_free_result(db_query(sqliteconnection, iString));
 
     format(iString, sizeof(iString), "{FFFFFF}Weather changed to: %d", myweather);
@@ -8893,7 +8894,7 @@ YCMD:sound(playerid, params[], help)
 
 			    Player[playerid][HitSound] = Val;
 			}
-			format(iString, sizeof(iString), "UPDATE Players SET HitSound = %d WHERE Name = '%s'", Player[playerid][HitSound], DB_Escape(Player[playerid][Name]));
+			format(iString, sizeof(iString), "UPDATE Players SET HitSound = %d WHERE Name = '%q'", Player[playerid][HitSound], Player[playerid][Name]);
 		    db_free_result(db_query(sqliteconnection, iString));
 
 			PlayerPlaySound(playerid, Player[playerid][HitSound], 0, 0, 0);
@@ -8916,7 +8917,7 @@ YCMD:sound(playerid, params[], help)
 
 			    Player[playerid][GetHitSound] = Val;
 			}
-			format(iString, sizeof(iString), "UPDATE Players SET GetHitSound = %d WHERE Name = '%s'", Player[playerid][GetHitSound], DB_Escape(Player[playerid][Name]));
+			format(iString, sizeof(iString), "UPDATE Players SET GetHitSound = %d WHERE Name = '%q'", Player[playerid][GetHitSound], Player[playerid][Name]);
 		    db_free_result(db_query(sqliteconnection, iString));
 
 			PlayerPlaySound(playerid, Player[playerid][GetHitSound], 0, 0, 0);
@@ -8949,7 +8950,7 @@ YCMD:time(playerid, params[], help)
 
 	new iString[128];
 
-	format(iString, sizeof(iString), "UPDATE Players SET Time = %d WHERE Name = '%s'", mytime, DB_Escape(Player[playerid][Name]));
+	format(iString, sizeof(iString), "UPDATE Players SET Time = %d WHERE Name = '%q'", mytime, Player[playerid][Name]);
     db_free_result(db_query(sqliteconnection, iString));
 
     format(iString, sizeof(iString), "{FFFFFF}Time changed to: %d", mytime);
