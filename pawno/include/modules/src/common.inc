@@ -37,8 +37,21 @@ SendErrorMessage(playerid, text[], messagebox_type = MSGBOX_TYPE_MIDDLE)
 {
 	if(messagebox_type < 0 || messagebox_type == MAX_MSGBOX_TYPES)
 		return 0;
-	PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
-	MessageBox(playerid, messagebox_type, "~r~~h~Error", text, 5000);
+	
+	switch(messagebox_type)
+	{
+		case MSGBOX_TYPE_MIDDLE:
+		{
+			new str[145];
+			format(str, sizeof(str), "{CC0000}ERROR: {FFFFFF}%s", text);
+			SendClientMessage(playerid, -1, str);
+		}
+		default:
+		{
+			PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+			MessageBox(playerid, messagebox_type, "~r~~h~Error", text, 5000);
+		}
+	}
 	return 1;
 }
 
@@ -46,8 +59,21 @@ SendUsageMessage(playerid, text[], messagebox_type = MSGBOX_TYPE_MIDDLE)
 {
 	if(messagebox_type < 0 || messagebox_type == MAX_MSGBOX_TYPES)
 		return 0;
-	PlayerPlaySound(playerid, 5202, 0.0, 0.0, 0.0);
-	MessageBox(playerid, messagebox_type, "~b~~h~Correct Syntax", text, 5000);
+	
+	switch(messagebox_type)
+	{
+		case MSGBOX_TYPE_MIDDLE:
+		{
+			new str[145];
+			format(str, sizeof(str), "{0000CC}USAGE: {FFFFFF}%s", text);
+			SendClientMessage(playerid, -1, str);
+		}
+		default:
+		{
+			PlayerPlaySound(playerid, 5202, 0.0, 0.0, 0.0);
+			MessageBox(playerid, messagebox_type, "~b~~h~Correct Syntax", text, 5000);
+		}
+	}
 	return 1;
 }
 
@@ -504,10 +530,13 @@ RecountPlayersOnCP()
 
 RemoveVendingMachinesForPlayer(playerid)
 {
-	for(new i = 0; i < sizeof(arr_VendingMachines); i ++)
-	{
-		RemoveBuildingForPlayer(playerid, arr_VendingMachines[i][e_Model], arr_VendingMachines[i][e_PosX], arr_VendingMachines[i][e_PosY], arr_VendingMachines[i][e_PosZ], 0.25);
-	}
+	RemoveBuildingForPlayer(playerid, 955, 0.0, 0.0, 0.0, 20000.0); // CJ_EXT_SPRUNK
+	RemoveBuildingForPlayer(playerid, 956, 0.0, 0.0, 0.0, 20000.0); // CJ_EXT_CANDY
+	RemoveBuildingForPlayer(playerid, 1209, 0.0, 0.0, 0.0, 20000.0); // vendmach
+	RemoveBuildingForPlayer(playerid, 1302, 0.0, 0.0, 0.0, 20000.0); // vendmachfd
+	RemoveBuildingForPlayer(playerid, 1775, 0.0, 0.0, 0.0, 20000.0); // CJ_SPRUNK1
+	RemoveBuildingForPlayer(playerid, 1776, 0.0, 0.0, 0.0, 20000.0); // CJ_CANDYVENDOR
+	RemoveBuildingForPlayer(playerid, 1977, 0.0, 0.0, 0.0, 20000.0); // vendin3
 }
 
 RemoveUselessObjectsForPlayer(playerid)
@@ -1814,7 +1843,6 @@ SyncPlayer(playerid)
 	SetPlayerArmedWeapon(playerid, CurrWep);
 	// Update tick count
 	Player[playerid][LastTimeSynced] = GetTickCount();
-	PlayerPlaySound(playerid, 1139, 0.0, 0.0, 0.0);
 	return 1;
 }
 

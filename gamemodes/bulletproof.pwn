@@ -154,7 +154,7 @@ public OnPlayerConnect(playerid)
 	SendClientMessage(playerid, -1, ""COL_PRIM"Don't miss our updates: {FFFFFF}/checkversion");
 	SendClientMessage(playerid, -1, ""COL_PRIM"Check {FFFFFF}/changelog "COL_PRIM"out to see what's up with this version!");
 	SendClientMessage(playerid, -1, ""COL_PRIM"Developers: {FFFFFF}Whitetiger"COL_PRIM" & {FFFFFF}[KHK]Khalid"COL_PRIM"");
-	SendClientMessage(playerid, -1, ""COL_PRIM"Contributors on GitHub: {FFFFFF}ApplePieLife"COL_PRIM", {FFFFFF}JamesCullum"COL_PRIM", {FFFFFF}[RBK]shendlaw");
+	SendClientMessage(playerid, -1, ""COL_PRIM"Contributors on GitHub: {FFFFFF}ApplePieLife"COL_PRIM", {FFFFFF}JamesCullum"COL_PRIM", {FFFFFF}shendlaw"COL_PRIM", {FFFFFF}pds2k12");
 	new str[128];
 	format(str,sizeof(str),""COL_PRIM"Server limits:  Min FPS = {FFFFFF}%d "COL_PRIM"| Max Ping = {FFFFFF}%d "COL_PRIM"| Max PL = {FFFFFF}%.2f", Min_FPS, Max_Ping, Float:Max_Packetloss);
 	SendClientMessage(playerid, -1, str);
@@ -3561,7 +3561,8 @@ public e_COMMAND_ERRORS:OnPlayerCommandReceived(playerid, cmdtext[], e_COMMAND_E
     {
         case COMMAND_UNDEFINED:
         {
-            MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~y~~h~Unknown Command", sprintf("~r~~h~%s ~w~is an unknown command. Check /cmds, /acmds or /cmdhelp for more info!", cmdtext), 3000);
+            //MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~y~~h~Unknown Command", sprintf("~r~~h~%s ~w~is an unknown command. Check /cmds, /acmds or /cmdhelp for more info!", cmdtext), 3000);
+			SendErrorMessage(playerid, sprintf("Unknown command: %s. Check /cmds, /acmds or /cmdhelp for more info!", cmdtext));
 			return COMMAND_DENIED;
 		}
 		case COMMAND_DENIED:
@@ -3958,7 +3959,10 @@ YCMD:hud(playerid, params[], help)
 	}
     new toggleStr[4], hudid;
 	if(sscanf(params, "is", hudid, toggleStr))
-	    return SendUsageMessage(playerid,"/hud [HUD ID] [on / off]~n~~n~HUD IDs:~n~-1 = ALL~n~0 = spectators~n~1 = net stats~n~2 = hp percent");
+	{
+	    SendUsageMessage(playerid,"/hud [HUD ID] [on / off]");
+		return SendClientMessage(playerid, -1, ""COL_PRIM"Note: {FFFFFF}HUD IDs are (-1 = ALL) (0 = spectators) (1 = net stats) (2 = hp percent)");
+	}
 
 	if(hudid < -1 || hudid == MAX_PLAYER_INTERFACE_ASPECTS)
 	    return SendErrorMessage(playerid, "Invalid HUD ID");
@@ -3969,7 +3973,10 @@ YCMD:hud(playerid, params[], help)
 	else if(strcmp(toggleStr, "off", true) == 0)
 		toggle = false;
 	else
-		return SendUsageMessage(playerid,"/hud [HUD ID] [on / off]~n~~n~HUD IDs:~n~0 = spectators~n~1 = net stats~n~2 = hp percent");
+	{
+	    SendUsageMessage(playerid,"/hud [HUD ID] [on / off]");
+		return SendClientMessage(playerid, -1, ""COL_PRIM"Note: {FFFFFF}HUD IDs are (-1 = ALL) (0 = spectators) (1 = net stats) (2 = hp percent)");
+	}
 
 	TogglePlayerInterface(playerid, toggle, hudid);
 	return 1;
@@ -4440,8 +4447,11 @@ YCMD:duel(playerid, params[], help)
 	}
 	new invitedid, Weapon1[23], Weapon2[23], duelarena[8], size;
 
- 	if(sscanf(params, "isiss", invitedid, duelarena, size, Weapon1, Weapon2)) return SendUsageMessage(playerid,"/duel [Player ID] [default/custom] [area size] [Weapon 1] [Weapon 2]~n~~n~[custom] to play in your current zone~n~[default] for default duel arena");
-
+ 	if(sscanf(params, "isiss", invitedid, duelarena, size, Weapon1, Weapon2))
+	{
+		SendUsageMessage(playerid,"/duel [Player ID] [default/custom] [area size] [Weapon 1] [Weapon 2]");
+        return SendClientMessage(playerid, -1, ""COL_PRIM"Note: {FFFFFF}[custom] to play in your current place and [default] for default duel arena");
+	}
 	if(!IsPlayerConnected(invitedid)) return SendErrorMessage(playerid,"That player isn't connected.");
 	if(Player[invitedid][Playing] == true) return SendErrorMessage(playerid,"That player is in a round.");
 	if(Player[playerid][Playing] == true) return SendErrorMessage(playerid,"You can't duel while being in a round.");
@@ -4450,9 +4460,11 @@ YCMD:duel(playerid, params[], help)
 	if(Player[invitedid][challengerid] == playerid) return SendErrorMessage(playerid,"You have already invited that player for duel. Let him accept or deny your previous invite.");    //duelspamfix
 	if(invitedid == playerid) return SendErrorMessage(playerid,"Can't duel with yourself.");
 
-	if(isnull(duelarena) || IsNumeric(duelarena)) return
-	SendUsageMessage(playerid,"/duel [Player ID] [default/custom] [area size] [Weapon 1] [Weapon 2]~n~~n~[custom] to play in your current zone~n~[default] for default duel arena");
-
+	if(isnull(duelarena) || IsNumeric(duelarena))
+	{
+		SendUsageMessage(playerid,"/duel [Player ID] [default/custom] [area size] [Weapon 1] [Weapon 2]");
+        return SendClientMessage(playerid, -1, ""COL_PRIM"Note: {FFFFFF}[custom] to play in your current place and [default] for default duel arena");
+	}
 	new duelarenaid;
     if(!strcmp(duelarena, "default", true))
 	{
@@ -4463,8 +4475,10 @@ YCMD:duel(playerid, params[], help)
         duelarenaid = 1 + DEFAULT_DUEL_ARENA_ID;
 	}
 	else
-		return SendUsageMessage(playerid,"/duel [Player ID] [default/custom] [area size] [Weapon 1] [Weapon 2]~n~~n~[custom] to play in your current zone~n~[default] for default duel arena");
-
+	{
+		SendUsageMessage(playerid,"/duel [Player ID] [default/custom] [area size] [Weapon 1] [Weapon 2]");
+        return SendClientMessage(playerid, -1, ""COL_PRIM"Note: {FFFFFF}[custom] to play in your current place and [default] for default duel arena");
+	}
 	if(size < 60)
 	    return SendErrorMessage(playerid, "Size cannot be less than 60 units.");
 
