@@ -22,7 +22,7 @@ GetPlayerAKA(playerid)
     GetPlayerIp(playerid, IP, sizeof(IP));
 	new DBResult:dbres = db_query(sqliteconnection, sprintf("SELECT `Names` FROM `AKAs` WHERE `IP` = '%s'", IP));
 
-	AKAString = "";
+	AKAString[0] = EOS;
 	if(db_num_rows(dbres) > 0) {
 		db_get_field_assoc(dbres, "Names", AKAString, sizeof(AKAString));
 	} else {
@@ -101,10 +101,10 @@ InitPlayerNames(playerid)
 // Loads and format shortcut messages as default
 LoadDefaultShortcuts(playerid)
 {
-	format(PlayerShortcut[playerid][Shortcut1], 50, "Back off! Back off!");
-    format(PlayerShortcut[playerid][Shortcut2], 50, "I found their sniper");
-	format(PlayerShortcut[playerid][Shortcut3], 50, "Spasser is attacking me!!");
-	format(PlayerShortcut[playerid][Shortcut4], 50, "Camp! Camp!");
+	strcat(PlayerShortcut[playerid][Shortcut1], "Back off! Back off!", 50);
+	strcat(PlayerShortcut[playerid][Shortcut2], "I found their sniper", 50);
+	strcat(PlayerShortcut[playerid][Shortcut3], "Spasser is attacking me!!", 50);
+	strcat(PlayerShortcut[playerid][Shortcut4], "Camp! Camp!", 50);
     EditingShortcutOf{playerid} = 250; // unique
 }
 
@@ -289,7 +289,7 @@ LoginPlayer(playerid, DBResult:res)
 	
 	// Load Death Messages
 	db_get_field_assoc(res, "DeathMessage", iString, sizeof(iString));
-	format(DeathMessageStr[playerid], 64, "%s", iString);
+	strcat(DeathMessageStr[playerid], iString, 64);
 	if(strcmp("NO_DEATH_MESSAGE", DeathMessageStr[playerid], false) != 0)
 		Player[playerid][HasDeathQuote] = true;
 	
@@ -321,7 +321,7 @@ LoginPlayer(playerid, DBResult:res)
 	
 	// Load Temp Tag (used for league FT matches)
 	db_get_field_assoc(res, "TempTag", iString, sizeof(iString));
-	format(Player[playerid][TempTag], 7, "%s", iString);
+	strcat(Player[playerid][TempTag], iString, 7);
 	
 	// Load Weapon Binding 
 	db_get_field_assoc(res, "WeaponBinding", iString, sizeof(iString));
