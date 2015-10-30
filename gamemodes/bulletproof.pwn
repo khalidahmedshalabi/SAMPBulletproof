@@ -110,7 +110,7 @@ public OnGameModeInit()
     InitScriptCoreVariables();
 	InitScriptSecondarySettings();
 	AddToServersDatabase();
-	SetTimer("OnScriptUpdate", 1000, true); // Timer that is repeatedly called every second (will be using this for most global stuff)
+	SetTimer("OnScriptUpdate", 1000, true); // Timer that is repeatedly called every second (will be using this for most global stuff)-
 	return 1;
 }
 

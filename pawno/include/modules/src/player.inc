@@ -20,14 +20,14 @@ GetPlayerAKA(playerid)
 {
     new IP[16];
     GetPlayerIp(playerid, IP, sizeof(IP));
-	new DBResult:dbres = db_query(sqliteconnection, sprintf("SELECT `Names` FROM `AKAs` WHERE `IP` = '%q'", IP));
+	new DBResult:dbres = db_query(sqliteconnection, sprintf("SELECT `Names` FROM `AKAs` WHERE `IP` = '%s'", IP));
 
-	AKAString = "";
+	AKAString[0] = EOS;
 	if(db_num_rows(dbres) > 0) {
 		db_get_field_assoc(dbres, "Names", AKAString, sizeof(AKAString));
 	} else {
 		db_free_result(db_query(sqliteconnection, sprintf("INSERT INTO `AKAs` (`IP`, `Names`) VALUES ('%s', '%s')", IP, "")));
-	}
+	}-
 	db_free_result(dbres);
 	return AKAString;
 }
@@ -66,7 +66,7 @@ CheckPlayerAKA(playerid)
 		else strcat(AKAString, add[1]);
 
 		new query[128];
-		format(query, sizeof(query), "UPDATE `AKAs` SET `Names` = '%q' WHERE `IP` = '%q'", AKAString, str);
+		format(query, sizeof(query), "UPDATE `AKAs` SET `Names` = '%q' WHERE `IP` = '%s'", AKAString, str);
 		db_free_result(db_query(sqliteconnection, query));
 	}
 }
