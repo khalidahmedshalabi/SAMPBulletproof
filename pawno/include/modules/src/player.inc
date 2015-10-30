@@ -20,7 +20,7 @@ GetPlayerAKA(playerid)
 {
     new IP[16];
     GetPlayerIp(playerid, IP, sizeof(IP));
-	new DBResult:dbres = db_query(sqliteconnection, sprintf("SELECT `Names` FROM `AKAs` WHERE `IP` = '%s'", IP));
+	new DBResult:dbres = db_query(sqliteconnection, sprintf("SELECT `Names` FROM `AKAs` WHERE `IP` = '%q'", IP));
 
 	AKAString = "";
 	if(db_num_rows(dbres) > 0) {
@@ -66,7 +66,7 @@ CheckPlayerAKA(playerid)
 		else strcat(AKAString, add[1]);
 
 		new query[128];
-		format(query, sizeof(query), "UPDATE `AKAs` SET `Names` = '%q' WHERE `IP` = '%s'", AKAString, str);
+		format(query, sizeof(query), "UPDATE `AKAs` SET `Names` = '%q' WHERE `IP` = '%q'", AKAString, str);
 		db_free_result(db_query(sqliteconnection, query));
 	}
 }
@@ -100,11 +100,11 @@ InitPlayerNames(playerid)
 
 // Loads and format shortcut messages as default
 LoadDefaultShortcuts(playerid)
-{
-	format(PlayerShortcut[playerid][Shortcut1], 50, "Back off! Back off!");
-    format(PlayerShortcut[playerid][Shortcut2], 50, "I found their sniper");
-	format(PlayerShortcut[playerid][Shortcut3], 50, "Spasser is attacking me!!");
-	format(PlayerShortcut[playerid][Shortcut4], 50, "Camp! Camp!");
+{	
+	strcat(PlayerShortcut[playerid][Shortcut1], "Back off! Back off!", 50);
+	strcat(PlayerShortcut[playerid][Shortcut2], "I found their sniper", 50);
+	strcat(PlayerShortcut[playerid][Shortcut3], "Spasser is attacking me!!", 50);
+	strcat(PlayerShortcut[playerid][Shortcut4], "Camp! Camp!", 50);
     EditingShortcutOf{playerid} = 250; // unique
 }
 
@@ -289,7 +289,8 @@ LoginPlayer(playerid, DBResult:res)
 	
 	// Load Death Messages
 	db_get_field_assoc(res, "DeathMessage", iString, sizeof(iString));
-	format(DeathMessageStr[playerid], 64, "%s", iString);
+	strcat(DeathMessageStr[playerid], iString, 64);
+
 	if(strcmp("NO_DEATH_MESSAGE", DeathMessageStr[playerid], false) != 0)
 		Player[playerid][HasDeathQuote] = true;
 	
@@ -321,7 +322,8 @@ LoginPlayer(playerid, DBResult:res)
 	
 	// Load Temp Tag (used for league FT matches)
 	db_get_field_assoc(res, "TempTag", iString, sizeof(iString));
-	format(Player[playerid][TempTag], 7, "%s", iString);
+	strcat(Player[playerid][TempTag], iString, 7);
+
 	
 	// Load Weapon Binding 
 	db_get_field_assoc(res, "WeaponBinding", iString, sizeof(iString));
