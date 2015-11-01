@@ -503,6 +503,21 @@ bool:IsGunSelectionOkay(playerid, weaponid, index)
 					return false;
 				}
 			}
+			// Make sure players won't have more than 2 bullet weapons in Bases
+			if(IsBulletWeapon(weaponid))
+			{
+				new ct = 0;
+				for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
+				{
+					if(IsBulletWeapon(GunmenuData[i][GunID]) && GunmenuData[i][HasGun][playerid])
+						ct ++;
+				}
+				if(ct >= 2)
+				{
+					SendErrorMessage(playerid, "You cannot have more than 2 (bullet) weapons in Bases!", messagebox_type);
+					return false;
+				}
+			}
 		}
 		case ARENA:
 		{
@@ -529,7 +544,7 @@ bool:IsGunSelectionOkay(playerid, weaponid, index)
 				}
 				if(ct >= 2)
 				{
-					SendErrorMessage(playerid, "You cannot have more than 2 weapons in Arenas!", messagebox_type);
+					SendErrorMessage(playerid, "You cannot have more than 2 (bullet) weapons in Arenas!", messagebox_type);
 					return false;
 				}
 			}
