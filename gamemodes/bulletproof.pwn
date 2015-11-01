@@ -5192,11 +5192,12 @@ YCMD:leaguehelp(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display help about league mode.");
 	    return 1;
 	}
-	new str[550];
+	new str[660];
+	strcat(str, "{FFFFFF}Type /league and stop worrying because everything should start automatically! Or do it manually...\n\n");
 	strcat(str, ""COL_PRIM"How to start a league match: clan vs clan\n\n{FFFFFF}Before starting a league match between 2 clans, you have to make sure that ");
 	strcat(str, "both clans are registered in the\nleague ("GM_WEBSITE") and players are registered in those clans.");
- 	strcat(str, "Once done of\nclan/player registration, you can easily enable league mode by using /league clan\n\n\n");
-	strcat(str, ""COL_PRIM"How to start a league match: funteams (ft)\n\n{FFFFFF}Make sure players are logged into their league accounts, enable match mode, balance teams and then /league ft");
+ 	strcat(str, "Once done of\nclan/player registration, you can easily enable league mode by using /leaguematch clan\n\n\n");
+	strcat(str, ""COL_PRIM"How to start a league match: funteams (ft)\n\n{FFFFFF}Make sure players are logged into their league accounts, enable match mode, balance teams and then /leaguematch ft");
 	ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "League mode help", str, "That's cool!", "");
 	return 1;
 }
@@ -5229,7 +5230,41 @@ YCMD:league(playerid, params[], help)
 {
     if(help)
 	{
-	    SendCommandHelpMessage(playerid, "enable league mode.");
+	    SendCommandHelpMessage(playerid, "enable league (server) mode.");
+	    return 1;
+	}
+    #if defined _league_included
+    //if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
+    if(WarMode == true && LeagueServer != true) return SendErrorMessage(playerid, "Can't use this when match mode is on.");
+    if(Current != -1) return SendErrorMessage(playerid, "Can't use this while a round is in progress.");
+    switch(LeagueServer)
+    {
+		case false:
+		{
+		    new iString[128];
+		    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"league server{FFFFFF} option (type /ready to start a league match).", Player[playerid][Name]);
+			SendClientMessageToAll(-1, iString);
+			ToggleLeagueServer(true);
+		}
+		case true:
+		{
+		    new iString[128];
+		    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"league server{FFFFFF} option.", Player[playerid][Name]);
+			SendClientMessageToAll(-1, iString);
+			ToggleLeagueServer(false);
+		}
+    }
+	#else
+	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
+	#endif
+	return 1;
+}
+
+YCMD:leaguematch(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "start league match.");
 	    return 1;
 	}
 	#if defined _league_included
@@ -5240,14 +5275,14 @@ YCMD:league(playerid, params[], help)
 
 	new leagueTypeStr[5], playersCount;
 	if(sscanf(params, "si", leagueTypeStr, playersCount))
-	    return SendUsageMessage(playerid,"/league [ft / clan] [match mode (players): 3, 4, 5...]");
+	    return SendUsageMessage(playerid,"/leaguematch [ft / clan] [match mode (players): 3, 4, 5...]");
 
 	if(strcmp(leagueTypeStr, "ft", true) == 0)
 		LeagueMatchType = LEAGUE_MATCH_TYPE_FT;
 	else if(strcmp(leagueTypeStr, "clan", true) == 0)
 		LeagueMatchType = LEAGUE_MATCH_TYPE_CLAN;
 	else
-		return SendUsageMessage(playerid,"/league [ft / clan] [players: 3, 4, 5...]");
+		return SendUsageMessage(playerid,"/leaguematch [ft / clan] [players: 3, 4, 5...]");
 
 	if(playersCount < 3)
 		return SendErrorMessage(playerid, "League matches cannot be less than 3v3");
