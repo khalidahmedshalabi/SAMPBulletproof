@@ -3021,7 +3021,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						}
 				    }
 
-					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'LeagueServer'", (ChangeName == false ? 0 : 1));
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'LeagueServer'", (LeagueServer == false ? 0 : 1));
 				    db_free_result(db_query(sqliteconnection, iString));
 					#else
 					SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
@@ -5256,7 +5256,7 @@ YCMD:league(playerid, params[], help)
 			ToggleLeagueServer(false);
 		}
     }
-    format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'LeagueServer'", (ChangeName == false ? 0 : 1));
+    format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'LeagueServer'", (LeagueServer == false ? 0 : 1));
   	db_free_result(db_query(sqliteconnection, iString));
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
