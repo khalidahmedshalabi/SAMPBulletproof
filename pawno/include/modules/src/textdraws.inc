@@ -6,10 +6,11 @@
 
 #include "modules\header\weaponshot.txt"
 
-// Credits: [U]27 aka [U]jay
 // Match scoreboard textdraws
 LoadMatchScoreTextDraws()
 {	
+	/*
+	// Credits: [U]27 aka [U]jay
 	ScoreBoardBoxTD[0] = TextDrawCreate(474.000000, 7.000000, "-");
 	TextDrawBackgroundColor(ScoreBoardBoxTD[0], 255);
 	TextDrawFont(ScoreBoardBoxTD[0], 1);
@@ -85,7 +86,32 @@ LoadMatchScoreTextDraws()
 	TextDrawUseBox(MatchScoreBoardSprite, 1);
 	TextDrawBoxColor(MatchScoreBoardSprite, 255);
 	TextDrawTextSize(MatchScoreBoardSprite, 16.000000, 16.000000);
-	TextDrawSetSelectable(MatchScoreBoardSprite, 0);
+	TextDrawSetSelectable(MatchScoreBoardSprite, 0);*/
+	
+	RoundsPlayed = TextDrawCreate(555.000000, 114.000000, "_");
+	TextDrawAlignment(RoundsPlayed, 2);
+	TextDrawBackgroundColor(RoundsPlayed, 255);
+	TextDrawFont(RoundsPlayed, 1);
+	TextDrawLetterSize(RoundsPlayed, 0.330000, 1.65000);
+	TextDrawBackgroundColor(RoundsPlayed,MAIN_BACKGROUND_COLOUR);
+	TextDrawColor(RoundsPlayed, 16711935);
+	TextDrawSetOutline(RoundsPlayed, 1);
+	TextDrawSetProportional(RoundsPlayed, 1);
+	TextDrawSetShadow(RoundsPlayed,0);
+	TextDrawTextSize(RoundsPlayed, 20, 100);
+	TextDrawSetSelectable(RoundsPlayed, 1);
+
+    TeamScoreText = TextDrawCreate(557.000000, 100.000000,"_");
+	TextDrawFont(TeamScoreText, 1);
+	TextDrawLetterSize(TeamScoreText, 0.330000, 1.650000);
+	TextDrawBackgroundColor(TeamScoreText,MAIN_BACKGROUND_COLOUR);
+	TextDrawColor(TeamScoreText,-65281);
+	TextDrawSetOutline(TeamScoreText, 1);
+    TextDrawSetProportional(TeamScoreText, 1);
+    TextDrawAlignment(TeamScoreText,2);
+    TextDrawSetShadow(TeamScoreText,0);
+	TextDrawTextSize(TeamScoreText, 20, 200);
+	TextDrawSetSelectable(TeamScoreText, 1);
 }
 
 LoadTextDraws()
@@ -1051,25 +1077,29 @@ ShowMatchScoreBoard(playerid = -1)
 	{
 		case -1:
 		{
-			TextDrawShowForAll(ScoreBoardBoxTD[0]);
+			/*TextDrawShowForAll(ScoreBoardBoxTD[0]);
 			TextDrawShowForAll(ScoreBoardBoxTD[1]);
 			TextDrawShowForAll(RoundsPlayed);
 			TextDrawShowForAll(TeamScoreText);
 			TextDrawShowForAll(TeamAttackerTD);
 			TextDrawShowForAll(TeamDefenderTD);
 			TextDrawShowForAll(MatchVersusTD);
-			TextDrawShowForAll(MatchScoreBoardSprite);
+			TextDrawShowForAll(MatchScoreBoardSprite);*/
+			TextDrawShowForAll(TeamScoreText);
+			TextDrawShowForAll(RoundsPlayed);
 		}
 		default:
 		{
-			TextDrawShowForPlayer(playerid, ScoreBoardBoxTD[0]);
+			/*TextDrawShowForPlayer(playerid, ScoreBoardBoxTD[0]);
 			TextDrawShowForPlayer(playerid, ScoreBoardBoxTD[1]);
 			TextDrawShowForPlayer(playerid, RoundsPlayed);
 			TextDrawShowForPlayer(playerid, TeamScoreText);
 			TextDrawShowForPlayer(playerid, TeamAttackerTD);
 			TextDrawShowForPlayer(playerid, TeamDefenderTD);
 			TextDrawShowForPlayer(playerid, MatchVersusTD);
-			TextDrawShowForPlayer(playerid, MatchScoreBoardSprite);
+			TextDrawShowForPlayer(playerid, MatchScoreBoardSprite);*/
+			TextDrawShowForPlayer(playerid, TeamScoreText);
+			TextDrawShowForPlayer(playerid, RoundsPlayed);
 		}
 	}
 }
@@ -1080,43 +1110,54 @@ HideMatchScoreBoard(playerid = -1)
 	{
 		case -1:
 		{
-			TextDrawHideForAll(ScoreBoardBoxTD[0]);
+			/*TextDrawHideForAll(ScoreBoardBoxTD[0]);
 			TextDrawHideForAll(ScoreBoardBoxTD[1]);
 			TextDrawHideForAll(RoundsPlayed);
 			TextDrawHideForAll(TeamScoreText);
 			TextDrawHideForAll(TeamAttackerTD);
 			TextDrawHideForAll(TeamDefenderTD);
 			TextDrawHideForAll(MatchVersusTD);
-			TextDrawHideForAll(MatchScoreBoardSprite);
+			TextDrawHideForAll(MatchScoreBoardSprite);*/
+			TextDrawHideForAll(TeamScoreText);
+			TextDrawHideForAll(RoundsPlayed);
 		}
 		default:
 		{
-			TextDrawHideForPlayer(playerid, ScoreBoardBoxTD[0]);
+			/*TextDrawHideForPlayer(playerid, ScoreBoardBoxTD[0]);
 			TextDrawHideForPlayer(playerid, ScoreBoardBoxTD[1]);
 			TextDrawHideForPlayer(playerid, RoundsPlayed);
 			TextDrawHideForPlayer(playerid, TeamScoreText);
 			TextDrawHideForPlayer(playerid, TeamAttackerTD);
 			TextDrawHideForPlayer(playerid, TeamDefenderTD);
 			TextDrawHideForPlayer(playerid, MatchVersusTD);
-			TextDrawHideForPlayer(playerid, MatchScoreBoardSprite);
+			TextDrawHideForPlayer(playerid, MatchScoreBoardSprite);*/
+			TextDrawHideForPlayer(playerid, TeamScoreText);
+			TextDrawHideForPlayer(playerid, RoundsPlayed);
 		}
 	}
 }
 
 UpdateTeamScoreTextDraw()
 {
-	TextDrawSetString(TeamScoreText, sprintf("%d     %d", TeamScore[ATTACKER], TeamScore[DEFENDER]));
-}
-
-UpdateRoundsPlayedTextDraw()
-{
-	TextDrawSetString(RoundsPlayed, sprintf( "~h~Ro~h~un~h~ds: ~h~%d/%d", CurrentRound, TotalRounds));
+	//TextDrawSetString(TeamScoreText, sprintf("%d     %d", TeamScore[ATTACKER], TeamScore[DEFENDER]));
+	new iString[160];
+	format(iString, sizeof(iString), "~r~%s %s(~r~%d%s)  ~b~~h~%s %s(~b~~h~%d%s)",TeamName[ATTACKER],MAIN_TEXT_COLOUR,TeamScore[ATTACKER],MAIN_TEXT_COLOUR,TeamName[DEFENDER],MAIN_TEXT_COLOUR,TeamScore[DEFENDER],MAIN_TEXT_COLOUR);
+    TextDrawSetString(TeamScoreText, iString);
 }
 
 UpdateTeamNameTextDraw()
 {
-	TextDrawSetString(TeamAttackerTD, sprintf("~r~~h~~h~%s", TeamName[ATTACKER]));
-	TextDrawSetString(TeamDefenderTD, sprintf("~b~~h~~h~%s", TeamName[DEFENDER]));
+	/*TextDrawSetString(TeamAttackerTD, sprintf("~r~~h~~h~%s", TeamName[ATTACKER]));
+	TextDrawSetString(TeamDefenderTD, sprintf("~b~~h~~h~%s", TeamName[DEFENDER]));*/
+	new iString[160];
+	format(iString, sizeof(iString), "~r~%s %s(~r~%d%s)  ~b~~h~%s %s(~b~~h~%d%s)",TeamName[ATTACKER],MAIN_TEXT_COLOUR,TeamScore[ATTACKER],MAIN_TEXT_COLOUR,TeamName[DEFENDER],MAIN_TEXT_COLOUR,TeamScore[DEFENDER],MAIN_TEXT_COLOUR);
+    TextDrawSetString(TeamScoreText, iString);
+}
+
+UpdateRoundsPlayedTextDraw()
+{
+	//TextDrawSetString(RoundsPlayed, sprintf( "~h~Ro~h~un~h~ds: ~h~%d/%d", CurrentRound, TotalRounds));
+	TextDrawSetString(RoundsPlayed, sprintf("%sRounds ~r~~h~~h~%d~r~/~h~~h~%d", MAIN_TEXT_COLOUR, CurrentRound, TotalRounds));
 }
 
 // This finds the Y co-ordinate of the next free place for the team HP bar textdraw

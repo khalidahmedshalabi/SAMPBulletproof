@@ -29,6 +29,7 @@
 
 new bool:PlayerInterface[MAX_PLAYERS][MAX_PLAYER_INTERFACE_ASPECTS];
 
+/*
 // Match scoreboard textdraws (credits [U]27 aka [U]jay)
 new Text: ScoreBoardBoxTD[2];
 new Text: RoundsPlayed;
@@ -37,7 +38,11 @@ new Text: TeamAttackerTD;
 new Text: TeamDefenderTD;
 new Text: MatchVersusTD;
 new Text: MatchScoreBoardSprite;
+*/
 
+// Scoreboard textdraws
+new Text: RoundsPlayed; // Shows how many rounds are played out of for example 9 rounds. (Rounds 3/9)
+new Text: TeamScoreText; // Shows team name and score (e.g. TeK 3 CZE 3)
 
 // - Global Textdraws -
 new Text: AnnTD;
