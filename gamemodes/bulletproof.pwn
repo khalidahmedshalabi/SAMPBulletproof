@@ -3685,7 +3685,7 @@ YCMD:cmds(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display server commands");
 	    return 1;
 	}
-	new str[1024], cmdsInLine = 0;
+	new str[1500], cmdsInLine = 0;
 	strcat(str,
 		"Use ! for team chat\nPress N to request for backup in a round\nPress H to lead your team\nUse # to talk in chat channel\nUse @ for admin chat\nIf you need help with a command, use /cmdhelp\n\n");
 	foreach(new i : Command())
