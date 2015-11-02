@@ -15,7 +15,7 @@
 #define TEAM_LEADER_COLOUR 		0xB7FFAEFF  // Light green colour
 
 // Client message color
-#define COL_PRIM    "{FF3035}" // Primary color used in client messages
+#define COL_PRIM    "{01A2F8}" // Primary color used in client messages
 #define COL_SEC     "{FFFFFF}" // Secondary color used in client messages
 
 // Team text colors
