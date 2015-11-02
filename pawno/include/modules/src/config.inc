@@ -184,7 +184,7 @@ LoadConfig()
 	
 	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // League server
 	#if defined _league_included
-	ToggleLeagueServer(strval(iString) == 1 ? true : false);
+	SetTimerEx("ToggleLeagueServer", 3000, false, "b", strval(iString) == 1 ? true : false);
 	#endif
     db_next_row(res);
 	
