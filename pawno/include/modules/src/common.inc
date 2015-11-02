@@ -1568,6 +1568,8 @@ public SetCPForPlayer(playerid)
 		}
 		case ARENA:
 		{
+			if(!CPInArena)
+				return 0;
 			SetPlayerCheckpoint(playerid, ACPSpawn[Current][0], ACPSpawn[Current][1], ACPSpawn[Current][2], 2);
 			GangZoneShowForPlayer(playerid, CPZone, 0x00000033);
 		}

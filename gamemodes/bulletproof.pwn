@@ -3027,6 +3027,28 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 					#endif
 				}
+				case 17:
+				{
+				    if(Current != -1) return SendErrorMessage(playerid, "Can't use this while a round is in progress.");
+				    switch(CPInArena)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Checkpoint in arena{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							CPInArena = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Checkpoint in arena{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							CPInArena = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'CPInArena'", (CPInArena == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
 	        }
 	    }
 	    return 1;
@@ -6134,6 +6156,7 @@ YCMD:fixcp(playerid, params[], help)
 	    return 1;
 	}
 	if(RCArena == true) return SendErrorMessage(playerid, "There are no checkpoints in RC arenas!");
+	if(GameType == ARENA && !CPInArena) return SendErrorMessage(playerid, "Checkpoint in arenas option is disabled in this server");
 	if(Player[playerid][Playing])
 	{
         SetTimerEx("SetCPForPlayer", 1000, false, "i", playerid);

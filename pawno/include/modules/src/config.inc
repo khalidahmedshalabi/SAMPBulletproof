@@ -90,6 +90,11 @@ ShowConfigDialog(playerid) {
 		strcat(string, "\n{66FF66}League server features [Disable]");
 	else
 		strcat(string, "\n{FF6666}League server features [Enable]");
+	
+	if(CPInArena == true)
+		strcat(string, "\n{66FF66}Checkpoint in arena");
+	else
+		strcat(string, "\n{FF6666}Checkpoint in arena");
 
     ShowPlayerDialog(playerid, DIALOG_CONFIG, DIALOG_STYLE_LIST, ""COL_PRIM"Config Settings", string, "OK", "Cancel");
     return 1;
@@ -182,6 +187,10 @@ LoadConfig()
 	#if defined _league_included
 	ToggleLeagueServer(LeagueServer);
 	#endif
+    db_next_row(res);
+	
+	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // CP in arena
+    CPInArena = (strval(iString) == 1 ? true : false);
     db_next_row(res);
 
 	db_free_result(res);
