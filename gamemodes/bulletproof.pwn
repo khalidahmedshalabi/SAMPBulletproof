@@ -1414,7 +1414,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		if(!IsValidHitRange(playerid, issuerid, weaponid, dist) && GetPlayerTeam(issuerid) != GetPlayerTeam(playerid))
 	    {
 	    	// Weapon range exceeded
-			MessageBox(issuerid, MSGBOX_TYPE_MIDDLE, "~r~~h~hit out of range", sprintf("On: %s~n~Weapon: %s~n~Hit range: %.3f~n~Max hit range (exceeded): %.3f", Player[playerid][Name], WeaponNames[weaponid], dist, WeaponRanges[weaponid]), 3000);
+			SendClientMessage(issuerid, -1, sprintf("{FF0000}Hit out range: {FFFFFF}On: %s / Weapon: %s / Hit range: %.2f / Max range (exceeded): %.2f", Player[playerid][Name], WeaponNames[weaponid], dist, WeaponRanges[weaponid]));
 		    SetFakeHealthArmour(playerid);
 			return 1;
 	    }
