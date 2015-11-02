@@ -1938,9 +1938,6 @@ public OnBaseStart(BaseID)
 	CPZone = GangZoneCreate(BCPSpawn[Current][0]-50, BCPSpawn[Current][1]-50, BCPSpawn[Current][0]+50, BCPSpawn[Current][1]+50);
 	GangZoneShowForAll(CPZone, 0xFF000044);
 	
-	new str[128];
-	format(str, sizeof str, "ID: %d~n~Name: %s~n~Location/Region: %s", Current, BName[Current], Get3DZoneName(BCPSpawn[Current][0], BCPSpawn[Current][1], BCPSpawn[Current][2]));
-	
 	foreach(new i : Player) {
 		Player[i][LastVehicle] = -1;
 
@@ -1973,13 +1970,6 @@ public OnBaseStart(BaseID)
 			SetPlayerCameraPos(i,BCPSpawn[Current][0],BCPSpawn[Current][1],BCPSpawn[Current][2]);
 			SetPlayerPos(i, BCPSpawn[Current][0]+10, BCPSpawn[Current][1]+10, BCPSpawn[Current][2]);
 			SetCPForPlayer(i); // Set checkpoint location and size.
-			MessageBox(
-				i, // player to show msg box for
-				MSGBOX_TYPE_MIDDLE, // type
-				"~p~~h~~h~base info", // caption
-				str, 
-				ViewTimer * 1000 // time
-				);
 		}
 		PlayerTextDrawSetString(i, BaseID_VS[i], iString);
 	}
@@ -2076,7 +2066,7 @@ public ViewBaseForPlayers()
 SpawnPlayersInBase()
 {
 	ClearChat();
-	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Base started: {FFFFFF}%s (ID: %d)", BName[Current], Current));
+	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Base started: {FFFFFF}%s (ID: %d | Location: %s)", BName[Current], Current, Get3DZoneName(BCPSpawn[Current][0], BCPSpawn[Current][1], BCPSpawn[Current][2])));
 	new iString[160];
 	foreach(new i : Player) 
 	{

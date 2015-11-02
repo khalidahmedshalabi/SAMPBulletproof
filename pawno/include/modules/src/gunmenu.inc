@@ -152,13 +152,13 @@ ResetPlayerGunmenu(playerid, bool:showagain)
 ShowGunmenuHelp(playerid)
 {
 	#if GTAV_SWITCH_MENU != 0
-	MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~b~~h~~h~gunmenu help", "Changed mind? Type /gunmenu again!~n~Code your own weapon key binds by using ~r~~h~/weaponbinds~n~Press ~r~~h~~k~~VEHICLE_ENTER_EXIT~ ~w~for quicker gun switching", 4000);
+	SendClientMessage(playerid, -1, ""COL_PRIM"Gunmenu help: {FFFFFF}/gunmenu to reselect guns, /weaponbinds to code weapon binds or press RETURN for quicker gun switching");
 	#else
-	MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~b~~h~~h~gunmenu help", "Changed mind? Type /gunmenu again!~n~Code your own weapon key binds by using ~r~~h~/weaponbinds", 4000);
+	SendClientMessage(playerid, -1, ""COL_PRIM"Gunmenu help: {FFFFFF}/gunmenu to reselect guns or /weaponbinds to code weapon binds");
 	#endif
 	#if defined _league_included
 	if(LeagueMode)
-		MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~p~~h~~h~league shop", "Type /shop to start shopping now!", 7000);
+		MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~p~~h~~h~league shop", "Type /shop to start shopping now and make use of your league points!", 7000);
 	#endif
 }
 
@@ -503,6 +503,21 @@ bool:IsGunSelectionOkay(playerid, weaponid, index)
 					return false;
 				}
 			}
+			// Make sure players won't have more than 2 bullet weapons in Bases
+			if(IsBulletWeapon(weaponid))
+			{
+				new ct = 0;
+				for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
+				{
+					if(IsBulletWeapon(GunmenuData[i][GunID]) && GunmenuData[i][HasGun][playerid])
+						ct ++;
+				}
+				if(ct >= 2)
+				{
+					SendErrorMessage(playerid, "You cannot have more than 2 (bullet) weapons in Bases!", messagebox_type);
+					return false;
+				}
+			}
 		}
 		case ARENA:
 		{
@@ -529,7 +544,7 @@ bool:IsGunSelectionOkay(playerid, weaponid, index)
 				}
 				if(ct >= 2)
 				{
-					SendErrorMessage(playerid, "You cannot have more than 2 weapons in Arenas!", messagebox_type);
+					SendErrorMessage(playerid, "You cannot have more than 2 (bullet) weapons in Arenas!", messagebox_type);
 					return false;
 				}
 			}

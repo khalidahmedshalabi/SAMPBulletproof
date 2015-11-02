@@ -1414,7 +1414,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		if(!IsValidHitRange(playerid, issuerid, weaponid, dist) && GetPlayerTeam(issuerid) != GetPlayerTeam(playerid))
 	    {
 	    	// Weapon range exceeded
-			MessageBox(issuerid, MSGBOX_TYPE_MIDDLE, "~r~~h~hit out of range", sprintf("On: %s~n~Weapon: %s~n~Hit range: %.3f~n~Max hit range (exceeded): %.3f", Player[playerid][Name], WeaponNames[weaponid], dist, WeaponRanges[weaponid]), 3000);
+			SendClientMessage(issuerid, -1, sprintf("{FF0000}Hit out range: {FFFFFF}On: %s / Weapon: %s / Hit range: %.2f / Max range (exceeded): %.2f", Player[playerid][Name], WeaponNames[weaponid], dist, WeaponRanges[weaponid]));
 		    SetFakeHealthArmour(playerid);
 			return 1;
 	    }
@@ -3020,9 +3020,34 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							ToggleLeagueServer(false);
 						}
 				    }
+
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'LeagueServer'", (LeagueServer == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
 					#else
 					SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 					#endif
+				}
+				case 17:
+				{
+				    if(Current != -1) return SendErrorMessage(playerid, "Can't use this while a round is in progress.");
+				    switch(CPInArena)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Checkpoint in arena{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							CPInArena = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Checkpoint in arena{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							CPInArena = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'CPInArena'", (CPInArena == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
 				}
 	        }
 	    }
@@ -3685,7 +3710,7 @@ YCMD:cmds(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display server commands");
 	    return 1;
 	}
-	new str[1024], cmdsInLine = 0;
+	new str[1500], cmdsInLine = 0;
 	strcat(str,
 		"Use ! for team chat\nPress N to request for backup in a round\nPress H to lead your team\nUse # to talk in chat channel\nUse @ for admin chat\nIf you need help with a command, use /cmdhelp\n\n");
 	foreach(new i : Command())
@@ -5237,23 +5262,24 @@ YCMD:league(playerid, params[], help)
     //if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
     if(WarMode == true && LeagueServer != true) return SendErrorMessage(playerid, "Can't use this when match mode is on.");
     if(Current != -1) return SendErrorMessage(playerid, "Can't use this while a round is in progress.");
+    new iString[128];
     switch(LeagueServer)
     {
 		case false:
 		{
-		    new iString[128];
 		    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"league server{FFFFFF} option (type /ready to start a league match).", Player[playerid][Name]);
 			SendClientMessageToAll(-1, iString);
 			ToggleLeagueServer(true);
 		}
 		case true:
 		{
-		    new iString[128];
 		    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"league server{FFFFFF} option.", Player[playerid][Name]);
 			SendClientMessageToAll(-1, iString);
 			ToggleLeagueServer(false);
 		}
     }
+    format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'LeagueServer'", (LeagueServer == false ? 0 : 1));
+  	db_free_result(db_query(sqliteconnection, iString));
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 	#endif
@@ -6130,6 +6156,7 @@ YCMD:fixcp(playerid, params[], help)
 	    return 1;
 	}
 	if(RCArena == true) return SendErrorMessage(playerid, "There are no checkpoints in RC arenas!");
+	if(GameType == ARENA && !CPInArena) return SendErrorMessage(playerid, "Checkpoint in arenas option is disabled in this server");
 	if(Player[playerid][Playing])
 	{
         SetTimerEx("SetCPForPlayer", 1000, false, "i", playerid);
