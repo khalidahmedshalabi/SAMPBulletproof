@@ -3020,6 +3020,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							ToggleLeagueServer(false);
 						}
 				    }
+
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'LeagueServer'", (ChangeName == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
 					#else
 					SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 					#endif
@@ -5237,23 +5240,24 @@ YCMD:league(playerid, params[], help)
     //if(LeagueMode) return SendErrorMessage(playerid, "Can't use this when league mode is enabled.");
     if(WarMode == true && LeagueServer != true) return SendErrorMessage(playerid, "Can't use this when match mode is on.");
     if(Current != -1) return SendErrorMessage(playerid, "Can't use this while a round is in progress.");
+    new iString[128];
     switch(LeagueServer)
     {
 		case false:
 		{
-		    new iString[128];
 		    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"league server{FFFFFF} option (type /ready to start a league match).", Player[playerid][Name]);
 			SendClientMessageToAll(-1, iString);
 			ToggleLeagueServer(true);
 		}
 		case true:
 		{
-		    new iString[128];
 		    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"league server{FFFFFF} option.", Player[playerid][Name]);
 			SendClientMessageToAll(-1, iString);
 			ToggleLeagueServer(false);
 		}
     }
+    format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'LeagueServer'", (ChangeName == false ? 0 : 1));
+  	db_free_result(db_query(sqliteconnection, iString));
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 	#endif
