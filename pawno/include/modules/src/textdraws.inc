@@ -239,11 +239,10 @@ LoadTextDraws()
 	TextDrawFont(DarkScreen, 3);
 	TextDrawLetterSize(DarkScreen, 0.500000, 1.000000);
 	TextDrawColor(DarkScreen, -1);
-	TextDrawSetOutline(DarkScreen, 0);
+	TextDrawSetOutline(DarkScreen, 1);
 	TextDrawSetProportional(DarkScreen, 1);
-	TextDrawSetShadow(DarkScreen, 1);
 	TextDrawUseBox(DarkScreen, 1);
-	TextDrawBoxColor(DarkScreen, 153);
+	TextDrawBoxColor(DarkScreen, 0x00000055);
 	TextDrawTextSize(DarkScreen, -16.000000, 105.000000);
 	
 	for(new i = 0; i < MAX_TEAMS; i ++)
