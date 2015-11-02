@@ -683,7 +683,7 @@ RoundTextdrawsCreate()
 	TextDrawAlignment(DefHpLose,3);
 	TextDrawSetShadow(DefHpLose, 0);
 
-	TeamHpLose[0] = TextDrawCreate(170.000000, 398.000000, "_");
+	TeamHpLose[0] = TextDrawCreate(170.000000, 403.000000, "_");
 	TextDrawAlignment(TeamHpLose[0], 2);
 	TextDrawFont(TeamHpLose[0], 2);
 	TextDrawLetterSize(TeamHpLose[0], 0.50000, 2.00000);
@@ -693,7 +693,7 @@ RoundTextdrawsCreate()
 	TextDrawSetProportional(TeamHpLose[0], 1);
 	TextDrawSetShadow(TeamHpLose[0],0);
 
-	TeamHpLose[1] = TextDrawCreate(450.000000, 398.000000, "_");
+	TeamHpLose[1] = TextDrawCreate(450.000000, 403.000000, "_");
 	TextDrawAlignment(TeamHpLose[1], 2);
 	TextDrawFont(TeamHpLose[1], 2);
 	TextDrawLetterSize(TeamHpLose[1], 0.50000, 2.00000);
