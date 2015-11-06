@@ -95,6 +95,11 @@ ShowConfigDialog(playerid) {
 		strcat(string, "\n{66FF66}Checkpoint in arena");
 	else
 		strcat(string, "\n{FF6666}Checkpoint in arena");
+	
+	if(AntiMacros == true)
+		strcat(string, "\n{66FF66}Anti-macros system");
+	else
+		strcat(string, "\n{FF6666}Anti-macros system");
 
     ShowPlayerDialog(playerid, DIALOG_CONFIG, DIALOG_STYLE_LIST, ""COL_PRIM"Config Settings", string, "OK", "Cancel");
     return 1;
@@ -190,6 +195,10 @@ LoadConfig()
 	
 	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // CP in arena
     CPInArena = (strval(iString) == 1 ? true : false);
+    db_next_row(res);
+	
+	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // AntiMacros
+    AntiMacros = (strval(iString) == 1 ? true : false);
     db_next_row(res);
 
 	db_free_result(res);

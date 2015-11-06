@@ -3049,6 +3049,27 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
+				case 18:
+				{
+				    switch(AntiMacros)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Anti-macros{FFFFFF} system.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							AntiMacros = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Anti-macros{FFFFFF} system.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							AntiMacros = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'AntiMacros'", (AntiMacros == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
 	        }
 	    }
 	    return 1;
@@ -9206,7 +9227,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	        }
 	    }
 	}
-	if(CheckPlayerSprintMacro(playerid, newkeys, oldkeys) == true)
+	if(AntiMacros == true && CheckPlayerSprintMacro(playerid, newkeys, oldkeys) == true)
 	    return 1;
 
     if(Player[playerid][TextDrawOnScreen] == true && PRESSED(4))
