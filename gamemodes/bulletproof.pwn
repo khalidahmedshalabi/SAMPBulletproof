@@ -152,9 +152,9 @@ public OnPlayerConnect(playerid)
 	SendClientMessage(playerid, -1, ""COL_PRIM"It's {FFFFFF}Bulletproof"COL_PRIM". Your bullets are fruitless. You can't take it down!");
 	SendClientMessage(playerid, -1, ""COL_PRIM"Get started: {FFFFFF}/help "COL_PRIM"and {FFFFFF}/cmds");
 	SendClientMessage(playerid, -1, ""COL_PRIM"Don't miss our updates: {FFFFFF}/checkversion");
-	SendClientMessage(playerid, -1, ""COL_PRIM"Check {FFFFFF}/changelog "COL_PRIM"out to see what's up with this version!");
 	SendClientMessage(playerid, -1, ""COL_PRIM"Developers: {FFFFFF}Whitetiger"COL_PRIM" & {FFFFFF}[KHK]Khalid"COL_PRIM"");
 	SendClientMessage(playerid, -1, ""COL_PRIM"Contributors on GitHub: {FFFFFF}ApplePieLife"COL_PRIM", {FFFFFF}JamesCullum"COL_PRIM", {FFFFFF}shendlaw"COL_PRIM", {FFFFFF}pds2k12");
+	SendClientMessage(playerid, -1, ""COL_PRIM"Find league matches easier: {FFFFFF}http://infinite-gaming.ml/khk/matchfinder/");
 	new str[128];
 	format(str,sizeof(str),""COL_PRIM"Server limits:  Min FPS = {FFFFFF}%d "COL_PRIM"| Max Ping = {FFFFFF}%d "COL_PRIM"| Max PL = {FFFFFF}%.2f", Min_FPS, Max_Ping, Float:Max_Packetloss);
 	SendClientMessage(playerid, -1, str);
