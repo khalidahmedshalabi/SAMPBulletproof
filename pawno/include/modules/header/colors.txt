@@ -23,6 +23,6 @@ new TextColor[MAX_TEAMS][10];
 new TDC[MAX_TEAMS][13];
 
 // Server theme (textdraws) color
-new MAIN_BACKGROUND_COLOUR = (0xEEEEEE33);
+new MAIN_BACKGROUND_COLOUR = (0x00000055);
 new MAIN_TEXT_COLOUR[16] /*   =	("~w~")*/;
 new ColScheme[10] = ""COL_PRIM"";

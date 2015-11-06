@@ -90,14 +90,12 @@ LoadMatchScoreTextDraws()
 	
 	RoundsPlayed = TextDrawCreate(555.000000, 114.000000, "_");
 	TextDrawAlignment(RoundsPlayed, 2);
-	TextDrawBackgroundColor(RoundsPlayed, 255);
 	TextDrawFont(RoundsPlayed, 1);
 	TextDrawLetterSize(RoundsPlayed, 0.330000, 1.65000);
 	TextDrawBackgroundColor(RoundsPlayed,MAIN_BACKGROUND_COLOUR);
 	TextDrawColor(RoundsPlayed, 16711935);
 	TextDrawSetOutline(RoundsPlayed, 1);
 	TextDrawSetProportional(RoundsPlayed, 1);
-	TextDrawSetShadow(RoundsPlayed,0);
 	TextDrawTextSize(RoundsPlayed, 20, 100);
 	TextDrawSetSelectable(RoundsPlayed, 1);
 
@@ -109,7 +107,6 @@ LoadMatchScoreTextDraws()
 	TextDrawSetOutline(TeamScoreText, 1);
     TextDrawSetProportional(TeamScoreText, 1);
     TextDrawAlignment(TeamScoreText,2);
-    TextDrawSetShadow(TeamScoreText,0);
 	TextDrawTextSize(TeamScoreText, 20, 200);
 	TextDrawSetSelectable(TeamScoreText, 1);
 }
@@ -788,7 +785,7 @@ LoadPlayerTextDraws(playerid)
     PlayerTextDrawSetShadow(playerid, TD_RoundSpec[playerid], 0);
 
 	FPSPingPacket[playerid] = CreatePlayerTextDraw(playerid,502.0, 1.4, "_");
-	PlayerTextDrawBackgroundColor(playerid, FPSPingPacket[playerid], 0x00000011);
+	PlayerTextDrawBackgroundColor(playerid, FPSPingPacket[playerid], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, FPSPingPacket[playerid], 1);
     PlayerTextDrawLetterSize(playerid, FPSPingPacket[playerid], 0.190000, 0.93000);
 	PlayerTextDrawColor(playerid, FPSPingPacket[playerid], 16711935);
@@ -799,7 +796,7 @@ LoadPlayerTextDraws(playerid)
 	RoundKillDmgTDmg[playerid] = CreatePlayerTextDraw(playerid,3.000000, 403.000000, "_");
 	PlayerTextDrawFont(playerid, RoundKillDmgTDmg[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, RoundKillDmgTDmg[playerid], 0.200000, 0.900000);
-	PlayerTextDrawBackgroundColor(playerid, RoundKillDmgTDmg[playerid], 0x00000011);
+	PlayerTextDrawBackgroundColor(playerid, RoundKillDmgTDmg[playerid], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawColor(playerid, RoundKillDmgTDmg[playerid], 16711935);
 	PlayerTextDrawSetOutline(playerid, RoundKillDmgTDmg[playerid], 1);
 	PlayerTextDrawSetProportional(playerid, RoundKillDmgTDmg[playerid], 1);
@@ -1149,7 +1146,7 @@ UpdateTeamNameTextDraw()
 	/*TextDrawSetString(TeamAttackerTD, sprintf("~r~~h~~h~%s", TeamName[ATTACKER]));
 	TextDrawSetString(TeamDefenderTD, sprintf("~b~~h~~h~%s", TeamName[DEFENDER]));*/
 	new iString[160];
-	format(iString, sizeof(iString), "~r~%s %s(~r~%d%s)  ~b~~h~%s %s(~b~~h~%d%s)",TeamName[ATTACKER],MAIN_TEXT_COLOUR,TeamScore[ATTACKER],MAIN_TEXT_COLOUR,TeamName[DEFENDER],MAIN_TEXT_COLOUR,TeamScore[DEFENDER],MAIN_TEXT_COLOUR);
+	format(iString, sizeof(iString), "~r~~h~~h~%s %s(~r~~h~~h~%d%s)  ~b~~h~~h~%s %s(~b~~h~~h~%d%s)",TeamName[ATTACKER],MAIN_TEXT_COLOUR,TeamScore[ATTACKER],MAIN_TEXT_COLOUR,TeamName[DEFENDER],MAIN_TEXT_COLOUR,TeamScore[DEFENDER],MAIN_TEXT_COLOUR);
     TextDrawSetString(TeamScoreText, iString);
 }
 
