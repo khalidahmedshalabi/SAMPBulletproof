@@ -1137,7 +1137,7 @@ UpdateTeamScoreTextDraw()
 {
 	//TextDrawSetString(TeamScoreText, sprintf("%d     %d", TeamScore[ATTACKER], TeamScore[DEFENDER]));
 	new iString[160];
-	format(iString, sizeof(iString), "~r~%s %s(~r~%d%s)  ~b~~h~%s %s(~b~~h~%d%s)",TeamName[ATTACKER],MAIN_TEXT_COLOUR,TeamScore[ATTACKER],MAIN_TEXT_COLOUR,TeamName[DEFENDER],MAIN_TEXT_COLOUR,TeamScore[DEFENDER],MAIN_TEXT_COLOUR);
+	format(iString, sizeof(iString), "~r~~h~~h~%s %s~w~%d%s - %s~w~%d%s ~b~~h~~h~%s",TeamName[ATTACKER],MAIN_TEXT_COLOUR,TeamScore[ATTACKER],MAIN_TEXT_COLOUR,MAIN_TEXT_COLOUR,TeamScore[DEFENDER],MAIN_TEXT_COLOUR,TeamName[DEFENDER]);
     TextDrawSetString(TeamScoreText, iString);
 }
 
@@ -1146,14 +1146,14 @@ UpdateTeamNameTextDraw()
 	/*TextDrawSetString(TeamAttackerTD, sprintf("~r~~h~~h~%s", TeamName[ATTACKER]));
 	TextDrawSetString(TeamDefenderTD, sprintf("~b~~h~~h~%s", TeamName[DEFENDER]));*/
 	new iString[160];
-	format(iString, sizeof(iString), "~r~~h~~h~%s %s(~r~~h~~h~%d%s)  ~b~~h~~h~%s %s(~b~~h~~h~%d%s)",TeamName[ATTACKER],MAIN_TEXT_COLOUR,TeamScore[ATTACKER],MAIN_TEXT_COLOUR,TeamName[DEFENDER],MAIN_TEXT_COLOUR,TeamScore[DEFENDER],MAIN_TEXT_COLOUR);
+	format(iString, sizeof(iString), "~r~~h~~h~%s %s~w~%d%s - %s~w~%d%s ~b~~h~~h~%s",TeamName[ATTACKER],MAIN_TEXT_COLOUR,TeamScore[ATTACKER],MAIN_TEXT_COLOUR,MAIN_TEXT_COLOUR,TeamScore[DEFENDER],MAIN_TEXT_COLOUR,TeamName[DEFENDER]);
     TextDrawSetString(TeamScoreText, iString);
 }
 
 UpdateRoundsPlayedTextDraw()
 {
 	//TextDrawSetString(RoundsPlayed, sprintf( "~h~Ro~h~un~h~ds: ~h~%d/%d", CurrentRound, TotalRounds));
-	TextDrawSetString(RoundsPlayed, sprintf("%sRounds ~r~~h~~h~%d~r~/~h~~h~%d", MAIN_TEXT_COLOUR, CurrentRound, TotalRounds));
+	TextDrawSetString(RoundsPlayed, sprintf("%sRounds ~r~~h~~h~%d~r~~w~/~b~~h~~h~%d", MAIN_TEXT_COLOUR, CurrentRound, TotalRounds));
 }
 
 // This finds the Y co-ordinate of the next free place for the team HP bar textdraw
