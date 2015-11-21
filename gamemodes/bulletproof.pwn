@@ -149,11 +149,13 @@ public OnPlayerConnect(playerid)
 	    return 0;
 	}
 	// Send them welcome messages
+    for(new i = 0; i < 100; i ++) SendClientMessage(playerid, -1, ""); // Function to clear the chat
 	SendClientMessage(playerid, -1, ""COL_PRIM"It's {FFFFFF}Bulletproof"COL_PRIM". Your bullets are fruitless. You can't take it down!");
 	SendClientMessage(playerid, -1, ""COL_PRIM"Get started: {FFFFFF}/help "COL_PRIM"and {FFFFFF}/cmds");
 	SendClientMessage(playerid, -1, ""COL_PRIM"Don't miss our updates: {FFFFFF}/checkversion");
 	SendClientMessage(playerid, -1, ""COL_PRIM"Developers: {FFFFFF}Whitetiger"COL_PRIM" & {FFFFFF}[KHK]Khalid"COL_PRIM"");
-	SendClientMessage(playerid, -1, ""COL_PRIM"Contributors on GitHub: {FFFFFF}ApplePieLife"COL_PRIM", {FFFFFF}JamesCullum"COL_PRIM", {FFFFFF}shendlaw"COL_PRIM", {FFFFFF}pds2k12");
+	SendClientMessage(playerid, -1, ""COL_PRIM"Contributors on GitHub: {FFFFFF}ApplePieLife"COL_PRIM",{FFFFFF}JamesCullum"COL_PRIM",{FFFFFF}shendlaw"COL_PRIM",{FFFFFF}pds2k12");
+    SendClientMessage(playerid, -1, ""COL_PRIM"and {FFFFFF}[L]Wallenstein"COL_PRIM"");
 	SendClientMessage(playerid, -1, ""COL_PRIM"Find league matches easier: {FFFFFF}http://infinite-gaming.ml/khk/matchfinder/");
 	new str[128];
 	format(str,sizeof(str),""COL_PRIM"Server limits:  Min FPS = {FFFFFF}%d "COL_PRIM"| Max Ping = {FFFFFF}%d "COL_PRIM"| Max PL = {FFFFFF}%.2f", Min_FPS, Max_Ping, Float:Max_Packetloss);
@@ -449,6 +451,14 @@ public OnPlayerDisconnect(playerid, reason)
 
 public OnPlayerDeath(playerid, killerid, reason)
 {
+    if(Player[playerid][InDuel] == true) //--> if player die in a duel he will re-spawn in lobby
+    {
+	    if(killerid != INVALID_PLAYER_ID)
+	 {
+        SpawnPlayerEx(playerid);
+     }
+        return 1;
+    }
 	// todo: test if this callback should be used under any weird circumstances. e.g: falling from a large cliff, exploding while driving a car, etc...
 
     if(Player[playerid][AlreadyDying] == true)
@@ -4503,8 +4513,7 @@ YCMD:duel(playerid, params[], help)
 	if(Player[invitedid][InDuel] == true) return SendErrorMessage(playerid,"That player is already dueling someone.");
 	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"You are already dueling someone.");
 	if(Player[invitedid][challengerid] == playerid) return SendErrorMessage(playerid,"You have already invited that player for duel. Let him accept or deny your previous invite.");    //duelspamfix
-	if(invitedid == playerid) return SendErrorMessage(playerid,"Can't duel with yourself.");
-
+    if(invitedid == playerid) return SendErrorMessage(playerid,"Can't duel with yourself.");
 	if(isnull(duelarena) || IsNumeric(duelarena))
 	{
 		SendUsageMessage(playerid,"/duel [Player ID] [default/custom] [area size] [Weapon 1] [Weapon 2]");
@@ -4513,7 +4522,7 @@ YCMD:duel(playerid, params[], help)
 	new duelarenaid;
     if(!strcmp(duelarena, "default", true))
 	{
-        duelarenaid = DEFAULT_DUEL_ARENA_ID;
+       duelarenaid = DEFAULT_DUEL_ARENA_ID;
 	}
 	else if(!strcmp(duelarena, "custom", true))
 	{
@@ -4557,7 +4566,7 @@ YCMD:yes(playerid, params[], help)
     new iString[128];
 	format(iString, sizeof(iString), "%s%s {FFFFFF}accepted the duel challenge by %s%s", TextColor[Player[playerid][Team]], Player[playerid][Name], TextColor[Player[pID][Team]], Player[pID][Name]);
 	SendClientMessageToAll(-1, iString);
-
+    PlayerPlaySound(playerid, 3600, 0.0, 0.0, 10.0);
 	StartDuel(pID, playerid, Player[playerid][duelweap1], Player[playerid][duelweap2], Player[playerid][Duel_X], Player[playerid][Duel_Y], Player[playerid][Duel_Size], Player[playerid][Duel_Interior]);
 	return 1;
 }
@@ -6313,7 +6322,6 @@ YCMD:admins(playerid, params[], help)
 
 	if(strlen(iString) < 2) ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,"{FFFFFF}Admins Online", "No Admins online.","Ok","");
 	else ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,"{FFFFFF}Admins Online", iString,"Ok","");
-
 	return 1;
 }
 
@@ -8335,7 +8343,6 @@ YCMD:spec(playerid, params[], help)
 	SpectatePlayer(playerid, specid);
 	return 1;
 }
-
 YCMD:specoff(playerid, params[], help)
 {
     if(help)
@@ -8878,9 +8885,9 @@ YCMD:sync(playerid, params[], help)
 	    return 1;
 	}
 	SyncPlayer(playerid);
+	PlayerPlaySound(playerid, 1084, 0, 0, 0);
 	return 1;
 }
-
 YCMD:setlevel(playerid, params[], help)
 {
 	//if(Player[playerid][Level] < 5 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be level 5 or rcon admin.");
@@ -9165,7 +9172,6 @@ YCMD:dmq(playerid, params[], help)
 	return 1;
 
 }
-
 YCMD:int(playerid,params[], help)
 {
     if(help)
@@ -9207,7 +9213,6 @@ YCMD:int(playerid,params[], help)
 	new iString[160];
 	format(iString,sizeof(iString),"{FFFFFF}%s "COL_PRIM"has entered Interior ID: {FFFFFF}%d "COL_PRIM"| Interior: {FFFFFF}%d",Player[playerid][Name],id,id,Interiors[id][int_interior]);
 	SendClientMessageToAll(-1,iString);
-
 	return 1;
 }
 
@@ -9223,6 +9228,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	        case 0, 1, 8, 11:
 	        {
 	            SyncPlayer(playerid);
+	            PlayerPlaySound(playerid, 1084, 0, 0, 0);
 	            return 1;
 	        }
 	    }
