@@ -1827,7 +1827,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 	    if(!response) // "Back" button
 	    {
-	        CallLocalFunction("OnPlayerCommandText", "ds", playerid, "/leaguestats");
+	        ShowLeagueStatsDialog(playerid);
 	    }
 	    return 1;
 	}
@@ -5222,9 +5222,7 @@ YCMD:leaguestats(playerid, params[], help)
 	}
 	#if defined _league_included
 	SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"is viewing the statistics of league {FFFFFF}(/leaguestats)", Player[playerid][Name]));
-	ShowPlayerDialog(playerid, DIALOG_LEAGUE_STATS, DIALOG_STYLE_LIST, "League mini scoreboard",
-		"Most Active Admins/Mods\nTop Clans\nTop Players (Points)\nTop Killers\nMost Active\nTop Punchers\nTop Damage (Overall damage)\nTop Sniper\nTop Deagler\nTop M4\nTop Rifler\nTop AK\nTop Spasser\nTop Shotgun",
-		"View", "Close");
+	ShowLeagueStatsDialog(playerid);
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 	#endif
