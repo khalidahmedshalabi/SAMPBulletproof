@@ -265,7 +265,7 @@ ProcessDuellerDeath(playerid, killerid, reason)
 	new HP[2];
 	GetHP(killerid, HP[0]);
 	GetAP(killerid, HP[1]);
-	format(str, sizeof(str), "%s%s "COL_PRIM"raped %s%s "COL_PRIM"in a duel with %s | {FFFFFF}%d HP", TextColor[Player[killerid][TeamBeforeDuel]], Player[killerid][Name], TextColor[Player[playerid][TeamBeforeDuel]], Player[playerid][Name], WeaponNames[reason], (HP[0] + HP[1]));
+	format(str, sizeof(str), "%s%s {FFFFFF}raped %s%s {FFFFFF}in a duel with %s | {FFFFFF}%d HP", TextColor[Player[killerid][TeamBeforeDuel]], Player[killerid][Name], TextColor[Player[playerid][TeamBeforeDuel]], Player[playerid][Name], WeaponNames[reason], (HP[0] + HP[1]));
 	SendClientMessageToAll(-1, str);
 	Player[playerid][challengerid] = -1;
 	Player[killerid][challengerid] = -1;
