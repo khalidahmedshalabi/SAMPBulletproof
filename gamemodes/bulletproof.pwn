@@ -6488,6 +6488,7 @@ YCMD:deathdiss(playerid, params[], help)
 	if(strlen(params) >= 64) return SendErrorMessage(playerid,"Too long!");
 
 	new iString[128];
+	DeathMessageStr[playerid][0] = EOS;
 	strcat(DeathMessageStr[playerid], params, 64);
 
 	format(iString, sizeof(iString), "UPDATE `Players` SET `DeathMessage` = '%q' WHERE `Name` = '%q'", params, Player[playerid][Name]);
