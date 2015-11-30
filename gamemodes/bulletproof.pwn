@@ -512,8 +512,6 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	}
 	else if(KillerConnected)
 	{
-        ShowPlayerDeathMessage(killerid, playerid);
-
 		new killText[64];
 		switch(reason)
 		{
@@ -577,6 +575,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 
 		if(Player[playerid][Playing] == true && Player[killerid][Playing] == true)
 		{
+		    ShowPlayerDeathMessage(killerid, playerid);
 		    #if defined _league_included
 		    if(LeagueMode)
 		    {

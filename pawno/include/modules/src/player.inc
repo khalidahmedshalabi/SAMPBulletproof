@@ -288,6 +288,7 @@ LoginPlayer(playerid, DBResult:res)
 	
 	// Load Death Messages
 	db_get_field_assoc(res, "DeathMessage", iString, sizeof(iString));
+	DeathMessageStr[playerid][0] = EOS;
 	strcat(DeathMessageStr[playerid], iString, 64);
 	if(strcmp("NO_DEATH_MESSAGE", DeathMessageStr[playerid], false) != 0)
 		Player[playerid][HasDeathQuote] = true;
