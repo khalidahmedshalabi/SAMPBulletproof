@@ -86,10 +86,10 @@ ShowConfigDialog(playerid) {
 	else
 		strcat(string, "\n{FF6666}Defenders don't see vehicle blips [Enable]");
 	
-	if(LeagueServer == true)
-		strcat(string, "\n{66FF66}League server features [Disable]");
+	if(LeagueAllowed == true)
+		strcat(string, "\n{66FF66}League system");
 	else
-		strcat(string, "\n{FF6666}League server features [Enable]");
+		strcat(string, "\n{FF6666}League system");
 	
 	if(CPInArena == true)
 		strcat(string, "\n{66FF66}Checkpoint in arena");
@@ -187,10 +187,8 @@ LoadConfig()
     ChangeName = (strval(iString) == 1 ? true : false);
     db_next_row(res);
 	
-	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // League server
-	#if defined _league_included
-	SetTimerEx("ToggleLeagueServer", 3000, false, "b", strval(iString) == 1 ? true : false);
-	#endif
+	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // League allowed
+	LeagueAllowed = (strval(iString) == 1 ? true : false);
     db_next_row(res);
 	
 	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // CP in arena

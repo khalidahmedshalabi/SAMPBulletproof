@@ -22,9 +22,9 @@ new bool:LobbyGuns = true;
 new bool:ServerLocked 	= false;
 new bool:PermLocked 	= false;
 new bool:DefendersSeeVehiclesBlips	=	true;
-new bool:LeagueServer = false; // League servers have a system (in short, /ready) that enables players to start a match without an admin.
 new bool:CPInArena = false;
 new bool:AntiMacros = true;
+new bool:LeagueAllowed = true;
 
 new RoundHP = 100, RoundAR = 100;
 

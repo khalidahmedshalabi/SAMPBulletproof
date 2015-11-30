@@ -745,16 +745,6 @@ PlayerVoteSwitch(playerid, onplayerid)
     if(!IsPlayerConnected(onplayerid)) return SendErrorMessage(playerid,"That player is not connected.");
 	if(Player[onplayerid][Playing] == true) return SendErrorMessage(playerid,"That player is already playing.");
 	if(Player[onplayerid][InDuel] == true) return SendErrorMessage(playerid,"That player is in a duel.");
-	#if defined _league_included
-	if(LeagueMode && LeagueMatchType != LEAGUE_MATCH_TYPE_FT)
-	{
-		return SendErrorMessage(playerid,"You can only use this command in league FT mode.");
-	}
-	if(LeagueMode && !Player[onplayerid][LeagueLogged])
-	{
-		return SendErrorMessage(playerid,"That player is not registered and/or logged in their league account.");
-	}
-	#endif
 	// Counting players who are able to vote
 	new countInTeam[2];
 	foreach(new i : Player)
@@ -802,12 +792,7 @@ PlayerVoteSwitch(playerid, onplayerid)
 			KillTimer(VoteData[votetype][VotingExpireTimer]);
 			ResetVoting(votetype, false);
 			Player[onplayerid][Team] = GetTeamWithLessPlayers();
-			#if defined _league_included
-			TempLeagueTagFix(onplayerid);
-			SpawnLeaguePlayer(onplayerid);
-			#else
 			SwitchTeamFix(onplayerid);
-			#endif
 			SendClientMessageToAll(-1, sprintf(""COL_PRIM"Voting result on {FFFFFF}%s: "COL_PRIM"switched to the team which has less players count (%s)!", Player[onplayerid][Name], TeamName[Player[onplayerid][Team]]));
 		}
 	}

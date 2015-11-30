@@ -3,46 +3,10 @@
 ResetDuellers(dueller1, dueller2)
 {
 	// Teams
-	#if defined _league_included
-	if(LeagueMode)
-	{
-		FixPlayerLeagueTeam(dueller1);
-		FixPlayerLeagueTeam(dueller2);
-		if(Current == -1 && ((Player[dueller1][Team] == ATTACKER || Player[dueller1][Team] == DEFENDER) || (Player[dueller1][Team] == ATTACKER || Player[dueller1][Team] == DEFENDER)))
-		{
-			if(IsEnoughPlayersForLeague(TeamName[ATTACKER], TeamName[DEFENDER]))
-			{
-				SendClientMessageToAll(-1, " ");
-				SendClientMessageToAll(-1, " ");
-				SendClientMessageToAll(-1, ""COL_PRIM"Teams are ready now...");
-				SendClientMessageToAll(-1, ""COL_PRIM"A new round is automatically starting in {FFFFFF}7 seconds");
-				if(CurrentRound == (TotalRounds - 1))
-				{
-					KillTimer(LeagueRoundStarterTimer);
-					LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 7000, false, "db", ARENA, true);
-				}
-				else if(CurrentRound < (TotalRounds - 1))
-				{
-					KillTimer(LeagueRoundStarterTimer);
-					LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 7000, false, "db", BASE, true);
-				}
-			}
-			FixVsTextDraw();
-		}
-	}
-	else
-	{
-		Player[dueller1][Team] = Player[dueller1][TeamBeforeDuel];
-		Player[dueller2][Team] = Player[dueller2][TeamBeforeDuel];
-		SwitchTeamFix(dueller1);
-		SwitchTeamFix(dueller2);
-	}
-	#else
 	Player[dueller1][Team] = Player[dueller1][TeamBeforeDuel];
 	Player[dueller2][Team] = Player[dueller2][TeamBeforeDuel];
     SwitchTeamFix(dueller1);
     SwitchTeamFix(dueller2);
-	#endif
 	// world bounds
 	ResetPlayerWorldBounds(dueller1);
 	ResetPlayerWorldBounds(dueller2);

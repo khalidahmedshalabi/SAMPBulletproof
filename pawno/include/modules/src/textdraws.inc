@@ -255,14 +255,14 @@ LoadTextDraws()
 	
 	#if defined _league_included
 	LeagueRoundResultTD = TextDrawCreate(492.000000, 240.000000, " ");
-	TextDrawBackgroundColor(LeagueRoundResultTD, 68);
+	TextDrawBackgroundColor(LeagueRoundResultTD, MAIN_BACKGROUND_COLOUR);
 	TextDrawFont(LeagueRoundResultTD, 1);
 	TextDrawLetterSize(LeagueRoundResultTD, 0.189999, 0.790000);
 	TextDrawColor(LeagueRoundResultTD, -1);
 	TextDrawSetOutline(LeagueRoundResultTD, 1);
 	TextDrawSetProportional(LeagueRoundResultTD, 1);
 	TextDrawUseBox(LeagueRoundResultTD, 1);
-	TextDrawBoxColor(LeagueRoundResultTD, -205);
+	TextDrawBoxColor(LeagueRoundResultTD, 0x00000022);
 	TextDrawTextSize(LeagueRoundResultTD, 710.000000, 0.000000);
 	#endif
 	
