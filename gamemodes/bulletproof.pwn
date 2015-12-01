@@ -257,10 +257,6 @@ public OnPlayerRequestClass(playerid, classid)
 
 public OnPlayerRequestSpawn(playerid)
 {
-	if(Player[playerid][Logged] == true)
-	{
-
-	}
 	OnPlayerRequestClass(playerid, 0);
 	return 0;
 }
