@@ -12,8 +12,6 @@ enum PlayerVariables
 {
 	Name[MAX_PLAYER_NAME],
 	NameWithoutTag[MAX_PLAYER_NAME],
-	Tag[7],
-	TempTag[7],
 	bool:Logged,
 	bool:IgnoreSpawn,
 	bool:InDM,
@@ -40,6 +38,7 @@ enum PlayerVariables
 	bool:AlreadyDying,
 	bool:TempNetcheck,
 	bool:MustLeaguePass,
+	bool:MustLeagueRegister,
 	bool:LeagueLogged,
 	bool:WeaponBinding,
 	bool:HasDeathQuote,

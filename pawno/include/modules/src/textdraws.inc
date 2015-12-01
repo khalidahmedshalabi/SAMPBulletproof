@@ -239,7 +239,7 @@ LoadTextDraws()
 	TextDrawSetOutline(DarkScreen, 1);
 	TextDrawSetProportional(DarkScreen, 1);
 	TextDrawUseBox(DarkScreen, 1);
-	TextDrawBoxColor(DarkScreen, 0x00000055);
+	TextDrawBoxColor(DarkScreen, 0x00000033);
 	TextDrawTextSize(DarkScreen, -16.000000, 105.000000);
 	
 	for(new i = 0; i < MAX_TEAMS; i ++)
@@ -255,14 +255,14 @@ LoadTextDraws()
 	
 	#if defined _league_included
 	LeagueRoundResultTD = TextDrawCreate(492.000000, 240.000000, " ");
-	TextDrawBackgroundColor(LeagueRoundResultTD, 68);
+	TextDrawBackgroundColor(LeagueRoundResultTD, MAIN_BACKGROUND_COLOUR);
 	TextDrawFont(LeagueRoundResultTD, 1);
 	TextDrawLetterSize(LeagueRoundResultTD, 0.189999, 0.790000);
 	TextDrawColor(LeagueRoundResultTD, -1);
 	TextDrawSetOutline(LeagueRoundResultTD, 1);
 	TextDrawSetProportional(LeagueRoundResultTD, 1);
 	TextDrawUseBox(LeagueRoundResultTD, 1);
-	TextDrawBoxColor(LeagueRoundResultTD, -205);
+	TextDrawBoxColor(LeagueRoundResultTD, 0x00000022);
 	TextDrawTextSize(LeagueRoundResultTD, 710.000000, 0.000000);
 	#endif
 	
@@ -914,7 +914,7 @@ LoadPlayerTextDraws(playerid)
 	
     DeathMessage[playerid][0] = CreatePlayerTextDraw(playerid, 193.000000, 157.000000, "Random says this to you");
 	PlayerTextDrawBackgroundColor(playerid, DeathMessage[playerid][0], -16776961);
-	PlayerTextDrawFont(playerid, DeathMessage[playerid][0], 3);
+	PlayerTextDrawFont(playerid, DeathMessage[playerid][0], 1);
 	PlayerTextDrawLetterSize(playerid, DeathMessage[playerid][0], 0.280000, 1.200000);
 	PlayerTextDrawColor(playerid, DeathMessage[playerid][0], -1);
 	PlayerTextDrawSetOutline(playerid, DeathMessage[playerid][0], 1);
@@ -923,13 +923,13 @@ LoadPlayerTextDraws(playerid)
 	DeathMessage[playerid][1] = CreatePlayerTextDraw(playerid, 318.000000, 177.000000, "This is my death message");
 	PlayerTextDrawAlignment(playerid, DeathMessage[playerid][1], 2);
 	PlayerTextDrawBackgroundColor(playerid, DeathMessage[playerid][1], -16776961);
-	PlayerTextDrawFont(playerid, DeathMessage[playerid][1], 2);
+	PlayerTextDrawFont(playerid, DeathMessage[playerid][1], 1);
 	PlayerTextDrawLetterSize(playerid, DeathMessage[playerid][1], 0.270000, 1.200000);
 	PlayerTextDrawColor(playerid, DeathMessage[playerid][1], -65281);
 	PlayerTextDrawSetOutline(playerid, DeathMessage[playerid][1], 1);
 	PlayerTextDrawSetProportional(playerid, DeathMessage[playerid][1], 1);
 	PlayerTextDrawUseBox(playerid, DeathMessage[playerid][1], 1);
-	PlayerTextDrawBoxColor(playerid, DeathMessage[playerid][1], 153);
+	PlayerTextDrawBoxColor(playerid, DeathMessage[playerid][1], 0x00000077);
 	PlayerTextDrawTextSize(playerid, DeathMessage[playerid][1], 794.000000, 271.000000);
 	
 	#if defined _league_included

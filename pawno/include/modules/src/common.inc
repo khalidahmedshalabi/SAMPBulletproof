@@ -292,94 +292,83 @@ public SpawnConnectedPlayer(playerid, team)
 {
 	Player[playerid][IgnoreSpawn] = true;
 	TogglePlayerSpectating(playerid, false);
-	#if defined _league_included
-    if(LeagueMode == false)
+	switch(team)
 	{
-	#endif
-		switch(team)
+		case 0: // auto-assign
 		{
-			case 0: // auto-assign
+			if(WarMode == false)
 			{
-				if(WarMode == false)
+				Player[playerid][Team] = GetTeamWithLessPlayers();
+				switch(Player[playerid][Team])
 				{
-					Player[playerid][Team] = GetTeamWithLessPlayers();
-					switch(Player[playerid][Team])
-					{
-						case ATTACKER: SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
-						case DEFENDER: SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
-					}
+					case ATTACKER: SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
+					case DEFENDER: SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
 				}
-				else
+			}
+			else
+			{
+				new ToAddIn;
+
+				if(strfind(Player[playerid][Name], TeamName[ATTACKER], true) != -1) ToAddIn = ATTACKER;
+				else if(strfind(Player[playerid][Name], TeamName[DEFENDER], true) != -1) ToAddIn = DEFENDER;
+				else ToAddIn = NON;
+
+				switch(ToAddIn)
 				{
-					new ToAddIn;
-
-					if(strfind(Player[playerid][Name], TeamName[ATTACKER], true) != -1) ToAddIn = ATTACKER;
-					else if(strfind(Player[playerid][Name], TeamName[DEFENDER], true) != -1) ToAddIn = DEFENDER;
-					else ToAddIn = NON;
-
-					switch(ToAddIn)
+					case NON:
 					{
-						case NON:
+						Player[playerid][Team] = GetTeamWithLessPlayers();
+						switch(Player[playerid][Team])
 						{
-							Player[playerid][Team] = GetTeamWithLessPlayers();
-							switch(Player[playerid][Team])
-							{
-								case ATTACKER: SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
-								case DEFENDER: SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
-							}
-						}
-						case ATTACKER:
-						{
-							Player[playerid][Team] = ATTACKER;
-							SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
-						}
-						case DEFENDER:
-						{
-							Player[playerid][Team] = DEFENDER;
-							SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
+							case ATTACKER: SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
+							case DEFENDER: SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
 						}
 					}
+					case ATTACKER:
+					{
+						Player[playerid][Team] = ATTACKER;
+						SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
+					}
+					case DEFENDER:
+					{
+						Player[playerid][Team] = DEFENDER;
+						SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
+					}
 				}
-				SwitchTeamFix(playerid, false, false);
 			}
-			case 1:
-			{
-				Player[playerid][Team] = ATTACKER;
-				SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
-				SwitchTeamFix(playerid, false, false);
-			}
-			case 2:
-			{
-				Player[playerid][Team] = DEFENDER;
-				SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
-				SwitchTeamFix(playerid, false, false);
-			}
-			case 3:
-			{
-				Player[playerid][Team] = REFEREE;
-				SetPlayerColor(playerid, REFEREE_COLOR);
-				SwitchTeamFix(playerid, false, false);
-			}
-			case 4:
-			{
-				Player[playerid][Team] = ATTACKER_SUB;
-				SetPlayerColor(playerid, ATTACKER_SUB_COLOR);
-				SwitchTeamFix(playerid, false, false);
-			}
-			case 5:
-			{
-				Player[playerid][Team] = DEFENDER_SUB;
-				SetPlayerColor(playerid, DEFENDER_SUB_COLOR);
-				SwitchTeamFix(playerid, false, false);
-			}
+			SwitchTeamFix(playerid, false, false);
 		}
-	#if defined _league_included
+		case 1:
+		{
+			Player[playerid][Team] = ATTACKER;
+			SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
+			SwitchTeamFix(playerid, false, false);
+		}
+		case 2:
+		{
+			Player[playerid][Team] = DEFENDER;
+			SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
+			SwitchTeamFix(playerid, false, false);
+		}
+		case 3:
+		{
+			Player[playerid][Team] = REFEREE;
+			SetPlayerColor(playerid, REFEREE_COLOR);
+			SwitchTeamFix(playerid, false, false);
+		}
+		case 4:
+		{
+			Player[playerid][Team] = ATTACKER_SUB;
+			SetPlayerColor(playerid, ATTACKER_SUB_COLOR);
+			SwitchTeamFix(playerid, false, false);
+		}
+		case 5:
+		{
+			Player[playerid][Team] = DEFENDER_SUB;
+			SetPlayerColor(playerid, DEFENDER_SUB_COLOR);
+			SwitchTeamFix(playerid, false, false);
+		}
 	}
-	else // League mode is enabled
-	{
-		SpawnLeaguePlayer(playerid);
-	}
-	#endif
 
 	SetPlayerWeather(playerid, Player[playerid][Weather]);
 	SetPlayerTime(playerid, Player[playerid][Time], 0);
@@ -445,13 +434,6 @@ public SpawnConnectedPlayer(playerid, team)
 	ShowPlayerProgressBar(playerid, HealthBar[playerid]);
 	ShowPlayerProgressBar(playerid, ArmourBar[playerid]);
 	
-	#if defined _league_included
-	if(LeagueServer && !LeagueMode)
-	{
-		UpdateLeagueReadyTextDraw();
-		TextDrawShowForPlayer(playerid, LeagueReadyTD);
-	}
-	#endif
 	if(WarMode == true)
 	{
 		ShowMatchScoreBoard(playerid);
@@ -1448,7 +1430,7 @@ SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
 	SetCameraBehindPlayer(playerid);
 	HideAllTeamBarsForPlayer(playerid);
 	#if defined _league_included
-	TempLeagueTagFix(playerid);
+	UpdatePlayerLeaguePointTextDraw(playerid);
 	#endif
 }
 

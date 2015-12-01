@@ -849,13 +849,6 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 forward UnpauseRound();
 public UnpauseRound()
 {
-	#if defined _league_included
-	if(League_AutoUnpauseTimer != -1)
-	{
-		KillTimer(League_AutoUnpauseTimer);
-		League_AutoUnpauseTimer = -1;
-	}
-	#endif
 	RoundUnpausing = true;
 	PauseCountdown --;
 
@@ -919,28 +912,7 @@ public PauseAirVehicles_Handler()
 	return 1;
 }
 
-#if defined _league_included
-forward LeagueAutoUnpause();
-public LeagueAutoUnpause()
-{
-	League_AutoUnpause --;
-	
-	if(League_AutoUnpause == 0)
-	{
-		PauseCountdown = 4;
-		UnpauseRound();
-		KillTimer(League_AutoUnpauseTimer);
-		League_AutoUnpauseTimer = -1;
-	}
-	else
-	{
-		TextDrawSetString(PauseTD, sprintf("~r~~h~Resuming in %d", League_AutoUnpause));
-	}
-	return 1;
-}
-#endif
-
-PauseRound(bool:leaguevote = false) 
+PauseRound() 
 {
 	new airVehiclesFound = 0;
 	foreach(new g : DynamicVehicle)
@@ -966,16 +938,6 @@ PauseRound(bool:leaguevote = false)
 	TextDrawSetString(PauseTD, "~r~~h~Round Paused");
 	TextDrawShowForAll(PauseTD);
 	RoundPaused = true;
-	#if defined _league_included
-	if(LeagueMode && !leaguevote)
-	{
-		League_AutoUnpause = 60;
-		KillTimer(League_AutoUnpauseTimer);
-		League_AutoUnpauseTimer = SetTimer("LeagueAutoUnpause", 1000, true); 
-	}
-	#else
-	#pragma unused leaguevote
-	#endif
 }
 
 PlayerLeadTeam(playerid, bool:force, bool:message = true)
@@ -1320,6 +1282,13 @@ RemovePlayerFromRound(playerid, bool:remove_iterator = true)
 	UpdateTeamPlayerCount(Player[playerid][Team], true, playerid);
 	UpdateTeamHP(Player[playerid][Team], playerid);
 
+	#if defined _league_included
+	if(LeagueAllowed)
+	{
+		CheckLeagueMatchValidity(1000);
+	}
+	#endif
+	
 	DisablePlayerCheckpoint(playerid);
 	SetPlayerScore(playerid, 0);
 	HideDialogs(playerid);
@@ -1563,9 +1532,9 @@ SpawnPlayersInRC()
 			GivePlayerWeapon(i, WEAPON_DEAGLE, 9999);
 		}
 		#if defined _league_included
-		if(LeagueMode)
+		if(LeagueAllowed)
 		{
-			AutoRemoveCheck();
+			CheckLeagueMatchValidity(1000);
 		}
 		#endif
 	}
@@ -1788,9 +1757,9 @@ SpawnPlayersInArena()
 		FallProtection = true;
 		RadarFix();
 		#if defined _league_included
-		if(LeagueMode)
+		if(LeagueAllowed)
 		{
-			AutoRemoveCheck();
+			CheckLeagueMatchValidity(1000);
 		}
 		#endif
 		SetTimer("ShowPlayingPlayersGunmenu", 1000, false);
@@ -1873,6 +1842,13 @@ public AddPlayerToArena(playerid)
 	        SetPlayerTeam(playerid, 3);
 		}
 	}
+	
+	#if defined _league_included
+	if(LeagueAllowed)
+	{
+		CheckLeagueMatchValidity(1000);
+	}
+	#endif
 
 	if(RoundPaused == false) TogglePlayerControllable(playerid, 1);
 	else TogglePlayerControllable(playerid, 0);
@@ -2163,9 +2139,9 @@ SpawnPlayersInBase()
 		FallProtection = true;
 		RadarFix();
 		#if defined _league_included
-		if(LeagueMode)
+		if(LeagueAllowed)
 		{
-			AutoRemoveCheck();
+			CheckLeagueMatchValidity(1000);
 		}
 		#endif
 		SetTimer("ShowPlayingPlayersGunmenu", 1000, false);
@@ -2249,6 +2225,13 @@ public AddPlayerToBase(playerid)
 		}
 	}
 
+	#if defined _league_included
+	if(LeagueAllowed)
+	{
+		CheckLeagueMatchValidity(1000);
+	}
+	#endif
+	
 	if(RoundPaused == false) TogglePlayerControllable(playerid, 1);
 	else TogglePlayerControllable(playerid, 0);
 
@@ -2608,7 +2591,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	#if defined _league_included
 	if(LeagueMode)
 	{	
-		OnLeagueRoundEnd(winnerid);
+		OnLeagueRoundEnd();
 	}
 	#endif
 	
@@ -2633,46 +2616,6 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 		SendClientMessageToAll(-1, ""COL_PRIM"If you missed the results screen by hiding the current textdraws, type {FFFFFF}/showagain");
         SendClientMessageToAll(-1, ""COL_PRIM"Type {FFFFFF}/weaponstats "COL_PRIM"to see a list of players weapon statistics.");
 	}
-	#if defined _league_included
-	else
-	{
-		if(LeagueMode)
-		{
-			if(!IsEnoughPlayersForLeague(TeamName[ATTACKER], TeamName[DEFENDER]))
-			{
-				SendClientMessageToAll(-1, " ");
-				SendClientMessageToAll(-1, " ");
-				SendClientMessageToAll(-1, ""COL_PRIM"One team doesn't have enough players to start. You have 5 minutes to be ready or this will be an RQ");
-				if(CurrentRound == (TotalRounds - 1))
-				{
-					KillTimer(LeagueRoundStarterTimer);
-					LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 300000, false, "db", ARENA, false);
-				}
-				else if(CurrentRound < (TotalRounds - 1))
-				{
-					KillTimer(LeagueRoundStarterTimer);
-					LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 300000, false, "db", BASE, false);
-				}
-			}
-			else
-			{
-				SendClientMessageToAll(-1, " ");
-				SendClientMessageToAll(-1, " ");
-				SendClientMessageToAll(-1, ""COL_PRIM"Another round is automatically starting in {FFFFFF}15 seconds");
-				if(CurrentRound == (TotalRounds - 1))
-				{
-					KillTimer(LeagueRoundStarterTimer);
-					LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 15000, false, "db", ARENA, true);
-				}
-				else if(CurrentRound < (TotalRounds - 1))
-				{
-					KillTimer(LeagueRoundStarterTimer);
-					LeagueRoundStarterTimer = SetTimerEx("StartAnotherLeagueRound", 15000, false, "db", BASE, true);
-				}
-			}
-		}
-	}
-	#endif
 	AttList = "";
 	AttKills = "";
 	AttDeaths = "";
@@ -2902,18 +2845,7 @@ public WarEnded()
 		{
 			OnLeagueMatchEnd();
 		}
-		else
-		{
-			SendClientMessageToAll(-1, ""COL_PRIM"League mode is now off. This match won't be uploaded to the league database.");
-			LeagueMode = false;
-			SetAdminCommandsLevelForLeague(false);
-			foreach(new i : Player)
-			{
-				PlayerTextDrawHide(i, PlayerLeagueStatsTD[i]);
-			}
-		}
 	}
-	RestartLeagueReadySystem();
 	#endif
     SetWeaponStatsString();
 

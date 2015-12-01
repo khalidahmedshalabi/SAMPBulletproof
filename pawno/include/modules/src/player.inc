@@ -215,7 +215,6 @@ InitPlayer(playerid)
 	SetPlayerColor(playerid, 0xAAAAAAAA);
 	RemoveUselessObjectsForPlayer(playerid);
 	LoadPlayerTextDraws(playerid);
-	format(Player[playerid][TempTag], 7, "");
 	for(new i = 0; i < MAX_PLAYER_BARS; i ++)
 		TeamBarShownForPlayer[playerid][_:i] = false;
 	
@@ -289,6 +288,7 @@ LoginPlayer(playerid, DBResult:res)
 	
 	// Load Death Messages
 	db_get_field_assoc(res, "DeathMessage", iString, sizeof(iString));
+	DeathMessageStr[playerid][0] = EOS;
 	strcat(DeathMessageStr[playerid], iString, 64);
 	if(strcmp("NO_DEATH_MESSAGE", DeathMessageStr[playerid], false) != 0)
 		Player[playerid][HasDeathQuote] = true;
@@ -318,10 +318,6 @@ LoginPlayer(playerid, DBResult:res)
 	// Load Gunmenu Style
 	db_get_field_assoc(res, "GunmenuStyle", iString, sizeof(iString));
 	Player[playerid][GunmenuStyle] = strval(iString);
-	
-	// Load Temp Tag (used for league FT matches)
-	db_get_field_assoc(res, "TempTag", iString, sizeof(iString));
-	strcat(Player[playerid][TempTag], iString, 7);
 	
 	// Load Weapon Binding 
 	db_get_field_assoc(res, "WeaponBinding", iString, sizeof(iString));
@@ -710,12 +706,9 @@ LoadPlayerVariables(playerid)
 				TogglePlayerControllable(playerid, 1);
 			
 			#if defined _league_included
-			if(LeagueMode)
+			if(LeagueAllowed)
 			{
-				if(PlayersAlive[ATTACKER] >= LEAGUE_MATCH_MODE && PlayersAlive[DEFENDER] >= LEAGUE_MATCH_MODE)
-					League_AutoUnpause = 1;
-				
-				AutoRemoveCheck(10000);
+				CheckLeagueMatchValidity(1000);
 			}
 			#endif
 
