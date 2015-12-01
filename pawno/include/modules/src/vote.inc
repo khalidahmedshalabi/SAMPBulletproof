@@ -592,6 +592,9 @@ PlayerVoteEndMatch(playerid)
 
 				PlayersAlive[ATTACKER] = 0;
 				PlayersAlive[DEFENDER] = 0;
+				
+				PlayersDead[ATTACKER] = 0;
+				PlayersDead[DEFENDER] = 0;
 
 				RoundUnpausing = false;
 

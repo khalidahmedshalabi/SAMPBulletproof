@@ -2293,6 +2293,9 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 
 	PlayersAlive[ATTACKER] = 0;
 	PlayersAlive[DEFENDER] = 0;
+	
+	PlayersDead[ATTACKER] = 0;
+	PlayersDead[DEFENDER] = 0;
 
     GangZoneDestroy(CPZone);
 	GangZoneDestroy(ArenaZone);
