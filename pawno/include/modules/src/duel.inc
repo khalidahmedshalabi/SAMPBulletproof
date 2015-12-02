@@ -225,6 +225,9 @@ ProcessDuellerDisconnect(playerid)
 
 ProcessDuellerDeath(playerid, killerid, reason)
 {
+	if(killerid == -1 || killerid == INVALID_PLAYER_ID)
+		killerid = Player[playerid][challengerid];
+	
 	new str[128];
 	new HP[2];
 	GetHP(killerid, HP[0]);
