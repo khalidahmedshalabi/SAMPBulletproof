@@ -456,7 +456,7 @@ public HidePlayerDeathMessage(playerid)
 
 ShowPlayerDeathMessage(killerid, playerid)
 {
-	if(!strcmp("NO_DEATH_MESSAGE", DeathMessageStr[killerid], false))
+	if(!Player[killerid][HasDeathQuote])
 	{
 	    return 0;
 	}
