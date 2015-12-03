@@ -2846,7 +2846,12 @@ public WarEnded()
 	{
 		if(TeamScore[ATTACKER] > 0 || TeamScore[DEFENDER] > 0)
 		{
-			OnLeagueMatchEnd();
+			if(TeamScore[ATTACKER] > TeamScore[DEFENDER])
+				OnLeagueMatchEnd(ATTACKER);
+			else if(TeamScore[DEFENDER] > TeamScore[ATTACKER])
+				OnLeagueMatchEnd(DEFENDER);
+			else
+				OnLeagueMatchEnd(-1);
 		}
 	}
 	#endif
