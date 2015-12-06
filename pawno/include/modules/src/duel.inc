@@ -5,8 +5,8 @@ ResetDuellers(dueller1, dueller2)
 	// Teams
 	Player[dueller1][Team] = Player[dueller1][TeamBeforeDuel];
 	Player[dueller2][Team] = Player[dueller2][TeamBeforeDuel];
-    SwitchTeamFix(dueller1);
-    SwitchTeamFix(dueller2);
+    SwitchTeamFix(dueller1, false);
+    SwitchTeamFix(dueller2, false);
 	// world bounds
 	ResetPlayerWorldBounds(dueller1);
 	ResetPlayerWorldBounds(dueller2);
@@ -213,8 +213,6 @@ ProcessDuellerDisconnect(playerid)
 		format(iString, sizeof(iString), "{FFFFFF}His opponent %s had {757575}%d HP and %d Armour", Player[winner][Name], Player[winner][pHealth], Player[winner][pArmour]);
 		SendClientMessageToAll(-1, iString);
 		Player[winner][InDuel] = false;
-		Player[winner][Team] = REFEREE;
-		SetPlayerColor(winner, REFEREE_COLOR);
 		Player[playerid][DuelsLost]++;
 		Player[winner][DuelsWon]++;
 		ResetDuellers(winner, playerid);
@@ -247,10 +245,6 @@ ProcessDuellerDeath(playerid, killerid, reason)
 
 	Player[playerid][InDuel] = false;
 	Player[killerid][InDuel] = false;
-	Player[playerid][Team] = REFEREE;
-	Player[killerid][Team] = REFEREE;
-	SetPlayerColor(playerid, REFEREE_COLOR);
-	SetPlayerColor(killerid, REFEREE_COLOR);
 	ResetDuellers(playerid, killerid);
 	UpdateDuellersStats(killerid, playerid);
 }

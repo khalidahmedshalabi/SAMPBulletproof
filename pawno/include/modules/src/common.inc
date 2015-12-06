@@ -296,80 +296,46 @@ public SpawnConnectedPlayer(playerid, team)
 	{
 		case 0: // auto-assign
 		{
-			if(WarMode == false)
+			switch(WarMode)
 			{
-				Player[playerid][Team] = GetTeamWithLessPlayers();
-				switch(Player[playerid][Team])
+				case false:
 				{
-					case ATTACKER: SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
-					case DEFENDER: SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
+					Player[playerid][Team] = GetTeamWithLessPlayers();
 				}
-			}
-			else
-			{
-				new ToAddIn;
-
-				if(strfind(Player[playerid][Name], TeamName[ATTACKER], true) != -1) ToAddIn = ATTACKER;
-				else if(strfind(Player[playerid][Name], TeamName[DEFENDER], true) != -1) ToAddIn = DEFENDER;
-				else ToAddIn = NON;
-
-				switch(ToAddIn)
+				case true:
 				{
-					case NON:
-					{
-						Player[playerid][Team] = GetTeamWithLessPlayers();
-						switch(Player[playerid][Team])
-						{
-							case ATTACKER: SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
-							case DEFENDER: SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
-						}
-					}
-					case ATTACKER:
-					{
+					if(strfind(Player[playerid][Name], TeamName[ATTACKER], true) != -1) 
 						Player[playerid][Team] = ATTACKER;
-						SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
-					}
-					case DEFENDER:
-					{
+					else if(strfind(Player[playerid][Name], TeamName[DEFENDER], true) != -1) 
 						Player[playerid][Team] = DEFENDER;
-						SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
-					}
+					else 
+						Player[playerid][Team] = GetTeamWithLessPlayers();
 				}
 			}
-			SwitchTeamFix(playerid, false, false);
 		}
 		case 1:
 		{
 			Player[playerid][Team] = ATTACKER;
-			SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
-			SwitchTeamFix(playerid, false, false);
 		}
 		case 2:
 		{
 			Player[playerid][Team] = DEFENDER;
-			SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
-			SwitchTeamFix(playerid, false, false);
 		}
 		case 3:
 		{
 			Player[playerid][Team] = REFEREE;
-			SetPlayerColor(playerid, REFEREE_COLOR);
-			SwitchTeamFix(playerid, false, false);
 		}
 		case 4:
 		{
 			Player[playerid][Team] = ATTACKER_SUB;
-			SetPlayerColor(playerid, ATTACKER_SUB_COLOR);
-			SwitchTeamFix(playerid, false, false);
 		}
 		case 5:
 		{
 			Player[playerid][Team] = DEFENDER_SUB;
-			SetPlayerColor(playerid, DEFENDER_SUB_COLOR);
-			SwitchTeamFix(playerid, false, false);
 		}
 	}
-
+	
+	SwitchTeamFix(playerid, false, false);
 	SetPlayerWeather(playerid, Player[playerid][Weather]);
 	SetPlayerTime(playerid, Player[playerid][Time], 0);
 
@@ -390,10 +356,6 @@ public SpawnConnectedPlayer(playerid, team)
 		}
 	}
 	PlayerTextDrawShow(playerid, BaseID_VS[playerid]);
-
-	new str[160];
-	format(str, sizeof(str), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
-	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], str);
 	
 	switch(PlayerInterface[playerid][INTERFACE_NET])
 	{
@@ -1436,16 +1398,22 @@ SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
 
 GetTeamWithLessPlayers()
 {
-    new attacker, defender, TeamID;
-    foreach(new i : Player) {
-        if(Player[i][Team] == DEFENDER){
-            defender++;
-        } else if(Player[i][Team] == ATTACKER) {
-    		attacker++;
-        }
+    new attacker, defender;
+    foreach(new i : Player) 
+	{
+		switch(Player[i][Team])
+		{
+			case DEFENDER:
+			{
+				defender ++;
+			}
+			case ATTACKER:
+			{
+				attacker ++;
+			}
+		}
     }
-	TeamID = (defender <= attacker) ? DEFENDER : ATTACKER;
-    return TeamID;
+    return (defender <= attacker) ? DEFENDER : ATTACKER;
 }
 
 EnableInterface(playerid) {
