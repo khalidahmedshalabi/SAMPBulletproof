@@ -2935,27 +2935,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
                     ShowConfigDialog(playerid);
 				}
-				case 14: {
-					if(ChangeName == false)
-					{
-					    ChangeName = true;
-
-					    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"(/changename){FFFFFF} command.", Player[playerid][Name]);
-						SendClientMessageToAll(-1, iString);
-					}
-					else
-					{
-					    ChangeName = false;
-					    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"(/changename){FFFFFF} command.", Player[playerid][Name]);
-						SendClientMessageToAll(-1, iString);
-					}
-
-					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'ChangeName'", (ChangeName == false ? 0 : 1));
-				    db_free_result(db_query(sqliteconnection, iString));
-
-				    ShowConfigDialog(playerid);
-				}
-				case 15:
+				case 14:
 				{
 				    if(!IsACPluginLoaded())
 					{
@@ -2983,7 +2963,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						}
 					}
 				}
-				case 16:
+				case 15:
 				{
 				    #if defined _league_included
 				    switch(LeagueAllowed)
@@ -3010,7 +2990,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 					#endif
 				}
-				case 17:
+				case 16:
 				{
 				    if(Current != -1) return SendErrorMessage(playerid, "Can't use this while a round is in progress.");
 				    switch(CPInArena)
@@ -3032,7 +3012,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
-				case 18:
+				case 17:
 				{
 				    switch(AntiMacros)
 				    {
@@ -6926,76 +6906,6 @@ YCMD:changepass(playerid, params[], help)
 
 	format(HashPass, sizeof(HashPass), "Your password is changed to: %s", params);
 	SendClientMessage(playerid, -1, HashPass);
-	return 1;
-}
-
-YCMD:changename(playerid,params[], help)
-{
-    if(help)
-	{
-	    SendCommandHelpMessage(playerid, "change your user account name.");
-	    return 1;
-	}
-    if(!ChangeName)
-		return SendErrorMessage(playerid, "/changename command is disabled in this server.");
-	if(Player[playerid][Logged] == false)
-		return SendErrorMessage(playerid,"You must be logged in.");
-	if(Player[playerid][Mute])
-		return SendErrorMessage(playerid, "Cannot use this command when you're muted.");
-	if(isnull(params))
-		return SendUsageMessage(playerid,"/changename [New Name]");
-	if(strlen(params) <= 1)
-		return SendErrorMessage(playerid,"Name cannot be that short idiot!!");
-
-	switch(SetPlayerName(playerid,params))
-	{
-	    case 1:
-	    {
-	        //success
-	        new iString[128],
-				DBResult: result
-			;
-
-			format( iString, sizeof(iString), "SELECT * FROM `Players` WHERE `Name` = '%q'", params);
-			result = db_query(sqliteconnection, iString);
-
-			if(db_num_rows(result) > 0)
-			{
-			    db_free_result(result);
-			    //name in Use in DB.
-			    SetPlayerName( playerid, Player[playerid][Name] );
-			    return SendErrorMessage(playerid,"Name already registered!");
-			}
-			else
-			{
-			    db_free_result(result);
-			    //name changed successfully!!
-
-				format(iString, sizeof(iString),">> {FFFFFF}%s "COL_PRIM"has changed name to {FFFFFF}%s",Player[playerid][Name],params);
-				SendClientMessageToAll(-1,iString);
-
-				format(iString, sizeof(iString), "UPDATE `Players` SET `Name` = '%q' WHERE `Name` = '%q'", params, Player[playerid][Name]);
-				db_free_result(db_query(sqliteconnection, iString));
-
-				format( Player[playerid][Name], MAX_PLAYER_NAME, "%s", params );
-
-			    new NewName[MAX_PLAYER_NAME];
-				NewName = RemoveClanTagFromName(playerid);
-
-				if(strlen(NewName) != 0)
-					Player[playerid][NameWithoutTag] = NewName;
-				else
-					Player[playerid][NameWithoutTag] = Player[playerid][Name];
-
-				#if defined _league_included
-                CheckPlayerLeagueRegister(playerid);
-                #endif
-			    return 1;
-			}
-	    }
-		case 0: return SendErrorMessage(playerid,"You're already using that name.");
-		case -1: return SendErrorMessage(playerid,"Either Name is too long, already in use or has invalid characters.");
-	}
 	return 1;
 }
 

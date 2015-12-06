@@ -15,7 +15,6 @@ new Float:Max_Packetloss;
 new Max_Ping;
 new Min_FPS;
 
-new bool:ChangeName = true; // Enable/Disable /changename command.
 new bool:AntiSpam = true;
 new bool:ShortCuts = false;
 new bool:LobbyGuns = true;

@@ -76,11 +76,6 @@ ShowConfigDialog(playerid) {
 		strcat(string, "\n{FF6666}Team Chat Shortcuts");
 	}
 
-	if(ChangeName == true) {
-		strcat(string, "\n{66FF66}Change name (/changename cmd)");
-	} else {
-		strcat(string, "\n{FF6666}Change name (/changename cmd)");
-	}
 	if(DefendersSeeVehiclesBlips == true)
 		strcat(string, "\n{66FF66}Defenders see vehicle blips [Disable]");
 	else
@@ -182,10 +177,6 @@ LoadConfig()
 	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // Color Scheme ID
  	format( ColScheme, 10, "{%s}", iString );
  	db_next_row(res);
-
-    db_get_field_assoc(res, "Value", iString, sizeof(iString)); // Changename
-    ChangeName = (strval(iString) == 1 ? true : false);
-    db_next_row(res);
 	
 	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // League allowed
 	LeagueAllowed = (strval(iString) == 1 ? true : false);
