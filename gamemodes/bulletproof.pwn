@@ -3398,14 +3398,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 		if(response)
 		{
-		    new groupID = listitem;
-		    if(strlen(GroupAccessPassword[groupID]) > 0 && (strcmp(RequestedGroupPass[playerid][groupID], GroupAccessPassword[groupID]) != 0 || isnull(RequestedGroupPass[playerid][groupID])))
-			{
-			    Player[playerid][RequestedClass] = listitem;
-				ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Please enter the group password:", "Submit", "Cancel");
-                return 1;
+		    if(listitem > 0) // Not auto-assign
+		    {
+			    new groupID = listitem - 1;
+			    if(strlen(GroupAccessPassword[groupID]) > 0 && (strcmp(RequestedGroupPass[playerid][groupID], GroupAccessPassword[groupID]) != 0 || isnull(RequestedGroupPass[playerid][groupID])))
+				{
+				    Player[playerid][RequestedClass] = listitem;
+					ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Please enter the group password:", "Submit", "Cancel");
+	                return 1;
+				}
 			}
-			SpawnConnectedPlayer(playerid, listitem + 1);
+			SpawnConnectedPlayer(playerid, listitem);
 		}
 		else
 		    ShowPlayerClassSelection(playerid);

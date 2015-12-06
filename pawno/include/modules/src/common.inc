@@ -277,7 +277,7 @@ ShowPlayerClassSelection(playerid)
 		}
 	}
 	format(str, sizeof(str),
-		"Team\tAccessibility\tMembers Count\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d",
+		"Team\tAccessibility\tMembers Count\n{FFFFFF}Auto-assign\tN/A\tN/A\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d",
 		TextColor[ATTACKER], TeamName[ATTACKER], strlen(GroupAccessPassword[ATTACKER - 1]) > 0 ? ("{FF6666}Locked (password required)") : ("{66FF66}Open"), ct[0],
 		TextColor[DEFENDER], TeamName[DEFENDER], strlen(GroupAccessPassword[DEFENDER - 1]) > 0 ? ("{FF6666}Locked (password required)") : ("{66FF66}Open"), ct[1],
 		TextColor[REFEREE], TeamName[REFEREE], strlen(GroupAccessPassword[REFEREE - 1]) > 0 ? ("{FF6666}Locked (password required)") : ("{66FF66}Open"), ct[2],
