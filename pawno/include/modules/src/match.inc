@@ -2391,7 +2391,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 				}
 				else
 				{
-					AddPlayerLeaguePoints(i, -75);
+					AddPlayerLeaguePoints(i, -100);
 				}
 				#endif
 				playerScores[index][player_Score] = Player[i][RoundDamage];
