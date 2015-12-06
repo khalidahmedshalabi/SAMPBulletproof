@@ -264,7 +264,6 @@ public OnPlayerRequestSpawn(playerid)
 
 public OnPlayerSpawn(playerid)
 {
-	TextDrawHideForPlayer(playerid, DarkScreen); // This fixes dark screen getting stuck on player's screen
 	if(Player[playerid][IgnoreSpawn] == true)
 	{
 	    // This spawn call should be ignored (used for many things .. e.g the SyncPlayer function)
@@ -642,7 +641,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 		#endif
 	    CreateDeadBody(playerid, killerid, reason, 0.0, x, y, z);
 	    PlayerNoLeadTeam(playerid);
-	    if(reason != WEAPON_KNIFE)
+	    if(reason != WEAPON_KNIFE && DeathCamera != false) // if weapon is not knife and death camera system is not disabled
 	    {
 	        new bool:showdeathquote = true;
 	        if(KillerConnected)
@@ -652,12 +651,10 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	        PlayDeathCamera(playerid, x, y, z, showdeathquote);
 	        SetTimerEx("SpectateAnyPlayerT", DEATH_CAMERA_DURATION + 500, false, "i", playerid);
 	    }
-	    else
+	    else // If not
 	    {
-	        // If weapon is knife then no need for death camera
 	    	SetTimerEx("SpectateAnyPlayerT", 1000, false, "i", playerid);
 		}
-		TextDrawShowForPlayer(playerid, DarkScreen);
 		switch(Player[playerid][Team])
 		{
 		    case ATTACKER:
@@ -3033,6 +3030,92 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
+				case 18:
+				{
+				    switch(DeadBodies)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Dead bodies{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							DeadBodies = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Dead bodies{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							DeleteAllDeadBodies();
+							DeadBodies = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'DeadBodies'", (DeadBodies == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
+				case 19:
+				{
+				    switch(DeathCamera)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Death camera{FFFFFF} system.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							DeathCamera = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Death camera{FFFFFF} system.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							DeathCamera = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'DeathCamera'", (DeathCamera == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
+				case 20:
+				{
+				    if(Current != -1) return SendErrorMessage(playerid, "Can't do this while a round is in progress.");
+				    switch(ShowHPBars)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"HP Bars{FFFFFF} system.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							ShowHPBars = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"HP Bars{FFFFFF} system.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							ShowHPBars = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'ShowHPBars'", (ShowHPBars == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
+				case 21:
+				{
+				    switch(LeagueShop)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"League Shop{FFFFFF} system.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							LeagueShop = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"League Shop{FFFFFF} system.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							LeagueShop = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'LeagueShop'", (LeagueShop == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
 	        }
 	    }
 	    return 1;
@@ -4053,7 +4136,10 @@ YCMD:shop(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	ShowPlayerShopDialog(playerid);
+	if(LeagueShop)
+		ShowPlayerShopDialog(playerid);
+	else
+	    SendErrorMessage(playerid, "League shop is disabled in this server");
 	#else
 	SendErrorMessage(playerid, "This version/edit of Bulletproof gamemode does not support league features!");
 	#endif

@@ -1180,6 +1180,9 @@ FindPlayerTeamBarY(playerid, &Float:y)
 // To be used when you add a player to the round for example, it should not be used for updating values
 CreatePlayerTeamBar(playerid)
 {
+	if(!ShowHPBars)
+		return 0;
+	
 	if(Iter_Contains(PlayerWithTeamBar, playerid))
 		DeletePlayerTeamBar(playerid);
 	
@@ -1262,6 +1265,9 @@ CreatePlayerTeamBar(playerid)
 // Shows team bars for a specific player
 ShowTeamBarsForPlayer(playerid)
 {
+	if(!ShowHPBars)
+		return 0;
+	
 	HideTeamBarsForPlayer(playerid);
 	if(Current == -1)
 		return 1;
@@ -1287,6 +1293,9 @@ ShowTeamBarsForPlayer(playerid)
 // Hide a specifc team bar for a player
 TeamBarHideForPlayer(playerid, barofplayerid)
 {
+	if(!ShowHPBars)
+		return;
+	
 	new Bar:barid;
 	barid = TeamBarsData[barofplayerid][TeamBar];
 	
@@ -1301,6 +1310,9 @@ TeamBarHideForPlayer(playerid, barofplayerid)
 // Hides team bars for a specific player
 HideTeamBarsForPlayer(playerid)
 {
+	if(!ShowHPBars)
+		return 0;
+	
 	new Bar:barid;
 	foreach(new i : PlayerWithTeamBar) // Loops through all players who have a team bar created for them
 	{
@@ -1321,6 +1333,9 @@ HideTeamBarsForPlayer(playerid)
 // Hide all team bars for a player with a force (doesn't matter if they're shown or not)
 HideAllTeamBarsForPlayer(playerid)
 {
+	if(!ShowHPBars)
+		return 0;
+	
 	new Bar:barid;
 	foreach(new i : PlayerWithTeamBar) // Loops through all players who have a team bar created for them
 	{
@@ -1336,6 +1351,9 @@ HideAllTeamBarsForPlayer(playerid)
 // To be used when round ends or when a player is removed
 DeletePlayerTeamBar(playerid)
 {
+	if(!ShowHPBars)
+		return 0;
+	
 	if(!Iter_Contains(PlayerWithTeamBar, playerid))
 		return 0;
 	
@@ -1352,6 +1370,9 @@ DeletePlayerTeamBar(playerid)
 // Usually used when a round is ended
 DeleteAllTeamBars()
 {
+	if(!ShowHPBars)
+		return 0;
+	
 	foreach(new i : PlayerWithTeamBar) // Loops through all players who have a team bar created for them
 	{
 		// Delete the textdraws
@@ -1368,6 +1389,9 @@ DeleteAllTeamBars()
 // To be used when player does damage or their health is changed
 UpdatePlayerTeamBar(playerid)
 {
+	if(!ShowHPBars)
+		return 0;
+	
 	if(!Iter_Contains(PlayerWithTeamBar, playerid)) // Check if this player has a team bar or not
 		return 0;
 	

@@ -79,6 +79,9 @@ SendUsageMessage(playerid, text[], messagebox_type = MSGBOX_TYPE_MIDDLE)
 
 CreateDeadBody(playerid, killerid, reason, Float:distance = 0.0, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0)
 {
+	if(!DeadBodies)
+		return;
+	
 	if(x == 0.0 && y == 0.0 && z == 0.0)
 	{
 		GetPlayerPos(playerid, x, y, z);
@@ -128,6 +131,9 @@ CreateDeadBody(playerid, killerid, reason, Float:distance = 0.0, Float:x = 0.0, 
 
 DeleteAllDeadBodies()
 {
+	if(!DeadBodies)
+		return;
+	
 	if(Iter_Count(DeadBodyLabels) != 0)
 	{
 		foreach(new i : DeadBodyLabels)
@@ -418,7 +424,7 @@ public HidePlayerDeathMessage(playerid)
 
 ShowPlayerDeathMessage(killerid, playerid)
 {
-	if(!Player[killerid][HasDeathQuote])
+	if(!Player[killerid][HasDeathQuote] || !DeathCamera)
 	{
 	    return 0;
 	}
