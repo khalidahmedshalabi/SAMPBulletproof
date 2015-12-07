@@ -164,6 +164,7 @@ public OnPlayerConnect(playerid)
 	InitPlayer(playerid);
 	#if defined _league_included
 	CheckPlayerLeagueRegister(playerid);
+	UpdateOnlinePlayersList(playerid, true);
 	#endif
 	CheckPlayerAKA(playerid);
 
@@ -367,6 +368,7 @@ public OnPlayerDisconnect(playerid, reason)
 	{
 	    CheckLeagueMatchValidity(1000);
 	}
+	UpdateOnlinePlayersList(playerid, false);
 	#endif
 	// Send public disconnect messages
     new iString[180];
@@ -2599,6 +2601,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			WarMode = false;
 			#if defined _league_included
+			UpdateOnlineMatchesList(false);
 			CancelLeagueMode();
 			#endif
 
@@ -2676,7 +2679,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			SendClientMessageToAll(-1, iString);
 
 		    WarMode = true;
+			#if defined _league_included
 		    UpdateOnlineMatchesList(true);
+		    #endif
 		    format(iString, sizeof iString, "%sWar Mode: ~r~ON", MAIN_TEXT_COLOUR);
 			TextDrawSetString(WarModeText, iString);
 
@@ -5468,7 +5473,9 @@ YCMD:war(playerid, params[], help)
 	}
 
 	WarMode = true;
+	#if defined _league_included
 	UpdateOnlineMatchesList(true);
+	#endif
 	RoundPaused = false;
     format(iString, sizeof iString, "%sWar Mode: ~r~ON", MAIN_TEXT_COLOUR);
 	TextDrawSetString(WarModeText, iString);
@@ -5560,6 +5567,11 @@ YCMD:teamname(playerid, params[], help)
 			SendClientMessageToAll(-1, iString);
 	    }
 	}
+	
+	#if defined _league_included
+	if(WarMode)
+    	UpdateOnlineMatchesList(true);
+    #endif
 
 	UpdateTeamNamesTextdraw();
 	UpdateTeamNameTextDraw();

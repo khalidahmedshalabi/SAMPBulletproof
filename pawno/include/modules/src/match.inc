@@ -2592,6 +2592,8 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
 	
 	#if defined _league_included
+	if(WarMode)
+		UpdateOnlineMatchesList(true);
 	if(LeagueMode)
 	{	
 		OnLeagueRoundEnd();
@@ -2842,6 +2844,7 @@ public WarEnded()
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
 	
 	#if defined _league_included
+	UpdateOnlineMatchesList(false);
 	if(LeagueMode)
 	{
 		if(TeamScore[ATTACKER] > 0 || TeamScore[DEFENDER] > 0)
