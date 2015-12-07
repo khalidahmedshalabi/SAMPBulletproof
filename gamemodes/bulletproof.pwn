@@ -2044,6 +2044,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			    format(str, sizeof(str), "UPDATE Players SET WeaponBind%d = %d WHERE Name = '%q'", index, weaponid, Player[playerid][Name]);
 			    db_free_result(db_query(sqliteconnection, str));
 			    UpdatePlayerWeaponBindTextDraw(playerid);
+			    ShowPlayerWeaponBindTextDraw(playerid, 5000);
 			}
 	    }
 	    return 1;
@@ -7392,7 +7393,6 @@ YCMD:done(playerid, params[], help)
 			    }
 			}
             ShowGunmenuHelp(playerid);
-			ShowPlayerWeaponBindTextDraw(playerid, 5000);
 		}
 		else
 		{
