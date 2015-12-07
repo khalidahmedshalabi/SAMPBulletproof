@@ -1,3 +1,5 @@
+#pragma dynamic 3500000
+
 #include <a_samp>
 #include <a_http>
 
