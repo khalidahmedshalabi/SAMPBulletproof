@@ -2676,6 +2676,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			SendClientMessageToAll(-1, iString);
 
 		    WarMode = true;
+		    UpdateOnlineMatchesList(true);
 		    format(iString, sizeof iString, "%sWar Mode: ~r~ON", MAIN_TEXT_COLOUR);
 			TextDrawSetString(WarModeText, iString);
 
@@ -5236,7 +5237,8 @@ YCMD:leaguecmds(playerid, params[], help)
 		/clanapps\tView clan join requests\n\
 		/acceptclan\tAccept players in your league clan\n\
 		/claninfo\tGet info about a league clan\n\
-		/kickclan\tKick someone from your league clan (You can kick yourself)",
+		/kickclan\tKick someone from your league clan (You can kick yourself)\n\
+		/setcoleader\tSet someone as coleader for your clan (to remove coleader, use /setcoleader none)",
 		"OK", "");
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
@@ -5252,11 +5254,16 @@ YCMD:claninfo(playerid, params[], help)
 	    return 1;
 	}
     #if defined _league_included
-	new ClanTag[7];
-	if(sscanf(params, "s", ClanTag))
+	if(isnull(params))
 		return SendUsageMessage(playerid,"/claninfo [Clan Tag]");
 
-	ClanInfo(playerid, ClanTag);
+    if(strlen(params) > 6)
+	    return SendErrorMessage(playerid,"A clan tag must be very short");
+
+	if(strfind(params, " ", true) != -1 || strfind(params, "[", true) != -1 || strfind(params, "]", true) != -1)
+	    return SendErrorMessage(playerid,"Spaces and brackets [] are not allowed in a clan tag");
+
+	ClanInfo(playerid, params);
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 	#endif
@@ -5278,6 +5285,27 @@ YCMD:acceptclan(playerid, params[], help)
 		return SendUsageMessage(playerid,"/acceptclan [Player Name]");
 
 	AcceptClan(playerid, NameToAccept);
+	#else
+	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
+	#endif
+	return 1;
+}
+
+YCMD:setcoleader(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "Set someone as coleader for your own clan.");
+	    return 1;
+	}
+    #if defined _league_included
+    if(!IsPlayerInAnyClan(playerid))
+	    return SendErrorMessage(playerid, "You're not in a clan.");
+	new NameToCo[MAX_PLAYER_NAME];
+	if(sscanf(params, "s", NameToCo))
+		return SendUsageMessage(playerid,"/setcoleader [Player Name] ");
+
+	SetCoLeader(playerid, NameToCo);
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 	#endif
@@ -5333,11 +5361,17 @@ YCMD:joinclan(playerid, params[], help)
     #if defined _league_included
     if(IsPlayerInAnyClan(playerid))
 	    return SendErrorMessage(playerid, "You're already in a clan.");
-	new ClanTag[7];
-	if(sscanf(params, "s", ClanTag))
-		return SendUsageMessage(playerid,"/joinclan [Clan Tag]");
+	    
+	if(isnull(params))
+		return SendUsageMessage(playerid,"/createclan [Clan Tag]");
 
-	JoinClan(playerid, ClanTag);
+    if(strlen(params) > 6)
+	    return SendErrorMessage(playerid,"A clan tag must be very short");
+
+	if(strfind(params, " ", true) != -1 || strfind(params, "[", true) != -1 || strfind(params, "]", true) != -1)
+	    return SendErrorMessage(playerid,"Spaces and brackets [] are not allowed in a clan tag");
+
+	JoinClan(playerid, params);
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 	#endif
@@ -5354,11 +5388,17 @@ YCMD:createclan(playerid, params[], help)
     #if defined _league_included
     if(IsPlayerInAnyClan(playerid))
 	    return SendErrorMessage(playerid, "You're already in a clan.");
-	new ClanTag[7];
-	if(sscanf(params, "s", ClanTag))
-		return SendUsageMessage(playerid,"/createclan [Clan Tag]");
 
-	CreateClan(playerid, ClanTag);
+	if(isnull(params))
+		return SendUsageMessage(playerid,"/createclan [Clan Tag]");
+		
+    if(strlen(params) > 6)
+	    return SendErrorMessage(playerid,"A clan tag must be very short");
+	    
+	if(strfind(params, " ", true) != -1 || strfind(params, "[", true) != -1 || strfind(params, "]", true) != -1)
+	    return SendErrorMessage(playerid,"Spaces and brackets [] are not allowed in a clan tag");
+
+	CreateClan(playerid, params);
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 	#endif
@@ -5428,6 +5468,7 @@ YCMD:war(playerid, params[], help)
 	}
 
 	WarMode = true;
+	UpdateOnlineMatchesList(true);
 	RoundPaused = false;
     format(iString, sizeof iString, "%sWar Mode: ~r~ON", MAIN_TEXT_COLOUR);
 	TextDrawSetString(WarModeText, iString);
