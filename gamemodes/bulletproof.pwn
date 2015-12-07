@@ -2,7 +2,7 @@
 #include <a_http>
 
 #undef MAX_PLAYERS
-#define MAX_PLAYERS      		40
+#define MAX_PLAYERS      		50
 
 //	- 	Libraries
 #include <geolocation> 		// Shows player country based on IP
