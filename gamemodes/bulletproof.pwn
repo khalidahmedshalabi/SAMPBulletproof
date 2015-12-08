@@ -5730,7 +5730,7 @@ YCMD:unfreeze(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "unfreeze a player.");
 	    return 1;
 	}
-	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/freeze [Player ID]");
+	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/unfreeze [Player ID]");
 
 	new pID = strval(params);
  	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isnt connected.");
