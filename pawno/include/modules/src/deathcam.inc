@@ -15,6 +15,7 @@ public OnPlayerDeathCameraEnd(playerid)
 	Player[playerid][IgnoreSpawn] = false;
 	TogglePlayerSpectating(playerid, false);
 	HideMessageBox(playerid, -1);
+	TextDrawHideForPlayer(playerid, DarkScreen);
 	switch(PlayerInterface[playerid][INTERFACE_HP])
 	{
 		case true:
@@ -49,6 +50,7 @@ PlayDeathCamera(playerid, Float:deathX, Float:deathY, Float:deathZ, bool:deathqu
 		MessageBox(playerid, MSGBOX_TYPE_MIDDLE, sprintf("~r~~h~~h~%s", WarQuotesAuthors[randWarQuote]), WarQuotes[randWarQuote], DEATH_CAMERA_DURATION);
 	}
 	
+	TextDrawShowForPlayer(playerid, DarkScreen);
 	// Hide some HUD textdraws
 	PlayerTextDrawHide(playerid, RoundKillDmgTDmg[playerid]);
 	PlayerTextDrawHide(playerid, HPTextDraw_TD[playerid]);

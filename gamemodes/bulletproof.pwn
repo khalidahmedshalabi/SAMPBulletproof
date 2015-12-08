@@ -1,8 +1,10 @@
+#pragma dynamic 3500000
+
 #include <a_samp>
 #include <a_http>
 
 #undef MAX_PLAYERS
-#define MAX_PLAYERS      		40
+#define MAX_PLAYERS      		50
 
 //	- 	Libraries
 #include <geolocation> 		// Shows player country based on IP
@@ -164,6 +166,7 @@ public OnPlayerConnect(playerid)
 	InitPlayer(playerid);
 	#if defined _league_included
 	CheckPlayerLeagueRegister(playerid);
+	UpdateOnlinePlayersList(playerid, true);
 	#endif
 	CheckPlayerAKA(playerid);
 
@@ -264,7 +267,6 @@ public OnPlayerRequestSpawn(playerid)
 
 public OnPlayerSpawn(playerid)
 {
-	TextDrawHideForPlayer(playerid, DarkScreen); // This fixes dark screen getting stuck on player's screen
 	if(Player[playerid][IgnoreSpawn] == true)
 	{
 	    // This spawn call should be ignored (used for many things .. e.g the SyncPlayer function)
@@ -368,6 +370,7 @@ public OnPlayerDisconnect(playerid, reason)
 	{
 	    CheckLeagueMatchValidity(1000);
 	}
+	UpdateOnlinePlayersList(playerid, false);
 	#endif
 	// Send public disconnect messages
     new iString[180];
@@ -642,7 +645,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 		#endif
 	    CreateDeadBody(playerid, killerid, reason, 0.0, x, y, z);
 	    PlayerNoLeadTeam(playerid);
-	    if(reason != WEAPON_KNIFE)
+	    if(reason != WEAPON_KNIFE && DeathCamera != false) // if weapon is not knife and death camera system is not disabled
 	    {
 	        new bool:showdeathquote = true;
 	        if(KillerConnected)
@@ -652,12 +655,10 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	        PlayDeathCamera(playerid, x, y, z, showdeathquote);
 	        SetTimerEx("SpectateAnyPlayerT", DEATH_CAMERA_DURATION + 500, false, "i", playerid);
 	    }
-	    else
+	    else // If not
 	    {
-	        // If weapon is knife then no need for death camera
 	    	SetTimerEx("SpectateAnyPlayerT", 1000, false, "i", playerid);
 		}
-		TextDrawShowForPlayer(playerid, DarkScreen);
 		switch(Player[playerid][Team])
 		{
 		    case ATTACKER:
@@ -2043,6 +2044,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			    format(str, sizeof(str), "UPDATE Players SET WeaponBind%d = %d WHERE Name = '%q'", index, weaponid, Player[playerid][Name]);
 			    db_free_result(db_query(sqliteconnection, str));
 			    UpdatePlayerWeaponBindTextDraw(playerid);
+			    ShowPlayerWeaponBindTextDraw(playerid, 5000);
 			}
 	    }
 	    return 1;
@@ -2602,6 +2604,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			WarMode = false;
 			#if defined _league_included
+			UpdateOnlineMatchesList(false);
 			CancelLeagueMode();
 			#endif
 
@@ -2679,6 +2682,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			SendClientMessageToAll(-1, iString);
 
 		    WarMode = true;
+			#if defined _league_included
+		    UpdateOnlineMatchesList(true);
+		    #endif
 		    format(iString, sizeof iString, "%sWar Mode: ~r~ON", MAIN_TEXT_COLOUR);
 			TextDrawSetString(WarModeText, iString);
 
@@ -2935,27 +2941,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
                     ShowConfigDialog(playerid);
 				}
-				case 14: {
-					if(ChangeName == false)
-					{
-					    ChangeName = true;
-
-					    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"(/changename){FFFFFF} command.", Player[playerid][Name]);
-						SendClientMessageToAll(-1, iString);
-					}
-					else
-					{
-					    ChangeName = false;
-					    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"(/changename){FFFFFF} command.", Player[playerid][Name]);
-						SendClientMessageToAll(-1, iString);
-					}
-
-					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'ChangeName'", (ChangeName == false ? 0 : 1));
-				    db_free_result(db_query(sqliteconnection, iString));
-
-				    ShowConfigDialog(playerid);
-				}
-				case 15:
+				case 14:
 				{
 				    if(!IsACPluginLoaded())
 					{
@@ -2983,7 +2969,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						}
 					}
 				}
-				case 16:
+				case 15:
 				{
 				    #if defined _league_included
 				    switch(LeagueAllowed)
@@ -3010,7 +2996,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 					#endif
 				}
-				case 17:
+				case 16:
 				{
 				    if(Current != -1) return SendErrorMessage(playerid, "Can't use this while a round is in progress.");
 				    switch(CPInArena)
@@ -3032,7 +3018,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
-				case 18:
+				case 17:
 				{
 				    switch(AntiMacros)
 				    {
@@ -3050,6 +3036,92 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						}
 					}
 					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'AntiMacros'", (AntiMacros == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
+				case 18:
+				{
+				    switch(DeadBodies)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Dead bodies{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							DeadBodies = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Dead bodies{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							DeleteAllDeadBodies();
+							DeadBodies = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'DeadBodies'", (DeadBodies == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
+				case 19:
+				{
+				    switch(DeathCamera)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Death camera{FFFFFF} system.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							DeathCamera = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Death camera{FFFFFF} system.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							DeathCamera = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'DeathCamera'", (DeathCamera == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
+				case 20:
+				{
+				    if(Current != -1) return SendErrorMessage(playerid, "Can't do this while a round is in progress.");
+				    switch(ShowHPBars)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"HP Bars{FFFFFF} system.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							ShowHPBars = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"HP Bars{FFFFFF} system.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							ShowHPBars = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'ShowHPBars'", (ShowHPBars == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
+				case 21:
+				{
+				    switch(LeagueShop)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"League Shop{FFFFFF} system.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							LeagueShop = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"League Shop{FFFFFF} system.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							LeagueShop = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'LeagueShop'", (LeagueShop == false ? 0 : 1));
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
@@ -3398,14 +3470,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 		if(response)
 		{
-		    new groupID = listitem;
-		    if(strlen(GroupAccessPassword[groupID]) > 0 && (strcmp(RequestedGroupPass[playerid][groupID], GroupAccessPassword[groupID]) != 0 || isnull(RequestedGroupPass[playerid][groupID])))
-			{
-			    Player[playerid][RequestedClass] = listitem;
-				ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Please enter the group password:", "Submit", "Cancel");
-                return 1;
+		    if(listitem > 0) // Not auto-assign
+		    {
+			    new groupID = listitem - 1;
+			    if(strlen(GroupAccessPassword[groupID]) > 0 && (strcmp(RequestedGroupPass[playerid][groupID], GroupAccessPassword[groupID]) != 0 || isnull(RequestedGroupPass[playerid][groupID])))
+				{
+				    Player[playerid][RequestedClass] = listitem;
+					ShowPlayerDialog(playerid, DIALOG_GROUPACCESS, DIALOG_STYLE_INPUT, "Authorization required", "Please enter the group password:", "Submit", "Cancel");
+	                return 1;
+				}
 			}
-			SpawnConnectedPlayer(playerid, listitem + 1);
+			SpawnConnectedPlayer(playerid, listitem);
 		}
 		else
 		    ShowPlayerClassSelection(playerid);
@@ -4070,7 +4145,10 @@ YCMD:shop(playerid, params[], help)
 	    return 1;
 	}
 	#if defined _league_included
-	ShowPlayerShopDialog(playerid);
+	if(LeagueShop)
+		ShowPlayerShopDialog(playerid);
+	else
+	    SendErrorMessage(playerid, "League shop is disabled in this server");
 	#else
 	SendErrorMessage(playerid, "This version/edit of Bulletproof gamemode does not support league features!");
 	#endif
@@ -5167,7 +5245,8 @@ YCMD:leaguecmds(playerid, params[], help)
 		/clanapps\tView clan join requests\n\
 		/acceptclan\tAccept players in your league clan\n\
 		/claninfo\tGet info about a league clan\n\
-		/kickclan\tKick someone from your league clan (You can kick yourself)",
+		/kickclan\tKick someone from your league clan (You can kick yourself)\n\
+		/setcoleader\tSet someone as coleader for your clan (to remove coleader, use /setcoleader none)",
 		"OK", "");
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
@@ -5183,11 +5262,16 @@ YCMD:claninfo(playerid, params[], help)
 	    return 1;
 	}
     #if defined _league_included
-	new ClanTag[7];
-	if(sscanf(params, "s", ClanTag))
+	if(isnull(params))
 		return SendUsageMessage(playerid,"/claninfo [Clan Tag]");
 
-	ClanInfo(playerid, ClanTag);
+    if(strlen(params) > 6)
+	    return SendErrorMessage(playerid,"A clan tag must be very short");
+
+	if(strfind(params, " ", true) != -1 || strfind(params, "[", true) != -1 || strfind(params, "]", true) != -1)
+	    return SendErrorMessage(playerid,"Spaces and brackets [] are not allowed in a clan tag");
+
+	ClanInfo(playerid, params);
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 	#endif
@@ -5209,6 +5293,27 @@ YCMD:acceptclan(playerid, params[], help)
 		return SendUsageMessage(playerid,"/acceptclan [Player Name]");
 
 	AcceptClan(playerid, NameToAccept);
+	#else
+	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
+	#endif
+	return 1;
+}
+
+YCMD:setcoleader(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "Set someone as coleader for your own clan.");
+	    return 1;
+	}
+    #if defined _league_included
+    if(!IsPlayerInAnyClan(playerid))
+	    return SendErrorMessage(playerid, "You're not in a clan.");
+	new NameToCo[MAX_PLAYER_NAME];
+	if(sscanf(params, "s", NameToCo))
+		return SendUsageMessage(playerid,"/setcoleader [Player Name] ");
+
+	SetCoLeader(playerid, NameToCo);
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 	#endif
@@ -5264,11 +5369,17 @@ YCMD:joinclan(playerid, params[], help)
     #if defined _league_included
     if(IsPlayerInAnyClan(playerid))
 	    return SendErrorMessage(playerid, "You're already in a clan.");
-	new ClanTag[7];
-	if(sscanf(params, "s", ClanTag))
-		return SendUsageMessage(playerid,"/joinclan [Clan Tag]");
+	    
+	if(isnull(params))
+		return SendUsageMessage(playerid,"/createclan [Clan Tag]");
 
-	JoinClan(playerid, ClanTag);
+    if(strlen(params) > 6)
+	    return SendErrorMessage(playerid,"A clan tag must be very short");
+
+	if(strfind(params, " ", true) != -1 || strfind(params, "[", true) != -1 || strfind(params, "]", true) != -1)
+	    return SendErrorMessage(playerid,"Spaces and brackets [] are not allowed in a clan tag");
+
+	JoinClan(playerid, params);
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 	#endif
@@ -5285,11 +5396,17 @@ YCMD:createclan(playerid, params[], help)
     #if defined _league_included
     if(IsPlayerInAnyClan(playerid))
 	    return SendErrorMessage(playerid, "You're already in a clan.");
-	new ClanTag[7];
-	if(sscanf(params, "s", ClanTag))
-		return SendUsageMessage(playerid,"/createclan [Clan Tag]");
 
-	CreateClan(playerid, ClanTag);
+	if(isnull(params))
+		return SendUsageMessage(playerid,"/createclan [Clan Tag]");
+		
+    if(strlen(params) > 6)
+	    return SendErrorMessage(playerid,"A clan tag must be very short");
+	    
+	if(strfind(params, " ", true) != -1 || strfind(params, "[", true) != -1 || strfind(params, "]", true) != -1)
+	    return SendErrorMessage(playerid,"Spaces and brackets [] are not allowed in a clan tag");
+
+	CreateClan(playerid, params);
 	#else
 	SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 	#endif
@@ -5359,6 +5476,9 @@ YCMD:war(playerid, params[], help)
 	}
 
 	WarMode = true;
+	#if defined _league_included
+	UpdateOnlineMatchesList(true);
+	#endif
 	RoundPaused = false;
     format(iString, sizeof iString, "%sWar Mode: ~r~ON", MAIN_TEXT_COLOUR);
 	TextDrawSetString(WarModeText, iString);
@@ -5450,6 +5570,11 @@ YCMD:teamname(playerid, params[], help)
 			SendClientMessageToAll(-1, iString);
 	    }
 	}
+	
+	#if defined _league_included
+	if(WarMode)
+    	UpdateOnlineMatchesList(true);
+    #endif
 
 	UpdateTeamNamesTextdraw();
 	UpdateTeamNameTextDraw();
@@ -5605,7 +5730,7 @@ YCMD:unfreeze(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "unfreeze a player.");
 	    return 1;
 	}
-	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/freeze [Player ID]");
+	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/unfreeze [Player ID]");
 
 	new pID = strval(params);
  	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isnt connected.");
@@ -6926,76 +7051,6 @@ YCMD:changepass(playerid, params[], help)
 	return 1;
 }
 
-YCMD:changename(playerid,params[], help)
-{
-    if(help)
-	{
-	    SendCommandHelpMessage(playerid, "change your user account name.");
-	    return 1;
-	}
-    if(!ChangeName)
-		return SendErrorMessage(playerid, "/changename command is disabled in this server.");
-	if(Player[playerid][Logged] == false)
-		return SendErrorMessage(playerid,"You must be logged in.");
-	if(Player[playerid][Mute])
-		return SendErrorMessage(playerid, "Cannot use this command when you're muted.");
-	if(isnull(params))
-		return SendUsageMessage(playerid,"/changename [New Name]");
-	if(strlen(params) <= 1)
-		return SendErrorMessage(playerid,"Name cannot be that short idiot!!");
-
-	switch(SetPlayerName(playerid,params))
-	{
-	    case 1:
-	    {
-	        //success
-	        new iString[128],
-				DBResult: result
-			;
-
-			format( iString, sizeof(iString), "SELECT * FROM `Players` WHERE `Name` = '%q'", params);
-			result = db_query(sqliteconnection, iString);
-
-			if(db_num_rows(result) > 0)
-			{
-			    db_free_result(result);
-			    //name in Use in DB.
-			    SetPlayerName( playerid, Player[playerid][Name] );
-			    return SendErrorMessage(playerid,"Name already registered!");
-			}
-			else
-			{
-			    db_free_result(result);
-			    //name changed successfully!!
-
-				format(iString, sizeof(iString),">> {FFFFFF}%s "COL_PRIM"has changed name to {FFFFFF}%s",Player[playerid][Name],params);
-				SendClientMessageToAll(-1,iString);
-
-				format(iString, sizeof(iString), "UPDATE `Players` SET `Name` = '%q' WHERE `Name` = '%q'", params, Player[playerid][Name]);
-				db_free_result(db_query(sqliteconnection, iString));
-
-				format( Player[playerid][Name], MAX_PLAYER_NAME, "%s", params );
-
-			    new NewName[MAX_PLAYER_NAME];
-				NewName = RemoveClanTagFromName(playerid);
-
-				if(strlen(NewName) != 0)
-					Player[playerid][NameWithoutTag] = NewName;
-				else
-					Player[playerid][NameWithoutTag] = Player[playerid][Name];
-
-				#if defined _league_included
-                CheckPlayerLeagueRegister(playerid);
-                #endif
-			    return 1;
-			}
-	    }
-		case 0: return SendErrorMessage(playerid,"You're already using that name.");
-		case -1: return SendErrorMessage(playerid,"Either Name is too long, already in use or has invalid characters.");
-	}
-	return 1;
-}
-
 YCMD:heal(playerid, params[], help)
 {
     if(help)
@@ -7338,7 +7393,6 @@ YCMD:done(playerid, params[], help)
 			    }
 			}
             ShowGunmenuHelp(playerid);
-			ShowPlayerWeaponBindTextDraw(playerid, 5000);
 		}
 		else
 		{

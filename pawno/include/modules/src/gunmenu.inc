@@ -588,7 +588,6 @@ OnGunmenuDialogResponse(playerid, response, listitem)
 			    }
 			}
 			ShowGunmenuHelp(playerid);
-			ShowPlayerWeaponBindTextDraw(playerid, 5000);
 		}
 		case 1: // Clicked "Pick"
 		{

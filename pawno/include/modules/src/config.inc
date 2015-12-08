@@ -76,11 +76,6 @@ ShowConfigDialog(playerid) {
 		strcat(string, "\n{FF6666}Team Chat Shortcuts");
 	}
 
-	if(ChangeName == true) {
-		strcat(string, "\n{66FF66}Change name (/changename cmd)");
-	} else {
-		strcat(string, "\n{FF6666}Change name (/changename cmd)");
-	}
 	if(DefendersSeeVehiclesBlips == true)
 		strcat(string, "\n{66FF66}Defenders see vehicle blips [Disable]");
 	else
@@ -100,6 +95,26 @@ ShowConfigDialog(playerid) {
 		strcat(string, "\n{66FF66}Anti-macros system");
 	else
 		strcat(string, "\n{FF6666}Anti-macros system");
+	
+	if(DeadBodies == true)
+		strcat(string, "\n{66FF66}Dead bodies");
+	else
+		strcat(string, "\n{FF6666}Dead bodies");
+	
+	if(DeathCamera == true)
+		strcat(string, "\n{66FF66}Death camera and its textdraws");
+	else
+		strcat(string, "\n{FF6666}Death camera and its textdraws");
+	
+	if(ShowHPBars == true)
+		strcat(string, "\n{66FF66}HP Bars");
+	else
+		strcat(string, "\n{FF6666}HP Bars");
+	
+	if(LeagueShop == true)
+		strcat(string, "\n{66FF66}League shop (/shop)");
+	else
+		strcat(string, "\n{FF6666}League shop (/shop)");
 
     ShowPlayerDialog(playerid, DIALOG_CONFIG, DIALOG_STYLE_LIST, ""COL_PRIM"Config Settings", string, "OK", "Cancel");
     return 1;
@@ -182,10 +197,6 @@ LoadConfig()
 	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // Color Scheme ID
  	format( ColScheme, 10, "{%s}", iString );
  	db_next_row(res);
-
-    db_get_field_assoc(res, "Value", iString, sizeof(iString)); // Changename
-    ChangeName = (strval(iString) == 1 ? true : false);
-    db_next_row(res);
 	
 	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // League allowed
 	LeagueAllowed = (strval(iString) == 1 ? true : false);
@@ -197,6 +208,22 @@ LoadConfig()
 	
 	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // AntiMacros
     AntiMacros = (strval(iString) == 1 ? true : false);
+    db_next_row(res);
+	
+	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // DeadBodies
+    DeadBodies = (strval(iString) == 1 ? true : false);
+    db_next_row(res);
+	
+	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // DeathCamera
+    DeathCamera = (strval(iString) == 1 ? true : false);
+    db_next_row(res);
+	
+	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // ShowHPBars
+    ShowHPBars = (strval(iString) == 1 ? true : false);
+    db_next_row(res);
+	
+	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // LeagueShop
+    LeagueShop = (strval(iString) == 1 ? true : false);
     db_next_row(res);
 
 	db_free_result(res);

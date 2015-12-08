@@ -79,6 +79,9 @@ SendUsageMessage(playerid, text[], messagebox_type = MSGBOX_TYPE_MIDDLE)
 
 CreateDeadBody(playerid, killerid, reason, Float:distance = 0.0, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0)
 {
+	if(!DeadBodies)
+		return;
+	
 	if(x == 0.0 && y == 0.0 && z == 0.0)
 	{
 		GetPlayerPos(playerid, x, y, z);
@@ -128,6 +131,9 @@ CreateDeadBody(playerid, killerid, reason, Float:distance = 0.0, Float:x = 0.0, 
 
 DeleteAllDeadBodies()
 {
+	if(!DeadBodies)
+		return;
+	
 	if(Iter_Count(DeadBodyLabels) != 0)
 	{
 		foreach(new i : DeadBodyLabels)
@@ -277,7 +283,7 @@ ShowPlayerClassSelection(playerid)
 		}
 	}
 	format(str, sizeof(str),
-		"Team\tAccessibility\tMembers Count\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d",
+		"Team\tAccessibility\tMembers Count\n{FFFFFF}Auto-assign\tN/A\tN/A\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d\n%s%s{FFFFFF}\t%s\t%d",
 		TextColor[ATTACKER], TeamName[ATTACKER], strlen(GroupAccessPassword[ATTACKER - 1]) > 0 ? ("{FF6666}Locked (password required)") : ("{66FF66}Open"), ct[0],
 		TextColor[DEFENDER], TeamName[DEFENDER], strlen(GroupAccessPassword[DEFENDER - 1]) > 0 ? ("{FF6666}Locked (password required)") : ("{66FF66}Open"), ct[1],
 		TextColor[REFEREE], TeamName[REFEREE], strlen(GroupAccessPassword[REFEREE - 1]) > 0 ? ("{FF6666}Locked (password required)") : ("{66FF66}Open"), ct[2],
@@ -296,80 +302,46 @@ public SpawnConnectedPlayer(playerid, team)
 	{
 		case 0: // auto-assign
 		{
-			if(WarMode == false)
+			switch(WarMode)
 			{
-				Player[playerid][Team] = GetTeamWithLessPlayers();
-				switch(Player[playerid][Team])
+				case false:
 				{
-					case ATTACKER: SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
-					case DEFENDER: SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
+					Player[playerid][Team] = GetTeamWithLessPlayers();
 				}
-			}
-			else
-			{
-				new ToAddIn;
-
-				if(strfind(Player[playerid][Name], TeamName[ATTACKER], true) != -1) ToAddIn = ATTACKER;
-				else if(strfind(Player[playerid][Name], TeamName[DEFENDER], true) != -1) ToAddIn = DEFENDER;
-				else ToAddIn = NON;
-
-				switch(ToAddIn)
+				case true:
 				{
-					case NON:
-					{
-						Player[playerid][Team] = GetTeamWithLessPlayers();
-						switch(Player[playerid][Team])
-						{
-							case ATTACKER: SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
-							case DEFENDER: SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
-						}
-					}
-					case ATTACKER:
-					{
+					if(strfind(Player[playerid][Name], TeamName[ATTACKER], true) != -1) 
 						Player[playerid][Team] = ATTACKER;
-						SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
-					}
-					case DEFENDER:
-					{
+					else if(strfind(Player[playerid][Name], TeamName[DEFENDER], true) != -1) 
 						Player[playerid][Team] = DEFENDER;
-						SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
-					}
+					else 
+						Player[playerid][Team] = GetTeamWithLessPlayers();
 				}
 			}
-			SwitchTeamFix(playerid, false, false);
 		}
 		case 1:
 		{
 			Player[playerid][Team] = ATTACKER;
-			SetPlayerColor(playerid, ATTACKER_NOT_PLAYING);
-			SwitchTeamFix(playerid, false, false);
 		}
 		case 2:
 		{
 			Player[playerid][Team] = DEFENDER;
-			SetPlayerColor(playerid, DEFENDER_NOT_PLAYING);
-			SwitchTeamFix(playerid, false, false);
 		}
 		case 3:
 		{
 			Player[playerid][Team] = REFEREE;
-			SetPlayerColor(playerid, REFEREE_COLOR);
-			SwitchTeamFix(playerid, false, false);
 		}
 		case 4:
 		{
 			Player[playerid][Team] = ATTACKER_SUB;
-			SetPlayerColor(playerid, ATTACKER_SUB_COLOR);
-			SwitchTeamFix(playerid, false, false);
 		}
 		case 5:
 		{
 			Player[playerid][Team] = DEFENDER_SUB;
-			SetPlayerColor(playerid, DEFENDER_SUB_COLOR);
-			SwitchTeamFix(playerid, false, false);
 		}
 	}
-
+	
+	SwitchTeamFix(playerid, false, false);
 	SetPlayerWeather(playerid, Player[playerid][Weather]);
 	SetPlayerTime(playerid, Player[playerid][Time], 0);
 
@@ -390,10 +362,6 @@ public SpawnConnectedPlayer(playerid, team)
 		}
 	}
 	PlayerTextDrawShow(playerid, BaseID_VS[playerid]);
-
-	new str[160];
-	format(str, sizeof(str), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
-	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], str);
 	
 	switch(PlayerInterface[playerid][INTERFACE_NET])
 	{
@@ -456,7 +424,7 @@ public HidePlayerDeathMessage(playerid)
 
 ShowPlayerDeathMessage(killerid, playerid)
 {
-	if(!Player[killerid][HasDeathQuote])
+	if(!Player[killerid][HasDeathQuote] || !DeathCamera)
 	{
 	    return 0;
 	}
@@ -1436,16 +1404,22 @@ SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
 
 GetTeamWithLessPlayers()
 {
-    new attacker, defender, TeamID;
-    foreach(new i : Player) {
-        if(Player[i][Team] == DEFENDER){
-            defender++;
-        } else if(Player[i][Team] == ATTACKER) {
-    		attacker++;
-        }
+    new attacker, defender;
+    foreach(new i : Player) 
+	{
+		switch(Player[i][Team])
+		{
+			case DEFENDER:
+			{
+				defender ++;
+			}
+			case ATTACKER:
+			{
+				attacker ++;
+			}
+		}
     }
-	TeamID = (defender <= attacker) ? DEFENDER : ATTACKER;
-    return TeamID;
+    return (defender <= attacker) ? DEFENDER : ATTACKER;
 }
 
 EnableInterface(playerid) {
