@@ -110,7 +110,6 @@ main()
 public OnGameModeInit()
 {
     InitScriptCoreSettings();
-    InitScriptCoreVariables();
 	InitScriptSecondarySettings();
 	AddToServersDatabase();
 	SetTimer("OnScriptUpdate", 1000, true); // Timer that is repeatedly called every second (will be using this for most global stuff)
@@ -7677,6 +7676,9 @@ YCMD:end(playerid, params[], help)
 	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
 
 	Current = -1;
+	#if defined _league_included
+	UpdateOnlineMatchesList(WarMode);
+	#endif
 	if(RoundPaused == true)
 		TextDrawHideForAll(PauseTD);
 

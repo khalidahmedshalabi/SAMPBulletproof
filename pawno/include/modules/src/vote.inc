@@ -582,6 +582,9 @@ PlayerVoteEndMatch(playerid)
 			if(Current != -1)
 			{
 				Current = -1;
+				#if defined _league_included
+				UpdateOnlineMatchesList(WarMode);
+				#endif
 				if(RoundPaused == true)
 					TextDrawHideForAll(PauseTD);
 
