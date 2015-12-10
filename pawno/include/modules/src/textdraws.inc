@@ -1183,6 +1183,13 @@ CreatePlayerTeamBar(playerid)
 	if(!ShowHPBars)
 		return 0;
 	
+	if(GetTeamBarsCount(Player[playerid][Team]) >= 5)
+	{
+		// 5 bars for a team is the limit. 
+		// If more than that, it'd look ugly thus we cancel this operation.
+		return 0;
+	}
+	
 	if(Iter_Contains(PlayerWithTeamBar, playerid))
 		DeletePlayerTeamBar(playerid);
 	
@@ -1260,6 +1267,18 @@ CreatePlayerTeamBar(playerid)
 		}
 	}
 	return 1;
+}
+
+// Gets how many bars created in a specific team
+GetTeamBarsCount(team)
+{
+	new ct = 0;
+	foreach(new i : PlayerWithTeamBar) // Loops through all players who have a team bar created for them
+	{
+		if(Player[i][Team] == team)
+			ct ++;
+	}
+	return ct;
 }
 
 // Shows team bars for a specific player
