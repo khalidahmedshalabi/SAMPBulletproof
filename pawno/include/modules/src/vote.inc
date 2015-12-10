@@ -605,6 +605,7 @@ PlayerVoteEndMatch(playerid)
 					if(Player[i][Spectating] == true)
 						StopSpectate(i);
 					Player[i][WasInBase] = false;
+					Player[i][WasInTeam] = NON;
 					Player[i][WeaponPicked] = 0;
 					Player[i][TimesSpawned] = 0;
 
@@ -712,6 +713,7 @@ PlayerVoteRestartRound(playerid)
 				{
 					if(Player[i][Spectating] == true) StopSpectate(i);
 					Player[i][WasInCP] = false;
+					Player[i][WasInTeam] = NON;
 
 					Player[i][WasInBase] = false;
 					Player[i][WeaponPicked] = 0;

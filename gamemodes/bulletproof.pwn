@@ -7109,6 +7109,7 @@ YCMD:rr(playerid, params[], help)
 			Player[i][WasInCP] = false;
 
 			Player[i][WasInBase] = false;
+			Player[i][WasInTeam] = NON;
 			Player[i][WeaponPicked] = 0;
 			Player[i][TimesSpawned] = 0;
 
@@ -7699,6 +7700,7 @@ YCMD:end(playerid, params[], help)
 		if(Player[i][Spectating] == true)
 			StopSpectate(i);
 		Player[i][WasInBase] = false;
+		Player[i][WasInTeam] = NON;
 		Player[i][WeaponPicked] = 0;
 		Player[i][TimesSpawned] = 0;
 

@@ -73,6 +73,7 @@ enum PlayerVariables
 	Weather,
 	Time,
 	Team,
+	WasInTeam,
 	TeamBeforeDuel,
 	DLlast,
 	FPS,
