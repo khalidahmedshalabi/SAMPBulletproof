@@ -34,14 +34,16 @@ PlayerFlyMode(playerid)
 	// Create an invisible object for the players camera to be attached to
 	if(Player[playerid][Spectating] == true) StopSpectate(playerid);
 
+	new tmp;
 	if(Player[playerid][BeingSpeced] == true) 
 	{
 	    foreach(new i : AllSpectators) 
 		{
 	        if(Player[i][IsSpectatingID] == playerid) 
 			{
-	            StopSpectate(i, false);
+				tmp = i;
 				Iter_SafeRemove(AllSpectators, i, i);
+	            StopSpectate(tmp, false);
 			}
 		}
 	}

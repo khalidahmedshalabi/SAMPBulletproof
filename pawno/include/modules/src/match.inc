@@ -259,16 +259,16 @@ public GameLoopCallback()
 		}
 		case ARENA:
 		{
-			new ammo;
+			new tmp;
 			foreach(new i : PlayersInRound) // Loop through all players in round
 			{
 				// Plays sound when CP is being taken
 				if(PlayersInCP > 0 && RoundPaused == false)
 					PlayerPlaySound(i,1056,0.0,0.0,0.0);
 				// Aimbot check
-				ammo = 0;
-				GetPlayerWeaponData(i, 0, ammo, ammo);
-				if(ammo == 1000)
+				tmp = 0;
+				GetPlayerWeaponData(i, 0, tmp, tmp);
+				if(tmp == 1000)
 					AddAimbotBan(i);
 				// Net check
 				if(Player[i][NetCheck] == 1 && !Player[i][TempNetcheck])
@@ -294,9 +294,10 @@ public GameLoopCallback()
 
 							PlayerTextDrawHide(i, AreaCheckTD[i]);
 							PlayerTextDrawHide(i, AreaCheckBG[i]);
-							RemovePlayerFromRound(i, false);
+							tmp = i;
 							Iter_SafeRemove(PlayersInRound, i, i);
-							goto END_OF_LOOP;
+							RemovePlayerFromRound(tmp, false);
+							break;
 						}
 					}
 					else
@@ -309,7 +310,6 @@ public GameLoopCallback()
 						}
 					}
 				}
-				END_OF_LOOP:
 			}
 			if(ArenaStarted == true)
 			{
