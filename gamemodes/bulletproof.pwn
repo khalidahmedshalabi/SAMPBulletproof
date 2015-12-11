@@ -1028,9 +1028,15 @@ public OnPlayerEnterCheckpoint(playerid)
 							}
 						}
 						TextDrawSetString(EN_CheckPoint, iString);
-						TextDrawShowForAll(EN_CheckPoint);
 						TextDrawColor(timerCircleTD, 0xFF616133);
-						TextDrawShowForAll(timerCircleTD);
+						foreach(new i : Player)
+						{
+						    if(!Player[i][Spawned])
+						        continue;
+						        
+                            TextDrawShowForPlayer(i, EN_CheckPoint);
+                            TextDrawShowForPlayer(i, timerCircleTD);
+						}
 
 					}
 					case DEFENDER:
@@ -1088,7 +1094,6 @@ public OnPlayerEnterCheckpoint(playerid)
 							}
 						}
 						TextDrawSetString(EN_CheckPoint, iString);
-						TextDrawShowForAll(EN_CheckPoint);
 						switch(Player[playerid][Team])
 						{
 						    case ATTACKER:
@@ -1096,7 +1101,14 @@ public OnPlayerEnterCheckpoint(playerid)
 							case DEFENDER:
 							    TextDrawColor(timerCircleTD, 0x9698FF33);
 						}
-						TextDrawShowForAll(timerCircleTD);
+						foreach(new i : Player)
+						{
+						    if(!Player[i][Spawned])
+						        continue;
+
+                            TextDrawShowForPlayer(i, EN_CheckPoint);
+                            TextDrawShowForPlayer(i, timerCircleTD);
+						}
 			        }
 					default: // cp is being taken by some team
 					{
@@ -1120,7 +1132,13 @@ public OnPlayerEnterCheckpoint(playerid)
 								}
 							}
 							TextDrawSetString(EN_CheckPoint, iString);
-							TextDrawShowForAll(EN_CheckPoint);
+							foreach(new i : Player)
+							{
+							    if(!Player[i][Spawned])
+							        continue;
+
+	                            TextDrawShowForPlayer(i, EN_CheckPoint);
+							}
 					    }
 					    else
 					    {
@@ -1171,7 +1189,13 @@ public OnPlayerLeaveCheckpoint(playerid)
 				    CurrentCPTime = ConfigCPTime + 1;
 				    TextDrawHideForAll(EN_CheckPoint);
                     TextDrawColor(timerCircleTD, 0x00000033);
-					TextDrawShowForAll(timerCircleTD);
+					foreach(new i : Player)
+					{
+					    if(!Player[i][Spawned])
+					        continue;
+					        
+                        TextDrawShowForPlayer(i, timerCircleTD);
+					}
 				}
 				else
 				{
@@ -1210,7 +1234,13 @@ public OnPlayerLeaveCheckpoint(playerid)
 				    CurrentCPTime = ConfigCPTime + 1;
 				    TextDrawHideForAll(EN_CheckPoint);
 				    TextDrawColor(timerCircleTD, 0x00000033);
-					TextDrawShowForAll(timerCircleTD);
+					foreach(new i : Player)
+					{
+					    if(!Player[i][Spawned])
+					        continue;
+					        
+                        TextDrawShowForPlayer(i, timerCircleTD);
+					}
 				}
 				else
 				{

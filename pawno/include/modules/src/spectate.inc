@@ -264,12 +264,12 @@ StopSpectate(playerid, bool:remove_iterator = true)
 	}
  	if(Player[playerid][BeingSpeced] == true)
 	{
+		new tmp;
 		foreach(new i : AllSpectators)
 		{
 		    if(i == playerid) // Absence of this causes a stupid error on crashdetect "stack heap size". Endless loop?
 		        continue;
 		        
-			new tmp;
 			if(Player[i][IsSpectatingID] == playerid) 
 			{
 			    tmp = i;
