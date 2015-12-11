@@ -2,7 +2,7 @@
 		Gamemode core
 */
 
-#define GM_NAME				"Bulletproof 0.1-RC5"
+#define GM_NAME				"Bulletproof 0.1-RC6"
 #define GM_WEBSITE			"www.bulletproof.ml"
 
 #define GTAV_SWITCH_MENU			0	// Toggles the gta v switch menu (gunswitch library)
