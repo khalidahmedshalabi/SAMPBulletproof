@@ -401,6 +401,12 @@ public SpawnConnectedPlayer(playerid, team)
 	PlayerTextDrawShow(playerid, BaseID_VS[playerid]);
 	ShowPlayerProgressBar(playerid, HealthBar[playerid]);
 	ShowPlayerProgressBar(playerid, ArmourBar[playerid]);
+	#if defined _league_included
+	if(LeagueMode)
+	{
+		PlayerTextDrawShow(playerid, PlayerLeagueStatsTD[playerid]);
+	}
+	#endif
 	
 	if(WarMode == true)
 	{

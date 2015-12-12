@@ -33,6 +33,16 @@ CheckServerHostname()
 
 InitScriptSecondarySettings()
 {
+	// Init some global variables
+	GameType = BASE;
+    ServerLastPlayed = -1;
+    ServerLastPlayedType = -1;
+    Current = -1;
+	#if defined _league_included
+	UpdateOnlineMatchesList(false);
+	#endif
+	
+	// Settings
 	SetGameModeText(GM_NAME); // Text that appears on 'Mode' column when you click on a server in samp.exe
     SendRconCommand("mapname Lobby");
 	CheckServerHostname();
@@ -63,15 +73,6 @@ InitScriptSecondarySettings()
     MAIN_BACKGROUND_COLOUR = 0x00000055;
 
 	teamskinlist = LoadModelSelectionMenu("skins.txt");
-	return 1;
-}
-
-InitScriptCoreVariables()
-{
-	GameType = BASE;
-    ServerLastPlayed = -1;
-    ServerLastPlayedType = -1;
-    Current = -1;
 	return 1;
 }
 

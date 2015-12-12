@@ -186,6 +186,7 @@ InitPlayer(playerid)
 	Player[playerid][Spectating] = false;
 	Player[playerid][BeingSpeced] = false;
 	Player[playerid][WasInBase] = false;
+	Player[playerid][WasInTeam] = NON;
 	Player[playerid][TextDrawOnScreen] = false;
 	PlayerOnInterface{playerid} = false;
 	Player[playerid][Spawned] = false;
@@ -585,6 +586,7 @@ LoadPlayerVariables(playerid)
 			Iter_Add(PlayersInRound, playerid);
 
 	        Player[playerid][Team] = SaveVariables[i][pTeam];
+			Player[playerid][WasInTeam] = Player[playerid][Team];
 			ShowTeamBarsForPlayer(playerid);
 			CreatePlayerTeamBar(playerid);
 			UpdateTeamPlayerCount(Player[playerid][Team], false);

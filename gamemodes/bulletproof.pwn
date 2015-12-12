@@ -110,7 +110,6 @@ main()
 public OnGameModeInit()
 {
     InitScriptCoreSettings();
-    InitScriptCoreVariables();
 	InitScriptSecondarySettings();
 	AddToServersDatabase();
 	SetTimer("OnScriptUpdate", 1000, true); // Timer that is repeatedly called every second (will be using this for most global stuff)
@@ -1029,9 +1028,15 @@ public OnPlayerEnterCheckpoint(playerid)
 							}
 						}
 						TextDrawSetString(EN_CheckPoint, iString);
-						TextDrawShowForAll(EN_CheckPoint);
 						TextDrawColor(timerCircleTD, 0xFF616133);
-						TextDrawShowForAll(timerCircleTD);
+						foreach(new i : Player)
+						{
+						    if(!Player[i][Spawned])
+						        continue;
+						        
+                            TextDrawShowForPlayer(i, EN_CheckPoint);
+                            TextDrawShowForPlayer(i, timerCircleTD);
+						}
 
 					}
 					case DEFENDER:
@@ -1089,7 +1094,6 @@ public OnPlayerEnterCheckpoint(playerid)
 							}
 						}
 						TextDrawSetString(EN_CheckPoint, iString);
-						TextDrawShowForAll(EN_CheckPoint);
 						switch(Player[playerid][Team])
 						{
 						    case ATTACKER:
@@ -1097,7 +1101,14 @@ public OnPlayerEnterCheckpoint(playerid)
 							case DEFENDER:
 							    TextDrawColor(timerCircleTD, 0x9698FF33);
 						}
-						TextDrawShowForAll(timerCircleTD);
+						foreach(new i : Player)
+						{
+						    if(!Player[i][Spawned])
+						        continue;
+
+                            TextDrawShowForPlayer(i, EN_CheckPoint);
+                            TextDrawShowForPlayer(i, timerCircleTD);
+						}
 			        }
 					default: // cp is being taken by some team
 					{
@@ -1121,7 +1132,13 @@ public OnPlayerEnterCheckpoint(playerid)
 								}
 							}
 							TextDrawSetString(EN_CheckPoint, iString);
-							TextDrawShowForAll(EN_CheckPoint);
+							foreach(new i : Player)
+							{
+							    if(!Player[i][Spawned])
+							        continue;
+
+	                            TextDrawShowForPlayer(i, EN_CheckPoint);
+							}
 					    }
 					    else
 					    {
@@ -1172,7 +1189,13 @@ public OnPlayerLeaveCheckpoint(playerid)
 				    CurrentCPTime = ConfigCPTime + 1;
 				    TextDrawHideForAll(EN_CheckPoint);
                     TextDrawColor(timerCircleTD, 0x00000033);
-					TextDrawShowForAll(timerCircleTD);
+					foreach(new i : Player)
+					{
+					    if(!Player[i][Spawned])
+					        continue;
+					        
+                        TextDrawShowForPlayer(i, timerCircleTD);
+					}
 				}
 				else
 				{
@@ -1211,7 +1234,13 @@ public OnPlayerLeaveCheckpoint(playerid)
 				    CurrentCPTime = ConfigCPTime + 1;
 				    TextDrawHideForAll(EN_CheckPoint);
 				    TextDrawColor(timerCircleTD, 0x00000033);
-					TextDrawShowForAll(timerCircleTD);
+					foreach(new i : Player)
+					{
+					    if(!Player[i][Spawned])
+					        continue;
+					        
+                        TextDrawShowForPlayer(i, timerCircleTD);
+					}
 				}
 				else
 				{
@@ -7109,6 +7138,7 @@ YCMD:rr(playerid, params[], help)
 			Player[i][WasInCP] = false;
 
 			Player[i][WasInBase] = false;
+			Player[i][WasInTeam] = NON;
 			Player[i][WeaponPicked] = 0;
 			Player[i][TimesSpawned] = 0;
 
@@ -7676,6 +7706,9 @@ YCMD:end(playerid, params[], help)
 	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
 
 	Current = -1;
+	#if defined _league_included
+	UpdateOnlineMatchesList(WarMode);
+	#endif
 	if(RoundPaused == true)
 		TextDrawHideForAll(PauseTD);
 
@@ -7699,6 +7732,7 @@ YCMD:end(playerid, params[], help)
 		if(Player[i][Spectating] == true)
 			StopSpectate(i);
 		Player[i][WasInBase] = false;
+		Player[i][WasInTeam] = NON;
 		Player[i][WeaponPicked] = 0;
 		Player[i][TimesSpawned] = 0;
 

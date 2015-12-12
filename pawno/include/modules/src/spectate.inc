@@ -149,14 +149,16 @@ SpectatePlayer(playerid, specid)
 	if(TargetInfoData[playerid][TargetInfoTimer] != -1)
 		HideTargetInfo(playerid); // hides the target info textdraws
 	new OldSpecID = -1;
+	new tmp;
 	if(Player[playerid][BeingSpeced] == true) // If anyone is spectating this player, we gotta turn off spectate for them
 	{
 		foreach(new i : AllSpectators)
 		{
 		    if(Player[i][IsSpectatingID] == playerid) 
 			{
-				StopSpectate(i, false);
+				tmp = i;
 				Iter_SafeRemove(AllSpectators, i, i);
+				StopSpectate(tmp, false);
 			}
 		}
 	} 
@@ -232,10 +234,12 @@ SpectatePlayer(playerid, specid)
 	set remove_iterator to false if you're using this in a loop 
 	and safely remove, for example
 
+	new tmp
 	foreach(new i : AllSpectators)
 	{
-		StopSpectate(i, false);
+		tmp = i;
 		Iter_SafeRemove(AllSpectators, i, i);
+		StopSpectate(tmp, false);
 	}
 */
 StopSpectate(playerid, bool:remove_iterator = true)
@@ -260,6 +264,7 @@ StopSpectate(playerid, bool:remove_iterator = true)
 	}
  	if(Player[playerid][BeingSpeced] == true)
 	{
+		new tmp;
 		foreach(new i : AllSpectators)
 		{
 		    if(i == playerid) // Absence of this causes a stupid error on crashdetect "stack heap size". Endless loop?
@@ -267,8 +272,9 @@ StopSpectate(playerid, bool:remove_iterator = true)
 		        
 			if(Player[i][IsSpectatingID] == playerid) 
 			{
-			    StopSpectate(i, false);
+			    tmp = i;
 				Iter_SafeRemove(AllSpectators, i, i);
+				StopSpectate(tmp, false);
 			}
 		}
 	}

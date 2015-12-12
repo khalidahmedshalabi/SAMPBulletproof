@@ -259,16 +259,16 @@ public GameLoopCallback()
 		}
 		case ARENA:
 		{
-			new ammo;
+			new tmp;
 			foreach(new i : PlayersInRound) // Loop through all players in round
 			{
 				// Plays sound when CP is being taken
 				if(PlayersInCP > 0 && RoundPaused == false)
 					PlayerPlaySound(i,1056,0.0,0.0,0.0);
 				// Aimbot check
-				ammo = 0;
-				GetPlayerWeaponData(i, 0, ammo, ammo);
-				if(ammo == 1000)
+				tmp = 0;
+				GetPlayerWeaponData(i, 0, tmp, tmp);
+				if(tmp == 1000)
 					AddAimbotBan(i);
 				// Net check
 				if(Player[i][NetCheck] == 1 && !Player[i][TempNetcheck])
@@ -294,9 +294,10 @@ public GameLoopCallback()
 
 							PlayerTextDrawHide(i, AreaCheckTD[i]);
 							PlayerTextDrawHide(i, AreaCheckBG[i]);
-							RemovePlayerFromRound(i, false);
+							tmp = i;
 							Iter_SafeRemove(PlayersInRound, i, i);
-							goto END_OF_LOOP;
+							RemovePlayerFromRound(tmp, false);
+							break;
 						}
 					}
 					else
@@ -309,7 +310,6 @@ public GameLoopCallback()
 						}
 					}
 				}
-				END_OF_LOOP:
 			}
 			if(ArenaStarted == true)
 			{
@@ -1138,6 +1138,7 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
 	Iter_Add(PlayersInRound, ToAddID);
 
     Player[ToAddID][Team] = Player[ToReplaceID][Team];
+	Player[ToAddID][WasInTeam] = Player[ToAddID][Team];
 	SwitchTeamFix(ToAddID, false, false);
 	SetHP(ToAddID, HP[0]);
 	SetAP(ToAddID, HP[1]);
@@ -1197,6 +1198,7 @@ public OnPlayerInGameReplace(ToAddID, i, playerid) {
 	Iter_Add(PlayersInRound, ToAddID);
 
     Player[ToAddID][Team] = SaveVariables[i][pTeam];
+	Player[playerid][WasInTeam] = Player[ToAddID][Team];
 	SwitchTeamFix(ToAddID, false, false);
 	SetHP(ToAddID, SaveVariables[i][gHealth]);
 	SetAP(ToAddID, SaveVariables[i][gArmour]);
@@ -1274,6 +1276,7 @@ RemovePlayerFromRound(playerid, bool:remove_iterator = true)
 	    OnPlayerLeaveCheckpoint(playerid);
 	}
 	Player[playerid][WasInBase] = false;
+	Player[playerid][WasInTeam] = NON;
 	Player[playerid][ToAddInRound] = false;
 	TogglePlayerControllable(playerid, 1);
 	RemovePlayerMapIcon(playerid, 59);
@@ -1461,6 +1464,7 @@ SpawnPlayersInRC()
 			
 	        Player[i][Playing] = true;
 	        Player[i][WasInBase] = true;
+			Player[i][WasInTeam] = Player[i][Team];
 			Iter_Add(PlayersInRound, i);
 
 			Player[i][RoundKills] = 0;
@@ -1687,6 +1691,7 @@ SpawnPlayersInArena()
 			
 	        Player[i][Playing] = true;
 	        Player[i][WasInBase] = true;
+			Player[i][WasInTeam] = Player[i][Team];
 			Iter_Add(PlayersInRound, i);
 
 			Player[i][RoundKills] = 0;
@@ -1794,6 +1799,7 @@ public AddPlayerToArena(playerid)
 	
     Player[playerid][Playing] = true;
     Player[playerid][WasInBase] = true;
+	Player[playerid][WasInTeam] = Player[playerid][Team];
 	Iter_Add(PlayersInRound, playerid);
 	UpdateTeamPlayerCount(Player[playerid][Team], false);
     Player[playerid][ToAddInRound] = false;
@@ -2066,6 +2072,7 @@ SpawnPlayersInBase()
 			
 	        Player[i][Playing] = true;
 	        Player[i][WasInBase] = true;
+			Player[i][WasInTeam] = Player[i][Team];
 			Iter_Add(PlayersInRound, i);
 			Player[i][RoundKills] = 0;
 			Player[i][RoundDeaths] = 0;
@@ -2183,6 +2190,7 @@ public AddPlayerToBase(playerid)
 
     Player[playerid][Playing] = true;
     Player[playerid][WasInBase] = true;
+	Player[playerid][WasInTeam] = Player[playerid][Team];
 	Iter_Add(PlayersInRound, playerid);
 	UpdateTeamPlayerCount(Player[playerid][Team], false);
 
@@ -2385,7 +2393,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 					#endif
 				}
 				#if defined _league_included
-				if(Player[i][Team] == winnerid)
+				if(Player[i][WasInTeam] == winnerid)
 				{
 					AddPlayerLeaguePoints(i, 150);
 				}
@@ -2428,6 +2436,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 			if(Player[i][Spectating] == true) 
 				StopSpectate(i);
 			Player[i][WasInBase] = false;
+			Player[i][WasInTeam] = NON;
 			Player[i][WeaponPicked] = 0;
 			Player[i][TimesSpawned] = 0;
 			RemovePlayerMapIcon(i, 59);
@@ -2592,8 +2601,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
 	
 	#if defined _league_included
-	if(WarMode)
-		UpdateOnlineMatchesList(true);
+	UpdateOnlineMatchesList(WarMode);
 	if(LeagueMode)
 	{	
 		OnLeagueRoundEnd();

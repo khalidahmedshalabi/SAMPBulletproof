@@ -582,6 +582,9 @@ PlayerVoteEndMatch(playerid)
 			if(Current != -1)
 			{
 				Current = -1;
+				#if defined _league_included
+				UpdateOnlineMatchesList(WarMode);
+				#endif
 				if(RoundPaused == true)
 					TextDrawHideForAll(PauseTD);
 
@@ -605,6 +608,7 @@ PlayerVoteEndMatch(playerid)
 					if(Player[i][Spectating] == true)
 						StopSpectate(i);
 					Player[i][WasInBase] = false;
+					Player[i][WasInTeam] = NON;
 					Player[i][WeaponPicked] = 0;
 					Player[i][TimesSpawned] = 0;
 
@@ -712,6 +716,7 @@ PlayerVoteRestartRound(playerid)
 				{
 					if(Player[i][Spectating] == true) StopSpectate(i);
 					Player[i][WasInCP] = false;
+					Player[i][WasInTeam] = NON;
 
 					Player[i][WasInBase] = false;
 					Player[i][WeaponPicked] = 0;
