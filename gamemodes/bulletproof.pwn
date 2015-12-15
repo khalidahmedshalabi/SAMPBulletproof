@@ -2,9 +2,7 @@
 
 #include <a_samp>
 #include <a_http>
-
-#undef MAX_PLAYERS
-#define MAX_PLAYERS      		50
+#include <maxplayers>
 
 //	- 	Libraries
 #include <geolocation> 		// Shows player country based on IP
@@ -4049,6 +4047,30 @@ YCMD:votemenu(playerid, params[], help)
 	    return SendUsageMessage(playerid,"/votemenu [Player ID]");
 
 	PlayerVoteMenu(playerid, pID);
+	return 1;
+}
+
+YCMD:xmas(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "toggle christmas mode");
+	    return 1;
+	}
+	if(isnull(params))
+	{
+	    return SendUsageMessage(playerid, "/xmas [on / off]");
+	}
+	if(!strcmp(params, "on", true))
+	{
+	    SendRconCommand("loadfs xmas");
+	}
+	else if(!strcmp(params, "off", true))
+	{
+	    SendRconCommand("unloadfs xmas");
+	}
+	else
+	    return SendUsageMessage(playerid, "/xmas [on / off]");
 	return 1;
 }
 
