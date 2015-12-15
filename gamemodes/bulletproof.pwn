@@ -6615,7 +6615,7 @@ YCMD:jetpack(playerid,params[], help)
 		    {
 		        PlayerShop[playerid][SHOP_JETPACK] = false;
 		        SetPlayerSpecialAction(playerid, 2);
-		        SendClientMessageToAll(-1, sprintf("{FFFFF}%s "COL_PRIM"has spawned a jetpack from league shop (/shop)", Player[playerid][Name]));
+		        SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has spawned a jetpack from league shop (/shop)", Player[playerid][Name]));
 		        return 1;
 		    }
 		}
