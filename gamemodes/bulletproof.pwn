@@ -1058,6 +1058,11 @@ public OnPlayerEnterCheckpoint(playerid)
 							#endif
 					    	CurrentCPTime = ConfigCPTime + 1;
 				    	}
+						else if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_USEJETPACK)
+						{
+						    if(CurrentCPTime < ConfigCPTime)
+						    	SendClientMessageToAll(-1, sprintf(""COL_PRIM"CP touch by {FFFFFF}%s "COL_PRIM"is denied due to abusing jetpack.", Player[playerid][Name]));
+						}
 						else
 						    if(CurrentCPTime < ConfigCPTime)
 						    	SendClientMessageToAll(-1, sprintf(""COL_PRIM"CP touch by {FFFFFF}%s "COL_PRIM"is denied. This might be considered as cheating or bug abusing.", Player[playerid][Name]));
@@ -1159,6 +1164,11 @@ public OnPlayerEnterCheckpoint(playerid)
 								#endif
 						    	CurrentCPTime = ConfigCPTime + 1;
 					    	}
+					    	else if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_USEJETPACK)
+							{
+							    if(CurrentCPTime < ConfigCPTime)
+							    	SendClientMessageToAll(-1, sprintf(""COL_PRIM"CP touch by {FFFFFF}%s "COL_PRIM"is denied due to abusing jetpack.", Player[playerid][Name]));
+							}
 							else
 							    if(CurrentCPTime < ConfigCPTime)
 							    	SendClientMessageToAll(-1, sprintf(""COL_PRIM"CP touch by {FFFFFF}%s "COL_PRIM"is denied. This might be considered as cheating or bug abusing.", Player[playerid][Name]));
@@ -4054,7 +4064,7 @@ YCMD:xmas(playerid, params[], help)
 {
     if(help)
 	{
-	    SendCommandHelpMessage(playerid, "toggle christmas mode");
+	    SendCommandHelpMessage(playerid, "toggle christmas mode (if filterscript is available)");
 	    return 1;
 	}
 	if(isnull(params))
