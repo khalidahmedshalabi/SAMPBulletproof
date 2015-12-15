@@ -7558,17 +7558,28 @@ YCMD:addall(playerid, params[], help)
 	}
 	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
 
-	foreach(new i : Player) {
-		if(Player[i][Playing] == false && Player[i][InDuel] == false && (Player[i][Team] == ATTACKER || Player[i][Team] == DEFENDER)) {
-			if(GameType == BASE) AddPlayerToBase(i);
-		    else if(GameType == ARENA) AddPlayerToArena(i);
+	foreach(new i : Player)
+	{
+		if(Player[i][WasInBase] != true && Player[i][Playing] == false && Player[i][InDuel] == false && (Player[i][Team] == ATTACKER || Player[i][Team] == DEFENDER))
+		{
+		    Player[i][Team] = GetTeamWithLessPlayers();
+		    SwitchTeamFix(i, false, false);
+			switch(GameType)
+			{
+			    case BASE:
+			    {
+			        AddPlayerToBase(i);
+			    }
+				case ARENA:
+				{
+					AddPlayerToArena(i);
+				}
+			}
 		}
 	}
-
     new iString[64];
     format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has added everyone to the round.", Player[playerid][Name]);
     SendClientMessageToAll(-1, iString);
-
 	return 1;
 }
 
