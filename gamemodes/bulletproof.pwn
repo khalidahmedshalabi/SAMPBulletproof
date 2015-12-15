@@ -1000,7 +1000,7 @@ public OnPlayerExitVehicle(playerid, vehicleid)
 
 public OnPlayerEnterCheckpoint(playerid)
 {
-    if(GetPlayerVehicleID(playerid) == 0 && Player[playerid][Playing] == true)
+    if(GetPlayerVehicleID(playerid) == 0 && Player[playerid][Playing] == true && (Player[playerid][Team] == ATTACKER || Player[playerid][Team] == DEFENDER))
 	{
 	    switch(GameType)
 	    {
