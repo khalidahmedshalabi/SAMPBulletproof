@@ -23,17 +23,6 @@ public AC_OnImgFileModifed(playerid, filename[], md5[])
 	return 1;
 }
 
-public AC_OnFileCalculated(playerid, filename[], md5[], bool:isCheat)
-{
-	if(isCheat)
-	{
-		new str[180];
-		format(str, sizeof str, "{FFFFFF}["COL_PRIM"AC{FFFFFF}] File calculation report from {FFFFFF}%s "COL_PRIM"/ module: {FFFFFF}%s "COL_PRIM"/ blacklisted: {FFFFFF}Yes", Player[playerid][Name], filename);
-		SendClientMessageToAll(-1, str);
-	}
-	return 1;
-}
-
 public AC_OnScreenshotTaken(playerid)
 {
 	new tick = GetTickCount();
