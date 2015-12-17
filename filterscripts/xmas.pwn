@@ -1,7 +1,8 @@
 #include <a_samp>
+#include <maxplayers>
 
 #include <YSI_inc\YSI\y_commands>
-#include <maxplayers>
+#include <YSI_inc\YSI\y_iterate>
 
 new
 	bool:SpawnedOnce[MAX_PLAYERS],
@@ -9,11 +10,8 @@ new
 
 public OnFilterScriptInit()
 {
-	for(new i = 0; i < MAX_PLAYERS; i ++)
+	foreach(new i : Player)
 	{
-	    if(!IsPlayerConnected(i))
-			continue;
-			
 		DeleteSnow(i);
 		StopAudioStreamForPlayer(i);
 	    if(IsPlayerAttachedObjectSlotUsed(i, 1))
@@ -31,11 +29,8 @@ public OnFilterScriptInit()
 
 public OnFilterScriptExit()
 {
-    for(new i = 0; i < MAX_PLAYERS; i ++)
+    foreach(new i : Player)
 	{
-	    if(!IsPlayerConnected(i))
-			continue;
-			
         SetPlayerTime(i, 9, 0);
         DeleteSnow(i);
 		StopAudioStreamForPlayer(i);
@@ -95,7 +90,8 @@ Snow_OnDisconnect(playerid)
 {
 	if(snowOn{playerid})
 	{
-	    for(new i = 0; i < MAX_SNOW_OBJECTS; i++) DestroyPlayerObject(playerid, snowObject[playerid][i]);
+	    for(new i = 0; i < MAX_SNOW_OBJECTS; i++)
+			DestroyPlayerObject(playerid, snowObject[playerid][i]);
 		snowOn{playerid} = false;
 		KillTimer(updateTimer{playerid});
 	}
