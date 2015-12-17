@@ -4074,10 +4074,12 @@ YCMD:xmas(playerid, params[], help)
 	if(!strcmp(params, "on", true))
 	{
 	    SendRconCommand("loadfs xmas");
+	    SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has attempted to load Xmas filterscript!", Player[playerid][Name]));
 	}
 	else if(!strcmp(params, "off", true))
 	{
 	    SendRconCommand("unloadfs xmas");
+	    SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has attempted to unload Xmas filterscript!", Player[playerid][Name]));
 	}
 	else
 	    return SendUsageMessage(playerid, "/xmas [on / off]");
