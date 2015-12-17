@@ -39,7 +39,7 @@ InitScriptSecondarySettings()
     ServerLastPlayedType = -1;
     Current = -1;
 	#if defined _league_included
-	UpdateOnlineMatchesList(false);
+	InitOnlineMatchesList();
 	#endif
 	
 	// Settings
