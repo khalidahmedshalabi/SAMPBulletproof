@@ -44,6 +44,7 @@ enum GunmenuData_STRUCT
 	GunFreezePlane // a timer to keep planes frozen
 }
 
+new bool:GunmenuRestrictions = true;
 new GunmenuData[MAX_GUNMENU_GUNS][GunmenuData_STRUCT];
 
 new 

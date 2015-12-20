@@ -413,94 +413,97 @@ bool:IsGunSelectionOkay(playerid, weaponid, index)
 				SendErrorMessage(playerid, sprintf("This weapon is no longer available because limit has exceeded. [%d/%d]", GunmenuData[index][GunLimit], GunmenuData[index][GunLimit]), messagebox_type);
 				return false;
 			}
-			// Make sure players won't have Spas and Sniper/Deagle/M4
-			if(weaponid == WEAPON_SHOTGSPA)
+			if(GunmenuRestrictions) // If gunmenu selection restriction is present
 			{
-				if(DoesPlayerHaveWeapon(playerid, WEAPON_SNIPER))
+				// Make sure players won't have Spas and Sniper/Deagle/M4
+				if(weaponid == WEAPON_SHOTGSPA)
 				{
-					SendErrorMessage(playerid, "You cannot get spas and sniper!", messagebox_type);
-					return false;
+					if(DoesPlayerHaveWeapon(playerid, WEAPON_SNIPER))
+					{
+						SendErrorMessage(playerid, "You cannot get spas and sniper!", messagebox_type);
+						return false;
+					}
+					else if(DoesPlayerHaveWeapon(playerid, WEAPON_DEAGLE))
+					{
+						SendErrorMessage(playerid, "You cannot get spas and deagle!", messagebox_type);
+						return false;
+					}
+					else if(DoesPlayerHaveWeapon(playerid, WEAPON_M4))
+					{
+						SendErrorMessage(playerid, "You cannot get spas and M4!", messagebox_type);
+						return false;
+					}
 				}
-				else if(DoesPlayerHaveWeapon(playerid, WEAPON_DEAGLE))
+				// Make sure players won't have Sniper and Spas/Deagle/M4
+				else if(weaponid == WEAPON_SNIPER)
 				{
-					SendErrorMessage(playerid, "You cannot get spas and deagle!", messagebox_type);
-					return false;
+					if(DoesPlayerHaveWeapon(playerid, WEAPON_SHOTGSPA))
+					{
+						SendErrorMessage(playerid, "You cannot get spas and sniper!", messagebox_type);
+						return false;
+					}
+					else if(DoesPlayerHaveWeapon(playerid, WEAPON_DEAGLE))
+					{
+						SendErrorMessage(playerid, "You cannot get sniper and deagle!", messagebox_type);
+						return false;
+					}
+					else if(DoesPlayerHaveWeapon(playerid, WEAPON_M4))
+					{
+						SendErrorMessage(playerid, "You cannot get sniper and M4!", messagebox_type);
+						return false;
+					}
 				}
-				else if(DoesPlayerHaveWeapon(playerid, WEAPON_M4))
+				// Make sure players won't have Deagle and Spas/Sniper/M4
+				else if(weaponid == WEAPON_DEAGLE)
 				{
-					SendErrorMessage(playerid, "You cannot get spas and M4!", messagebox_type);
-					return false;
+					if(DoesPlayerHaveWeapon(playerid, WEAPON_SHOTGSPA))
+					{
+						SendErrorMessage(playerid, "You cannot get spas and deagle!", messagebox_type);
+						return false;
+					}
+					else if(DoesPlayerHaveWeapon(playerid, WEAPON_SNIPER))
+					{
+						SendErrorMessage(playerid, "You cannot get deagle and sniper!", messagebox_type);
+						return false;
+					}
+					else if(DoesPlayerHaveWeapon(playerid, WEAPON_M4))
+					{
+						SendErrorMessage(playerid, "You cannot get deagle and M4!", messagebox_type);
+						return false;
+					}
 				}
-			}
-			// Make sure players won't have Sniper and Spas/Deagle/M4
-			else if(weaponid == WEAPON_SNIPER)
-			{
-				if(DoesPlayerHaveWeapon(playerid, WEAPON_SHOTGSPA))
+				// Make sure players won't have M4 and Spas/Deagle/Sniper/Rifle
+				else if(weaponid == WEAPON_M4)
 				{
-					SendErrorMessage(playerid, "You cannot get spas and sniper!", messagebox_type);
-					return false;
+					if(DoesPlayerHaveWeapon(playerid, WEAPON_SHOTGSPA))
+					{
+						SendErrorMessage(playerid, "You cannot get M4 and spas!", messagebox_type);
+						return false;
+					}
+					else if(DoesPlayerHaveWeapon(playerid, WEAPON_DEAGLE))
+					{
+						SendErrorMessage(playerid, "You cannot get M4 and deagle!", messagebox_type);
+						return false;
+					}
+					else if(DoesPlayerHaveWeapon(playerid, WEAPON_SNIPER))
+					{
+						SendErrorMessage(playerid, "You cannot get m4 and sniper!", messagebox_type);
+						return false;
+					}
+					else if(DoesPlayerHaveWeapon(playerid, WEAPON_RIFLE))
+					{
+						SendErrorMessage(playerid, "You cannot get rifle and m4!", messagebox_type);
+						return false;
+					}
 				}
-				else if(DoesPlayerHaveWeapon(playerid, WEAPON_DEAGLE))
+				// Make sure players won't have Rifle and M4
+				else if(weaponid == WEAPON_RIFLE)
 				{
-					SendErrorMessage(playerid, "You cannot get sniper and deagle!", messagebox_type);
-					return false;
-				}
-				else if(DoesPlayerHaveWeapon(playerid, WEAPON_M4))
-				{
-					SendErrorMessage(playerid, "You cannot get sniper and M4!", messagebox_type);
-					return false;
-				}
-			}
-			// Make sure players won't have Deagle and Spas/Sniper/M4
-			else if(weaponid == WEAPON_DEAGLE)
-			{
-				if(DoesPlayerHaveWeapon(playerid, WEAPON_SHOTGSPA))
-				{
-					SendErrorMessage(playerid, "You cannot get spas and deagle!", messagebox_type);
-					return false;
-				}
-				else if(DoesPlayerHaveWeapon(playerid, WEAPON_SNIPER))
-				{
-					SendErrorMessage(playerid, "You cannot get deagle and sniper!", messagebox_type);
-					return false;
-				}
-				else if(DoesPlayerHaveWeapon(playerid, WEAPON_M4))
-				{
-					SendErrorMessage(playerid, "You cannot get deagle and M4!", messagebox_type);
-					return false;
-				}
-			}
-			// Make sure players won't have M4 and Spas/Deagle/Sniper/Rifle
-			else if(weaponid == WEAPON_M4)
-			{
-				if(DoesPlayerHaveWeapon(playerid, WEAPON_SHOTGSPA))
-				{
-					SendErrorMessage(playerid, "You cannot get M4 and spas!", messagebox_type);
-					return false;
-				}
-				else if(DoesPlayerHaveWeapon(playerid, WEAPON_DEAGLE))
-				{
-					SendErrorMessage(playerid, "You cannot get M4 and deagle!", messagebox_type);
-					return false;
-				}
-				else if(DoesPlayerHaveWeapon(playerid, WEAPON_SNIPER))
-				{
-					SendErrorMessage(playerid, "You cannot get m4 and sniper!", messagebox_type);
-					return false;
-				}
-				else if(DoesPlayerHaveWeapon(playerid, WEAPON_RIFLE))
-				{
-					SendErrorMessage(playerid, "You cannot get rifle and m4!", messagebox_type);
-					return false;
-				}
-			}
-			// Make sure players won't have Rifle and M4
-			else if(weaponid == WEAPON_RIFLE)
-			{
-				if(DoesPlayerHaveWeapon(playerid, WEAPON_M4))
-				{
-					SendErrorMessage(playerid, "You cannot get rifle and M4!", messagebox_type);
-					return false;
+					if(DoesPlayerHaveWeapon(playerid, WEAPON_M4))
+					{
+						SendErrorMessage(playerid, "You cannot get rifle and M4!", messagebox_type);
+						return false;
+					}
 				}
 			}
 			// Make sure players won't have more than 2 bullet weapons in Bases

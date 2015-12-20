@@ -115,6 +115,11 @@ ShowConfigDialog(playerid) {
 		strcat(string, "\n{66FF66}League shop (/shop)");
 	else
 		strcat(string, "\n{FF6666}League shop (/shop)");
+	
+	if(GunmenuRestrictions == true)
+		strcat(string, "\n{66FF66}Gunmenu selection restriction");
+	else
+		strcat(string, "\n{FF6666}Gunmenu selection restriction");
 
     ShowPlayerDialog(playerid, DIALOG_CONFIG, DIALOG_STYLE_LIST, ""COL_PRIM"Config Settings", string, "OK", "Cancel");
     return 1;

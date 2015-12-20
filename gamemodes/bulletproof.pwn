@@ -3140,7 +3140,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'ShowHPBars'", (ShowHPBars == false ? 0 : 1));
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
-				}
+    			}
 				case 21:
 				{
 				    switch(LeagueShop)
@@ -3160,6 +3160,25 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
 					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'LeagueShop'", (LeagueShop == false ? 0 : 1));
 				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
+				case 22:
+				{
+				    switch(GunmenuRestrictions)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Gunmenu selection restriction.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							GunmenuRestrictions = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Gunmenu selection restriction.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							GunmenuRestrictions = false;
+						}
+					}
 				    ShowConfigDialog(playerid);
 				}
 	        }
