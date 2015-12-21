@@ -7611,24 +7611,50 @@ YCMD:addall(playerid, params[], help)
 	}
 	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
 
-	foreach(new i : Player)
+	switch(WarMode)
 	{
-		if(Player[i][WasInBase] != true && Player[i][Playing] == false && Player[i][InDuel] == false && (Player[i][Team] == ATTACKER || Player[i][Team] == DEFENDER))
-		{
-		    Player[i][Team] = GetTeamWithLessPlayers();
-		    SwitchTeamFix(i, false, false);
-			switch(GameType)
+	    case true:
+	    {
+	        foreach(new i : Player)
 			{
-			    case BASE:
-			    {
-			        AddPlayerToBase(i);
-			    }
-				case ARENA:
+				if(Player[i][WasInBase] != true && Player[i][Playing] == false && Player[i][InDuel] == false && (Player[i][Team] == ATTACKER || Player[i][Team] == DEFENDER))
 				{
-					AddPlayerToArena(i);
+					switch(GameType)
+					{
+					    case BASE:
+					    {
+					        AddPlayerToBase(i);
+					    }
+						case ARENA:
+						{
+							AddPlayerToArena(i);
+						}
+					}
 				}
 			}
-		}
+	    }
+	    case false:
+	    {
+	        foreach(new i : Player)
+			{
+				if(Player[i][WasInBase] != true && Player[i][Playing] == false && Player[i][InDuel] == false && (Player[i][Team] == ATTACKER || Player[i][Team] == DEFENDER))
+				{
+				    Player[i][Team] = GetTeamWithLessPlayers();
+				    SwitchTeamFix(i, false, false);
+					switch(GameType)
+					{
+					    case BASE:
+					    {
+					        AddPlayerToBase(i);
+					    }
+						case ARENA:
+						{
+							AddPlayerToArena(i);
+						}
+					}
+				}
+			}
+	    }
 	}
     new iString[64];
     format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has added everyone to the round.", Player[playerid][Name]);
