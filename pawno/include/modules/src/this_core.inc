@@ -38,14 +38,14 @@ InitScriptSecondarySettings()
     ServerLastPlayed = -1;
     ServerLastPlayedType = -1;
     Current = -1;
-	#if defined _league_included
-	InitOnlineMatchesList();
-	#endif
 	
 	// Settings
 	SetGameModeText(GM_NAME); // Text that appears on 'Mode' column when you click on a server in samp.exe
     SendRconCommand("mapname Lobby");
 	CheckServerHostname();
+	#if defined _league_included
+	InitOnlineMatchesList();
+	#endif
 	SendRconCommand("stream_distance 400.0");
 	SendRconCommand("stream_rate 50");
 	#if MATCH_SYNC == 1
