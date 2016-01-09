@@ -30,8 +30,10 @@ LoadDatabase()
 {
 	sqliteconnection = db_open("AAD.db");
 	if(sqliteconnection == DB:0)
+	{
+		printf("Warning: database is not loaded. Make sure 'AAD.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE);
 		return 0;
-	
+	}
 	//db_debug_openfiles();
 	//db_debug_openresults();
 	DatabaseLoading = true;
