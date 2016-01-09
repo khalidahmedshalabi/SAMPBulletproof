@@ -138,7 +138,8 @@ public OnPlayerConnect(playerid)
         ClearChatForPlayer(playerid);
 		SendClientMessage(playerid, -1, "Please wait! Database loading, you will be connected when it's loaded successfully.");
 		SetTimerEx("OnPlayerConnect", 1000, false, "i", playerid);
-		return 0; // If database is still loading, disable the player from spawning
+  		SetTimerEx("OnPlayerRequestClass", 1050, false, "ii", playerid, 0);
+		return 0; // If database is still loading, temporarily disable the player from connecting
 	}
 	// Check if players count exceeded the limit
 	if(Iter_Count(Player) == MAX_PLAYERS)
@@ -180,6 +181,10 @@ public OnPlayerConnect(playerid)
 
 public OnPlayerRequestClass(playerid, classid)
 {
+    // If database is still loading, then we must not let this player login or access data now
+    if(DatabaseLoading == true)
+        return 0;
+        
 	TogglePlayerSpectating(playerid, true);
 	// Initialize class selection mode
 	Player[playerid][Team] = NON;
@@ -193,7 +198,7 @@ public OnPlayerRequestClass(playerid, classid)
 	SetPlayerCameraPos(playerid, -734.5640, 484.6783, 1371.5766);
 	SetPlayerCameraLookAt(playerid, -739.8491, 486.9522, 1371.9198);
 	SetPlayerInterior(playerid, 1);
-
+        
     #if defined _league_included
 	// League account login check
 	if(Player[playerid][MustLeaguePass] == true)

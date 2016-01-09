@@ -28,12 +28,11 @@ SetDatabaseToReload(playerid = INVALID_PLAYER_ID)
 
 LoadDatabase()
 {
-	//db_close(sqliteconnection);
 	sqliteconnection = db_open("AAD.db");
 	//db_debug_openfiles();
 	//db_debug_openresults();
 	DatabaseLoading = true;
-	SetTimer("DatabaseDefaultReload", 100, false);
+	SetTimer("DelayedDatabaseStuff", 500, false);
 	return 1;
 }
 
@@ -52,17 +51,6 @@ public DelayedDatabaseStuff()
 	
 	DatabaseLoading = false;
     return 1;
-}
-
-forward DatabaseDefaultReload();
-public DatabaseDefaultReload()
-{
-	if(sqliteconnection == DB:0)
-		return 0;
-	
-    SetDatabaseToReload();
-    SetTimer("DelayedDatabaseStuff", 200, false);
-	return 1;
 }
 
 OptimizeDatabase()
