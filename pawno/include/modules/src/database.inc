@@ -29,6 +29,9 @@ SetDatabaseToReload(playerid = INVALID_PLAYER_ID)
 LoadDatabase()
 {
 	sqliteconnection = db_open("AAD.db");
+	if(sqliteconnection == DB:0)
+		return 0;
+	
 	//db_debug_openfiles();
 	//db_debug_openresults();
 	DatabaseLoading = true;

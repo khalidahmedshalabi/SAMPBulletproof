@@ -133,13 +133,19 @@ public OnPlayerConnect(playerid)
         SetTimerEx("OnPlayerKicked", 500, false, "i", playerid);
 		return 0;
 	}
+	// If database is still loading, temporarily disable the player from connecting
     if(DatabaseLoading == true)
     {
         ClearChatForPlayer(playerid);
 		SendClientMessage(playerid, -1, "Please wait! Database loading, you will be connected when it's loaded successfully.");
 		SetTimerEx("OnPlayerConnect", 1000, false, "i", playerid);
   		SetTimerEx("OnPlayerRequestClass", 1050, false, "ii", playerid, 0);
-		return 0; // If database is still loading, temporarily disable the player from connecting
+		return 0; 
+	}
+	// If there was a problem loading the database, warn them
+	if(sqliteconnection == DB:0)
+	{
+	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}database is not loaded. Make sure 'AAD.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE));
 	}
 	// Check if players count exceeded the limit
 	if(Iter_Count(Player) == MAX_PLAYERS)
