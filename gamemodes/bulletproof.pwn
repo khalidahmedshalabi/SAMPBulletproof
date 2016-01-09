@@ -185,25 +185,31 @@ public OnPlayerConnect(playerid)
 	return 1;
 }
 
+forward InitClassSelectionCamera(playerid);
+public InitClassSelectionCamera(playerid)
+{
+    // Position and camera...
+    SetPlayerTime(playerid, 12, 0);
+	SetPlayerInterior(playerid, MainInterior);
+	SetPlayerCameraPos(playerid, MainSpawn[0] + random(12), MainSpawn[1] + random(12), MainSpawn[2] + random(10) + 3);
+	SetPlayerCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2]);
+	return 1;
+}
+
 public OnPlayerRequestClass(playerid, classid)
 {
     // If database is still loading, then we must not let this player login or access data now
     if(DatabaseLoading == true)
         return 0;
         
-	TogglePlayerSpectating(playerid, true);
 	// Initialize class selection mode
 	Player[playerid][Team] = NON;
     SetPlayerColor(playerid, 0xAAAAAAAA);
     Player[playerid][Spawned] = false;
 
-	// Position and camera...
- 	SetPlayerSpecialAction(playerid, 68);
-	SetPlayerPos(playerid, -739.8491, 486.9522, 1371.9198);
-	SetPlayerFacingAngle(playerid, 243.4329);
-	SetPlayerCameraPos(playerid, -734.5640, 484.6783, 1371.5766);
-	SetPlayerCameraLookAt(playerid, -739.8491, 486.9522, 1371.9198);
-	SetPlayerInterior(playerid, 1);
+	if(GetPlayerState(playerid) != PLAYER_STATE_SPECTATING)
+    	TogglePlayerSpectating(playerid, true);
+	SetTimerEx("InitClassSelectionCamera", 200, false, "i", playerid);
         
     #if defined _league_included
 	// League account login check
