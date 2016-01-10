@@ -28,16 +28,14 @@ ResetDuellers(dueller1, dueller2)
 UpdateDuellersStats(winner, loser)
 {
 	// announcement
-	printf("duel debug: %d %d", winner, loser);
-	new str[256];
+	new str[144];
 	format(
 	str, 
 	sizeof str, 
-	""COL_PRIM"Duel stats: {FFFFFF}%s [W: "COL_PRIM"%d{FFFFFF}/L: "COL_PRIM"%d{FFFFFF}] "COL_PRIM"& {FFFFFF}%s [W: "COL_PRIM"%d{FFFFFF}/L: "COL_PRIM"%d{FFFFFF}]", 
+	""COL_PRIM"Duel stats: {FFFFFF}%s [W: %d / L: %d] & %s [W: %d / L: %d]", 
 	Player[winner][NameWithoutTag], Player[winner][DuelsWon], Player[winner][DuelsLost],
 	Player[loser][NameWithoutTag], Player[loser][DuelsWon], Player[loser][DuelsLost]
 	);
-	printf("duel debug: len: %d", strlen(str));
 	SendClientMessageToAll(-1, str);
 	// database
 	format(str, sizeof(str), "UPDATE Players SET DLost = %d WHERE Name = '%q'", Player[loser][DuelsLost], Player[loser][Name]);
