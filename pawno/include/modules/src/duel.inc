@@ -1,6 +1,6 @@
 #include "modules\header\duel.txt"
 
-ResetDuellers(dueller1, dueller2)
+ResetDuellers(dueller1, dueller2, bool:respawn = true)
 {
 	// Teams
 	Player[dueller1][Team] = Player[dueller1][TeamBeforeDuel];
@@ -20,9 +20,12 @@ ResetDuellers(dueller1, dueller2)
 		GangZoneDestroy(Player[dueller1][Duel_GangZone]);
 		GangZoneDestroy(Player[dueller2][Duel_GangZone]);
 	}
-	// spawn
-	SpawnPlayerEx(dueller1);
-	SpawnPlayerEx(dueller2);
+	if(respawn)
+	{
+		// spawn
+		SpawnPlayerEx(dueller1);
+		SpawnPlayerEx(dueller2);
+	}
 }
 
 UpdateDuellersStats(winner, loser)
@@ -243,6 +246,7 @@ ProcessDuellerDeath(playerid, killerid, reason)
 
 	Player[playerid][InDuel] = false;
 	Player[killerid][InDuel] = false;
-	ResetDuellers(playerid, killerid);
+	ResetDuellers(playerid, killerid, false);
+	SpawnPlayerEx(killerid);
 	UpdateDuellersStats(killerid, playerid);
 }
