@@ -127,8 +127,6 @@ InitPlayer(playerid)
 	Player[playerid][TotalDeaths] = 0;
 	Player[playerid][TotalDamage] = 0;
 	Player[playerid][ACKick] = 0;
-	for(new i = 0; i < 55; i ++)
-	    Player[playerid][WeaponStat][i] = 0;
 	Player[playerid][IsSpectatingID] = -1;
 	Player[playerid][OutOfArena] = MAX_ZONE_LIMIT_WARNINGS;
 	Player[playerid][FPSKick] = 0;
@@ -370,9 +368,6 @@ StorePlayerVariablesMin(playerid) {
 			SaveVariables[i][tshotsHit] =   Player[playerid][TotalshotsHit];
 			SaveVariables[i][tBulletsShot] = Player[playerid][TotalBulletsFired];
 
-			for(new j = 0; j < 55; j ++)
-		 		SaveVariables[i][WeaponStat][j] = Player[playerid][WeaponStat][j];
-
 			SaveVariables[i][gHealth]  =   0;
 			SaveVariables[i][gArmour]  =   0;
 
@@ -457,9 +452,6 @@ StorePlayerVariables(playerid) {
 			SaveVariables[i][tshotsHit] =   Player[playerid][TotalshotsHit];
 			SaveVariables[i][tBulletsShot] = Player[playerid][TotalBulletsFired];
 
-			for(new j = 0; j < 55; j ++)
-				 SaveVariables[i][WeaponStat][j] = Player[playerid][WeaponStat][j];
-
 			for(new j = 0; j < MAX_GUNMENU_GUNS; j ++)
 			{
 				SaveVariables[i][HadGunmenuGun][j] = GunmenuData[j][HasGun][playerid];
@@ -539,9 +531,6 @@ LoadPlayerVariables(playerid)
 				}
 				#endif
 
-			 	for(new j = 0; j < 55; j ++)
-    				Player[playerid][WeaponStat][j] = SaveVariables[i][WeaponStat][j];
-
                 ResetSaveVariables(i);
 
 				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has spawned as: {FFFFFF}%s", Player[playerid][Name], TeamName[Player[playerid][Team]]);
@@ -564,9 +553,6 @@ LoadPlayerVariables(playerid)
 				Player[playerid][RoundKills]        =   SaveVariables[i][RKills];
 				Player[playerid][RoundDeaths]       =	SaveVariables[i][RDeaths];
 				Player[playerid][RoundDamage]       =	SaveVariables[i][RDamage];
-
-                for(new j = 0; j < 55; j ++)
-    				Player[playerid][WeaponStat][j] = SaveVariables[i][WeaponStat][j];
 
 				Player[playerid][WasInBase]         =   true;
 
@@ -604,9 +590,6 @@ LoadPlayerVariables(playerid)
 			Player[playerid][Accuracy]      =   SaveVariables[i][iAccuracy];
 		 	Player[playerid][TotalshotsHit]	=	SaveVariables[i][tshotsHit];
 		 	Player[playerid][TotalBulletsFired] = SaveVariables[i][tBulletsShot];
-
-		 	for(new j = 0; j < 55; j ++)
-				Player[playerid][WeaponStat][j] = SaveVariables[i][WeaponStat][j];
 
             if(SaveVariables[i][WasCrashedInStart] == false)
 			{
@@ -758,9 +741,6 @@ ResetSaveVariables(index) {
     SaveVariables[index][TDeaths] = 0;
     SaveVariables[index][TDamage] = 0;
     SaveVariables[index][RoundID] = -1;
-    for(new i = 0; i < 55; i ++)
-    	SaveVariables[index][WeaponStat][i] = 0;
-
     SaveVariables[index][WasCrashedInStart] = false;
     SaveVariables[index][ToBeAdded] = false;
     SaveVariables[index][CheckScore] = false;

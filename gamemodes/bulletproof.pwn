@@ -1690,7 +1690,6 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
             	AddPlayerLeaguePoints(playerid, -(rounded_amount));
      		}
      		#endif
-            Player[issuerid][WeaponStat][weaponid] += rounded_amount;
 			Player[issuerid][shotsHit] ++;
 			Player[issuerid][RoundDamage] += rounded_amount;
 			Player[issuerid][TotalDamage] += rounded_amount;
@@ -2600,8 +2599,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 					foreach(new i : Player)
 					{
-					    for(new j = 0; j < 55; j ++)
-	    					Player[i][WeaponStat][j] = 0;
 		   				Player[i][TotalKills] = 0;
 						Player[i][TotalDeaths] = 0;
 						Player[i][TotalDamage] = 0;
@@ -2648,8 +2645,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			TextDrawSetString(WarModeText, iString);
 
 			foreach(new i : Player) {
-			    //for(new j = 0; j < 55; j ++)
-  				//	Player[i][WeaponStat][j] = 0;
    				Player[i][TotalKills] = 0;
 				Player[i][TotalDeaths] = 0;
 				Player[i][TotalDamage] = 0;
@@ -3650,8 +3645,6 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 			}
 
 			foreach(new i : Player) {
-			    for(new j = 0; j < 55; j ++)
-  					Player[i][WeaponStat][j] = 0;
    				Player[i][TotalKills] = 0;
 				Player[i][TotalDeaths] = 0;
 				Player[i][TotalDamage] = 0;
@@ -5089,8 +5082,6 @@ YCMD:resetscores(playerid, params[], help)
 	ClearPlayerVariables();
 
 	foreach(new i : Player) {
-	    for(new j = 0; j < 55; j ++)
-			Player[i][WeaponStat][j] = 0;
 		Player[i][TotalKills] = 0;
 		Player[i][TotalDeaths] = 0;
 		Player[i][TotalDamage] = 0;
@@ -5558,7 +5549,6 @@ YCMD:war(playerid, params[], help)
 		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has set the match to end!", Player[playerid][Name]));
 		SendClientMessageToAll(-1, ""COL_PRIM"Preparing End Match Results..");
 		SendClientMessageToAll(-1, ""COL_PRIM"If you missed the results screen by hiding the current textdraws, type {FFFFFF}/showagain");
-		SendClientMessageToAll(-1, ""COL_PRIM"Type {FFFFFF}/weaponstats "COL_PRIM"to see a list of players weapon statistics.");
 
 		return 1;
 	} else if(isnull(TeamBName)) return SendUsageMessage(playerid,"/war ([Team A] [Team B]) (end)");
@@ -5601,8 +5591,6 @@ YCMD:war(playerid, params[], help)
 
 	foreach(new i : Player)
 	{
-	    for(new j = 0; j < 55; j ++)
-			Player[i][WeaponStat][j] = 0;
 		Player[i][TotalKills] = 0;
 		Player[i][TotalDeaths] = 0;
 		Player[i][TotalDamage] = 0;
@@ -6817,43 +6805,6 @@ YCMD:fakepacket(playerid, params[], help)
 	SendClientMessageToAll(-1, str);
 
     LogAdminCommand("fakepacket", playerid, pID);
-	return 1;
-}
-
-SetWeaponStatsString()
-{
-	format(WeaponStatsStr, sizeof WeaponStatsStr, "");
-	foreach(new i : Player)
-	{
-	    if((Player[i][WeaponStat][WEAPON_DEAGLE] + Player[i][WeaponStat][WEAPON_SHOTGUN] + Player[i][WeaponStat][WEAPON_M4] + Player[i][WeaponStat][WEAPON_SHOTGSPA] + Player[i][WeaponStat][WEAPON_RIFLE] + Player[i][WeaponStat][WEAPON_SNIPER] + Player[i][WeaponStat][WEAPON_AK47] + Player[i][WeaponStat][WEAPON_MP5] + Player[i][WeaponStat][0]) <= 0)
-			continue;
-
-		format(WeaponStatsStr, sizeof WeaponStatsStr, "%s{0066FF}%s {D6D6D6}[Deagle: %d] [Shotgun: %d] [M4: %d] [Spas: %d] [Rifle: %d] [Sniper: %d] [AK: %d] [MP5: %d] [Punch: %d] [Rounds: %d]\n",
-			WeaponStatsStr, Player[i][Name], Player[i][WeaponStat][WEAPON_DEAGLE], Player[i][WeaponStat][WEAPON_SHOTGUN], Player[i][WeaponStat][WEAPON_M4], Player[i][WeaponStat][WEAPON_SHOTGSPA], Player[i][WeaponStat][WEAPON_RIFLE], Player[i][WeaponStat][WEAPON_SNIPER], Player[i][WeaponStat][WEAPON_AK47], Player[i][WeaponStat][WEAPON_MP5], Player[i][WeaponStat][0], Player[i][RoundPlayed]);
-	}
-
-	for(new i = 0; i < SAVE_SLOTS; i ++)
-	{
-		if(strlen(SaveVariables[i][pName]) > 2)
-		{
-		    if((SaveVariables[i][WeaponStat][WEAPON_DEAGLE] + SaveVariables[i][WeaponStat][WEAPON_SHOTGUN] + SaveVariables[i][WeaponStat][WEAPON_M4] + SaveVariables[i][WeaponStat][WEAPON_SHOTGSPA] + SaveVariables[i][WeaponStat][WEAPON_RIFLE] + SaveVariables[i][WeaponStat][WEAPON_SNIPER] + SaveVariables[i][WeaponStat][WEAPON_AK47] + SaveVariables[i][WeaponStat][WEAPON_MP5] + SaveVariables[i][WeaponStat][0]) <= 0)
-				continue;
-
-			format(WeaponStatsStr, sizeof WeaponStatsStr, "%s{0066FF}%s {D6D6D6}[Deagle: %d] [Shotgun: %d] [M4: %d] [Spas: %d] [Rifle: %d] [Sniper: %d] [AK: %d] [MP5: %d] [Punch: %d] [Rounds: %d]\n",
-				WeaponStatsStr, SaveVariables[i][pName], SaveVariables[i][WeaponStat][WEAPON_DEAGLE], SaveVariables[i][WeaponStat][WEAPON_SHOTGUN], SaveVariables[i][WeaponStat][WEAPON_M4], SaveVariables[i][WeaponStat][WEAPON_SHOTGSPA], SaveVariables[i][WeaponStat][WEAPON_RIFLE], SaveVariables[i][WeaponStat][WEAPON_SNIPER], SaveVariables[i][WeaponStat][WEAPON_AK47], SaveVariables[i][WeaponStat][WEAPON_MP5], SaveVariables[i][WeaponStat][0], SaveVariables[i][TPlayed]);
-		}
-	}
-	return 1;
-}
-
-YCMD:weaponstats(playerid, params[], help)
-{
-    if(help)
-	{
-	    SendCommandHelpMessage(playerid, "display everyone's weapon statistics.");
-	    return 1;
-	}
-	ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "Players Weapon Statistics", WeaponStatsStr, "Close", "");
 	return 1;
 }
 

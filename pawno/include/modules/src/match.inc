@@ -2627,7 +2627,6 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 		SetTimer("WarEnded", 5000, 0);
 		SendClientMessageToAll(-1, ""COL_PRIM"Preparing End Match Results..");
 		SendClientMessageToAll(-1, ""COL_PRIM"If you missed the results screen by hiding the current textdraws, type {FFFFFF}/showagain");
-        SendClientMessageToAll(-1, ""COL_PRIM"Type {FFFFFF}/weaponstats "COL_PRIM"to see a list of players weapon statistics.");
 	}
 	AttList = "";
 	AttKills = "";
@@ -2674,8 +2673,6 @@ public WarEnded()
     TextDrawSetString(topTextScore, iString);
 
 	MatchEnded = true;
-
-	SetWeaponStatsString();
 
 	CurrentRound = 0;
 	format(iString, sizeof(iString), "SELECT * FROM Configs WHERE Option = 'Total Rounds'");
@@ -2866,7 +2863,6 @@ public WarEnded()
 		}
 	}
 	#endif
-    SetWeaponStatsString();
 
 	TeamName[ATTACKER] = "Alpha";
 	TeamName[ATTACKER_SUB] = "Alpha Sub";
@@ -2882,8 +2878,6 @@ public WarEnded()
 
 	foreach(new i : Player)
 	{
-	    //for(new j = 0; j < 55; j ++)
-		//	Player[i][WeaponStat][j] = 0;
 		Player[i][TotalKills] = 0;
 		Player[i][TotalDeaths] = 0;
 		Player[i][TotalDamage] = 0;

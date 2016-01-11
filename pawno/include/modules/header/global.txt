@@ -32,7 +32,6 @@ new TargetInfoData[MAX_PLAYERS][TargetInfoData_STRUCT];
 new ChangingSkinOfTeam[MAX_PLAYERS];
 
 #define MAX_SERVER_PASS_LENGH 6
-new WeaponStatsStr[3000];
 new ServerPass[MAX_SERVER_PASS_LENGH + 9]; // contains "password " plus the password itself
 new hostname[64];
 new AKAString[1024];
