@@ -128,8 +128,9 @@ public OnPlayerConnect(playerid)
     // Check if version is out-dated and if server owners are forced to use newest version
 	if(VersionReport == VERSION_IS_BEHIND && ForceUserToNewestVersion == true)
 	{
-	    SendClientMessageToAll(-1, sprintf(""COL_PRIM"Version checker: {FFFFFF}the version used in this server is out-dated. You can visit "COL_PRIM"%s {FFFFFF}to get the latest version", GM_WEBSITE));
-        SendClientMessageToAll(-1, sprintf(""COL_PRIM"Server version: {FFFFFF}%s "COL_PRIM"| Newest version: {FFFFFF}%s", GM_NAME, LatestVersionStr));
+	    SendClientMessage(playerid, -1, ""COL_PRIM"Version checker: {FFFFFF}the version used in this server is out-dated.");
+    	SendClientMessage(playerid, -1, sprintf(""COL_PRIM"Visit {FFFFFF}%s "COL_PRIM"to get the latest version", GM_WEBSITE));
+		SendClientMessage(playerid, -1, sprintf(""COL_PRIM"Server version: {FFFFFF}%s "COL_PRIM"| Newest version: {FFFFFF}%s", GM_NAME, LatestVersionStr));
         SetTimerEx("OnPlayerKicked", 500, false, "i", playerid);
 		return 0;
 	}
