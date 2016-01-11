@@ -328,9 +328,11 @@ StopSpectate(playerid, bool:remove_iterator = true)
 	}
 	else
 	{
+		// Freecam mode cancel
 		new Float:camPos[3];
 		GetPlayerCameraPos(playerid, camPos[0], camPos[1], camPos[2]);
 		SetPlayerPos(playerid, camPos[0], camPos[1], camPos[2]);
+		SwitchTeamFix(playerid, false, true);
 	}
 	SetPlayerInterior(playerid, MainInterior);
 	SetPlayerVirtualWorld(playerid, 0);
