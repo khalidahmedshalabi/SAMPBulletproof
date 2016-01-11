@@ -1339,6 +1339,11 @@ public OnRconLoginAttempt(ip[], password[], success)
     	db_free_result(db_query(sqliteconnection, Str));
         if(Player[playerid][Level] != 5)
         {
+            if(Player[playerid][Level] == 0)
+			{
+			    // Previous level was 0. This means it's a new admin. Guide them.
+			    SendClientMessage(playerid, -1, ""COL_PRIM"Looks like you're a new admin. Type {FFFFFF}/acmds "COL_PRIM" to see a list of admin commands!");
+			}
 	        Player[playerid][Level] = 5;
 	        UpdatePlayerAdminGroup(playerid);
 			format(Str, sizeof(Str), "UPDATE Players SET Level = %d WHERE Name = '%q'", Player[playerid][Level], Player[playerid][Name]);
@@ -3859,7 +3864,7 @@ YCMD:cmds(playerid, params[], help)
 	}
 	new str[1500], cmdsInLine = 0;
 	strcat(str,
-		"Use ! for team chat\nPress N to request for backup in a round\nPress H to lead your team\nUse # to talk in chat channel\nUse @ for admin chat\nIf you need help with a command, use /cmdhelp\n\n");
+		"Use ! for team chat\nPress N to request for backup in a round\nPress H to lead your team\nUse # for league clan chat\nUse @ for admin chat\nIf you need help with a command, use /cmdhelp\n\n");
 	foreach(new i : Command())
 	{
 		if(GetCommandLevel(i) == 0)
@@ -3888,7 +3893,7 @@ YCMD:acmds(playerid, params[], help)
 	    return 1;
 	}
 	new str[1500], cmdsInLine;
-	strcat(str, "Use @ for admin chat");
+	strcat(str, "Use @ for admin chat\nIf you need help with a command, use /cmdhelp");
 	new level = Player[playerid][Level];
 	for(new i = 0; i < MAX_ADMIN_LEVELS; i ++)
 	{
@@ -8795,6 +8800,12 @@ YCMD:setlevel(playerid, params[], help)
 	if(Player[GiveID][Logged] == false) return SendErrorMessage(playerid,"That player is not logged in.");
 	if(LEVEL < 0 || LEVEL > 5) return SendErrorMessage(playerid,"Invalid level.");
 	if(Player[GiveID][Level] == LEVEL) return SendErrorMessage(playerid,"That player is already this level.");
+
+	if(Player[GiveID][Level] == 0)
+	{
+	    // Previous level was 0. This means it's a new admin. Guide them.
+	    SendClientMessage(GiveID, -1, ""COL_PRIM"Looks like you're a new admin. Type {FFFFFF}/acmds "COL_PRIM" to see a list of admin commands!");
+	}
 
 	new iString[128];
 
