@@ -4,7 +4,7 @@
 #include <a_http>
 #include <maxplayers>
 
-//	- 	Libraries
+// Libraries
 #include <geolocation> 		// Shows player country based on IP
 #include <strlib>           // String functions by Slice
 #include <progress2>        // Player Progress Bar functions
@@ -12,8 +12,9 @@
 #include <profiler>         // Script profiler
 #include <sampac> 			// THE MIGHTY NEW ANTICHEAT
 #include <mSelection>       // Selection with preview models feature library
+#include <gBugFix>			// Fix false vehicle entry as passenger (G (teleport/distance) bug)
 
-//	-	YSI Libraries (updated)
+// YSI Libraries (updated)
 #define YSI_NO_MASTER
 //#define 	_DEBUG			(7) 	// y_debug debug level
 #define FOREACH_NO_VEHICLES
@@ -30,43 +31,12 @@
 native gpci (playerid, serial [], len);
 native IsValidVehicle(vehicleid);
 
-/*
-	If PRE_RELEASE_VERSION is defined, the version checker
-	is ignored and you can no longer worry about it. It's
-	to be commented out on releases though.
-*/
-//#define PRE_RELEASE_VERSION
-
-#include <gBugFix> // Fix false vehicle entry as passenger (G (teleport/distance) bug)
-
-/*
-	PROTECTION:
-	The following code will check whether the http destinations
-	library (which is not open-source) is permitted for this c-
-	-ompiler or not. If it is not, the code will empty destina-
-	-tion variables to show no useful information to this coder
-*/
-#tryinclude "modules\header\http_destinations.txt"
-
-#if !defined _http_destinations_included
-	#define HTTP_DEST_SERVERLIST 				""
-	#define HTTP_DEST_LEAGUE_SAVEPLAYER			""
-	#define HTTP_DEST_LEAGUE_SAVECLANS			""
-	#define HTTP_DEST_LEAGUE_CHECKPLAYER		""
-	#define HTTP_DEST_LEAGUE_CHECKPLAYERPASS	""
-	#define HTTP_DEST_LEAGUE_CHECKCLANS			""
-	#define HTTP_DEST_LEAGUE_TOPPLAYERS			""
-	#define HTTP_DEST_LEAGUE_TOPCLANS			""
-	#define HTTP_DEST_LEAGUE_PLAYERPOINTS       ""
-	#define HTTP_DEST_LEAGUE_LEAGUEADMINS       ""
-	#define HTTP_DEST_LEAGUE_REGISTER_PLAYER    ""
-#endif
-
-// Server modules (note: modules that consists of hooking have to be first)
+// Server modules (find them in "/pawno/include/modules") (note: modules that consists of hooking have to be first)
 #include "modules\src\hooking\tickcount.inc"
 #include "modules\src\hooking\safegametext.inc"
 #include "modules\src\hooking\vehicle.inc"
 #include "modules\src\hooking\commonhooking.inc"
+#tryinclude "modules\header\http_destinations.txt" // (closed source)
 #tryinclude "modules\src\league.inc" // The league system source code is not open
 #tryinclude "modules\src\shop.inc"  // The league shop source code is not open
 #include "modules\src\this_core.inc"
@@ -388,7 +358,7 @@ public OnPlayerDisconnect(playerid, reason)
 	UpdateOnlinePlayersList(playerid, false);
 	#endif
 	// Send public disconnect messages
-    new iString[180];
+    new iString[144];
     switch (reason){
 		case 0:{
 			if(Player[playerid][Playing] == false) format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Timeout{757575}]",Player[playerid][Name]);
