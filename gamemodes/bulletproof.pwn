@@ -16,9 +16,9 @@
 //	-	YSI Libraries (updated)
 #define YSI_NO_MASTER
 //#define 	_DEBUG			(7) 	// y_debug debug level
-//#define FOREACH_NO_VEHICLES
+#define FOREACH_NO_VEHICLES
 //#define FOREACH_NO_LOCALS
-//#define FOREACH_NO_ACTORS
+#define FOREACH_NO_ACTORS
 #include <YSI_inc\YSI\y_stringhash> // better than strcmp in comparing strings (not recommended for long ones though)
 #include <YSI_inc\YSI\y_commands>
 #include <YSI_inc\YSI\y_groups>
