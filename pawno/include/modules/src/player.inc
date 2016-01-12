@@ -702,7 +702,7 @@ LoadPlayerVariables(playerid)
 			
 			if(!Player[playerid][FakePacketRenovation] && Player[playerid][NetCheck] && NetStats_GetConnectedTime(playerid) < 300000)
 			{
-				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", playerid, GetPlayerPacketLoss(playerid), false);
+				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", playerid, NetStats_PacketLossPercent(playerid), false);
 				Player[playerid][FakePacketRenovation] = true;
 			}
 

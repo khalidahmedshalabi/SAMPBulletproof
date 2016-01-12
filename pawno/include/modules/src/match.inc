@@ -1458,7 +1458,7 @@ SpawnPlayersInRC()
 
 			if(!Player[i][FakePacketRenovation] && Player[i][NetCheck] && NetStats_GetConnectedTime(i) < 300000)
 			{
-				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", i, GetPlayerPacketLoss(i), false);
+				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", i, NetStats_PacketLossPercent(i), false);
 				Player[i][FakePacketRenovation] = true;
 			}
 			
@@ -1685,7 +1685,7 @@ SpawnPlayersInArena()
 
 			if(!Player[i][FakePacketRenovation] && Player[i][NetCheck] && NetStats_GetConnectedTime(i) < 300000)
 			{
-				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", i, GetPlayerPacketLoss(i), false);
+				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", i, NetStats_PacketLossPercent(i), false);
 				Player[i][FakePacketRenovation] = true;
 			}
 			
@@ -1793,7 +1793,7 @@ public AddPlayerToArena(playerid)
 	
 	if(!Player[playerid][FakePacketRenovation] && Player[playerid][NetCheck] && NetStats_GetConnectedTime(playerid) < 300000)
 	{
-		SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", playerid, GetPlayerPacketLoss(playerid), false);
+		SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", playerid, NetStats_PacketLossPercent(playerid), false);
 		Player[playerid][FakePacketRenovation] = true;
 	}
 	
@@ -2066,7 +2066,7 @@ SpawnPlayersInBase()
 
 			if(!Player[i][FakePacketRenovation] && Player[i][NetCheck] && NetStats_GetConnectedTime(i) < 300000)
 			{
-				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", i, GetPlayerPacketLoss(i), false);
+				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", i, NetStats_PacketLossPercent(i), false);
 				Player[i][FakePacketRenovation] = true;
 			}
 			
@@ -2184,7 +2184,7 @@ public AddPlayerToBase(playerid)
 	
 	if(!Player[playerid][FakePacketRenovation] && Player[playerid][NetCheck] && NetStats_GetConnectedTime(playerid) < 300000)
 	{
-		SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", playerid, GetPlayerPacketLoss(playerid), false);
+		SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", playerid, NetStats_PacketLossPercent(playerid), false);
 		Player[playerid][FakePacketRenovation] = true;
 	}
 

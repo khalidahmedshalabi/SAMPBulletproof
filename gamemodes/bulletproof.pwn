@@ -2274,7 +2274,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
                 GetPlayerFPS(CID);
 				format(statsSTR[0], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Country: %s\n\n"COL_PRIM"- {FFFFFF}Round Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Total Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}FPS: \t\t\t%d\n"COL_PRIM"- {FFFFFF}Round Deaths: \t%.0f\t\t"COL_PRIM"- {FFFFFF}Total Deaths: \t%d\t\t"COL_PRIM"- {FFFFFF}Ping: \t\t\t%d\n",Country,Player[CID][RoundKills],Player[CID][TotalKills], Player[CID][FPS], RD, TD, GetPlayerPing(CID));
-				format(statsSTR[1], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Round Damage: \t%d\t\t"COL_PRIM"- {FFFFFF}Total Damage:   \t%d\t\t"COL_PRIM"- {FFFFFF}Packet-Loss:   \t%.1f\n\n"COL_PRIM"- {FFFFFF}Player Weather: \t%d\t\t"COL_PRIM"- {FFFFFF}Chat Channel: \t%d\t\t"COL_PRIM"- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], GetPlayerPacketLoss(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
+				format(statsSTR[1], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Round Damage: \t%d\t\t"COL_PRIM"- {FFFFFF}Total Damage:   \t%d\t\t"COL_PRIM"- {FFFFFF}Packet-Loss:   \t%.1f\n\n"COL_PRIM"- {FFFFFF}Player Weather: \t%d\t\t"COL_PRIM"- {FFFFFF}Chat Channel: \t%d\t\t"COL_PRIM"- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], NetStats_PacketLossPercent(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
 				format(statsSTR[2], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Player Time: \t\t%d\t\t"COL_PRIM"- {FFFFFF}DM ID: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Hit Sound: \t\t%d\n"COL_PRIM"- {FFFFFF}Player NetCheck: \t%s\t"COL_PRIM"- {FFFFFF}Player Level: \t%d\t\t"COL_PRIM"- {FFFFFF}Get Hit Sound: \t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
 				format(statsSTR[3], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Duels Won: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Duels Lost: \t\t%d", Player[CID][DuelsWon], Player[CID][DuelsLost]);
 				new TotalStr[1200];
@@ -6778,7 +6778,7 @@ public FakePacketRenovationEnd(playerid, Float:fakepacket, bool:message)
 
     Player[playerid][FakePacketRenovation] = false;
     if(message)
-    	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Fake PL renovation on {FFFFFF}%s "COL_PRIM"has ended - Old: {FFFFFF}%.1f "COL_PRIM" | Current: {FFFFFF}%.1f", Player[playerid][Name], fakepacket, GetPlayerPacketLoss(playerid)));
+    	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Fake PL renovation on {FFFFFF}%s "COL_PRIM"has ended - Old: {FFFFFF}%.1f "COL_PRIM" | Current: {FFFFFF}%.1f", Player[playerid][Name], fakepacket, NetStats_PacketLossPercent(playerid)));
 	return 1;
 }
 
@@ -6797,7 +6797,7 @@ YCMD:fakepacket(playerid, params[], help)
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isn't connected.");
 	if(NetStats_PacketLossPercent(pID) == 0.0) return SendErrorMessage(playerid, "That player has 0.0% packet-loss");
 
-	SetTimerEx("FakePacketRenovationEnd", interv * 60 * 1000, false, "ifb", pID, GetPlayerPacketLoss(pID), true);
+	SetTimerEx("FakePacketRenovationEnd", interv * 60 * 1000, false, "ifb", pID, NetStats_PacketLossPercent(pID), true);
 	Player[pID][FakePacketRenovation] = true;
 
 	new str[150];
@@ -9444,7 +9444,7 @@ public OnScriptUpdate()
 		// Update net info textdraws
 		GetPlayerFPS(i);
 		if(PlayerInterface[i][INTERFACE_NET])
-  			PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS %s%d %sPing %s%d %sPacketLoss %s%.1f%%", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][FPS], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], GetPlayerPing(i), MAIN_TEXT_COLOUR, TDC[Player[i][Team]], GetPlayerPacketLoss(i)));
+  			PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS %s%d %sPing %s%d %sPacketLoss %s%.1f%%", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][FPS], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], GetPlayerPing(i), MAIN_TEXT_COLOUR, TDC[Player[i][Team]], NetStats_PacketLossPercent(i)));
 	}
 	return 1;
 }

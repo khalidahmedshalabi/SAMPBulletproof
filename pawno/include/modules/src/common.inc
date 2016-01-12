@@ -199,14 +199,14 @@ CheckPlayerNet(playerid)
 		Player[playerid][FPSKick] = 0;
 	}
 	
-	if(GetPlayerPacketLoss(playerid) >= Max_Packetloss && Player[playerid][FakePacketRenovation] == false && Player[playerid][PLCheck] == 1)
+	if(NetStats_PacketLossPercent(playerid) >= Max_Packetloss && Player[playerid][FakePacketRenovation] == false && Player[playerid][PLCheck] == 1)
 	{
 		Player[playerid][PacketKick]++;
 		SendClientMessage(playerid, -1, sprintf("{FF756D}High PL! Warning %d/15 - use /netcheckme", Player[playerid][PacketKick]));
 
 		if(Player[playerid][PacketKick] == 15) 
 		{
-			SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been kicked from the server .: {FFFFFF}High Packetloss | %.2f/%.2f "COL_PRIM":.", Player[playerid][Name], GetPlayerPacketLoss(playerid), Max_Packetloss));
+			SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been kicked from the server .: {FFFFFF}High Packetloss | %.2f/%.2f "COL_PRIM":.", Player[playerid][Name], NetStats_PacketLossPercent(playerid), Max_Packetloss));
 			SetTimerEx("OnPlayerKicked", 500, false, "i", playerid);
 		} 
 	} 
@@ -585,7 +585,7 @@ ShowTargetInfo(playerid, targetid)
 	{
 		format(str, sizeof str, "~n~~n~%sName: %s%s~n~%sPing: %s%d   %sFPS: %s%d~n~%sPL: %s%.1f   %sHP: %s%d",
 			MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][NameWithoutTag], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]],
-			GetPlayerPing(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][FPS], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], GetPlayerPacketLoss(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], (Player[targetid][pHealth] + Player[targetid][pArmour]));
+			GetPlayerPing(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][FPS], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], NetStats_PacketLossPercent(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], (Player[targetid][pHealth] + Player[targetid][pArmour]));
 	}
 	else
 	{
@@ -593,7 +593,7 @@ ShowTargetInfo(playerid, targetid)
 	    GetVehicleHealth(GetPlayerVehicleID(targetid), vHP);
         format(str, sizeof str, "~n~~n~%sName: %s%s~n~%sPing: %s%d   %sFPS: %s%d~n~%sPL: %s%.1f   %sHP: %s%d~n~%sVehicle HP: %s%.1f",
 			MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][NameWithoutTag], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]],
-			GetPlayerPing(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][FPS], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], GetPlayerPacketLoss(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], (Player[targetid][pHealth] + Player[targetid][pArmour]), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], vHP / 100);
+			GetPlayerPing(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][FPS], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], NetStats_PacketLossPercent(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], (Player[targetid][pHealth] + Player[targetid][pArmour]), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], vHP / 100);
 	}
 	PlayerTextDrawSetString(playerid, TargetInfoData[playerid][TargetInfoTD], str);
 	PlayerTextDrawShow(playerid, TargetInfoData[playerid][TargetInfoTD]);
@@ -1830,31 +1830,6 @@ IsNumeric(string[]){
     	if (string[i] > '9' || string[i] < '0') return 0;
     }
     return 1;
-}
-
-/*
-strmatch(const sStr1[], const sStr2[]) {
-	return (strcmp(sStr1, sStr2, true) == 0) && (strlen(sStr2) == strlen(sStr1)) ? true : false;
-}
-*/
-
-forward Float:GetPlayerPacketLoss(playerid);
-public Float:GetPlayerPacketLoss(playerid) {
-
-    /*new stats[401], stringstats[70];
-    GetPlayerNetworkStats(playerid, stats, sizeof(stats));
-    new len = strfind(stats, "Packetloss: ");
-    new Float:packetloss = 0.0;
-    if(len != -1) {
-        strmid(stringstats, stats, len, strlen(stats));
-        new len2 = strfind(stringstats, "%");
-        if(len != -1) {
-            strdel(stats, 0, strlen(stats));
-            strmid(stats, stringstats, len2-3, len2);
-            packetloss = floatstr(stats);
-        }
-    }*/
-    return NetStats_PacketLossPercent(playerid);
 }
 
 GetPlayerFPS(playerid) {
