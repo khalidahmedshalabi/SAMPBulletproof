@@ -227,7 +227,7 @@ public OnPlayerRequestClass(playerid, classid)
 			// If result returns any registered users with the same name and IP that have connected to this server before, log them in
 			if(db_num_rows(res))
 			{
-			    MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~g~~h~Auto-login", "You've been automatically logged in (IP is the same as last login)", 4000);
+			    SendClientMessage(playerid, -1, "{009933}Server account: {FFFFFF}automatically logged in!");
 				LoginPlayer(playerid, res);
 			    db_free_result(res);
 			    ShowPlayerClassSelection(playerid);
@@ -2290,7 +2290,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			format(query, sizeof(query), "INSERT INTO Players (Name, Password, IP, LastSeen_Day, LastSeen_Month, LastSeen_Year) VALUES('%q', '%q', '%q', %d, %d, %d)", Player[playerid][Name], HashPass, IP, day, month, year);
 			db_free_result(db_query(sqliteconnection, query));
 
-			MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~g~~h~register", sprintf("You've successfully registered your account with the password: %s", inputtext), 4000);
+            SendClientMessage(playerid, -1, sprintf("{009933}Server account: {FFFFFF}registered your account with the password: %s", inputtext));
 
             ShowPlayerClassSelection(playerid);
 
