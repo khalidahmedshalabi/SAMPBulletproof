@@ -2761,7 +2761,6 @@ public WarEnded()
 		if(Player[i][Spectating] == true) StopSpectate(i);
 
 		if(Player[i][InDuel] == false) ShowEndRoundTextDraw(i);
-		if(Player[i][InDuel] == false) SetPlayerVirtualWorld(i, i);
 
 	}
 	for(new i=0; i < SAVE_SLOTS; ++i) {
