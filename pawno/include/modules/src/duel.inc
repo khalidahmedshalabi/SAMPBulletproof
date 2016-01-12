@@ -1,4 +1,26 @@
 #include "modules\header\duel.txt"
+#include <YSI_inc\YSI\y_hooks>
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+	if(Player[playerid][InDuel] == true)
+	{
+		new iString[128];
+		format(iString, sizeof(iString), "{FFFFFF}%s left server during a duel {757575}| HP %d | Armour %d", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
+		SendClientMessageToAll(-1, iString);
+
+		new winner = Player[playerid][challengerid];
+		format(iString, sizeof(iString), "{FFFFFF}His opponent %s had {757575}%d HP and %d Armour", Player[winner][Name], Player[winner][pHealth], Player[winner][pArmour]);
+		SendClientMessageToAll(-1, iString);
+		Player[winner][InDuel] = false;
+		Player[playerid][DuelsLost]++;
+		Player[winner][DuelsWon]++;
+		ResetDuellers(winner, playerid);
+		UpdateDuellersStats(winner, playerid);
+		Player[winner][challengerid] = -1;
+	}
+	return 1;
+}
 
 ResetDuellers(dueller1, dueller2, bool:respawn = true)
 {
@@ -200,26 +222,6 @@ PlayerDuelQuit(playerid)
 
 	Player[playerid][challengerid] = -1;
 	Player[winner][challengerid] = -1;
-}
-
-ProcessDuellerDisconnect(playerid)
-{
-	if(Player[playerid][InDuel] == true)
-	{
-		new iString[128];
-		format(iString, sizeof(iString), "{FFFFFF}%s left server during a duel {757575}| HP %d | Armour %d", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
-		SendClientMessageToAll(-1, iString);
-
-		new winner = Player[playerid][challengerid];
-		format(iString, sizeof(iString), "{FFFFFF}His opponent %s had {757575}%d HP and %d Armour", Player[winner][Name], Player[winner][pHealth], Player[winner][pArmour]);
-		SendClientMessageToAll(-1, iString);
-		Player[winner][InDuel] = false;
-		Player[playerid][DuelsLost]++;
-		Player[winner][DuelsWon]++;
-		ResetDuellers(winner, playerid);
-		UpdateDuellersStats(winner, playerid);
-		Player[winner][challengerid] = -1;
-	}
 }
 
 ProcessDuellerDeath(playerid, killerid, reason)

@@ -7,6 +7,39 @@
 #include "modules\header\fields.txt"
 #tryinclude "modules\header\league.txt"
 #include "modules\header\messagebox.txt"
+#include <YSI_inc\YSI\y_hooks>
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+	// Handle war mode
+    if(WarMode == true)
+	{
+		if(Player[playerid][Playing] == true)
+		{
+		    PlayerNoLeadTeam(playerid);
+		    StorePlayerVariables(playerid);
+			if(Player[playerid][DontPause] == false && AutoPause == true && Current != -1)
+			{
+				KillTimer(UnpauseTimer);
+				RoundUnpausing = false;
+				PauseRound();
+				SendClientMessageToAll(-1, ""COL_PRIM"Round has been auto-paused.");
+			}
+		}
+		else
+			StorePlayerVariablesMin(playerid);
+	}
+	// Handle match
+ 	Iter_Remove(PlayersInRound, playerid);
+	UpdateTeamPlayerCount(Player[playerid][Team], true, playerid);
+	UpdateTeamHP(Player[playerid][Team], playerid);
+	// Call OnPlayerLeaveCheckpoint to see if this player was in the checkpoint and fix issues
+	if(Current != -1)
+	{
+        OnPlayerLeaveCheckpoint(playerid);
+	}
+	return 1;
+}
 
 // Set default name for all teams
 SetTeamDefaultNames()

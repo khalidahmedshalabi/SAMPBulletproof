@@ -14,6 +14,7 @@
 #include "modules\header\spectate.txt"
 #tryinclude "modules\header\league.txt"
 #include "modules\header\weaponbinds.txt"
+#include "modules\header\teamhpbars.txt"
 
 // Checks player AKAs
 GetPlayerAKA(playerid)

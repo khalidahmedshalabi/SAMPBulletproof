@@ -3,6 +3,15 @@
 */
 
 #include "modules\header\spectate.txt"
+#include <YSI_inc\YSI\y_hooks>
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+	// Handle spectate when a player disconnects
+	StopSpectate(playerid);
+	HandleSpectatedPlayerDisconnect(playerid);
+	return 1;
+}
 
 // This timer is called frequently to update textdraws for spectators so they can see correct info about who they're spectating
 TIMER(UpdateInfoForSpectators)

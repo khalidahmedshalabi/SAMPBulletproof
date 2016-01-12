@@ -24,6 +24,7 @@
 #include <YSI_inc\YSI\y_commands>
 #include <YSI_inc\YSI\y_groups>
 #include <YSI_inc\YSI\y_iterate> 	// foreach and iterators
+#include <YSI_inc\YSI\y_hooks>
 //#include <YSI_inc\YSI\y_debug>
 #include <YSI_inc\YSI\y_master>
 
@@ -71,6 +72,7 @@ native IsValidVehicle(vehicleid);
 #include "modules\src\ac_addons.inc"
 #include "modules\src\vote.inc"
 #include "modules\src\gunonhead.inc"
+#include "modules\src\teamhpbars.inc"
 
 main()
 {}
@@ -319,44 +321,6 @@ public OnPlayerSpawn(playerid)
 
 public OnPlayerDisconnect(playerid, reason)
 {
-	// Handle war mode
-    if(WarMode == true)
-	{
-		if(Player[playerid][Playing] == true)
-		{
-		    PlayerNoLeadTeam(playerid);
-		    StorePlayerVariables(playerid);
-			if(Player[playerid][DontPause] == false && AutoPause == true && Current != -1)
-			{
-				KillTimer(UnpauseTimer);
-				RoundUnpausing = false;
-				PauseRound();
-				SendClientMessageToAll(-1, ""COL_PRIM"Round has been auto-paused.");
-			}
-		}
-		else
-			StorePlayerVariablesMin(playerid);
-	}
-	// Reset player weapons on gunmenu
-	ResetPlayerGunmenu(playerid, false);
-	// Handle match
- 	Iter_Remove(PlayersInRound, playerid);
-	UpdateTeamPlayerCount(Player[playerid][Team], true, playerid);
-	UpdateTeamHP(Player[playerid][Team], playerid);
-    DeletePlayerTeamBar(playerid);
-    // Handle league match
-    #if defined _league_included
-	if(LeagueMode)
-	{
-	    SaveLeaguePlayerData(playerid);
-	    SaveLeaguePlayerTotalPoints(playerid);
-	}
-	if(LeagueAllowed)
-	{
-	    CheckLeagueMatchValidity(1000);
-	}
-	UpdateOnlinePlayersList(playerid, false);
-	#endif
 	// Send public disconnect messages
     new iString[144];
     switch (reason){
@@ -377,16 +341,6 @@ public OnPlayerDisconnect(playerid, reason)
 		}
 	}
 	SendClientMessageToAll(-1,iString);
-	// Call OnPlayerLeaveCheckpoint to see if this player was in the checkpoint and fix issues
-	if(Current != -1)
-	{
-        OnPlayerLeaveCheckpoint(playerid);
-	}
-	// Handle duels
-	ProcessDuellerDisconnect(playerid);
-	// Handle spectate
-	StopSpectate(playerid);
-	HandleSpectatedPlayerDisconnect(playerid);
 	// Check player spawned vehicle
 	if(IsValidVehicle(Player[playerid][LastVehicle]))
 	{
@@ -402,30 +356,7 @@ public OnPlayerDisconnect(playerid, reason)
 		Player[playerid][LastVehicle] = -1;
 		DoNotDestroyVehicle:
 	}
-	// If it's the last player in the server (server is empty now!)
-	if(Iter_Count(Player) == 1)
-	{
-	    // Server lock check
-		if(ServerLocked)
-		{
-		    // See if round is not paused
-		    if(RoundPaused == false)
-			{
-			    // if permanent locking is disabled
-				if(!PermLocked)
-			    {
-			        // Unlock the server
-					SendRconCommand("password 0");
-					ServerLocked = false;
-				}
-			}
-		}
-		// Version check
-		ReportServerVersion();
-		// Optimize and clean database
-		OptimizeDatabase();
-	}
-	// Fixes the x Vs y textdraws with current team player count
+ 	// Fixes the x Vs y textdraws with current team player count
 	FixVsTextDraw(playerid);
 	return 1;
 }

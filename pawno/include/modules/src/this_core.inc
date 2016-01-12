@@ -9,7 +9,35 @@
 #include "modules\header\config.txt"
 #include "modules\header\global.txt"
 #include "modules\header\weaponshot.txt"
+#include <YSI_inc\YSI\y_hooks>
 
+hook OnPlayerDisconnect(playerid, reason)
+{
+	// If it's the last player in the server (server is empty now!)
+	if(Iter_Count(Player) == 1)
+	{
+	    // Server lock check
+		if(ServerLocked)
+		{
+		    // See if round is not paused
+		    if(RoundPaused == false)
+			{
+			    // if permanent locking is disabled
+				if(!PermLocked)
+			    {
+			        // Unlock the server
+					SendRconCommand("password 0");
+					ServerLocked = false;
+				}
+			}
+		}
+		// Version check
+		ReportServerVersion();
+		// Optimize and clean database
+		OptimizeDatabase();
+	}
+	return 1;
+}
 InitScriptCoreSettings()
 {
 	LoadDatabase();

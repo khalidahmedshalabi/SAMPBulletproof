@@ -5,6 +5,14 @@
 */
 
 #include "modules\header\gunmenu.txt"
+#include <YSI_inc\YSI\y_hooks>
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+	// Reset player weapons on gunmenu
+	ResetPlayerGunmenu(playerid, false);
+	return 1;
+}
 
 LoadGunmenuData()
 {
