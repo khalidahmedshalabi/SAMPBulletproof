@@ -35,6 +35,10 @@ hook OnPlayerDisconnect(playerid, reason)
 		ReportServerVersion();
 		// Optimize and clean database
 		OptimizeDatabase();
+		#if defined _league_included
+		// Empty server on league live trackers as well
+		InitOnlineMatchesList();
+		#endif
 	}
 	return 1;
 }
