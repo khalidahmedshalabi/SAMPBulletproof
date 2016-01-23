@@ -7416,7 +7416,7 @@ YCMD:spas(playerid, params[], help)
 		        {
 		            // Show them gunmenu
 		            ShowPlayerGunmenu(i, 0);
-		            SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"was automatically shown the gunmenu because they had Spas."));
+		            SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"was automatically shown the gunmenu because they had Spas.", Player[playerid][Name]));
 		        }
 		    }
 		}
