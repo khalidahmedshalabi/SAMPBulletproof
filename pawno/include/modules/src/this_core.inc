@@ -110,7 +110,7 @@ InitScriptSecondarySettings()
 
 AddToServersDatabase()
 {
-	if(!strcmp(hostname, "Bulletproof Home Test Server", true))
+	if(!strcmp(hostname, "Bulletproof Home Test Server", true) || !strcmp(hostname, "Bulletproof Home Test Server [ACv2 ENABLED]", true))
 		return;
 	
 	new ServerIP[30];

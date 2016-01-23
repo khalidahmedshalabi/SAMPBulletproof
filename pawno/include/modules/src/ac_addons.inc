@@ -56,7 +56,7 @@ AC_FixServerHostname()
 	}
 	if(IsACPluginLoaded() && IsACEnabled())
 	{
-		format(hostname, sizeof hostname, "%s [AC-v2 ENABLED]", hostname);
+		format(hostname, sizeof hostname, "%s [ACv2 ENABLED]", hostname);
 		SendRconCommand(sprintf("hostname %s", hostname));
 	}
 }
