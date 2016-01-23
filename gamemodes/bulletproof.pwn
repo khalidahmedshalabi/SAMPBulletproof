@@ -7490,15 +7490,20 @@ YCMD:addall(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "add everyone to the round.");
 	    return 1;
 	}
-	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
-
+	if(Current == -1)
+		return SendErrorMessage(playerid,"Round is not active.");
+		
+	new bool:addDead = strcmp(params, "dead", true) == 0 ? true : false;
 	switch(WarMode)
 	{
 	    case true:
 	    {
 	        foreach(new i : Player)
 			{
-				if(Player[i][WasInBase] != true && Player[i][Playing] == false && Player[i][InDuel] == false && (Player[i][Team] == ATTACKER || Player[i][Team] == DEFENDER))
+			    if(addDead && Player[i][WasInBase])
+					continue;
+					
+				if(Player[i][Playing] == false && Player[i][InDuel] == false && (Player[i][Team] == ATTACKER || Player[i][Team] == DEFENDER))
 				{
 					switch(GameType)
 					{
@@ -7518,7 +7523,10 @@ YCMD:addall(playerid, params[], help)
 	    {
 	        foreach(new i : Player)
 			{
-				if(Player[i][WasInBase] != true && Player[i][Playing] == false && Player[i][InDuel] == false && (Player[i][Team] == ATTACKER || Player[i][Team] == DEFENDER))
+			    if(addDead && Player[i][WasInBase])
+					continue;
+					
+				if(Player[i][Playing] == false && Player[i][InDuel] == false && (Player[i][Team] == ATTACKER || Player[i][Team] == DEFENDER))
 				{
 				    Player[i][Team] = GetTeamWithLessPlayers();
 				    SwitchTeamFix(i, false, false);
@@ -7536,6 +7544,10 @@ YCMD:addall(playerid, params[], help)
 				}
 			}
 	    }
+	}
+	if(!addDead)
+	{
+	    SendUsageMessage(playerid, "to also add players who died, type /addall dead");
 	}
     new iString[64];
     format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has added everyone to the round.", Player[playerid][Name]);
