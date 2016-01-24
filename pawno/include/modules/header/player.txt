@@ -92,7 +92,6 @@ enum PlayerVariables
 	PingKick,
 	FPSKick,
 	ACKick,
-	DeathIcon,
 	LastVehicle,
 	LastTimeSynced,
 	LastEnterVehicleAttempt,

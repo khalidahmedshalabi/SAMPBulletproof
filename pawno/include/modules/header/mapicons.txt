@@ -1,0 +1,9 @@
+/*
+		Global map icon IDs
+*/
+
+enum
+{
+	ATTACKER_DEATH_ICON,
+	DEFENDER_DEATH_ICON
+}	

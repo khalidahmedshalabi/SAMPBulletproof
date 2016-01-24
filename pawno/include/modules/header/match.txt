@@ -70,6 +70,7 @@ new ArenaZone; // Holds the ID of an arena gangzone
 new ElapsedTime;
 new bool:TeamHasLeader[MAX_TEAMS]; // Whether a team has leader or not
 new TeamLeader[MAX_TEAMS]; // Holds the ID of the current team leader
+new TeamDeathIconTimer[MAX_TEAMS]; // Holds the ID of team death map icon destroyer timer
 
 // String for round results
 new AttList[256];

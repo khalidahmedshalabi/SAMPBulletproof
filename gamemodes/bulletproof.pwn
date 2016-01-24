@@ -44,6 +44,7 @@ native IsValidVehicle(vehicleid);
 #include "modules\src\freecam.inc"
 #include "modules\src\common.inc"
 #include "modules\header\longarrays.txt"
+#include "modules\header\mapicons.txt"
 #include "modules\src\fightstyle.inc"
 #include "modules\src\dialogs.inc"
 #include "modules\src\colors.inc"
@@ -575,37 +576,8 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	    {
 	    	SetTimerEx("SpectateAnyPlayerT", 1000, false, "i", playerid);
 		}
-		switch(Player[playerid][Team])
-		{
-		    case ATTACKER:
-		    {
-		        foreach(new i : PlayersInRound)
-		        {
-					switch(Player[playerid][Team])
-					{
-					    case ATTACKER:
-					    {
-					        SetPlayerMapIcon(i, Player[playerid][DeathIcon], x, y, z, 23, 0, MAPICON_GLOBAL);
-					        SetTimerEx("PlayerDeathIcon", 5000, false, "i", playerid);
-					    }
-					}
-				}
-		    }
-		    case DEFENDER:
-		    {
-		        foreach(new i : PlayersInRound)
-		        {
-					switch(Player[playerid][Team])
-					{
-					    case DEFENDER:
-					    {
-					        SetPlayerMapIcon(i, Player[playerid][DeathIcon], x, y, z, 23, 0, MAPICON_GLOBAL);
-					        SetTimerEx("PlayerDeathIcon", 5000, false, "i", playerid);
-					    }
-					}
-		        }
-			}
-		}
+		// Create an icon on radar where the player died
+		CreateTeamDeathMapIcon(Player[playerid][Team], x, y, z);
 	}
 	else if(Player[playerid][InDuel])
 	{

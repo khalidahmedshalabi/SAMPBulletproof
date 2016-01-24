@@ -41,6 +41,15 @@ hook OnPlayerDisconnect(playerid, reason)
 	return 1;
 }
 
+hook OnGameModeInit()
+{
+	for(new i = 0; i < MAX_TEAMS; ++i)
+	{
+		TeamDeathIconTimer[i] = -1;
+	}
+	return 1;
+}
+
 // Set default name for all teams
 SetTeamDefaultNames()
 {
@@ -1114,10 +1123,30 @@ public DefenderAskingHelp(playerid) {
 	return 1;
 }
 
-forward PlayerDeathIcon(playerid);
-public PlayerDeathIcon(playerid) {
-	foreach(new i : Player) {
-		RemovePlayerMapIcon(i, Player[playerid][DeathIcon]);
+forward RemoveTeamDeathMapIcon(teamid, iconid);
+public RemoveTeamDeathMapIcon(teamid, iconid) 
+{
+	foreach(new i : Player) 
+	{
+		RemovePlayerMapIcon(i, iconid);
+	}
+	TeamDeathIconTimer[teamid] = -1;
+}
+
+CreateTeamDeathMapIcon(teamid, Float:x, Float:y, Float:z)
+{
+	new iconID = (teamid == DEFENDER) ? DEFENDER_DEATH_ICON : ATTACKER_DEATH_ICON;
+	
+	if(TeamDeathIconTimer[teamid] != -1)
+		KillTimer(TeamDeathIconTimer[teamid]);
+	
+	TeamDeathIconTimer[teamid] = SetTimerEx("RemoveTeamDeathMapIcon", 5000, false, "ii", teamid, iconID);
+	foreach(new i : PlayersInRound)
+	{
+		if(Player[i][Team] == teamid)
+		{
+			SetPlayerMapIcon(i, iconID, x, y, z, 23, 0, MAPICON_GLOBAL);
+		}
 	}
 }
 
