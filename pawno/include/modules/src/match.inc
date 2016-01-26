@@ -1471,7 +1471,13 @@ public OnRCStart()
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
 	TextDrawColor(timerCircleTD, 0x00000033);
-	TextDrawShowForAll(timerCircleTD);
+	foreach(new i : Player)
+	{
+		if(!Player[i][Spawned])
+			continue;
+		
+		TextDrawShowForPlayer(i, timerCircleTD);
+	}
 	
 	ResetGunmenuSelections();
 
@@ -1696,7 +1702,13 @@ public OnArenaStart(ArenaID)
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
 	TextDrawColor(timerCircleTD, 0x00000033);
-	TextDrawShowForAll(timerCircleTD);
+	foreach(new i : Player)
+	{
+		if(!Player[i][Spawned])
+			continue;
+		
+		TextDrawShowForPlayer(i, timerCircleTD);
+	}
 	
 	ResetGunmenuSelections();
 
@@ -2032,7 +2044,13 @@ public OnBaseStart(BaseID)
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
 	TextDrawColor(timerCircleTD, 0x00000033);
-	TextDrawShowForAll(timerCircleTD);
+	foreach(new i : Player)
+	{
+		if(!Player[i][Spawned])
+			continue;
+		
+		TextDrawShowForPlayer(i, timerCircleTD);
+	}
 	
 	ResetGunmenuSelections();
 

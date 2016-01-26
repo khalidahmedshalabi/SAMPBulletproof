@@ -479,7 +479,13 @@ RecountPlayersOnCP()
 	    CurrentCPTime = ConfigCPTime + 1;
 	    TextDrawHideForAll(EN_CheckPoint);
 		TextDrawColor(timerCircleTD, 0x00000033);
-		TextDrawShowForAll(timerCircleTD);
+		foreach(new i : Player)
+		{
+			if(!Player[i][Spawned])
+				continue;
+			
+			TextDrawShowForPlayer(i, timerCircleTD);
+		}
 	}
 	return PlayersInCP;
 }
