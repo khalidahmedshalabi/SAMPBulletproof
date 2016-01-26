@@ -1774,69 +1774,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 	    if(response)
 	    {
-			switch(listitem)
-			{
-			    case 0:
-			    {
-			        #if defined _league_included
-					ShowLeagueAdmins(playerid);
-					#else
-					SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
-					#endif
-			    }
-			    case 1: // top clans
-			    {
-			        ShowLeagueStatistics(playerid, LEAGUE_STATS_CLAN);
-			    }
-		     	case 2: // top players
-			    {
-			        ShowLeagueStatistics(playerid, LEAGUE_STATS_POINTS);
-			    }
-			    case 3:
-			    {
-			        ShowLeagueStatistics(playerid, LEAGUE_STATS_KILLS);
-			    }
-			    case 4:
-			    {
-			        ShowLeagueStatistics(playerid, LEAGUE_STATS_ROUNDS);
-			    }
-			    case 5:
-			    {
-			        ShowLeagueStatistics(playerid, LEAGUE_STATS_PUNCHES);
-			    }
-			    case 6:
-			    {
-			        ShowLeagueStatistics(playerid, LEAGUE_STATS_DAMAGE);
-			    }
-			    case 7:
-			    {
-			        ShowLeagueStatistics(playerid, LEAGUE_STATS_SNIPER);
-			    }
-			    case 8:
-			    {
-			        ShowLeagueStatistics(playerid, LEAGUE_STATS_DEAGLE);
-			    }
-			    case 9:
-			    {
-			        ShowLeagueStatistics(playerid, LEAGUE_STATS_M4);
-			    }
-			    case 10:
-			    {
-			        ShowLeagueStatistics(playerid, LEAGUE_STATS_RIFLE);
-			    }
-			    case 11:
-			    {
-			        ShowLeagueStatistics(playerid, LEAGUE_STATS_AK);
-			    }
-			    case 12:
-			    {
-			        ShowLeagueStatistics(playerid, LEAGUE_STATS_SPAS);
-			    }
-			    case 13:
-			    {
-			        ShowLeagueStatistics(playerid, LEAGUE_STATS_SHOTGUN);
-			    }
-			}
+	        ShowLeagueStatistics(playerid, listitem);
 	    }
 	    return 1;
 	}
