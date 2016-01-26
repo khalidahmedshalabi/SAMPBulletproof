@@ -28,7 +28,6 @@ enum PlayerVariables
 	bool:IsFrozen,
 	bool:IsGettingKicked,
 	bool:AskingForHelp,
-	AskingForHelpTimer,
 	bool:Mute,
 	bool:ToAddInRound,
 	bool:DontPause,

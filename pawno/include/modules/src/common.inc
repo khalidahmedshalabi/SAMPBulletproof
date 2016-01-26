@@ -1219,27 +1219,26 @@ RemovePlayerWeapon(playerid, weaponid)
 	return 1;
 }
 
-/*
 GetCardinalPoint(Float:degree)
 {
     // this function return a string that contain the Cardinal point of a heading direction
 
-    new CardinalPoint[20]; //needed string
+    new CardinalPoint[11]; //needed string
+	CardinalPoint[0] = EOS;
     // each cardinal point cover 45degree (45 X 8 = 360)
-    if(337.5 <= degree <= 360) format(CardinalPoint,sizeof(CardinalPoint),"North");
-    else if(0 <= degree <= 22.5) format(CardinalPoint,sizeof(CardinalPoint),"North");
-    else if(22.5 <= degree <= 67.5) format(CardinalPoint,sizeof(CardinalPoint),"North East");
-    else if(67.5 <= degree <= 112.5) format(CardinalPoint,sizeof(CardinalPoint),"East");
-    else if(112.5 <= degree <= 157.5) format(CardinalPoint,sizeof(CardinalPoint),"South East");
-    else if(157.5 <= degree <= 202.5) format(CardinalPoint,sizeof(CardinalPoint),"South");
-    else if(202.5 <= degree <= 247.5) format(CardinalPoint,sizeof(CardinalPoint),"South West");
-    else if(247.5 <= degree <= 292.5) format(CardinalPoint,sizeof(CardinalPoint),"West");
-    else if(292.5 <= degree <= 337.5) format(CardinalPoint,sizeof(CardinalPoint),"North West");
-    else format(CardinalPoint,sizeof(CardinalPoint),"Error"); // error
+    if(337.5 <= degree <= 360) strcat(CardinalPoint,"North");
+    else if(0 <= degree <= 22.5) strcat(CardinalPoint,"North");
+    else if(22.5 <= degree <= 67.5) strcat(CardinalPoint,"North East");
+    else if(67.5 <= degree <= 112.5) strcat(CardinalPoint,"East");
+    else if(112.5 <= degree <= 157.5) strcat(CardinalPoint,"South East");
+    else if(157.5 <= degree <= 202.5) strcat(CardinalPoint,"South");
+    else if(202.5 <= degree <= 247.5) strcat(CardinalPoint,"South West");
+    else if(247.5 <= degree <= 292.5) strcat(CardinalPoint,"West");
+    else if(292.5 <= degree <= 337.5) strcat(CardinalPoint,"North West");
+    else strcat(CardinalPoint,"Unknown"); // error
 
     return CardinalPoint;// we return our string
 }
-*/
 
 SwapTeams()
 {

@@ -1045,7 +1045,7 @@ PlayerNoLeadTeam(playerid)
 						SendClientMessage(i, -1, sprintf("%s%s {FFFFFF}is no longer leading the team.", TextColor[team], Player[playerid][Name]));
 					}
 				}
-				AttackerAskingHelp(playerid);
+				EndTeamBackupRequest(playerid, ATTACKER_BACKUP_ICON);
 			}
 			case DEFENDER:
 			{
@@ -1056,7 +1056,7 @@ PlayerNoLeadTeam(playerid)
 						SendClientMessage(i, -1, sprintf("%s%s {FFFFFF}is no longer leading the team.", TextColor[team], Player[playerid][Name]));
 					}
 				}
-				DefenderAskingHelp(playerid);
+				EndTeamBackupRequest(playerid, DEFENDER_BACKUP_ICON);
 			}
 		}
 	}
@@ -1090,12 +1090,18 @@ ResetTeamLeaders()
 	return 1;
 }
 
-forward AttackerAskingHelp(playerid);
-public AttackerAskingHelp(playerid) 
+forward EndTeamBackupRequest(playerid, iconid);
+public EndTeamBackupRequest(playerid, iconid) 
 {
-	TeamHelp[ATTACKER] = false;
-    Player[playerid][AskingForHelp] = false;
-    new team = Player[playerid][Team];
+	new team = Player[playerid][Team];
+	TeamHelp[team] = false;
+	Player[playerid][AskingForHelp] = false;
+	
+	foreach(new i : Player) 
+	{
+		RemovePlayerMapIcon(i, iconid);
+	}
+	
 	if(TeamHasLeader[team] == true && TeamLeader[team] == playerid)
 	    PlayerLeadTeam(playerid, true, false);
 	else
@@ -1107,20 +1113,84 @@ public AttackerAskingHelp(playerid)
 	return 1;
 }
 
-forward DefenderAskingHelp(playerid);
-public DefenderAskingHelp(playerid) {
-	TeamHelp[DEFENDER] = false;
-	Player[playerid][AskingForHelp] = false;
+PlayerRequestBackup(playerid)
+{
 	new team = Player[playerid][Team];
-	if(TeamHasLeader[team] == true && TeamLeader[team] == playerid)
-	    PlayerLeadTeam(playerid, true, false);
-	else
+	
+	// Check if there's someone in their team already requesting backup
+	if(TeamHelp[team])
+		return 0; // fail
+	
+	// Calculate the player's total HP
+	new totHP = Player[playerid][pHealth] + Player[playerid][pArmour];
+	
+	// Get the player's facing angle
+	new Float:facingAngle;
+	GetPlayerFacingAngle(playerid, facingAngle);
+	
+	// Get player's position
+	new Float:x, Float:y, Float:z;
+	GetPlayerPos(playerid, x, y, z);
+	
+	// Find how many players are in range
+	new enemiesCt = 0;
+	foreach(new i : PlayersInRound)
 	{
-		ColorFix(playerid);
-		RadarFix(playerid);
+		// in enemy team?
+		if(Player[i][Team] != team)
+		{
+			// Check if enemy is in range
+			if(IsPlayerInRangeOfPoint(i, 25.0, x, y, z))
+			{
+				enemiesCt ++;
+			}
+		}
 	}
+	// Inform the player that their backup request is a success
+	SendClientMessage(playerid, -1, sprintf("{%s}[HELP] {FFFFFF}You have requested for backup.", (team == ATTACKER) ? ("FF6666" ): ("9999FF")));
+	
+	// Get map icon id based off the team which the player is in
+	new iconID = (team == DEFENDER) ? DEFENDER_BACKUP_ICON : ATTACKER_BACKUP_ICON;
+	
+	// Set map icon for the player in the location where they requested backup
+	SetPlayerMapIcon(playerid, iconID, x, y, z, 19, 0, MAPICON_GLOBAL);
+	
+	// Create a variable to hold request backup message
+	new str[144];
+	
+	// Format backup request message to send it later
+	format(str, sizeof(str), "{%s}[HELP] %s {FFFFFF}needs backup [Heading %s | HP %d | Enemies: %d]", (team == ATTACKER) ? ("FF6666") : ("9999FF"), Player[playerid][Name], GetCardinalPoint(facingAngle), totHP, enemiesCt);
+	
+	// Send backup request message to all teammates
+	foreach(new i : PlayersInRound)
+	{
+		if(i == playerid)
+			continue;
+		
+		if(Player[i][Team] == team)
+		{
+			SendClientMessage(i, -1, str);
+			PlayerPlaySound(i,1137,0.0,0.0,0.0);
+			SetPlayerMapIcon(i, iconID, x, y, z, 19, 0, MAPICON_GLOBAL);
+		}
+	}
+	
+	// Set the player's color
+	SetPlayerColor(playerid, team == ATTACKER ? ATTACKER_ASKING_HELP : DEFENDER_ASKING_HELP);
+	
+	// Set a timer to end backup request later
+	SetTimerEx("EndTeamBackupRequest", 7000, 0, "ii", playerid, iconID);
+	
+	// Set values to tell that this team has someone requesting for backup now
+	TeamHelp[team] = true;
+	Player[playerid][AskingForHelp] = true;
+	
+	// Fix the players radar
+	RadarFix(playerid);
+	
+	// Update the team bar so that its color changes
 	UpdatePlayerTeamBar(playerid);
-	return 1;
+	return 1; // success
 }
 
 forward RemoveTeamDeathMapIcon(teamid, iconid);

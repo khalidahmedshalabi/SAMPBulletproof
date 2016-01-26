@@ -9010,52 +9010,8 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	{
 	    if(PRESSED(131072) && AllowStartBase == true && Player[playerid][Playing] == true)
 		{
-		    if(Player[playerid][Team] == ATTACKER && TeamHelp[ATTACKER] == false)
-			{
-                new iString[160];
-                new totHP = Player[playerid][pHealth] + Player[playerid][pArmour];
-				foreach(new i : Player)
-				{
-				    if((Player[i][Playing] == true || GetPlayerState(i) == PLAYER_STATE_SPECTATING) && i != playerid && Player[i][Team] == ATTACKER)
-					{
-						format(iString, sizeof(iString), "{FF6666}[HELP] {FFFFFF}%s {FF6666}needs a backup [Distance %.0f ft / HP %d]", Player[playerid][Name], GetDistanceBetweenPlayers(i, playerid), totHP);
-					    SendClientMessage(i, -1, iString);
-					    PlayerPlaySound(i,1137,0.0,0.0,0.0);
-					}
-				}
-				TeamHelp[ATTACKER] = true;
-				Player[playerid][AskingForHelp] = true;
-				SetPlayerColor(playerid, ATTACKER_ASKING_HELP);
-
-				SendClientMessage(playerid, -1, "{FF6666}[HELP] {FFFFFF}You have requested for backup.");
-				Player[playerid][AskingForHelpTimer] = SetTimerEx("AttackerAskingHelp", 7000, 0, "i", playerid);
-				RadarFix(playerid);
-				UpdatePlayerTeamBar(playerid);
-				return 1;
-			}
-			else if(Player[playerid][Team] == DEFENDER && TeamHelp[DEFENDER] == false)
-			{
-                new iString[160];
-                new totHP = Player[playerid][pHealth] + Player[playerid][pArmour];
-				foreach(new i : Player)
-				{
-				    if((Player[i][Playing] == true || GetPlayerState(i) == PLAYER_STATE_SPECTATING) && i != playerid && Player[i][Team] == DEFENDER)
-					{
-				    	format(iString, sizeof(iString), "{9999FF}[HELP] {FFFFFF}%s {9999FF}needs a backup [Distance %.0f ft / HP %d]", Player[playerid][Name], GetDistanceBetweenPlayers(i, playerid), totHP);
-					    SendClientMessage(i, -1, iString);
-					    PlayerPlaySound(i,1137,0.0,0.0,0.0);
-					}
-				}
-				TeamHelp[DEFENDER] = true;
-				Player[playerid][AskingForHelp] = true;
-				SetPlayerColor(playerid, DEFENDER_ASKING_HELP);
-
-				SendClientMessage(playerid, -1, "{9999FF}[HELP] {FFFFFF}You have requested for backup.");
-				Player[playerid][AskingForHelpTimer] = SetTimerEx("DefenderAskingHelp", 7000, 0, "i", playerid);
-                RadarFix(playerid);
-                UpdatePlayerTeamBar(playerid);
-                return 1;
-			}
+		    if(PlayerRequestBackup(playerid))
+		        return 1;
 		}
 	    // Lead team
 	    if(PRESSED(262144) && AllowStartBase == true && Player[playerid][Playing] == true)
