@@ -160,9 +160,9 @@ ResetPlayerGunmenu(playerid, bool:showagain)
 ShowGunmenuHelp(playerid)
 {
 	#if GTAV_SWITCH_MENU != 0
-	SendClientMessage(playerid, -1, ""COL_PRIM"Gunmenu help: {FFFFFF}/gunmenu to reselect guns, /weaponbinds to code weapon binds or press RETURN for quicker gun switching");
+	SendClientMessage(playerid, -1, ""COL_PRIM"Gunmenu help: {FFFFFF}/gunmenu, /weaponbinds, /remgun or press RETURN for quicker gun switching");
 	#else
-	SendClientMessage(playerid, -1, ""COL_PRIM"Gunmenu help: {FFFFFF}/gunmenu to reselect guns or /weaponbinds to code weapon binds");
+	SendClientMessage(playerid, -1, ""COL_PRIM"Gunmenu help: {FFFFFF}/gunmenu to reselect guns, /weaponbinds to code weapon binds or /remgun");
 	#endif
 	#if defined _league_included
 	if(LeagueMode)
