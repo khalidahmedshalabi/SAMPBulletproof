@@ -110,6 +110,7 @@ InitScriptSecondarySettings()
 
 AddToServersDatabase()
 {
+	#if defined HTTP_DEST_SERVERLIST
 	if(!strcmp(hostname, "Bulletproof Home Test Server", true) || !strcmp(hostname, "Bulletproof Home Test Server [ACv2 ENABLED]", true))
 		return;
 	
@@ -123,4 +124,5 @@ AddToServersDatabase()
     new post[256];
     format(post, sizeof(post), "IP=%s&Port=%d&HostName=%s", ServerIP, port, hostname);
     HTTP(0, HTTP_POST, HTTP_DEST_SERVERLIST, post, "");
+	#endif
 }
