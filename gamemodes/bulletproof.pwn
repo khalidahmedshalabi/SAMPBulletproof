@@ -8914,9 +8914,18 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	if(AntiMacros == true && CheckPlayerSprintMacro(playerid, newkeys, oldkeys) == true)
 	    return 1;
 
-    if(Player[playerid][TextDrawOnScreen] == true && PRESSED(4))
+    if(PRESSED(4)) // key fire
 	{
-	    HideEndRoundTextDraw(playerid);
+	    if(Player[playerid][TextDrawOnScreen])
+	    {
+	    	HideEndRoundTextDraw(playerid);
+	    	return 1;
+		}
+		if(Player[playerid][InDeathCamera])
+		{
+		    OnPlayerDeathCameraEnd(playerid);
+		    return 1;
+		}
 	}
     if(Player[playerid][Spectating] == true && noclipdata[playerid][FlyMode] == false && Player[playerid][SpectatingRound] == -1)
 	{
