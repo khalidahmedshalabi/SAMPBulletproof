@@ -2,18 +2,13 @@
 		Gamemode core
 */
 
-#define GM_NAME				"Bulletproof 0.1-RC7"
-#define GM_WEBSITE			"www.bulletproof.ml"
+new	const Float:GM_VERSION		= 		0.17;
+#define 		GM_NAME				"Bulletproof"
+new 			GM_WEBSITE[50]	=	"www.bulletproof.ml";
 
 #define GTAV_SWITCH_MENU			0	// Toggles the gta v switch menu (gunswitch library)
 #define MATCH_SYNC      			0   // (Beta) Uploads each match data somewhere so that it can be easily displayed in a website.
 #define SAFE_GAMETEXT_AUTO_CHECK	0 	// When enabled, most of textdraw and gametext functions are hooked to automatically reject unsafe use of tildes.
-/*
-	If PRE_RELEASE_VERSION is defined, the version checker
-	is ignored and you can no longer worry about it. It's
-	to be commented out on releases though.
-*/
-//#define PRE_RELEASE_VERSION
 
 // Limits
 #define MAX_TEAMS 			6

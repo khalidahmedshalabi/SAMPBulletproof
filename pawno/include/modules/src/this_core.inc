@@ -31,8 +31,10 @@ hook OnPlayerDisconnect(playerid, reason)
 				}
 			}
 		}
+		// Website check
+		CheckWebsiteText();
 		// Version check
-		ReportServerVersion();
+		InitVersionChecker();
 		// Optimize and clean database
 		OptimizeDatabase();
 		#if defined _league_included
@@ -72,7 +74,7 @@ InitScriptSecondarySettings()
     Current = -1;
 	
 	// Settings
-	SetGameModeText(GM_NAME); // Text that appears on 'Mode' column when you click on a server in samp.exe
+	SetGameModeText(sprintf("%s v%.2f", GM_NAME, GM_VERSION)); // Text that appears on 'Mode' column when you click on a server in samp.exe
     SendRconCommand("mapname Lobby");
 	CheckServerHostname();
 	#if defined _league_included
@@ -86,7 +88,7 @@ InitScriptSecondarySettings()
 	SetTeamDefaultColors();
     SetTeamDefaultNames();
     SetAltCommands();
-	InitVersionChecker(false, true);
+	InitVersionChecker();
     InitSpectate();
 	InitVisualDamage();
 	InitGunmenu();
