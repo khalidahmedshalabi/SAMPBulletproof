@@ -208,9 +208,9 @@ ShowGunmenuDialog(playerid)
 	{
 		case BASE:
 		{
-			new str[GUNMENU_LIMIT_DIALOG_SIZE];
-			format(str, sizeof str, "Weapon\tAmmo\tPicked / Limit");
 			new team = Player[playerid][Team];
+			new str[GUNMENU_LIMIT_DIALOG_SIZE];
+			format(str, sizeof str, "%sWeapon\t%sAmmo\t%sPicked / Limit", TextColor[team], TextColor[team], TextColor[team]);
 			for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
 			{
 				// Do some coloring for items
@@ -227,13 +227,13 @@ ShowGunmenuDialog(playerid)
 					format(str, sizeof str, "%s\n{696969}%s\t%d\t%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
 				}
 			}
-			ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, "Gunmenu", str, "Pick", "Reset");
+			ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, sprintf("%sGunmenu", TextColor[team]), str, sprintf("%sPick", TextColor[team]), sprintf("%sReset", TextColor[team]));
 		}
 		case ARENA:
 		{
-			new str[550];
-			format(str, sizeof str, "Weapon\tTimes Picked");
 			new team = Player[playerid][Team];
+			new str[550];
+			format(str, sizeof str, "%sWeapon\t%sTimes Picked", TextColor[team], TextColor[team]);
 			for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
 			{
 				// Do some coloring for items
@@ -250,7 +250,7 @@ ShowGunmenuDialog(playerid)
 					format(str, sizeof str, "%s\n{50EB50}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
 				}
 			}
-			ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, "Gunmenu", str, "Pick", "Reset");
+			ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, sprintf("%sGunmenu", TextColor[team]), str, sprintf("%sPick", TextColor[team]), sprintf("%sReset", TextColor[team]));
 		}
 	}
 }

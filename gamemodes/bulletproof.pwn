@@ -7369,8 +7369,8 @@ YCMD:gunmenu(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display the weapon menu.");
 	    return 1;
 	}
-	//if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
-	//if(Player[playerid][Playing] == false) return SendErrorMessage(playerid,"You are not playing.");
+	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
+	if(Player[playerid][Playing] == false) return SendErrorMessage(playerid,"You are not playing.");
 	if(RCArena == true) return SendErrorMessage(playerid, "You cannot get gunmenu in RC arenas");
 	if(ElapsedTime <= 30 && Player[playerid][Team] != REFEREE)
 	{
