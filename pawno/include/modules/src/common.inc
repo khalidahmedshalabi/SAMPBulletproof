@@ -1432,8 +1432,10 @@ GetTeamWithLessPlayers()
     return (defender <= attacker) ? DEFENDER : ATTACKER;
 }
 
-EnableInterface(playerid) {
-	if(IsPlayerInAnyVehicle(playerid)) return 1;
+EnableMatchInterface(playerid) 
+{
+	if(IsPlayerInAnyVehicle(playerid)) 
+		return;
 
 	SelectTextDraw(playerid, 0xFF0000FF);
 	TextDrawShowForPlayer(playerid, LeagueToggleTD);
@@ -1442,8 +1444,17 @@ EnableInterface(playerid) {
 	TextDrawShowForPlayer(playerid, LockServerTD);
 	TextDrawShowForPlayer(playerid, CloseText);
 	PlayerOnInterface{playerid} = true;
+}
 
-	return 1;
+DisableMatchInterface(playerid)
+{
+	TextDrawHideForPlayer(playerid, LeagueToggleTD);
+	TextDrawHideForPlayer(playerid, WarModeText);
+	TextDrawHideForPlayer(playerid, SettingBox);
+	TextDrawHideForPlayer(playerid, LockServerTD);
+	TextDrawHideForPlayer(playerid, CloseText);
+	PlayerOnInterface{playerid} = false;
+	CancelSelectTextDraw(playerid);
 }
 
 IsPlayerInArea(playerid, Float:minx, Float:maxx, Float:miny, Float:maxy) {

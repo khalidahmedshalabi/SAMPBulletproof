@@ -3483,18 +3483,24 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	        return 1;
 	    }
 		#endif
-	 	TextDrawHideForPlayer(playerid, LeagueToggleTD);
-        TextDrawHideForPlayer(playerid, WarModeText);
-        TextDrawHideForPlayer(playerid, SettingBox);
-        TextDrawHideForPlayer(playerid, LockServerTD);
-        TextDrawHideForPlayer(playerid, CloseText);
-
-        CancelSelectTextDraw(playerid);
-	    return 1;
+		if(PlayerOnInterface{playerid} == true)
+		{
+		    DisableMatchInterface(playerid);
+		    return 1;
+		}
+		return 1;
 	}
 	if(clickedid == LeagueToggleTD)
 	{
-	    CallLocalFunction("OnPlayerCommandText", "ds", playerid, "/league");
+	    if(LeagueAllowed)
+	    {
+	        if(!WarMode)
+	        	SendUsageMessage(playerid, "League is enabled on this server. All you need to do now is start a match (quicker: /war)!");
+			else
+			    SendUsageMessage(playerid, "League is enabled and so is match mode. Start a round with /start or /random!");
+	    }
+	    else
+    		SendErrorMessage(playerid, "League is disabled. You can enable it from server config dialog (/config).");
 		return 1;
 	}
 
@@ -3549,26 +3555,10 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 		return 1;
 	}
 
-	if(clickedid == CloseText) {
-        TextDrawHideForPlayer(playerid, LeagueToggleTD);
-        TextDrawHideForPlayer(playerid, WarModeText);
-        TextDrawHideForPlayer(playerid, SettingBox);
-        TextDrawHideForPlayer(playerid, LockServerTD);
-        TextDrawHideForPlayer(playerid, CloseText);
-
-        CancelSelectTextDraw(playerid);
+	if(clickedid == CloseText)
+	{
+        DisableMatchInterface(playerid);
         return 1;
-	}
-
-	if(PlayerOnInterface{playerid} == true) {
-	    if(clickedid == Text:65535) {
-	        TextDrawHideForPlayer(playerid, LeagueToggleTD);
-	        TextDrawHideForPlayer(playerid, WarModeText);
-	        TextDrawHideForPlayer(playerid, SettingBox);
-	        TextDrawHideForPlayer(playerid, LockServerTD);
-	        TextDrawHideForPlayer(playerid, CloseText);
-		}
-		return 1;
 	}
 	return 0;
 }
@@ -7953,7 +7943,7 @@ YCMD:match(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "toggle match mode.");
 	    return 1;
 	}
-	EnableInterface(playerid);
+	EnableMatchInterface(playerid);
 	return 1;
 }
 
@@ -9231,7 +9221,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	{
 		if(PRESSED(KEY_YES) && Player[playerid][Level] > 1)
 		{
-			EnableInterface(playerid);
+			EnableMatchInterface(playerid);
 			return 1;
 		}
 		else if(PRESSED(131072))
