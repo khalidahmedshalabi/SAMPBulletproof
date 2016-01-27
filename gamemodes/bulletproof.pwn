@@ -5761,9 +5761,12 @@ YCMD:lastplayed(playerid,params[], help)
 	    SendCommandHelpMessage(playerid, "display the ID of the last played round.");
 	    return 1;
 	}
-	new iString[128];
-	format(iString, sizeof(iString), ""COL_PRIM"Last Played: {FFFFFF}%d "COL_PRIM"| Requested by {FFFFFF}%s", ServerLastPlayed, Player[playerid][Name]);
-	SendClientMessageToAll(-1, iString);
+	if(Current < 0)
+	{
+	    SendErrorMessage(playerid, "Invalid round ID.");
+	    return 1;
+	}
+	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Last Played: {FFFFFF}%d "COL_PRIM"| Requested by {FFFFFF}%s "COL_PRIM"| Type {FFFFFF}/start last "COL_PRIM"to start it!", ServerLastPlayed, Player[playerid][Name]));
 	return 1;
 }
 
