@@ -7671,7 +7671,7 @@ YCMD:end(playerid, params[], help)
 	ArenaStarted = false;
 
     SendRconCommand("mapname Lobby");
-	SetGameModeText(GM_NAME);
+	SetGameModeText(sprintf("%s v%.2f", GM_NAME, GM_VERSION));
 
 	new iString[64];
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has ended the round.", Player[playerid][Name]);

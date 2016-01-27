@@ -2499,7 +2499,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	TextDrawSetString(rightText, iString);
 
 	SendRconCommand("mapname Lobby");
-	SetGameModeText(GM_NAME);
+	SetGameModeText(sprintf("%s v%.2f", GM_NAME, GM_VERSION));
 
 
 	new

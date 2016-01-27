@@ -637,7 +637,7 @@ PlayerVoteEndMatch(playerid)
 				ArenaStarted = false;
 
 				SendRconCommand("mapname Lobby");
-				SetGameModeText(GM_NAME);
+				SetGameModeText(sprintf("%s v%.2f", GM_NAME, GM_VERSION));
 				DeleteAllTeamBars();
 				DeleteAllDeadBodies();
 				GangZoneDestroy(CPZone);
