@@ -18,3 +18,26 @@ stock _H_TogglePlayerControllable(playerid, toggle)
 #endif
  
 #define TogglePlayerControllable _H_TogglePlayerControllable
+
+// Hook SetPlayerSkin to fix skin change when in vehicle
+stock _H_SetPlayerSkin(playerid, skinid)
+{
+	new	vehicleid = GetPlayerVehicleID(playerid);
+	if(vehicleid)
+	{
+		new seat = GetPlayerVehicleSeat(playerid);
+		ClearAnimations(playerid);
+		new ret = SetPlayerSkin(playerid, skinid);
+		PutPlayerInVehicle(playerid, vehicleid, seat);
+		return ret;
+	}
+	return SetPlayerSkin(playerid, skinid);
+}
+ 
+#if defined _ALS_SetPlayerSkin
+	#undef SetPlayerSkin
+#else
+	#define _ALS_SetPlayerSkin
+#endif
+ 
+#define SetPlayerSkin _H_SetPlayerSkin

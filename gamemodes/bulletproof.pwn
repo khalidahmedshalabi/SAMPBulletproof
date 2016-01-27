@@ -894,6 +894,15 @@ public OnPlayerExitVehicle(playerid, vehicleid)
 	return 1;
 }
 
+public OnVehicleMod(playerid, vehicleid, componentid)
+{
+	if(!IsVehicleComponentLegal(GetVehicleModel(vehicleid), componentid))
+	{
+	    return 0;
+	}
+	return 1;
+}
+
 public OnPlayerEnterCheckpoint(playerid)
 {
     if(GetPlayerVehicleID(playerid) == 0 && Player[playerid][Playing] == true && (Player[playerid][Team] == ATTACKER || Player[playerid][Team] == DEFENDER))
@@ -1740,7 +1749,6 @@ public OnPlayerModelSelection(playerid, response, listid, modelid)
 			    if(Player[i][Team] == ChangingSkinOfTeam[playerid])
 				{
 			        SetPlayerSkin(i, modelid);
-					ClearAnimations(i);
 				}
 			}
 
@@ -6814,15 +6822,12 @@ YCMD:defaultskins(playerid, params[], help)
 	foreach(new i : Player) {
 	    if(Player[i][Team] == ATTACKER) {
 	        SetPlayerSkin(i, Skin[ATTACKER]);
-			ClearAnimations(i);
 		}
 		if(Player[i][Team] == DEFENDER) {
 	        SetPlayerSkin(i, Skin[DEFENDER]);
-			ClearAnimations(i);
 		}
 		if(Player[i][Team] == REFEREE) {
 	        SetPlayerSkin(i, Skin[REFEREE]);
-			ClearAnimations(i);
 		}
 	}
 
@@ -6892,7 +6897,6 @@ YCMD:setteam(playerid, params[], help)
 	Player[Params[0]][Team] = Params[1]+1;
 	SetPlayerSkin(Params[0], Skin[Params[1]+1]);
 	ColorFix(Params[0]);
-	ClearAnimations(Params[0]);
 
 	if(Current != -1)
 	{
