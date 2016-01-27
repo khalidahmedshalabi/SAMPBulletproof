@@ -159,15 +159,7 @@ ResetPlayerGunmenu(playerid, bool:showagain)
 
 ShowGunmenuHelp(playerid)
 {
-	#if GTAV_SWITCH_MENU != 0
-	SendClientMessage(playerid, -1, ""COL_PRIM"Handy cmds: {FFFFFF}/gunmenu, /weaponbinds, /melee, /fightstyle, /remgun or press RETURN for quicker gun switching");
-	#else
-	SendClientMessage(playerid, -1, ""COL_PRIM"Handy cmds: {FFFFFF}/gunmenu, /weaponbinds, /melee, /fightstyle or /remgun");
-	#endif
-	#if defined _league_included
-	if(LeagueMode)
-		MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~p~~h~~h~league shop", "Type /shop to start shopping now and make use of your league points!", 7000);
-	#endif
+	SendClientMessage(playerid, -1, ""COL_PRIM"Help: {FFFFFF}type /matchtips to display some guidelines you may need while playing!");
 }
 
 HidePlayerGunmenu(playerid)

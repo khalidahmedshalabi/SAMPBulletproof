@@ -129,16 +129,6 @@ public OnPlayerConnect(playerid)
 	    SetTimerEx("OnPlayerKicked", 500, false, "i", playerid);
 	    return 0;
 	}
-	// Send them welcome messages
-	SendClientMessage(playerid, -1, ""COL_PRIM"It's {FFFFFF}Bulletproof"COL_PRIM". Your bullets are fruitless. You can't take it down!");
-	SendClientMessage(playerid, -1, ""COL_PRIM"Get started: {FFFFFF}/help "COL_PRIM", {FFFFFF}/cmds "COL_PRIM"and {FFFFFF}/leaguecmds");
-	SendClientMessage(playerid, -1, ""COL_PRIM"Don't miss our updates: {FFFFFF}/checkversion");
-	SendClientMessage(playerid, -1, ""COL_PRIM"Developers: {FFFFFF}Whitetiger"COL_PRIM" & {FFFFFF}[KHK]Khalid"COL_PRIM"");
-	SendClientMessage(playerid, -1, ""COL_PRIM"Contributors on GitHub: {FFFFFF}ApplePieLife"COL_PRIM", {FFFFFF}JamesCullum"COL_PRIM", {FFFFFF}shendlaw"COL_PRIM", {FFFFFF}pds2k12");
-	SendClientMessage(playerid, -1, ""COL_PRIM"Visit {FFFFFF}www.bulletproof.ml "COL_PRIM"for much more features!");
-	new str[128];
-	format(str,sizeof(str),""COL_PRIM"Server limits:  Min FPS = {FFFFFF}%d "COL_PRIM"| Max Ping = {FFFFFF}%d "COL_PRIM"| Max PL = {FFFFFF}%.2f", Min_FPS, Max_Ping, Float:Max_Packetloss);
-	SendClientMessage(playerid, -1, str);
 
 	// Initialize the new player
 	InitPlayer(playerid);
@@ -149,7 +139,7 @@ public OnPlayerConnect(playerid)
 	CheckPlayerAKA(playerid);
 
 	// Tell everyone that he's connected
-	str[0] = EOS;
+	new str[144];
     GetPlayerCountry(playerid, str, sizeof(str));
 	format(str, sizeof(str), "{FFFFFF}%s {757575}(ID: %d) has connected [{FFFFFF}%s{757575}]", Player[playerid][Name], playerid, str);
     SendClientMessageToAll(-1, str);
@@ -3677,8 +3667,7 @@ YCMD:changelog(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display a list of gamemode updates");
 	    return 1;
 	}
-	new str[1];
-	ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX,""COL_PRIM"Bulletproof Changelog", str, "OK","");
+	ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX,""COL_PRIM"Bulletproof Changelog", "_", "OK","");
 	return 1;
 }
 
@@ -3689,19 +3678,45 @@ YCMD:help(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display some guidelines");
 	    return 1;
 	}
-    new HelpString[1024];
-	strcat(HelpString, "\t\t\t\t\t"COL_PRIM"Current Developers: {FFFFFF}Whitetiger & [KHK]Khalid");
-	strcat(HelpString, "\n"COL_PRIM"This is a re-written & improved version of Att-Def GM so shoutout to all who contributed to the old GM over the world :]");
-	strcat(HelpString, "\n\n"COL_PRIM"Match-Mode Help:");
-	strcat(HelpString, "\n{FFFFFF}To enable Match-Mode, press 'Y' in lobby or 'H' in round and most textdraws will be clickable.");
-	strcat(HelpString, "\nOr use /war if you're in a hurry! Moreover, you can click on match textdraws to set team names, score and etc");
-	strcat(HelpString, "\n\n"COL_PRIM"Server Help:");
-	strcat(HelpString, "\n{FFFFFF}For admin commands, type /acmds and for public commands type /cmds");
-	strcat(HelpString, "\nIf you need help with a command, use /cmdhelp");
-	strcat(HelpString, "\nRound can be paused by pressing 'Y' (for admins only).");
-	strcat(HelpString, "\nYou can request for backup from your team by pressing 'N' in round.");
-	strcat(HelpString, "\nYou can ask for pausing the round by pressing 'Y' in round.");
-	ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,""COL_PRIM"Server Help", HelpString, "OK","");
+	new str[570];
+	strcat(str, ""COL_PRIM"Main developers: {FFFFFF}Whitetiger & [KHK]Khalid");
+	strcat(str, "\n"COL_PRIM"Contributors on GitHub: {FFFFFF}ApplePieLife, JamesCullum, shendlaw, pds2k12");
+	strcat(str, "\n"COL_PRIM"Project on GitHub: {FFFFFF}https://github.com/KHKKhalid/SAMPBulletproof/");
+	strcat(str, "\n\n\n{FFFFFF}To see server settings: {888888}/settings");
+	strcat(str, "\n{FFFFFF}For admin commands: {888888}/acmds");
+	strcat(str, "\n{FFFFFF}For public commands: {888888}/cmds");
+	strcat(str, "\n{FFFFFF}If you need help with a specific command: {888888}/cmdhelp");
+	strcat(str, "\n{FFFFFF}Match help: {888888}/matchtips");
+	strcat(str, "\n{FFFFFF}To stay updated always: {888888}/checkversion");
+	strcat(str, "\n{FFFFFF}League help: {888888}/leaguecmds");
+	ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,sprintf("%s gamemode "COL_PRIM"help+tips", GM_NAME),str,"OK","");
+	return 1;
+}
+
+YCMD:matchtips(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "display some guidelines about match mode");
+	    return 1;
+	}
+	new str[1201];
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}To enable Match-Mode, press 'Y' in lobby or 'H' (shortcut to /match) in round and most textdraws will be clickable.");
+	strcat(str, "\nOr use /war if you're in a hurry! Moreover, you can click on match textdraws to set team names, score and etc.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}To re-select your weapons in a round, type /gunmenu.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}Type /melee to get melee weapons menu while in a round.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}Use /weaponbinds to code your own weapon key binds.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}To change your fight style, you can use the /fightstyle command.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}You can remove a gun by holding it and typing /remgun.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}Round can be paused by pressing 'Y' (for admins only).");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}You can request for backup from your team by pressing 'N' in round.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}You can ask for pausing the round by pressing 'Y' in round.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}To lead your team press 'H'.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}If you're lagging, you can request netcheck with /netcheckme.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}To diss whom you kill, use /deathdiss command.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}You can change your gunmenu style with /gunmenustyle.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}Type /shop to start shopping and make use of your league points.");
+	ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,""COL_PRIM"Match help & tips",str,"OK","");
 	return 1;
 }
 
