@@ -6,7 +6,7 @@
 
 #include "modules\header\this_core.txt"
 
-#define MAX_GUNMENU_GUNS						12
+#define MAX_GUNMENU_GUNS							9
 
 #define GUNMENU_OBJECTS_CIRCLE_RADIUS				1.9		// The gun objects are shown in a circular shape, this is the radius of the circle
 #define GUNMENU_OBJECTS_CIRCLE_RADIUS_INVEHICLE		4.5		// Same GUNMENU_OBJECTS_CIRCLE_RADIUS but for while in vehicles
@@ -14,7 +14,7 @@
 #define GUNMENU_OBJECT_Z_MOVE_SPEED					(GUNMENU_OBJECT_Z_CHANGES / 3.0)
 
 #define GUNMENU_LIMIT_TEXTDRAW_SIZE					(MAX_GUNMENU_GUNS * 50) 			// Each gun needs 50 characters in the textdraw
-#define GUNMENU_LIMIT_DIALOG_SIZE					(70 + (45 * MAX_GUNMENU_GUNS))		// Each gun needs 45 characters plus 70 characters for "reset" text
+#define GUNMENU_LIMIT_DIALOG_SIZE					(45 * MAX_GUNMENU_GUNS)				// Each gun needs 45 characters
 
 // Gunmenu styles
 #define GUNMENU_STYLE_DIALOG		0
@@ -49,3 +49,7 @@ new GunmenuData[MAX_GUNMENU_GUNS][GunmenuData_STRUCT];
 
 new 
 	Iterator:PlayerGunObjects[MAX_PLAYERS]<MAX_PLAYERS>;
+	
+new 
+	MeleeWeaponsArray_ID[6] = {1, 4, 10, 16, 17, 46},
+	MeleeWeaponsArray_AMMO[6] = {1, 1, 1, 3, 3, 1};

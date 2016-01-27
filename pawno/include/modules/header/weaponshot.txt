@@ -15,7 +15,6 @@
 #define GRENADE_HIGH_DAMAGE			16.0						// Modified grenade damage	
 #define	GRENADE_MEDIUM_DAMAGE		GRENADE_HIGH_DAMAGE / 2		// Modified grenade damage
 #define	GRENADE_LOW_DAMAGE			GRENADE_HIGH_DAMAGE / 3		// Modified grenade damage
-#define GRENADE_AMMO				3							// Grenade ammo amount
 
 // Body part names
 new BodyPartName[10][] = 

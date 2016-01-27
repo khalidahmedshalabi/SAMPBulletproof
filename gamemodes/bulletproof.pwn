@@ -1873,6 +1873,26 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    OnGunmenuDialogResponse(playerid, response, listitem);
 	    return 1;
 	}
+	if(dialogid == DIALOG_GUNMENU_MELEE)
+	{
+	    if(response)
+	    {
+			new
+				weap = MeleeWeaponsArray_ID[listitem],
+				ammo = MeleeWeaponsArray_AMMO[listitem];
+				
+			if(DoesPlayerHaveWeapon(playerid, weap))
+			{
+			    RemovePlayerWeapon(playerid, weap);
+			}
+			else
+			{
+			    GivePlayerWeapon(playerid, weap, ammo);
+			}
+			SetTimerEx("ShowPlayerMeleeWeaponsMenu", GetPlayerPing(playerid) + 70, false, "i", playerid);
+	    }
+	    return 1;
+	}
 	if(dialogid == DIALOG_WEAPONBIND_MAIN)
 	{
 	    if(response)
@@ -3008,6 +3028,27 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							GunmenuRestrictions = false;
 						}
 					}
+				    ShowConfigDialog(playerid);
+				}
+				case 23:
+				{
+				    switch(MeleeAllowed)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"melee weapons menu{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							MeleeAllowed = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"melee weapons menu{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							MeleeAllowed = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'MeleeAllowed'", (MeleeAllowed == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
 	        }
@@ -7227,57 +7268,6 @@ YCMD:reset(playerid, params[], help)
 	return 1;
 }
 
-YCMD:done(playerid, params[], help)
-{
-    if(help)
-	{
-	    SendCommandHelpMessage(playerid, "finish selecting of gunmenu.");
-	    return 1;
-	}
-	if(Player[playerid][OnGunmenu])
-	{
-	    if(Player[playerid][GunmenuStyle] == GUNMENU_STYLE_OBJECT)
-	    {
-			HidePlayerGunmenu(playerid);
-			new str[200];
-			format(str, sizeof str, "%s%s {FFFFFF}has finished equiping their inventory (%s", TextColor[Player[playerid][Team]], Player[playerid][NameWithoutTag], TextColor[Player[playerid][Team]]);
-			new w, a, ct;
-			for(new i = 0; i < 13; i ++)
-			{
-			    GetPlayerWeaponData(playerid, i, w, a);
-			    if(w == 0)
-			        continue;
-
-	      		if(ct == 0)
-	      		{
-	      		    format(str, sizeof str, "%s%s", str, WeaponNames[w]);
-	                ct ++;
-				}
-	      		else
-			    	format(str, sizeof str, "%s / %s", str, WeaponNames[w]);
-
-
-			}
-			format(str, sizeof str, "%s{FFFFFF})", str);
-			foreach(new i : Player)
-			{
-			    if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
-			    {
-			        SendClientMessage(i, -1, str);
-			    }
-			}
-            ShowGunmenuHelp(playerid);
-		}
-		else
-		{
-			SendErrorMessage(playerid, "This command is available only in gunmenu objects style.");
-		}
-	}
-	else
-	    SendErrorMessage(playerid, "You're not selecting weapons from gunmenu");
-	return 1;
-}
-
 YCMD:gunmenumod(playerid, params[], help)
 {
 	if(help)
@@ -7340,6 +7330,31 @@ YCMD:spas(playerid, params[], help)
 	return 1;
 }
 
+YCMD:melee(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "display the melee weapon menu.");
+	    return 1;
+	}
+	if(!MeleeAllowed) return SendErrorMessage(playerid,"Melee weapons menu is disabled.");
+	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
+	if(Player[playerid][Playing] == false) return SendErrorMessage(playerid,"You are not playing.");
+	if(RCArena == true) return SendErrorMessage(playerid, "You cannot get gunmenu in RC arenas");
+	if(ElapsedTime <= 30 && Player[playerid][Team] != REFEREE)
+	{
+	    new iString[128];
+	    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has displayed melee weapons menu (/melee).", Player[playerid][Name]);
+		SendClientMessageToAll(-1, iString);
+		ShowPlayerMeleeWeaponsMenu(playerid);
+	}
+	else
+	{
+		SendErrorMessage(playerid,"Too late to show yourself melee weapons menu.");
+	}
+	return 1;
+}
+
 YCMD:gunmenu(playerid, params[], help)
 {
     if(help)
@@ -7347,13 +7362,13 @@ YCMD:gunmenu(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display the weapon menu.");
 	    return 1;
 	}
-	if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
-	if(Player[playerid][Playing] == false) return SendErrorMessage(playerid,"You are not playing.");
+	//if(Current == -1) return SendErrorMessage(playerid,"Round is not active.");
+	//if(Player[playerid][Playing] == false) return SendErrorMessage(playerid,"You are not playing.");
 	if(RCArena == true) return SendErrorMessage(playerid, "You cannot get gunmenu in RC arenas");
 	if(ElapsedTime <= 30 && Player[playerid][Team] != REFEREE)
 	{
 	    new iString[128];
-	    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has showed weapon menu for himself.", Player[playerid][Name]);
+	    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has displayed gunmenu (/gunmenu).", Player[playerid][Name]);
 		SendClientMessageToAll(-1, iString);
 		ShowPlayerGunmenu(playerid, 0);
 	}
@@ -7376,7 +7391,9 @@ YCMD:gunmenustyle(playerid, params[], help)
 
 	new styleStr[7];
 	if(sscanf(params, "s", styleStr))
+	{
 	    return SendUsageMessage(playerid,"/gunmenustyle [dialog / object]");
+ 	}
 
     new style;
 	if(strcmp(styleStr, "dialog", true) == 0)

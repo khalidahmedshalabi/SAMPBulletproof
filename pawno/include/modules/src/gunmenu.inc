@@ -160,9 +160,9 @@ ResetPlayerGunmenu(playerid, bool:showagain)
 ShowGunmenuHelp(playerid)
 {
 	#if GTAV_SWITCH_MENU != 0
-	SendClientMessage(playerid, -1, ""COL_PRIM"Gunmenu help: {FFFFFF}/gunmenu, /weaponbinds, /remgun or press RETURN for quicker gun switching");
+	SendClientMessage(playerid, -1, ""COL_PRIM"Handy cmds: {FFFFFF}/gunmenu, /weaponbinds, /melee, /fightstyle, /remgun or press RETURN for quicker gun switching");
 	#else
-	SendClientMessage(playerid, -1, ""COL_PRIM"Gunmenu help: {FFFFFF}/gunmenu to reselect guns, /weaponbinds to code weapon binds or /remgun");
+	SendClientMessage(playerid, -1, ""COL_PRIM"Handy cmds: {FFFFFF}/gunmenu, /weaponbinds, /melee, /fightstyle or /remgun");
 	#endif
 	#if defined _league_included
 	if(LeagueMode)
@@ -209,7 +209,7 @@ ShowGunmenuDialog(playerid)
 		case BASE:
 		{
 			new str[GUNMENU_LIMIT_DIALOG_SIZE];
-			format(str, sizeof str, "Weapon\tAmmo\tPicked / Limit\n{FFFFFF}Reset my weapons and restart selections!");
+			format(str, sizeof str, "Weapon\tAmmo\tPicked / Limit");
 			new team = Player[playerid][Team];
 			for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
 			{
@@ -227,12 +227,12 @@ ShowGunmenuDialog(playerid)
 					format(str, sizeof str, "%s\n{696969}%s\t%d\t%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
 				}
 			}
-			ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, "Gunmenu", str, "Pick", "Done");
+			ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, "Gunmenu", str, "Pick", "Reset");
 		}
 		case ARENA:
 		{
 			new str[550];
-			format(str, sizeof str, "Weapon\tTimes Picked\n{FFFFFF}Reset my weapons and restart selections!");
+			format(str, sizeof str, "Weapon\tTimes Picked");
 			new team = Player[playerid][Team];
 			for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
 			{
@@ -250,7 +250,7 @@ ShowGunmenuDialog(playerid)
 					format(str, sizeof str, "%s\n{50EB50}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
 				}
 			}
-			ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, "Gunmenu", str, "Pick", "Done");
+			ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, "Gunmenu", str, "Pick", "Reset");
 		}
 	}
 }
@@ -294,8 +294,8 @@ public ShowPlayerGunmenu(playerid, delay)
 			}
 			TextDrawShowForPlayer(playerid, GunmenuLimitsTD[Player[playerid][Team]]);
 			DisablePlayerCheckpoint(playerid); // Checkpoints seem to make object selection gitched, disable them temporarily
-			SendClientMessage(playerid, -1, ""COL_PRIM"Type {FFFFFF}/done "COL_PRIM"when you finish selecting guns or {FFFFFF}/reset "COL_PRIM"to restart selection");
-			// Create gun objects for them... (I'm not a math teacher so don't explain heavy documentation)
+			SendClientMessage(playerid, -1, ""COL_PRIM"Type {FFFFFF}/reset "COL_PRIM"to restart selection!");
+			// Create gun objects for them... (I'm not a math teacher so don't expect heavy documentation)
 			Iter_Clear(PlayerGunObjects[playerid]); // Clear gunmenu objects iterator
 			// We're going to generate points as a function of this angle
 			// Basically we will be going from 0 to 360 since it's a circle
@@ -514,21 +514,6 @@ bool:IsGunSelectionOkay(playerid, weaponid, index)
 					}
 				}
 			}
-			// Make sure players won't have more than 2 bullet weapons in Bases
-			if(IsBulletWeapon(weaponid))
-			{
-				new ct = 0;
-				for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
-				{
-					if(IsBulletWeapon(GunmenuData[i][GunID]) && GunmenuData[i][HasGun][playerid])
-						ct ++;
-				}
-				if(ct >= 2)
-				{
-					SendErrorMessage(playerid, "You cannot have more than 2 (bullet) weapons in Bases!", messagebox_type);
-					return false;
-				}
-			}
 		}
 		case ARENA:
 		{
@@ -544,21 +529,6 @@ bool:IsGunSelectionOkay(playerid, weaponid, index)
 				SendErrorMessage(playerid, "Spas is not allowed in Arenas!", messagebox_type);
 				return false;
 			}
-			// Make sure players won't have more than 2 bullet weapons in Arenas
-			if(IsBulletWeapon(weaponid))
-			{
-				new ct = 0;
-				for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
-				{
-					if(IsBulletWeapon(GunmenuData[i][GunID]) && GunmenuData[i][HasGun][playerid])
-						ct ++;
-				}
-				if(ct >= 2)
-				{
-					SendErrorMessage(playerid, "You cannot have more than 2 (bullet) weapons in Arenas!", messagebox_type);
-					return false;
-				}
-			}
 		}
 	}
 	return true;
@@ -568,60 +538,21 @@ OnGunmenuDialogResponse(playerid, response, listitem)
 {
 	switch(response)
 	{
-		case 0: // Clicked  "Done"
+		case 0: // Clicked  "Reset"
 		{
-			HidePlayerGunmenu(playerid);
-			new str[200];
-			format(str, sizeof str, "%s%s {FFFFFF}has finished equiping their inventory (%s", TextColor[Player[playerid][Team]], Player[playerid][NameWithoutTag], TextColor[Player[playerid][Team]]);
-			new w, a, ct;
-			for(new i = 0; i < 13; i ++)
-			{
-			    GetPlayerWeaponData(playerid, i, w, a);
-			    if(w == 0)
-			        continue;
-
-	      		if(ct == 0)
-	      		{
-	      		    format(str, sizeof str, "%s%s", str, WeaponNames[w]);
-	                ct ++;
-				}
-	      		else
-			    	format(str, sizeof str, "%s / %s", str, WeaponNames[w]);
-
-
-			}
-			format(str, sizeof str, "%s{FFFFFF})", str);
-			foreach(new i : Player)
-			{
-			    if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
-			    {
-			        SendClientMessage(i, -1, str);
-			    }
-			}
-			ShowGunmenuHelp(playerid);
+			ResetPlayerGunmenu(playerid, true);
+			MessageBox(playerid, MSGBOX_TYPE_TOP, "~g~~h~~h~emptied inventory", " ", 3000);
 		}
 		case 1: // Clicked "Pick"
 		{
-			switch(listitem)
+			if(IsGunSelectionOkay(playerid, GunmenuData[listitem][GunID], listitem))
 			{
-				case 0: // Reset
-				{
-					ResetPlayerGunmenu(playerid, true);
-					MessageBox(playerid, MSGBOX_TYPE_TOP, "~g~~h~~h~emptied inventory", " ", 3000);
-				}
-				default: // Picked a weapon
-				{
-					new gunmenuIndex = listitem - 1;
-					if(IsGunSelectionOkay(playerid, GunmenuData[gunmenuIndex][GunID], gunmenuIndex))
-					{
-						GivePlayerGunmenuWeapon(playerid, gunmenuIndex);
-						PlayerPlaySound(playerid, 1054, 0.0, 0.0, 0.0);
-					}
-					else
-					{
-						ShowGunmenuDialog(playerid);
-					}
-				}
+				GivePlayerGunmenuWeapon(playerid, listitem);
+				PlayerPlaySound(playerid, 1054, 0.0, 0.0, 0.0);
+			}
+			else
+			{
+				ShowGunmenuDialog(playerid);
 			}
 		}
 	}
@@ -684,6 +615,16 @@ GivePlayerGunmenuWeapon(playerid, index)
 	{
 		if(Player[i][OnGunmenu] && Player[i][GunmenuStyle] == GUNMENU_STYLE_DIALOG)
 			ShowGunmenuDialog(playerid);
+	}
+	new ct = 0;
+	for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
+	{
+		if(GunmenuData[i][HasGun][playerid])
+			ct ++;
+	}
+	if(ct >= 2)
+	{
+		SetTimerEx("OnPlayerFinishGunmenu", GetPlayerPing(playerid) + 70, false, "i", playerid);
 	}
 }
 
@@ -750,4 +691,50 @@ OnPlayerSelectGunmenuObject(playerid, objectid, modelid)
 			);
 	}
 	return 1;
+}
+
+forward OnPlayerFinishGunmenu(playerid);
+public OnPlayerFinishGunmenu(playerid)
+{
+	HidePlayerGunmenu(playerid);
+	new str[200];
+	format(str, sizeof str, "%s%s {FFFFFF}has finished equiping their inventory (%s", TextColor[Player[playerid][Team]], Player[playerid][NameWithoutTag], TextColor[Player[playerid][Team]]);
+	new w, a, ct;
+	for(new i = 0; i < 13; i ++)
+	{
+		GetPlayerWeaponData(playerid, i, w, a);
+		if(w == 0)
+			continue;
+
+		if(ct == 0)
+		{
+			format(str, sizeof str, "%s%s", str, WeaponNames[w]);
+			ct ++;
+		}
+		else
+			format(str, sizeof str, "%s / %s", str, WeaponNames[w]);
+
+
+	}
+	format(str, sizeof str, "%s{FFFFFF})", str);
+	foreach(new i : Player)
+	{
+		if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
+		{
+			SendClientMessage(i, -1, str);
+		}
+	}
+	ShowGunmenuHelp(playerid);
+}
+
+forward ShowPlayerMeleeWeaponsMenu(playerid);
+public ShowPlayerMeleeWeaponsMenu(playerid)
+{
+	new str[256], weap;
+	for(new i = 0; i != sizeof MeleeWeaponsArray_ID; ++i)
+	{
+		weap = MeleeWeaponsArray_ID[i];
+		format(str, sizeof str, "%s\n%s%s", str, (DoesPlayerHaveWeapon(playerid, weap) ? ("{DB5858}"):("{50EB50}")), WeaponNames[weap]);
+	}
+	ShowPlayerDialog(playerid, DIALOG_GUNMENU_MELEE, DIALOG_STYLE_LIST, "Melee weapons", str, "Get", "Close");
 }

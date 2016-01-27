@@ -28,6 +28,7 @@ new bool:DefendersSeeVehiclesBlips	=	true;
 new bool:CPInArena = false;
 new bool:AntiMacros = true;
 new bool:LeagueAllowed = true;
+new bool:MeleeAllowed = false;
 
 new RoundHP = 100, RoundAR = 100;
 

@@ -120,6 +120,11 @@ ShowConfigDialog(playerid) {
 		strcat(string, "\n{66FF66}Gunmenu selection restriction");
 	else
 		strcat(string, "\n{FF6666}Gunmenu selection restriction");
+	
+	if(MeleeAllowed == true)
+		strcat(string, "\n{66FF66}Melee weapon menu");
+	else
+		strcat(string, "\n{FF6666}Melee weapon menu");
 
     ShowPlayerDialog(playerid, DIALOG_CONFIG, DIALOG_STYLE_LIST, ""COL_PRIM"Config Settings", string, "OK", "Cancel");
     return 1;
@@ -229,6 +234,10 @@ LoadConfig()
 	
 	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // LeagueShop
     LeagueShop = (strval(iString) == 1 ? true : false);
+    db_next_row(res);
+	
+	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // MeleeAllowed
+    MeleeAllowed = (strval(iString) == 1 ? true : false);
     db_next_row(res);
 
 	db_free_result(res);
