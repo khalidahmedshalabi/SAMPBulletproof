@@ -27,7 +27,7 @@ LoadBases()
 	new iString[64];
     TotalBases = 0;
 
-	new DBResult:res = db_query(sqliteconnection, "SELECT * FROM 'Bases' ORDER BY ID ASC");
+	new DBResult:res = db_query(sqliteconnection, sprintf("SELECT * FROM `%s` ORDER BY ID ASC", CurrentBaseSet));
 
     for(new i = 0; i < MAX_BASES; i++) BExist[i] = false;
     new i;
@@ -56,8 +56,8 @@ LoadBases()
 
 	db_free_result(res);
 
-	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Bases Loaded: {FFFFFF}%d", TotalBases));
-	printf("Bases Loaded: %d", TotalBases);
+	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Bases Loaded: {FFFFFF}%d "COL_PRIM"| Current base set: {FFFFFF}%s", TotalBases, CurrentBaseSet));
+	printf("Bases Loaded: %d (from table: %s)", TotalBases, CurrentBaseSet);
 }
 
 LoadArenas()

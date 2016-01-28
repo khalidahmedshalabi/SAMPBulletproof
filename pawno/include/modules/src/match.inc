@@ -2199,6 +2199,7 @@ SpawnPlayersInBase()
 {
 	ClearChat();
 	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Base started: {FFFFFF}%s (ID: %d | Location: %s)", BName[Current], Current, Get3DZoneName(BCPSpawn[Current][0], BCPSpawn[Current][1], BCPSpawn[Current][2])));
+	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Current base set: {FFFFFF}%s. "COL_PRIM"Type {FFFFFF}/loadbases "COL_PRIM"to switch base sets!", CurrentBaseSet));
 	new iString[160];
 	foreach(new i : Player) 
 	{

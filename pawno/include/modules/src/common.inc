@@ -1469,7 +1469,7 @@ HideDialogs(playerid)
 	ShowPlayerDialog(playerid, -1, 0, " ", " ", " ", " ");
 	return 1;
 }
-
+/*
 GetPlayerHighestScores(array[][rankingEnum], left, right)
 {
     new
@@ -1497,7 +1497,7 @@ GetPlayerHighestScores(array[][rankingEnum], left, right)
     }
     if(left < tempRight) GetPlayerHighestScores(array, left, tempRight);
     if(tempLeft < right) GetPlayerHighestScores(array, tempLeft, right);
-}
+}*/
 
 GetPlayerHighestScores2(array[][rankingEnum], names[][MAX_PLAYER_NAME], left, right)
 {

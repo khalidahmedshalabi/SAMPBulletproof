@@ -239,6 +239,10 @@ LoadConfig()
 	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // MeleeAllowed
     MeleeAllowed = (strval(iString) == 1 ? true : false);
     db_next_row(res);
+	
+	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // CurrentBaseSet
+	sscanf(iString, "s", CurrentBaseSet);
+    db_next_row(res);
 
 	db_free_result(res);
 

@@ -4690,6 +4690,55 @@ YCMD:config(playerid, params[], help) {
 	return 1;
 }
 
+YCMD:loadbases(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "load another set of bases from the database.");
+	    return 1;
+	}
+	if(Current != -1) return SendErrorMessage(playerid,"Can't use this command while round is active.");
+	new baseset = 0;
+	if(sscanf(params, "d", baseset))
+	{
+	    SendUsageMessage(playerid, "/loadbases [base set id]");
+	    SendClientMessage(playerid, -1, "Available base set IDs:");
+		SendClientMessage(playerid, -1, "0 = new & updated bulletproof bases");
+		SendClientMessage(playerid, -1, "1 = old bulletproof bases (includes some oldschool bases)");
+		SendClientMessage(playerid, -1, "2 = attdef bases (mainly TeK bases)");
+		return 1;
+	}
+	if(baseset < 0 || baseset > 2)
+	{
+	    SendErrorMessage(playerid, "Invalid base set ID.");
+	    SendClientMessage(playerid, -1, "Available base set IDs:");
+		SendClientMessage(playerid, -1, "0 = new & updated bulletproof bases");
+		SendClientMessage(playerid, -1, "1 = old bulletproof bases (includes some oldschool bases)");
+		SendClientMessage(playerid, -1, "2 = attdef bases (mainly TeK bases)");
+		return 1;
+	}
+    CurrentBaseSet[0] = EOS;
+	switch(baseset)
+	{
+	    case 0:
+	    {
+	        strcat(CurrentBaseSet, "NewBulletproofBases");
+	    }
+	    case 1:
+	    {
+            strcat(CurrentBaseSet, "OldBulletproofBases");
+	    }
+	    case 2:
+	    {
+            strcat(CurrentBaseSet, "AttdefBases");
+	    }
+	}
+	db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Configs` SET `Value`='%s' WHERE `Option`='CurrentBaseSet'", CurrentBaseSet)));
+	LoadBases();
+	SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has loaded base set ID: {FFFFFF}%d | %s", Player[playerid][Name], baseset, CurrentBaseSet));
+	return 1;
+}
+
 YCMD:base(playerid, params[], help)
 {
 	//if(Player[playerid][Level] < 5 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be level 5 or rcon admin.");
@@ -4713,26 +4762,15 @@ YCMD:base(playerid, params[], help)
 
 	switch(CommandID) {
 	    case 1: {
-
-	        /*format(iString, sizeof(iString), "SELECT ID FROM Bases ORDER BY `ID` DESC LIMIT 1");
-			new DBResult:res = db_query(sqliteconnection, iString);
-
-			new BaseID;
-			if(db_num_rows(res)) {
-				db_get_field_assoc(res, "ID", iString, sizeof(iString));
-	    		BaseID = strval(iString)+1;
-		    }
-		    db_free_result(res);*/
-
 		    if(TotalBases > MAX_BASES)
-				return SendErrorMessage(playerid,"Too many bases already created.");
+				return SendErrorMessage(playerid,"Too many bases already created. You can use /loadbases to create this base in another set.");
 
             new BaseID;
 			BaseID = FindFreeBaseSlot();
-			format(iString, sizeof(iString), "INSERT INTO Bases (ID, AttSpawn, CPSpawn, DefSpawn, Interior, Name) VALUES (%d, 0, 0, 0, 0, 'No Name')", BaseID);
+			format(iString, sizeof(iString), "INSERT INTO `%s` (ID, AttSpawn, CPSpawn, DefSpawn, Interior, Name) VALUES (%d, 0, 0, 0, 0, 'No Name')", CurrentBaseSet, BaseID);
 			db_free_result(db_query(sqliteconnection, iString));
 
-			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has created {FFFFFF}Base ID: %d", Player[playerid][Name], BaseID);
+			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has created base ID: {FFFFFF}%d "COL_PRIM"| in base set: {FFFFFF}%s", Player[playerid][Name], BaseID, CurrentBaseSet);
 			SendClientMessageToAll(-1, iString);
 
 			LoadBases();
@@ -4750,7 +4788,7 @@ YCMD:base(playerid, params[], help)
 			GetPlayerPos(playerid, P[0], P[1], P[2]);
 			format(PositionA, sizeof(PositionA), "%.0f,%.0f,%.0f", P[0], P[1], P[2]);
 
-			format(iString, sizeof(iString), "UPDATE Bases SET AttSpawn = '%s' WHERE ID = %d", PositionA, baseid);
+			format(iString, sizeof(iString), "UPDATE `%s` SET AttSpawn = '%s' WHERE ID = %d", CurrentBaseSet, PositionA, baseid);
 			db_free_result(db_query(sqliteconnection, iString));
 
 			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has configured Attacker position for {FFFFFF}Base ID: %d", Player[playerid][Name], baseid);
@@ -4771,7 +4809,7 @@ YCMD:base(playerid, params[], help)
 			GetPlayerPos(playerid, P[0], P[1], P[2]);
 			format(PositionB, sizeof(PositionB), "%.0f,%.0f,%.0f", P[0], P[1], P[2]);
 
-			format(iString, sizeof(iString), "UPDATE Bases SET DefSpawn = '%s' WHERE ID = %d", PositionB, baseid);
+			format(iString, sizeof(iString), "UPDATE `%s` SET DefSpawn = '%s' WHERE ID = %d", CurrentBaseSet, PositionB, baseid);
 			db_free_result(db_query(sqliteconnection, iString));
 
 			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has configured Defender position for {FFFFFF}Base ID: %d", Player[playerid][Name], baseid);
@@ -4792,7 +4830,7 @@ YCMD:base(playerid, params[], help)
 			GetPlayerPos(playerid, P[0], P[1], P[2]);
 			format(cp, sizeof(cp), "%.0f,%.0f,%.0f", P[0], P[1], P[2]);
 
-			format(iString, sizeof(iString), "UPDATE Bases SET CPSpawn = '%s', Interior = %d WHERE ID = %d", cp, GetPlayerInterior(playerid), baseid);
+			format(iString, sizeof(iString), "UPDATE `%s` SET CPSpawn = '%s', Interior = %d WHERE ID = %d", CurrentBaseSet, cp, GetPlayerInterior(playerid), baseid);
 			db_free_result(db_query(sqliteconnection, iString));
 
 			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has configured CP/Interior position for {FFFFFF}Base ID: %d", Player[playerid][Name], baseid);
@@ -4810,7 +4848,7 @@ YCMD:base(playerid, params[], help)
 			if(baseid > MAX_BASES) return SendErrorMessage(playerid,"That base doesn't exist.");
 			if(!BExist[baseid]) return SendErrorMessage(playerid,"That base doesn't exist.");
 
-			format(iString, sizeof(iString), "UPDATE Bases SET Name = '%s' WHERE ID = %d", BaseName, baseid);
+			format(iString, sizeof(iString), "UPDATE `%s` SET Name = '%s' WHERE ID = %d", CurrentBaseSet, BaseName, baseid);
 			db_free_result(db_query(sqliteconnection, iString));
 
 			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has configured Name for {FFFFFF}Base ID: %d", Player[playerid][Name], baseid);
@@ -4827,12 +4865,12 @@ YCMD:base(playerid, params[], help)
 			if(baseid > MAX_BASES) return SendErrorMessage(playerid,"That base doesn't exist.");
 			if(!BExist[baseid]) return SendErrorMessage(playerid,"That base doesn't exist.");
 
-			format(iString, sizeof(iString), "DELETE FROM Bases WHERE ID = %d", baseid);
+			format(iString, sizeof(iString), "DELETE FROM `%s` WHERE ID = %d", CurrentBaseSet, baseid);
 			db_free_result(db_query(sqliteconnection, iString));
 
 			BExist[baseid] = false;
 
-			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has deleted {FFFFFF}Base ID: %d", Player[playerid][Name], baseid);
+			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has deleted {FFFFFF}Base ID: %d from base set: %s", Player[playerid][Name], baseid, CurrentBaseSet);
 			SendClientMessageToAll(-1, iString);
 
 			LoadBases();

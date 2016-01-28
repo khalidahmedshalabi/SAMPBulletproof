@@ -16,6 +16,7 @@ new BInterior[MAX_BASES];
 new BName[MAX_BASES][MAX_FIELD_NAME];
 new bool:BExist[MAX_BASES] = false;
 new TotalBases;
+new CurrentBaseSet[32] = "NewBulletproofBases";
 
 
 // - Arena Variables -
