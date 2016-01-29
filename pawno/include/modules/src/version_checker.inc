@@ -51,6 +51,7 @@ public OnWebsiteTextChecked(index, response_code, data[])
 {
     if(response_code == 200)
     {
+		GM_WEBSITE[0] = EOS;
 		strcat(GM_WEBSITE, data);
     }
 	return 1;
