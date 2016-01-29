@@ -3656,7 +3656,7 @@ YCMD:checkversion(playerid, params[])
 	    return SendErrorMessage(playerid, "Connection error. Try again later maybe!");
 
     ShowPlayerDialog(playerid, 0, DIALOG_STYLE_MSGBOX, "Version Checker",
-	 sprintf(""COL_PRIM"Server version: {FFFFFF}%s "COL_PRIM"| Newest version: {FFFFFF}%s", GM_VERSION, LatestVersion), "Okay", "");
+	 sprintf(""COL_PRIM"Server version: {FFFFFF}%.2f "COL_PRIM"| Newest version: {FFFFFF}%.2f", GM_VERSION, LatestVersion), "Okay", "");
 	return 1;
 }
 
