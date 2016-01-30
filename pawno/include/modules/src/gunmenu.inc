@@ -616,7 +616,8 @@ GivePlayerGunmenuWeapon(playerid, index)
 	}
 	if(ct >= 2)
 	{
-		SetTimerEx("OnPlayerFinishGunmenu", GetPlayerPing(playerid) + 70, false, "i", playerid);
+		// The delay is needed for GetPlayerWeaponData to sync properly
+		SetTimerEx("OnPlayerFinishGunmenu", GetPlayerPing(playerid) + 150, false, "i", playerid);
 	}
 }
 
