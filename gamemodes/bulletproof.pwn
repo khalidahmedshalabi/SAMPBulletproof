@@ -377,17 +377,6 @@ public OnPlayerDeath(playerid, killerid, reason)
 	return 1;
 }
 
-forward ResetDeadPlayerVariables(playerid);
-public ResetDeadPlayerVariables(playerid)
-{
-    Player[playerid][InDM] = false;
-	Player[playerid][Playing] = false;
-	Iter_Remove(PlayersInRound, playerid);
-	UpdateTeamPlayerCount(Player[playerid][Team], true, playerid);
-	UpdateTeamHP(Player[playerid][Team], playerid);
-	return 1;
-}
-
 forward ServerOnPlayerDeath(playerid, killerid, reason);
 public ServerOnPlayerDeath(playerid, killerid, reason)
 {
@@ -590,8 +579,11 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 		PlayerTextDrawHide(playerid, AreaCheckTD[playerid]);
 		PlayerTextDrawHide(playerid, AreaCheckBG[playerid]);
 	}
-	// Reset variables and handle match (delay needed to fix: https://github.com/KHKKhalid/SAMPBulletproof/issues/51)
-	SetTimerEx("ResetDeadPlayerVariables", SERVER_PlAYER_DEATH_DELAY + 100, false, "i", playerid);
+	Player[playerid][InDM] = false;
+	Player[playerid][Playing] = false;
+	Iter_Remove(PlayersInRound, playerid);
+	UpdateTeamPlayerCount(Player[playerid][Team], true, playerid);
+	UpdateTeamHP(Player[playerid][Team], playerid);
 	// Handle spectate
 	foreach(new i : AllSpectators)
     {
