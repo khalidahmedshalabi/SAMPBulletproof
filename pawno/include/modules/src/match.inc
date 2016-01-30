@@ -1140,7 +1140,7 @@ PlayerRequestBackup(playerid)
 		if(Player[i][Team] != team)
 		{
 			// Check if enemy is in range
-			if(IsPlayerInRangeOfPoint(i, 25.0, x, y, z))
+			if(IsPlayerInRangeOfPoint(i, 35.0, x, y, z))
 			{
 				enemiesCt ++;
 			}
