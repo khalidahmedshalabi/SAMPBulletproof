@@ -3700,7 +3700,7 @@ YCMD:matchtips(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display some guidelines about match mode");
 	    return 1;
 	}
-	new str[1201];
+	new str[1287];
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}To enable Match-Mode, press 'Y' in lobby or 'H' (shortcut to /match) in round and most textdraws will be clickable.");
 	strcat(str, "\nOr use /war if you're in a hurry! Moreover, you can click on match textdraws to set team names, score and etc.");
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}To re-select your weapons in a round, type /gunmenu.");
@@ -3716,6 +3716,7 @@ YCMD:matchtips(playerid, params[], help)
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}To diss whom you kill, use /deathdiss command.");
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}You can change your gunmenu style with /gunmenustyle.");
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}Type /shop to start shopping and make use of your league points.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}Type /sound to change the sound when you hit someone or get hit.");
 	ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,""COL_PRIM"Match help & tips",str,"OK","");
 	return 1;
 }
@@ -8714,7 +8715,7 @@ YCMD:testsound(playerid, params[], help)
  	if(isnull(params) || !IsNumeric(params)) return SendUsageMessage(playerid,"/testsound [Sound ID]");
 
 	new Val = strval(params);
-	if(!IsValidSound(Val)) return SendErrorMessage(playerid,"This sound ID is not valid.");
+	if(!IsValidSound(Val)) return SendErrorMessage(playerid,"This sound ID is not valid. Type 'samp sound id' on Google for more.");
 
 	PlayerPlaySound(playerid, Val, 0, 0, 0);
 	return 1;
@@ -8728,11 +8729,21 @@ YCMD:sound(playerid, params[], help)
 	    return 1;
 	}
 	new Option[16], Value[64], CommandID;
-	if(sscanf(params, "sz",Option, Value)) return SendUsageMessage(playerid,"/sound [hit | gethit] [Sound ID | default]");
+	if(sscanf(params, "sz",Option, Value))
+	{
+	    SendUsageMessage(playerid,"/sound [hit | gethit] [Sound ID | default]");
+	    SendClientMessage(playerid, -1, "Use /testsound to test a sound ID before using it. Type 'samp sound id' on Google for more.");
+	    return 1;
+	}
 
 	if(strcmp(Option, "hit", true) == 0) CommandID = 1;
 	else if(strcmp(Option, "gethit", true) == 0) CommandID = 2;
-	else return SendUsageMessage(playerid,"/sound [hit | gethit] [Sound ID | default]");
+	else
+	{
+	    SendUsageMessage(playerid,"/sound [hit | gethit] [Sound ID | default]");
+	    SendClientMessage(playerid, -1, "Use /testsound to test a sound ID before using it. Type 'samp sound id' on Google for more.");
+	    return 1;
+	}
 
 	new iString[128];
 	switch(CommandID)
@@ -8746,12 +8757,17 @@ YCMD:sound(playerid, params[], help)
 				{
 	                Player[playerid][HitSound] = 17802;
 				}
-				else return SendUsageMessage(playerid,"/sound [hit] [Sound ID | default]");
+				else
+				{
+				    SendUsageMessage(playerid,"/sound [hit | gethit] [Sound ID | default]");
+				    SendClientMessage(playerid, -1, "Use /testsound to test a sound ID before using it. Type 'samp sound id' on Google for more.");
+				    return 1;
+				}
 			}
 		 	else
 			{
 			    new Val = strval(Value);
-			    if(!IsValidSound(Val)) return SendErrorMessage(playerid,"This sound ID is not valid.");
+			    if(!IsValidSound(Val)) return SendErrorMessage(playerid,"This sound ID is not valid. Type 'samp sound id' on Google for more.");
 
 			    Player[playerid][HitSound] = Val;
 			}
@@ -8762,19 +8778,29 @@ YCMD:sound(playerid, params[], help)
 	    }
 		case 2:
 		{
-	        if(isnull(Value)) return SendUsageMessage(playerid,"/sound [gethit] [Sound ID | default]");
+	        if(isnull(Value)) 
+			{
+			    SendUsageMessage(playerid,"/sound [hit | gethit] [Sound ID | default]");
+			    SendClientMessage(playerid, -1, "Use /testsound to test a sound ID before using it. Type 'samp sound id' on Google for more.");
+			    return 1;
+			}
 	        if(!IsNumeric(Value))
 			{
 	            if(strcmp(Value, "default", true) == 0)
 				{
 	                Player[playerid][GetHitSound] = 1131;
 				}
-				else return SendUsageMessage(playerid,"/sound [gethit] [Sound ID | default]");
+				else
+				{
+				    SendUsageMessage(playerid,"/sound [hit | gethit] [Sound ID | default]");
+				    SendClientMessage(playerid, -1, "Use /testsound to test a sound ID before using it. Type 'samp sound id' on Google for more.");
+				    return 1;
+				}
 			}
 			else
 			{
 			    new Val = strval(Value);
-			    if(!IsValidSound(Val)) return SendErrorMessage(playerid,"This sound ID is not valid.");
+			    if(!IsValidSound(Val)) return SendErrorMessage(playerid,"This sound ID is not valid. Type 'samp sound id' on Google for more.");
 
 			    Player[playerid][GetHitSound] = Val;
 			}
