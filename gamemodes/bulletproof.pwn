@@ -3652,6 +3652,21 @@ YCMD:checkversion(playerid, params[])
 	return 1;
 }
 
+forward ShowPlayerChangelog(index, response_code, data[]);
+public ShowPlayerChangelog(index, response_code, data[])
+{
+	if(response_code == 200)
+	{
+		SendClientMessage(index, -1, sprintf(""COL_PRIM"See more at {FFFFFF}%s", GM_WEBSITE));
+		ShowPlayerDialog(index, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "Gamemode changelog", data, "Close", "");
+	}
+	else
+	{
+		SendErrorMessage(index, sprintf("Connection error. Response code: %d", response_code));
+	}
+	return 1;
+}
+
 YCMD:changelog(playerid, params[], help)
 {
     if(help)
@@ -3659,7 +3674,7 @@ YCMD:changelog(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display a list of gamemode updates");
 	    return 1;
 	}
-	ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX,""COL_PRIM"Bulletproof Changelog", "_", "OK","");
+	HTTP(playerid, HTTP_GET, "infinite-gaming.ml/khk/bulletproof/api/changelog.php", "", "ShowPlayerChangelog");
 	return 1;
 }
 
@@ -3670,7 +3685,7 @@ YCMD:help(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display some guidelines");
 	    return 1;
 	}
-	new str[570];
+	new str[583];
 	strcat(str, ""COL_PRIM"Main developers: {FFFFFF}Whitetiger & [KHK]Khalid");
 	strcat(str, "\n"COL_PRIM"Contributors on GitHub: {FFFFFF}ApplePieLife, JamesCullum, shendlaw, pds2k12");
 	strcat(str, "\n"COL_PRIM"Project on GitHub: {FFFFFF}https://github.com/KHKKhalid/SAMPBulletproof/");
@@ -3679,7 +3694,7 @@ YCMD:help(playerid, params[], help)
 	strcat(str, "\n{FFFFFF}For public commands: {888888}/cmds");
 	strcat(str, "\n{FFFFFF}If you need help with a specific command: {888888}/cmdhelp");
 	strcat(str, "\n{FFFFFF}Match help: {888888}/matchtips");
-	strcat(str, "\n{FFFFFF}To stay updated always: {888888}/checkversion");
+	strcat(str, "\n{FFFFFF}To stay updated always: {888888}/updates and /checkversion");
 	strcat(str, "\n{FFFFFF}League help: {888888}/leaguecmds");
 	ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,sprintf("%s gamemode "COL_PRIM"help+tips", GM_NAME),str,"OK","");
 	return 1;
