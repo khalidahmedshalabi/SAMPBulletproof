@@ -36,6 +36,10 @@ public OnPlayerDeathCameraEnd(playerid)
 		PlayerTextDrawShow(playerid, PlayerLeagueStatsTD[playerid]);
 	}
 	#endif
+	if(Current != -1)
+	{
+		SetTimerEx("SpectateAnyPlayerT", 1000, false, "i", playerid);
+	}
 	return 1;
 }
 

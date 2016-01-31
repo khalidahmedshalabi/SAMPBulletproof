@@ -560,7 +560,6 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 				showdeathquote = !Player[killerid][HasDeathQuote];
 			}
 	        PlayDeathCamera(playerid, x, y, z, showdeathquote);
-	        SetTimerEx("SpectateAnyPlayerT", DEATH_CAMERA_DURATION + 500, false, "i", playerid);
 	    }
 	    else // If not
 	    {
