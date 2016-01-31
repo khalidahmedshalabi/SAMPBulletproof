@@ -842,7 +842,7 @@ LoadPlayerTextDraws(playerid)
 
 	SpecText[playerid][0] = CreatePlayerTextDraw(playerid, 4.333333, 354.251831 - 70.0, "LD_POKE:cd9s");
 	PlayerTextDrawLetterSize(playerid, SpecText[playerid][0], 0.000000, 0.000000);
-	PlayerTextDrawTextSize(playerid, SpecText[playerid][0], 72.000000, 75);
+	PlayerTextDrawTextSize(playerid, SpecText[playerid][0], 72.000000, 77);
 	PlayerTextDrawAlignment(playerid, SpecText[playerid][0], 1);
 	PlayerTextDrawColor(playerid, SpecText[playerid][0], 0x00000033);
 	PlayerTextDrawSetShadow(playerid, SpecText[playerid][0], 0);
