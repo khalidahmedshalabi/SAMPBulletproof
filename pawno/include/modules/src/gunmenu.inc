@@ -616,8 +616,7 @@ GivePlayerGunmenuWeapon(playerid, index)
 	}
 	if(ct >= 2)
 	{
-		// The delay is needed for GetPlayerWeaponData to sync properly
-		SetTimerEx("OnPlayerFinishGunmenu", GetPlayerPing(playerid) + 150, false, "i", playerid);
+		OnPlayerFinishGunmenu(playerid);
 	}
 }
 
@@ -686,28 +685,28 @@ OnPlayerSelectGunmenuObject(playerid, objectid, modelid)
 	return 1;
 }
 
-forward OnPlayerFinishGunmenu(playerid);
-public OnPlayerFinishGunmenu(playerid)
+OnPlayerFinishGunmenu(playerid)
 {
 	HidePlayerGunmenu(playerid);
 	new str[200];
 	format(str, sizeof str, "%s%s {FFFFFF}has finished equiping their inventory (%s", TextColor[Player[playerid][Team]], Player[playerid][NameWithoutTag], TextColor[Player[playerid][Team]]);
-	new w, a, ct;
-	for(new i = 0; i < 13; i ++)
+	new ct = 0, weap;
+	for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
 	{
-		GetPlayerWeaponData(playerid, i, w, a);
-		if(w == 0)
-			continue;
-
-		if(ct == 0)
+		if(GunmenuData[i][HasGun][playerid])
 		{
-			format(str, sizeof str, "%s%s", str, WeaponNames[w]);
-			ct ++;
+			weap = GunmenuData[i][GunID];
+			if(weap == 0)
+				continue;
+
+			if(ct == 0)
+			{
+				format(str, sizeof str, "%s%s", str, WeaponNames[weap]);
+				ct ++;
+			}
+			else
+				format(str, sizeof str, "%s / %s", str, WeaponNames[weap]);
 		}
-		else
-			format(str, sizeof str, "%s / %s", str, WeaponNames[w]);
-
-
 	}
 	format(str, sizeof str, "%s{FFFFFF})", str);
 	foreach(new i : Player)

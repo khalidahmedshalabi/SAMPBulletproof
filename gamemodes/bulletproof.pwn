@@ -1886,7 +1886,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			{
 			    GivePlayerWeapon(playerid, weap, ammo);
 			}
-			SetTimerEx("ShowPlayerMeleeWeaponsMenu", GetPlayerPing(playerid) + 70, false, "i", playerid);
+			SetTimerEx("ShowPlayerMeleeWeaponsMenu", GetPlayerPing(playerid) + 200, false, "i", playerid);
 	    }
 	    return 1;
 	}
