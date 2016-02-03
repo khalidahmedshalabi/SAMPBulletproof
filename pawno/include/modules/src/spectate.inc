@@ -27,7 +27,7 @@ TIMER(UpdateInfoForSpectators)
 			MAIN_TEXT_COLOUR, Player[specid][Name], specid, MAIN_TEXT_COLOUR, Player[specid][pArmour], Player[specid][pHealth], MAIN_TEXT_COLOUR, GetPlayerFPS(specid), MAIN_TEXT_COLOUR, GetPlayerPing(specid), 
 			MAIN_TEXT_COLOUR, NetStats_PacketLossPercent(specid), MAIN_TEXT_COLOUR, Player[specid][RoundKills], MAIN_TEXT_COLOUR, Player[specid][RoundDamage], MAIN_TEXT_COLOUR, Player[specid][TotalDamage]);
 			
-		#if _league_included
+		#if defined _league_included
 		format(specStr, sizeof specStr, "%s~n~%sPoints: ~r~~h~%d/%d", specStr, MAIN_TEXT_COLOUR, GetPlayerLeagueRoundPoints(specid), GetPlayerLeagueTotalPoints(specid));
 		#endif
 		PlayerTextDrawSetString(i, SpecText[i][1], specStr);
