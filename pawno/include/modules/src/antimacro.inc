@@ -87,7 +87,8 @@ bool:CheckPlayerSprintMacro(playerid, newkeys, oldkeys)
 			AntimacroData[playerid][TimesWarned] = 0;
 			AntimacroData[playerid][LastTimeWarned] = 0; 
 			SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been running like a cheetah and since this ain't no zoo he's kicked!", Player[playerid][Name]));
-			SetTimerEx("OnPlayerKicked", 100, false, "i", playerid);
+			SendClientMessageToAll(-1, ""COL_PRIM"Warning: {FFFFFF}this is rarely a false-positive, however it could still occur due to lag or desync!");
+			SetTimerEx("OnPlayerKicked", 1000, false, "i", playerid);
 			return true; // PUNISHED
 		}
 		UpdatePlayerSprintMacroData(playerid, speed, tick, false);
