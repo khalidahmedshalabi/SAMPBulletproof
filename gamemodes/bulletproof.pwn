@@ -3445,9 +3445,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			"Login",
 			"Quit"
 		);
+		return 1;
 	}
 	#endif
-	return 1;
+	return 0;
 }
 
 public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
