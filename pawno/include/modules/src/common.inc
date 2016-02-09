@@ -621,7 +621,7 @@ public HideAnnForAll()
 
 CanPlay(playerid)
 {
-    if(noclipdata[playerid][FlyMode] == true)
+    if(noclipdata[playerid][FlyMode] == true || Player[playerid][InDuel])
 		return 0;
 
     if(!(Player[playerid][Team] == ATTACKER || Player[playerid][Team] == DEFENDER))

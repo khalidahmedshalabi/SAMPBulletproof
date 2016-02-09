@@ -3047,6 +3047,31 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
+				case 24:
+				{
+				    switch(AutoRoundStarter)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"auto round start{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							AutoRoundStarter = true;
+							if(Current == -1 && AllowStartBase != false)
+							{
+							    SetRoundAutoStart(0);
+							}
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"auto round start{FFFFFF} option.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							AutoRoundStarter = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'AutoRoundStarter'", (AutoRoundStarter == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
 	        }
 	    }
 	    return 1;

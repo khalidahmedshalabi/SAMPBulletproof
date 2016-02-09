@@ -29,6 +29,7 @@ new bool:CPInArena = false;
 new bool:AntiMacros = true;
 new bool:LeagueAllowed = true;
 new bool:MeleeAllowed = false;
+new bool:AutoRoundStarter = false;
 
 new RoundHP = 100, RoundAR = 100;
 

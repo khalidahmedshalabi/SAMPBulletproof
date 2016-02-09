@@ -50,6 +50,84 @@ hook OnGameModeInit()
 	return 1;
 }
 
+forward StartRoundAutomatically();
+public StartRoundAutomatically()
+{
+	if(!AutoRoundStarter || Current != -1 || AllowStartBase == false)
+		return 0;
+	
+	new ct[2] = {0, 0};
+	foreach(new i : Player)
+	{
+		if(noclipdata[i][FlyMode] == true || Player[i][InDuel])
+			continue;	
+		
+		switch(Player[i][Team])
+		{
+			case ATTACKER:
+			{
+				ct[0] ++;
+			}
+			case DEFENDER:
+			{
+				ct[1] ++;
+			}
+		}
+	}
+	if(ct[0] < 1 || ct[1] < 1)
+	{
+		SendClientMessageToAll(-1, ""COL_PRIM"Auto round starter error: {FFFFFF}Not enough players to start a round!");
+		SendClientMessageToAll(-1, "{FFFFFF}System "COL_PRIM"will try to start a round again in 60 seconds!");
+		SetTimer("StartRoundAutomatically", 60000, false);
+		return 0;
+	}
+	
+	AllowStartBase = false; // Make sure other player or you yourself is not able to start round on top of another round.
+	foreach(new i : Player) 
+	{
+		if(CanPlay(i)) 
+		{
+			TogglePlayerControllable(i, 0); // Pause all the players.
+			Player[i][ToAddInRound] = true;
+		}
+	}
+	switch(random(2))
+	{
+		case 0: // arena
+		{
+			new id = DetermineRandomRound(0, true, ARENA);
+			SetTimerEx("OnArenaStart", 2000, false, "i", id);
+			
+			new str[144];
+			format(str, sizeof(str), "{FFFFFF}System "COL_PRIM"has randomly started Arena: {FFFFFF}%s (ID: %d)", AName[id], id);
+			SendClientMessageToAll(-1, str);
+		}
+		case 1: // base
+		{
+			new id = DetermineRandomRound(0, true, BASE);
+			SetTimerEx("OnBaseStart", 2000, false, "i", id);
+			
+			new str[144];
+			format(str, sizeof(str), "{FFFFFF}System "COL_PRIM"has randomly started Base: {FFFFFF}%s (ID: %d)", BName[id], id);
+			SendClientMessageToAll(-1, str);
+		}
+	}
+	return 1;
+}
+
+SetRoundAutoStart(in_seconds)
+{
+	if(in_seconds > 0)
+	{
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}System "COL_PRIM"is starting another round in %d seconds!", in_seconds));
+		SetTimer("StartRoundAutomatically", in_seconds * 1000, false);
+	}
+	else
+	{
+		StartRoundAutomatically();
+	}
+}
+
 // Set default name for all teams
 SetTeamDefaultNames()
 {
@@ -2794,6 +2872,9 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
     ResetTeamLeaders();
 	Iter_Clear(PlayersInRound);
 
+	if(AutoRoundStarter)
+		SetRoundAutoStart(20);
+	
     SetTimer("NotEndingRound", 3000, false);
 	return 1;
 }
