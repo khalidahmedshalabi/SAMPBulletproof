@@ -82,6 +82,9 @@ public StartRoundAutomatically()
 		return 0;
 	}
 	
+	BalanceTeams();
+	SendClientMessageToAll(-1, "{FFFFFF}System "COL_PRIM"has balanced the teams!");
+	
 	AllowStartBase = false; // Make sure other player or you yourself is not able to start round on top of another round.
 	foreach(new i : Player) 
 	{
