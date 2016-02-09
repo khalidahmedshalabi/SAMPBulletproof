@@ -74,7 +74,7 @@ InitScriptSecondarySettings()
     Current = -1;
 	
 	// Settings
-	SetGameModeText(sprintf("%s v%.2f", GM_NAME, GM_VERSION)); // Text that appears on 'Mode' column when you click on a server in samp.exe
+	FixGamemodeText(); // Text that appears on 'Mode' column when you click on a server in samp.exe
     SendRconCommand("mapname Lobby");
 	CheckServerHostname();
 	#if defined _league_included
@@ -127,4 +127,9 @@ AddToServersDatabase()
     format(post, sizeof(post), "IP=%s&Port=%d&HostName=%s", ServerIP, port, hostname);
     HTTP(0, HTTP_POST, HTTP_DEST_SERVERLIST, post, "");
 	#endif
+}
+
+FixGamemodeText()
+{
+	SetGameModeText(sprintf("%s v%.2f%s", GM_NAME, GM_VERSION, GM_BONUS_VERSION));
 }
