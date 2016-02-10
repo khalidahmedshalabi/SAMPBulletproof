@@ -7767,7 +7767,7 @@ YCMD:end(playerid, params[], help)
 	ArenaStarted = false;
 
     SendRconCommand("mapname Lobby");
-	SetGameModeText(sprintf("%s v%.2f", GM_NAME, GM_VERSION));
+	FixGamemodeText();
 
 	new iString[64];
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has ended the round.", Player[playerid][Name]);
@@ -7779,6 +7779,8 @@ YCMD:end(playerid, params[], help)
 	GangZoneDestroy(ArenaZone);
 	ResetTeamLeaders();
     Iter_Clear(PlayersInRound);
+    
+    SetRoundAutoStart(20);
     LogAdminCommand("end", playerid, INVALID_PLAYER_ID);
 	return 1;
 }
