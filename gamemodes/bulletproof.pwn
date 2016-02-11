@@ -7517,6 +7517,7 @@ YCMD:addall(playerid, params[], help)
 		return SendErrorMessage(playerid,"Round is not active.");
 		
 	new bool:addDead = strcmp(params, "dead", true) == 0 ? true : false;
+	new ct = 0;
 	switch(WarMode)
 	{
 	    case true:
@@ -7539,6 +7540,7 @@ YCMD:addall(playerid, params[], help)
 							AddPlayerToArena(i);
 						}
 					}
+					ct ++;
 				}
 			}
 	    }
@@ -7564,17 +7566,35 @@ YCMD:addall(playerid, params[], help)
 							AddPlayerToArena(i);
 						}
 					}
+					ct ++;
 				}
 			}
 	    }
 	}
-	if(!addDead)
+	if(ct == 0)
 	{
-	    SendUsageMessage(playerid, "to also add players who died, type /addall dead");
+	    switch(addDead)
+	    {
+	        case true:
+	        {
+	            SendErrorMessage(playerid, "Found no players which could be added to the round!");
+	        }
+	        case false:
+	        {
+	            SendErrorMessage(playerid, "No players to add! Did you want to add dead players? Use /addall dead");
+	        }
+	    }
 	}
-    new iString[64];
-    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has added everyone to the round.", Player[playerid][Name]);
-    SendClientMessageToAll(-1, iString);
+	else
+	{
+		if(!addDead)
+		{
+		    SendUsageMessage(playerid, "to also add players who died, you can type /addall dead");
+		}
+	    new iString[64];
+	    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has added everyone to the round.", Player[playerid][Name]);
+	    SendClientMessageToAll(-1, iString);
+  	}
 	return 1;
 }
 
