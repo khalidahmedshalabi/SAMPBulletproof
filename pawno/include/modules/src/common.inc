@@ -578,9 +578,6 @@ ShowTargetInfo(playerid, targetid)
 {
 	if(targetid == INVALID_PLAYER_ID || playerid == INVALID_PLAYER_ID)
 		return 1;
-
-	if(GetPlayerTeam(targetid) == GetPlayerTeam(playerid) && GetPlayerTeam(playerid) != NO_TEAM)
-		return 1;
 	
 	if(targetid == TargetInfoData[playerid][TargetInfoLastTarget] && GetTickCount() < TargetInfoData[playerid][TargetInfoLastTick])
 		return 1;
@@ -603,7 +600,7 @@ ShowTargetInfo(playerid, targetid)
 	}
 	PlayerTextDrawSetString(playerid, TargetInfoData[playerid][TargetInfoTD], str);
 	PlayerTextDrawShow(playerid, TargetInfoData[playerid][TargetInfoTD]);
-	TargetInfoData[playerid][TargetInfoLastTick] = GetTickCount() + 200;
+	TargetInfoData[playerid][TargetInfoLastTick] = GetTickCount() + 2000;
 	TargetInfoData[playerid][TargetInfoLastTarget] = targetid;
 
 	if(TargetInfoData[playerid][TargetInfoTimer] == -1)
