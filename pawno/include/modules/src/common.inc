@@ -1251,8 +1251,19 @@ GetCardinalPoint(Float:degree)
 {
     // this function return a string that contain the Cardinal point of a heading direction
 
-    new CardinalPoint[11]; //needed string
+	// Create string and initialize it to hold the direction text
+    new CardinalPoint[11];
 	CardinalPoint[0] = EOS;
+	
+	/*
+		From SA:MP wiki
+		
+		"Angles are reversed in GTA:SA; 90 degrees would be 
+		East in the real world, but in GTA:SA 90 degrees is 
+		in fact West. North and South are still 0/360 and 180
+	*/
+	degree = 360.0 - degree; // correct conversion
+	
     // each cardinal point cover 45degree (45 X 8 = 360)
     if(337.5 <= degree <= 360) strcat(CardinalPoint,"North");
     else if(0 <= degree <= 22.5) strcat(CardinalPoint,"North");
