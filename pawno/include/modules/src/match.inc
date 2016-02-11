@@ -1534,6 +1534,7 @@ public ShowPlayingPlayersGunmenu()
 forward OnRCStart();
 public OnRCStart()
 {
+	AutoAFKCheck(); // Checks all players and set idle players to afk mode
 	RCArena = true;
 	new ArenaID = 72; // That's the ID of the RC arena (interior)
 	ClearKillList(); // Clears the kill-list.
@@ -1766,6 +1767,7 @@ SpawnPlayersInRC()
 forward OnArenaStart(ArenaID);
 public OnArenaStart(ArenaID)
 {
+	AutoAFKCheck(); // Checks all players and set idle players to afk mode
     ClearKillList(); // Clears the kill-list.
     DestroyDynamicVehicles(1); // Destroys vehicles
 	DeleteAllDeadBodies();
@@ -2110,6 +2112,7 @@ public AddPlayerToArena(playerid)
 forward OnBaseStart(BaseID);
 public OnBaseStart(BaseID)
 {
+	AutoAFKCheck(); // Checks all players and set idle players to afk mode
 	ClearKillList(); // Clears the kill-list.
     DestroyDynamicVehicles(1); // Destroys vehicles
 	DeleteAllDeadBodies();

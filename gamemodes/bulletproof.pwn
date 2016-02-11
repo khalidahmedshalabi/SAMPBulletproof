@@ -673,7 +673,7 @@ public OnPlayerText(playerid, text[])
 		return 0;
 	}
 	#if defined _league_included
-    // League admins chat
+	// League admins chat
 	if(text[0] == '~' && IsLeagueMod(playerid))
 	{
 	    new ChatString[128];
@@ -1231,7 +1231,6 @@ public OnRconLoginAttempt(ip[], password[], success)
 	}
     return 1;
 }
-
 
 public OnPlayerUpdate(playerid)
 {

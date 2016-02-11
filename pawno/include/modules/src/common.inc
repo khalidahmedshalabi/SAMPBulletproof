@@ -17,7 +17,6 @@
 #include "modules\header\weaponbinds.txt"
 #include "modules\header\messagebox.txt"
 
-//Common functions
 forward OnPlayerKicked(playerid);
 public OnPlayerKicked(playerid) {
 	Player[playerid][IsKicked] = true;
@@ -75,6 +74,32 @@ SendUsageMessage(playerid, text[], messagebox_type = MSGBOX_TYPE_MIDDLE)
 		}
 	}
 	return 1;
+}
+
+// Checks all players and set idle players to afk mode
+AutoAFKCheck()
+{
+	foreach(new i : Player)
+	{
+		if(Player[i][PauseCount] > 30) // If they've been away for more than 30 seconds
+		{
+			if(Player[i][Playing] == true)
+				RemovePlayerFromRound(i);
+			else if(Player[i][ToAddInRound] == true)
+				Player[i][ToAddInRound] = false;
+			else if(Player[i][Spectating] == true) 
+				StopSpectate(i);
+			else if(Player[i][InDM] == true) 
+				QuitDM(i);
+
+			Player[i][Team] = NON;
+			SetPlayerColor(i, 0xAAAAAAAA);
+			TogglePlayerControllable(i, 0);
+			Player[i][IsAFK] = true;
+
+			SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been set to AFK mode automatically due to %d seconds of inactivity!", Player[i][Name], Player[i][PauseCount]));
+		}
+	}
 }
 
 CreateDeadBody(playerid, killerid, reason, Float:distance = 0.0, Float:x = 0.0, Float:y = 0.0, Float:z = 0.0)
