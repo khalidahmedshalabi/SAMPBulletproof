@@ -673,6 +673,7 @@ public OnPlayerText(playerid, text[])
 		return 0;
 	}
 	#if defined _league_included
+	/*
 	// League admins chat
 	if(text[0] == '~' && IsLeagueMod(playerid))
 	{
@@ -688,6 +689,7 @@ public OnPlayerText(playerid, text[])
 		}
 		return 0;
 	}
+	*/
 	// League clans chat
 	if(text[0] == '#')
 	{
