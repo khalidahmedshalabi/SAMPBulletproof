@@ -2149,7 +2149,7 @@ public OnBaseStart(BaseID)
 	ViewBaseCamPos[0] = BCPSpawn[Current][0];
 	ViewBaseCamPos[1] = BCPSpawn[Current][1];
 	ViewBaseCamPos[2] = BCPSpawn[Current][2];
-	ViewTimer = 8;
+	ViewTimer = 9;
 	
 	CPZone = GangZoneCreate(BCPSpawn[Current][0]-50, BCPSpawn[Current][1]-50, BCPSpawn[Current][0]+50, BCPSpawn[Current][1]+50);
 	GangZoneShowForAll(CPZone, 0xFF000044);
@@ -2221,51 +2221,68 @@ public ViewBaseForPlayers()
 	    return 1;
 	}
 	
-	new 
-		bool:ViewBaseMoveCamera = false,
-		Float:LastCamPos[3];
+	new Float:LastCamPos[3];
 		
 	switch(ViewTimer)
 	{
-		case 8:
+		case 9:
 		{
-			ViewBaseMoveCamera = true;
 			LastCamPos[0] = ViewBaseCamPos[0];
 			LastCamPos[1] = ViewBaseCamPos[1];
 			LastCamPos[2] = ViewBaseCamPos[2];
-			ViewBaseCamPos[0] = BCPSpawn[Current][0] + randomExInt(15, 25);
-			ViewBaseCamPos[1] = BCPSpawn[Current][1] + randomExInt(15, 25);
-			ViewBaseCamPos[2] = BCPSpawn[Current][2] + randomExInt(60, 70);
-		}
-		case 4:
-		{
-			ViewBaseMoveCamera = true;
-			LastCamPos[0] = ViewBaseCamPos[0];
-			LastCamPos[1] = ViewBaseCamPos[1];
-			LastCamPos[2] = ViewBaseCamPos[2];
-			ViewBaseCamPos[0] = BCPSpawn[Current][0] + randomExInt(40, 50);
-			ViewBaseCamPos[1] = BCPSpawn[Current][1] + randomExInt(40, 50);
-			ViewBaseCamPos[2] = BCPSpawn[Current][2] + 5;
-		}
-	}
-	new iString[64];
-	format(iString,sizeof(iString),"~w~Base starting in ~r~~h~%d ~w~seconds", ViewTimer);
-	TextDrawSetString( centerTeamNames, iString);
-	switch(ViewBaseMoveCamera)
-	{
-		case true:
-		{
+			ViewBaseCamPos[0] = BCPSpawn[Current][0] + 50.0;
+			ViewBaseCamPos[1] = BCPSpawn[Current][1] - 20.0;
+			ViewBaseCamPos[2] = BCPSpawn[Current][2] + 70.0;
+			
 			foreach(new i : Player) 
 			{
 				if(Player[i][ToAddInRound] == true)
 				{
 					PlayerPlaySound(i,1139,0.0,0.0,0.0);
-					InterpolateCameraPos(i, LastCamPos[0], LastCamPos[1], LastCamPos[2], ViewBaseCamPos[0], ViewBaseCamPos[1], ViewBaseCamPos[2], 4000, CAMERA_MOVE);
-					InterpolateCameraLookAt(i, BCPSpawn[Current][0], BCPSpawn[Current][1], BCPSpawn[Current][2], BCPSpawn[Current][0], BCPSpawn[Current][1], BCPSpawn[Current][2], 4000, CAMERA_MOVE);
+					InterpolateCameraPos(i, LastCamPos[0], LastCamPos[1], LastCamPos[2], ViewBaseCamPos[0], ViewBaseCamPos[1], ViewBaseCamPos[2], 3000, CAMERA_MOVE);
+					InterpolateCameraLookAt(i, BCPSpawn[Current][0], BCPSpawn[Current][1], BCPSpawn[Current][2], BCPSpawn[Current][0], BCPSpawn[Current][1], BCPSpawn[Current][2], 3000, CAMERA_MOVE);
 				}
 			}
 		}
-		case false:
+		case 6:
+		{
+			LastCamPos[0] = ViewBaseCamPos[0];
+			LastCamPos[1] = ViewBaseCamPos[1];
+			LastCamPos[2] = ViewBaseCamPos[2];
+			ViewBaseCamPos[0] = BCPSpawn[Current][0] - 20.0;
+			ViewBaseCamPos[1] = BCPSpawn[Current][1] + 50.0;
+			ViewBaseCamPos[2] = BCPSpawn[Current][2] + 15.0;
+			
+			foreach(new i : Player) 
+			{
+				if(Player[i][ToAddInRound] == true)
+				{
+					PlayerPlaySound(i,1139,0.0,0.0,0.0);
+					InterpolateCameraPos(i, LastCamPos[0], LastCamPos[1], LastCamPos[2], ViewBaseCamPos[0], ViewBaseCamPos[1], ViewBaseCamPos[2], 3000, CAMERA_MOVE);
+					InterpolateCameraLookAt(i, BCPSpawn[Current][0], BCPSpawn[Current][1], BCPSpawn[Current][2], BCPSpawn[Current][0], BCPSpawn[Current][1], BCPSpawn[Current][2], 3000, CAMERA_MOVE);
+				}
+			}
+		}
+		case 3:
+		{
+			LastCamPos[0] = ViewBaseCamPos[0];
+			LastCamPos[1] = ViewBaseCamPos[1];
+			LastCamPos[2] = ViewBaseCamPos[2];
+			ViewBaseCamPos[0] = BCPSpawn[Current][0] + 5.0;
+			ViewBaseCamPos[1] = BCPSpawn[Current][1] - 5.0;
+			ViewBaseCamPos[2] = BCPSpawn[Current][2] + 3.0;
+			
+			foreach(new i : Player) 
+			{
+				if(Player[i][ToAddInRound] == true)
+				{
+					PlayerPlaySound(i,1139,0.0,0.0,0.0);
+					InterpolateCameraPos(i, LastCamPos[0], LastCamPos[1], LastCamPos[2], ViewBaseCamPos[0], ViewBaseCamPos[1], ViewBaseCamPos[2], 3000, CAMERA_MOVE);
+					InterpolateCameraLookAt(i, BCPSpawn[Current][0], BCPSpawn[Current][1], BCPSpawn[Current][2], BCPSpawn[Current][0], BCPSpawn[Current][1], BCPSpawn[Current][2], 3000, CAMERA_MOVE);
+				}
+			}
+		}
+		default:
 		{
 			foreach(new i : Player) 
 			{
@@ -2274,6 +2291,9 @@ public ViewBaseForPlayers()
 			}
 		}
 	}
+	new iString[64];
+	format(iString,sizeof(iString),"~w~Base starting in ~r~~h~%d ~w~seconds", ViewTimer);
+	TextDrawSetString( centerTeamNames, iString);
 
 	ViewTimer --;
 	return SetTimer("ViewBaseForPlayers", 1000, false);
