@@ -4348,7 +4348,6 @@ YCMD:ann(playerid, params[], help)
 	return 1;
 }
 
-
 YCMD:freecam(playerid, params[], help)
 {
     if(help)
@@ -4360,29 +4359,16 @@ YCMD:freecam(playerid, params[], help)
 	if(Player[playerid][InDM] == true) return 1;
 	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"Can't use this command during duel.");
 	if(Player[playerid][AntiLag] == true) return 1;
-	if(Player[playerid][Spectating] == true) return 1;
+	if(Player[playerid][Spectating] == true && !noclipdata[playerid][FlyMode]) return 1;
+	if(GetPlayerVehicleID(playerid)) return SendErrorMessage(playerid, "You cannot use this command while in vehicle.");
 
 	if(noclipdata[playerid][FlyMode] == true)
 	{
-		CancelFlyMode(playerid);
-		PlayerTextDrawShow(playerid, RoundKillDmgTDmg[playerid]);
-		if(PlayerInterface[playerid][INTERFACE_NET])
-			PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
-		PlayerTextDrawShow(playerid, BaseID_VS[playerid]);
-  		switch(PlayerInterface[playerid][INTERFACE_HP])
-		{
-			case true:
-			{
-				PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid]);
-				PlayerTextDrawShow(playerid, ArmourTextDraw[playerid]);
-			}
-		}
-		ShowPlayerProgressBar(playerid, HealthBar[playerid]);
-		ShowPlayerProgressBar(playerid, ArmourBar[playerid]);
+		SendClientMessage(playerid, -1, "Use /specoff to exit FreeCam!");
 	}
 	else
 	{
-		PlayerFlyMode(playerid);
+		PlayerFlyMode(playerid, false);
 		SendClientMessage(playerid, -1, "Use /specoff to exit FreeCam!");
 		PlayerTextDrawHide(playerid, RoundKillDmgTDmg[playerid]);
 		PlayerTextDrawHide(playerid, FPSPingPacket[playerid]);
@@ -4392,7 +4378,6 @@ YCMD:freecam(playerid, params[], help)
 		HidePlayerProgressBar(playerid, HealthBar[playerid]);
 		HidePlayerProgressBar(playerid, ArmourBar[playerid]);
 	}
-	LogAdminCommand("freecam", playerid, INVALID_PLAYER_ID);
 	return 1;
 }
 

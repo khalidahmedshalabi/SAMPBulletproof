@@ -29,50 +29,57 @@ MoveIt(playerid, Float:toX, Float:toY, Float:toZ)
 }
 */
 
-PlayerFlyMode(playerid)
+PlayerFlyMode(playerid, bool:frozencamera)
 {
-	// Create an invisible object for the players camera to be attached to
-	if(Player[playerid][Spectating] == true) StopSpectate(playerid);
-
-	new tmp;
-	if(Player[playerid][BeingSpeced] == true) 
+	// If the player is spectating, cancel spectation mode
+	if(Player[playerid][Spectating] == true) 
+		StopSpectate(playerid);
+	else
 	{
-	    foreach(new i : AllSpectators) 
+		// If the player was being spectated by someone else, stop spectation mode for them
+		new tmp;
+		if(Player[playerid][BeingSpeced] == true) 
 		{
-	        if(Player[i][IsSpectatingID] == playerid) 
+			foreach(new i : AllSpectators) 
 			{
-				tmp = i;
-				Iter_SafeRemove(AllSpectators, i, i);
-	            StopSpectate(tmp, false);
+				if(Player[i][IsSpectatingID] == playerid) 
+				{
+					tmp = i;
+					Iter_SafeRemove(AllSpectators, i, i);
+					StopSpectate(tmp, false);
+				}
 			}
 		}
 	}
 
+	// Get the player's position
 	new Float:X, Float:Y, Float:Z;
 	GetPlayerPos(playerid, X, Y, Z);
+	
+	// Create an invisible object for the players camera to be attached to
 	noclipdata[playerid][flyobject] = CreatePlayerObject(playerid, 19300, X, Y, Z, 0.0, 0.0, 0.0);
-
-	// Place the player in spectating mode so objects will be streamed based on camera location
-	TogglePlayerSpectating(playerid, true);
-	// Attach the players camera to the created object
-	AttachCameraToPlayerObject(playerid, noclipdata[playerid][flyobject]);
-
+	
+	// Set variables correct values
 	noclipdata[playerid][FlyMode] = true;
 	Player[playerid][Spectating] = true;
 	noclipdata[playerid][cameramode] = CAMERA_MODE_FLY;
-
+	noclipdata[playerid][camfrozen] = frozencamera;
+	
+	// Set player's virtual world to main world
 	SetPlayerVirtualWorld(playerid, 0);
+	
+	// Clear player's animations
+	ClearAnimations(playerid);
+	
+	// Place the player in spectating mode so objects will be streamed based on camera location
+	TogglePlayerSpectating(playerid, true);
+	
+	// Attach the players camera to the previously created (invisible) object
+	AttachCameraToPlayerObject(playerid, noclipdata[playerid][flyobject]);
 	return 1;
 }
 
-forward SetPosAfterFly(playerid, Float:tX, Float:tY, Float:tZ);
-public SetPosAfterFly(playerid, Float:tX, Float:tY, Float:tZ)
-{
-	SetPlayerPos(playerid, tX, tY, tZ);
-	return 1;
-}
-
-CancelFlyMode(playerid/*, bool:setpos = true*/)
+CancelFlyMode(playerid)
 {
 	if(!noclipdata[playerid][FlyMode])
 		return 0;
@@ -80,12 +87,7 @@ CancelFlyMode(playerid/*, bool:setpos = true*/)
 	noclipdata[playerid][FlyMode] = false;
 
 	CancelEdit(playerid);
-//	new Float:X, Float:Y, Float:Z;
-//	GetPlayerCameraPos(playerid, X, Y, Z);
 	TogglePlayerSpectating(playerid, false);
-//	if(setpos)
-//		SetTimerEx("SetPosAfterFly", 1000, false, "ifff", playerid, X, Y, Z);
-
 
 	DestroyPlayerObject(playerid, noclipdata[playerid][flyobject]);
 	noclipdata[playerid][cameramode] = CAMERA_MODE_NONE;
@@ -203,26 +205,29 @@ ProcessFreeCameraMovement(playerid)
 		// If the last move was > 100ms ago, process moving the object the players camera is attached to
 		MoveCamera(playerid);
 	}
-	new keys, ud, lr;
-	GetPlayerKeys(playerid, keys, ud, lr);
-	// Is the players current key state different than their last keystate?
-	if(noclipdata[playerid][udold] != ud || noclipdata[playerid][lrold] != lr)
+	if(!noclipdata[playerid][camfrozen])
 	{
-		if((noclipdata[playerid][udold] != 0 || noclipdata[playerid][lrold] != 0) && ud == 0 && lr == 0)
-		{   // All keys have been released, stop the object the camera is attached to and reset the acceleration multiplier
-			StopPlayerObject(playerid, noclipdata[playerid][flyobject]);
-			noclipdata[playerid][noclipcammode] = 0;
-			noclipdata[playerid][accelmul]  = 0.0;
-		}
-		else
-		{   // Indicates a new key has been pressed
+		new keys, ud, lr;
+		GetPlayerKeys(playerid, keys, ud, lr);
+		// Is the players current key state different than their last keystate?
+		if(noclipdata[playerid][udold] != ud || noclipdata[playerid][lrold] != lr)
+		{
+			if((noclipdata[playerid][udold] != 0 || noclipdata[playerid][lrold] != 0) && ud == 0 && lr == 0)
+			{   // All keys have been released, stop the object the camera is attached to and reset the acceleration multiplier
+				StopPlayerObject(playerid, noclipdata[playerid][flyobject]);
+				noclipdata[playerid][noclipcammode] = 0;
+				noclipdata[playerid][accelmul]  = 0.0;
+			}
+			else
+			{   // Indicates a new key has been pressed
 
-			// Get the direction the player wants to move as indicated by the keys
-			noclipdata[playerid][noclipcammode] = GetMoveDirectionFromKeys(ud, lr);
+				// Get the direction the player wants to move as indicated by the keys
+				noclipdata[playerid][noclipcammode] = GetMoveDirectionFromKeys(ud, lr);
 
-			// Process moving the object the players camera is attached to
-			MoveCamera(playerid);
+				// Process moving the object the players camera is attached to
+				MoveCamera(playerid);
+			}
 		}
+		noclipdata[playerid][udold] = ud; noclipdata[playerid][lrold] = lr; // Store current keys pressed for comparison next update
 	}
-	noclipdata[playerid][udold] = ud; noclipdata[playerid][lrold] = lr; // Store current keys pressed for comparison next update
 }
