@@ -242,6 +242,17 @@ LoadTextDraws()
 	TextDrawBoxColor(DarkScreen, 0x00000033);
 	TextDrawTextSize(DarkScreen, -16.000000, 105.000000);
 	
+	RedDeathScreen = TextDrawCreate(727.000000, -2.000000, "~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~");
+	TextDrawBackgroundColor(RedDeathScreen, 255);
+	TextDrawFont(RedDeathScreen, 3);
+	TextDrawLetterSize(RedDeathScreen, 0.500000, 1.000000);
+	TextDrawColor(RedDeathScreen, -1);
+	TextDrawSetOutline(RedDeathScreen, 1);
+	TextDrawSetProportional(RedDeathScreen, 1);
+	TextDrawUseBox(RedDeathScreen, 1);
+	TextDrawBoxColor(RedDeathScreen, 0xFF000055);
+	TextDrawTextSize(RedDeathScreen, -16.000000, 105.000000);
+	
 	for(new i = 0; i < MAX_TEAMS; i ++)
 	{
 		GunmenuLimitsTD[i] = TextDrawCreate(2.000000, 147.000000, " ");

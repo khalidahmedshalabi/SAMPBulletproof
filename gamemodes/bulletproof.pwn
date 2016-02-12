@@ -559,7 +559,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 		    {
 				showdeathquote = !Player[killerid][HasDeathQuote];
 			}
-	        PlayDeathCamera(playerid, x, y, z, showdeathquote);
+	        PlayDeathCamera(playerid, showdeathquote);
 	    }
 	    else // If not
 	    {

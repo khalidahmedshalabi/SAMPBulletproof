@@ -10,12 +10,13 @@ public OnPlayerDeathCameraEnd(playerid)
 	if(!Player[playerid][InDeathCamera])
 		return 0;
 	
+	SetPlayerDrunkLevel(playerid, 0);
+	CancelFlyMode(playerid);
 	Player[playerid][InDeathCamera] = false;
 	OnPlayerSpawn(playerid);
 	Player[playerid][IgnoreSpawn] = false;
-	TogglePlayerSpectating(playerid, false);
 	HideMessageBox(playerid, -1);
-	TextDrawHideForPlayer(playerid, DarkScreen);
+	TextDrawHideForPlayer(playerid, RedDeathScreen);
 	switch(PlayerInterface[playerid][INTERFACE_HP])
 	{
 		case true:
@@ -43,7 +44,7 @@ public OnPlayerDeathCameraEnd(playerid)
 	return 1;
 }
 
-PlayDeathCamera(playerid, Float:deathX, Float:deathY, Float:deathZ, bool:deathquote)
+PlayDeathCamera(playerid, bool:deathquote)
 {
 	if(Player[playerid][InDeathCamera])
 		return;
@@ -54,7 +55,7 @@ PlayDeathCamera(playerid, Float:deathX, Float:deathY, Float:deathZ, bool:deathqu
 		MessageBox(playerid, MSGBOX_TYPE_MIDDLE, sprintf("~r~~h~~h~%s", WarQuotesAuthors[randWarQuote]), WarQuotes[randWarQuote], DEATH_CAMERA_DURATION);
 	}
 	
-	TextDrawShowForPlayer(playerid, DarkScreen);
+	TextDrawShowForPlayer(playerid, RedDeathScreen);
 	// Hide some HUD textdraws
 	PlayerTextDrawHide(playerid, RoundKillDmgTDmg[playerid]);
 	PlayerTextDrawHide(playerid, HPTextDraw_TD[playerid]);
@@ -64,27 +65,9 @@ PlayDeathCamera(playerid, Float:deathX, Float:deathY, Float:deathZ, bool:deathqu
 	PlayerTextDrawHide(playerid, PlayerLeagueStatsTD[playerid]);
 	#endif
 	
-	TogglePlayerSpectating(playerid, true);
-	new randomCameraMove = random(3);
-	switch(randomCameraMove)
-	{
-		// Look at the dead body at the beginning from a low height and then get higher with the camera slowly while changing X/Y position
-		case 0:
-		{
-			InterpolateCameraPos(playerid, deathX + 1.0, deathY, deathZ, deathX, deathY + 1.0, deathZ + 6.0, DEATH_CAMERA_DURATION, CAMERA_MOVE);
-		}
-		// Look at the dead body at the beginning from a high level and then change X/Y position while getting lower with the camera slowly
-		case 1:
-		{
-			InterpolateCameraPos(playerid, deathX, deathY + 1.0, deathZ + 6.0, deathX + 1.0, deathY, deathZ, DEATH_CAMERA_DURATION, CAMERA_MOVE);
-		}
-		// Look at the dead body at the beginning from the same level of the body and then change X/Y position while staying at the same height
-		case 2:
-		{
-			InterpolateCameraPos(playerid, deathX - 1.0, deathY, deathZ - 0.2, deathX, deathY + 2.0, deathZ - 0.2, DEATH_CAMERA_DURATION, CAMERA_MOVE);
-		}
-	}
-	InterpolateCameraLookAt(playerid, deathX, deathY, deathZ - 0.2, deathX, deathY, deathZ - 0.2, DEATH_CAMERA_DURATION, CAMERA_MOVE);
+	PlayerFlyMode(playerid, true);
+	SetPlayerDrunkLevel(playerid, 50000);
+	
 	Player[playerid][InDeathCamera] = true;
 	SetTimerEx("OnPlayerDeathCameraEnd", DEATH_CAMERA_DURATION, false, "i", playerid);
 	MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~y~~h~~h~~h~tip", "Press ~r~~h~~h~~k~~PED_FIREWEAPON~ ~w~to skip death camera!", DEATH_CAMERA_DURATION);

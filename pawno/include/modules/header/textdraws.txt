@@ -49,6 +49,7 @@ new Text: EN_AttackerBox;
 new Text: EN_DefenderBox;
 new Text: EN_CheckPoint;
 new Text: DarkScreen;
+new Text:RedDeathScreen;
 new Text: GunmenuLimitsTD[MAX_TEAMS];
 #if defined _league_included
 new Text: LeagueRoundResultTD;
