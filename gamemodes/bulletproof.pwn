@@ -2687,23 +2687,23 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    ShowPlayerDialog(playerid, DIALOG_ATT_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Attacker Team Name",iString,"Next","Close");
 	            }
 	            case 1: {
-	                format(iString, sizeof(iString), "%sAttacker Team\n%sDefender Team", TextColor[ATTACKER], TextColor[DEFENDER]);
-	                ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_TEAM_SKIN, DIALOG_STYLE_LIST, ""COL_PRIM"Select team", iString, "OK", "Cancel");
+	                format(iString, sizeof(iString), "%sAttacker Team\n%sDefender Team\n%sReferee Team", TextColor[ATTACKER], TextColor[DEFENDER], TextColor[REFEREE]);
+	                ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_TEAM_SKIN, DIALOG_STYLE_LIST, ""COL_PRIM"Select team", iString, "OK", "Back");
 	            }
 				case 2: {
-				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_AAD, DIALOG_STYLE_LIST, ""COL_PRIM"A/D Config", ""COL_PRIM"Health\n"COL_PRIM"Armour\n"COL_PRIM"Round Time\n"COL_PRIM"CP Time", "OK", "Cancel");
+				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_AAD, DIALOG_STYLE_LIST, ""COL_PRIM"A/D Config", ""COL_PRIM"Health\n"COL_PRIM"Armour\n"COL_PRIM"Round Time\n"COL_PRIM"CP Time", "OK", "Back");
 				}
 				case 3: {
 				    SendRconCommand("gmx");
 				}
 				case 4: {
-				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_MAX_PING, DIALOG_STYLE_INPUT, ""COL_PRIM"Set max Ping", "Set the max ping:", "OK", "Cancel");
+				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_MAX_PING, DIALOG_STYLE_INPUT, ""COL_PRIM"Set max Ping", "Set the max ping:", "OK", "Back");
 				}
 				case 5: {
-				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_MAX_PACKET, DIALOG_STYLE_INPUT, ""COL_PRIM"Set max Packetloss", "Set the max packetloss:", "OK", "Cancel");
+				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_MAX_PACKET, DIALOG_STYLE_INPUT, ""COL_PRIM"Set max Packetloss", "Set the max packetloss:", "OK", "Back");
 				}
 				case 6: {
-				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_MIN_FPS, DIALOG_STYLE_INPUT, ""COL_PRIM"Set Minimum FPS", "Set the minimum FPS:", "OK", "Cancel");
+				    ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_MIN_FPS, DIALOG_STYLE_INPUT, ""COL_PRIM"Set Minimum FPS", "Set the minimum FPS:", "OK", "Back");
 				}
 				case 7: {
 				    new string[90];
@@ -3227,8 +3227,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			switch(listitem)
 			{
-				case 0: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_ATT_SKIN, DIALOG_STYLE_INPUT, ""COL_PRIM"Attacker Name", ""COL_PRIM"Set the attacker skin below:", "OK", "Cancel"); }
-		        case 1: { ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_DEF_SKIN, DIALOG_STYLE_INPUT, ""COL_PRIM"Defender Name", ""COL_PRIM"Set the defender skin below:", "OK", "Cancel"); }
+				case 0: { CallLocalFunction("OnPlayerCommandText", "ds", playerid, "/teamskin 0"); }
+		        case 1: { CallLocalFunction("OnPlayerCommandText", "ds", playerid, "/teamskin 1"); }
+				case 2: { CallLocalFunction("OnPlayerCommandText", "ds", playerid, "/teamskin 2"); }
 			}
 		}
 		else
@@ -3322,18 +3323,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             ShowConfigDialog(playerid);
 		}
 		return 1;
-	}
-
-	if(dialogid == DIALOG_CONFIG_SET_ATT_SKIN) {
-	    CallLocalFunction("OnPlayerCommandText", "ds", playerid, sprintf("/teamskin 0 %s", inputtext));
-	    ShowConfigDialog(playerid);
-	    return 1;
-	}
-
-	if(dialogid == DIALOG_CONFIG_SET_DEF_SKIN) {
-	    CallLocalFunction("OnPlayerCommandText", "ds", playerid, sprintf("/teamskin 1 %s", inputtext));
-	    ShowConfigDialog(playerid);
-	    return 1;
 	}
 
 	if(dialogid == DIALOG_CONFIG_SET_MAX_PING) {
