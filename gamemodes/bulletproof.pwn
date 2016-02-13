@@ -6182,7 +6182,7 @@ YCMD:getpara(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "give you a parachute.");
 	    return 1;
 	}
-	GivePlayerWeapon(playerid, PARACHUTE, 1);
+	GivePlayerWeapon(playerid, WEAPON_PARACHUTE, 1);
     SendClientMessage(playerid, -1, "{FFFFFF}Parachute given.");
 	return 1;
 }

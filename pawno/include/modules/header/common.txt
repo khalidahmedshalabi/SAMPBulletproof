@@ -12,19 +12,6 @@
 #define PRESSING(%0,%1) \
 	(%0 & (%1))
 
-// Shortened weapon name definition
-#define KNIFE           4
-#define SILENCER        23
-#define DEAGLE          24
-#define SHOTGUN         25
-#define COMBAT          27
-#define MP5             29
-#define AK47            30
-#define M4              31
-#define RIFLE           33
-#define SNIPER          34
-#define PARACHUTE		46
-
 new 
 	Iterator:DeadBodyActors<MAX_ACTORS>,
 	Iterator:DeadBodyLabels<_:MAX_3DTEXT_GLOBAL>;

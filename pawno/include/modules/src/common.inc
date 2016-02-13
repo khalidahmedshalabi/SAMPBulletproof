@@ -673,11 +673,11 @@ SpawnInAntiLag(playerid) {
 	SetHP(playerid,	100);
 	SetAP(playerid,	100);
 
-    GivePlayerWeapon(playerid, SHOTGUN, 9996);
-    GivePlayerWeapon(playerid, SNIPER, 	9996);
-    GivePlayerWeapon(playerid, M4, 		9996);
-    GivePlayerWeapon(playerid, MP5, 	9996);
-	GivePlayerWeapon(playerid, DEAGLE, 	9996);
+    GivePlayerWeapon(playerid, WEAPON_SHOTGUN, 9996);
+    GivePlayerWeapon(playerid, WEAPON_SNIPER, 	9996);
+    GivePlayerWeapon(playerid, WEAPON_M4, 		9996);
+    GivePlayerWeapon(playerid, WEAPON_MP5, 	9996);
+	GivePlayerWeapon(playerid, WEAPON_DEAGLE, 	9996);
 
 	SetPlayerTeam(playerid, 5);
 }
