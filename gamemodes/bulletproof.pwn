@@ -6708,7 +6708,21 @@ public FakePacketRenovationEnd(playerid, Float:fakepacket, bool:message)
 
     Player[playerid][FakePacketRenovation] = false;
     if(message)
-    	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Fake PL renovation on {FFFFFF}%s "COL_PRIM"has ended - Old: {FFFFFF}%.1f "COL_PRIM" | Current: {FFFFFF}%.1f", Player[playerid][Name], fakepacket, NetStats_PacketLossPercent(playerid)));
+    {
+        new Float:currPacket = NetStats_PacketLossPercent(playerid);
+        if(currPacket >= fakepacket)
+        {
+            new str[144];
+            format(str, sizeof str, ""COL_PRIM"Fake PL renovation on {FFFFFF}%s "COL_PRIM"has failed - Old: {FFFFFF}%.2f "COL_PRIM" | Current: {FFFFFF}%.2f", Player[playerid][Name], fakepacket, currPacket);
+            SendClientMessageToAll(-1, str);
+		}
+        else
+        {
+			new str[144];
+	        format(str, sizeof str, ""COL_PRIM"Fake PL renovation on {FFFFFF}%s "COL_PRIM"has ended - Old: {FFFFFF}%.2f "COL_PRIM" | Current: {FFFFFF}%.2f", Player[playerid][Name], fakepacket, currPacket);
+	    	SendClientMessageToAll(-1, str);
+  		}
+	}
 	return 1;
 }
 
@@ -6730,7 +6744,7 @@ YCMD:fakepacket(playerid, params[], help)
 	SetTimerEx("FakePacketRenovationEnd", interv * 60 * 1000, false, "ifb", pID, NetStats_PacketLossPercent(pID), true);
 	Player[pID][FakePacketRenovation] = true;
 
-	new str[150];
+	new str[144];
 	format(str, sizeof str, "{FFFFFF}%s "COL_PRIM"has started fake packetloss renovation on {FFFFFF}%s "COL_PRIM" - Interval: {FFFFFF}%d min(s).",Player[playerid][Name], Player[pID][Name], interv);
 	SendClientMessageToAll(-1, str);
 
@@ -9093,13 +9107,13 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	}
 	if(Current != -1 && Player[playerid][Playing] == true)
 	{
-	    if(PRESSED(131072) && AllowStartBase == true && Player[playerid][Playing] == true)
+	    if(PRESSED(131072) && AllowStartBase == true)
 		{
 		    if(PlayerRequestBackup(playerid))
 		        return 1;
 		}
 	    // Lead team
-	    if(PRESSED(262144) && AllowStartBase == true && Player[playerid][Playing] == true)
+	    if(PRESSED(262144) && AllowStartBase == true)
         {
             if(GetPlayerVehicleID(playerid))
                 return 1;
