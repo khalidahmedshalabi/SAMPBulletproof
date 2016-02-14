@@ -2355,7 +2355,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			ServerLocked = true;
 			PermLocked = false;
 
-            new iString[64];
+            new iString[144];
 			format(iString, sizeof(iString), "%sServer Pass: ~r~~h~%s", MAIN_TEXT_COLOUR, inputtext);
 			TextDrawSetString(LockServerTD, iString);
 
@@ -2370,9 +2370,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(isnull(inputtext)) return 1;
         if(!IsNumeric(inputtext)) {
             SendErrorMessage(playerid,"You can only use numeric input.");
-            new iString[64];
-			iString = ""COL_PRIM"Enter current round or total rounds to be played:";
-    		ShowPlayerDialog(playerid, DIALOG_CURRENT_TOTAL, DIALOG_STYLE_INPUT,""COL_PRIM"Rounds Dialog",iString,"Current","Total");
+    		ShowPlayerDialog(playerid, DIALOG_CURRENT_TOTAL, DIALOG_STYLE_INPUT,""COL_PRIM"Rounds Dialog",""COL_PRIM"Enter current round or total rounds to be played:","Current","Total");
 			return 1;
 		}
 
@@ -2380,13 +2378,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 		if(Value < 0 || Value > 100) {
             SendErrorMessage(playerid,"Current or total rounds can only be between 0 and 100.");
-            new iString[64];
-			iString = ""COL_PRIM"Enter current round or total rounds to be played:";
-    		ShowPlayerDialog(playerid, DIALOG_CURRENT_TOTAL, DIALOG_STYLE_INPUT,""COL_PRIM"Rounds Dialog",iString,"Current","Total");
+    		ShowPlayerDialog(playerid, DIALOG_CURRENT_TOTAL, DIALOG_STYLE_INPUT,""COL_PRIM"Rounds Dialog",""COL_PRIM"Enter current round or total rounds to be played:","Current","Total");
 			return 1;
 		}
 
-        new iString[128];
+        new iString[144];
 
 	    if(response) {
 	        CurrentRound = Value;
@@ -2404,12 +2400,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	if(dialogid == DIALOG_TEAM_SCORE)
 	{
 		if(response) {
-		    new iString[128];
 		    switch(listitem) {
 		        case 0: {
-					iString = ""COL_PRIM"Enter {FFFFFF}Attacker "COL_PRIM"Team Name Below:";
-				    ShowPlayerDialog(playerid, DIALOG_ATT_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Attacker Team Name",iString,"Next","Close");
+				    ShowPlayerDialog(playerid, DIALOG_ATT_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Attacker Team Name",""COL_PRIM"Enter {FFFFFF}Attacker "COL_PRIM"Team Name Below:","Next","Close");
 				} case 1: {
+				    new iString[128];
 					format(iString, sizeof(iString), ""COL_PRIM"Enter {FFFFFF}%s "COL_PRIM"Team Score Below:", TeamName[ATTACKER]);
 				    ShowPlayerDialog(playerid, DIALOG_ATT_SCORE, DIALOG_STYLE_INPUT,""COL_PRIM"Attacker Team Score",iString,"Next","Close");
 				} case 2: {
@@ -2435,6 +2430,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					    Player[i][TotalshotsHit] = 0;
 					}
 
+					new iString[64];
 					format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has reset the scores.", Player[playerid][Name]);
 					SendClientMessageToAll(-1, iString);
 				}
@@ -2450,11 +2446,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    TeamScore[ATTACKER] = 0;
 		    TeamScore[DEFENDER] = 0;
 		    CurrentRound = 0;
+		    
+		    new DBResult:res = db_query(sqliteconnection, "SELECT * FROM Configs WHERE Option = 'Total Rounds'");
 
-            new iString[128];
-			format(iString, sizeof(iString), "SELECT * FROM Configs WHERE Option = 'Total Rounds'");
-		    new DBResult:res = db_query(sqliteconnection, iString);
-
+            new iString[144];
+            
 			db_get_field_assoc(res, "Value", iString, sizeof(iString));
     		TotalRounds = strval(iString);
 			db_free_result(res);
@@ -2499,16 +2495,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 	if(dialogid == DIALOG_ATT_NAME) {
 	    if(response) {
-	        new iString[128];
 			if(isnull(inputtext)) {
-				iString = ""COL_PRIM"Enter {FFFFFF}Defender "COL_PRIM"Team Name Below:";
-			    ShowPlayerDialog(playerid, DIALOG_DEF_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Defender Team Name",iString,"Ok","Close");
+			    ShowPlayerDialog(playerid, DIALOG_DEF_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Defender Team Name",""COL_PRIM"Enter {FFFFFF}Defender "COL_PRIM"Team Name Below:","Ok","Close");
 				return 1;
 			}
 			if(strlen(inputtext) > 6) {
             	SendErrorMessage(playerid,"Team name is too long.");
-				iString = ""COL_PRIM"Enter {FFFFFF}Attacker "COL_PRIM"Team Name Below:";
-			    ShowPlayerDialog(playerid, DIALOG_ATT_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Attacker Team Name",iString,"Next","Close");
+			    ShowPlayerDialog(playerid, DIALOG_ATT_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Attacker Team Name",""COL_PRIM"Enter {FFFFFF}Attacker "COL_PRIM"Team Name Below:","Next","Close");
 				return 1;
 			}
 
@@ -2525,11 +2518,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 		    UpdateTeamNamesTextdraw();
 
+            new iString[144];
 			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has set attacker team name to: {FFFFFF}%s", Player[playerid][Name], TeamName[ATTACKER]);
 			SendClientMessageToAll(-1, iString);
 
-			iString = ""COL_PRIM"Enter {FFFFFF}Defender "COL_PRIM"Team Name Below:";
-		    ShowPlayerDialog(playerid, DIALOG_DEF_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Defender Team Name",iString,"Ok","Close");
+			ShowPlayerDialog(playerid, DIALOG_DEF_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Defender Team Name",""COL_PRIM"Enter {FFFFFF}Defender "COL_PRIM"Team Name Below:","Ok","Close");
 		}
 		return 1;
 	}
@@ -2541,9 +2534,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        if(isnull(inputtext)) return 1;
 	        if(strlen(inputtext) > 6) {
 	           	SendErrorMessage(playerid,"Team name is too long.");
-	           	new iString[64];
-				iString = ""COL_PRIM"Enter {FFFFFF}Defender "COL_PRIM"Team Name Below:";
-			    ShowPlayerDialog(playerid, DIALOG_DEF_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Defender Team Name",iString,"Ok","Close");
+			    ShowPlayerDialog(playerid, DIALOG_DEF_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Defender Team Name",""COL_PRIM"Enter {FFFFFF}Defender "COL_PRIM"Team Name Below:","Ok","Close");
 				return 1;
 			}
 
@@ -2554,13 +2545,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			format(TeamName[DEFENDER], 24, inputtext);
 			format(TeamName[DEFENDER_SUB], 24, "%s Sub", TeamName[DEFENDER]);
 
-            new iString[128];
 			UpdateTeamScoreTextDraw();
 			UpdateRoundsPlayedTextDraw();
 			UpdateTeamNameTextDraw();
 
 		    UpdateTeamNamesTextdraw();
 
+			new iString[144];
 			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has set defender team name to: {FFFFFF}%s", Player[playerid][Name], TeamName[DEFENDER]);
 			SendClientMessageToAll(-1, iString);
 
@@ -2679,14 +2670,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 	    if(response)
 		{
-		    new iString[128];
 	        switch(listitem)
 			{
 	            case 0: {
-	                iString = ""COL_PRIM"Enter {FFFFFF}Attacker "COL_PRIM"Team Name Below:";
-				    ShowPlayerDialog(playerid, DIALOG_ATT_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Attacker Team Name",iString,"Next","Close");
+				    ShowPlayerDialog(playerid, DIALOG_ATT_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Attacker Team Name",""COL_PRIM"Enter {FFFFFF}Attacker "COL_PRIM"Team Name Below:","Next","Close");
 	            }
 	            case 1: {
+	                new iString[128];
 	                format(iString, sizeof(iString), "%sAttacker Team\n%sDefender Team\n%sReferee Team", TextColor[ATTACKER], TextColor[DEFENDER], TextColor[REFEREE]);
 	                ShowPlayerDialog(playerid, DIALOG_CONFIG_SET_TEAM_SKIN, DIALOG_STYLE_LIST, ""COL_PRIM"Select team", iString, "OK", "Back");
 	            }
@@ -2765,6 +2755,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    }
 				}
 				case 9: {
+				    new iString[144];
 				    if(AntiSpam == false) {
 					    AntiSpam = true;
 	    				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"anti-spam.", Player[playerid][Name]);
@@ -2777,6 +2768,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     ShowConfigDialog(playerid);
 				}
 				case 10: {
+				    new iString[144];
 				    if(AutoBal == false) {
 					    AutoBal = true;
 	    				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"auto-balance in non war mode.", Player[playerid][Name]);
@@ -2789,6 +2781,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     ShowConfigDialog(playerid);
 				}
 				case 11: {
+				    new iString[144];
 				    if(AutoPause == false) {
 					    AutoPause = true;
 	    				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Auto-Pause on player disconnect in war mode.", Player[playerid][Name]);
@@ -2801,6 +2794,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     ShowConfigDialog(playerid);
 				}
 				case 12: {
+                    new iString[144];
 					if(LobbyGuns == true) {
 						LobbyGuns = false;
 				    	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"guns in lobby.", Player[playerid][Name]);
@@ -2813,6 +2807,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    ShowConfigDialog(playerid);
 				}
 				case 13: {
+				    new iString[144];
 				    if(ShortCuts == false) {
 					    ShortCuts = true;
 	    				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"shortcut team messages.", Player[playerid][Name]);
@@ -2838,6 +2833,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
 					else
 					{
+					    new iString[144];
 					    if(DefendersSeeVehiclesBlips == false)
 						{
 						    DefendersSeeVehiclesBlips = true;
@@ -2855,6 +2851,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				case 15:
 				{
 				    #if defined _league_included
+				    new iString[144];
 				    switch(LeagueAllowed)
 				    {
 						case false:
@@ -2882,6 +2879,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				case 16:
 				{
 				    if(Current != -1) return SendErrorMessage(playerid, "Can't use this while a round is in progress.");
+				    new iString[144];
 				    switch(CPInArena)
 				    {
 						case false:
@@ -2903,6 +2901,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				case 17:
 				{
+				    new iString[144];
 				    switch(AntiMacros)
 				    {
 						case false:
@@ -2924,6 +2923,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				case 18:
 				{
+				    new iString[144];
 				    switch(DeadBodies)
 				    {
 						case false:
@@ -2946,6 +2946,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				case 19:
 				{
+				    new iString[144];
 				    switch(DeathCamera)
 				    {
 						case false:
@@ -2968,6 +2969,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				case 20:
 				{
 				    if(Current != -1) return SendErrorMessage(playerid, "Can't do this while a round is in progress.");
+				    new iString[144];
 				    switch(ShowHPBars)
 				    {
 						case false:
@@ -2989,6 +2991,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     			}
 				case 21:
 				{
+				    new iString[144];
 				    switch(LeagueShop)
 				    {
 						case false:
@@ -3010,6 +3013,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				case 22:
 				{
+				    new iString[144];
 				    switch(GunmenuRestrictions)
 				    {
 						case false:
@@ -3029,6 +3033,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				case 23:
 				{
+				    new iString[144];
 				    switch(MeleeAllowed)
 				    {
 						case false:
@@ -3050,6 +3055,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				case 24:
 				{
+				    new iString[144];
 				    switch(AutoRoundStarter)
 				    {
 						case false:
@@ -3522,9 +3528,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 			    Player[i][TotalBulletsFired] = 0;
 			    Player[i][TotalshotsHit] = 0;
 			}
-            new iString[64];
-			iString = ""COL_PRIM"Enter {FFFFFF}Attacker "COL_PRIM"Team Name Below:";
-	    	ShowPlayerDialog(playerid, DIALOG_ATT_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Attacker Team Name",iString,"Next","Close");
+	    	ShowPlayerDialog(playerid, DIALOG_ATT_NAME, DIALOG_STYLE_INPUT,""COL_PRIM"Attacker Team Name",""COL_PRIM"Enter {FFFFFF}Attacker "COL_PRIM"Team Name Below:","Next","Close");
 		} else {
 	    	ShowPlayerDialog(playerid, DIALOG_WAR_RESET, DIALOG_STYLE_MSGBOX,""COL_PRIM"War Dialog",""COL_PRIM"Are you sure you want to turn War Mode off?","Yes","No");
 		}
@@ -3536,10 +3540,9 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 		if(ServerLocked == false) {
 		   ShowPlayerDialog(playerid, DIALOG_SERVER_PASS, DIALOG_STYLE_INPUT,""COL_PRIM"Server Password",""COL_PRIM"Enter server password below:", "Ok","Close");
 		} else {
-		    new iString[128];
-			iString = "password 0";
-			SendRconCommand(iString);
+			SendRconCommand("password 0");
 
+			new iString[64];
 			format(iString, sizeof iString, "%sServer: ~r~Unlocked", MAIN_TEXT_COLOUR);
 			TextDrawSetString(LockServerTD, iString);
 
@@ -7965,7 +7968,7 @@ YCMD:pause(playerid, params[], help)
 	}
 	if(Current == -1) return SendErrorMessage(playerid,"There is no active round.");
 
-	new iString[64];
+	new iString[144];
 	if(RoundPaused == false)
 	{
 	    if(RoundUnpausing == true)
@@ -8010,7 +8013,7 @@ YCMD:unpause(playerid, params[], help)
 	PauseCountdown = 4;
 	UnpauseRound();
 
-	new iString[64];
+	new iString[144];
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has unpaused the current round.", Player[playerid][Name]);
 	SendClientMessageToAll(-1, iString);
 	return 1;
@@ -9132,7 +9135,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	            {
 	                case true:
 	                {
-	                    new iString[160];
+	                    new iString[144];
                         if((GetTickCount() - PausePressed) < 3000)
 							return SendErrorMessage(playerid,"Please Wait.");
 						if(RoundUnpausing == true) return 1;
@@ -9146,7 +9149,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	                }
 	                case false:
 	                {
-	                    new iString[160];
+	                    new iString[144];
 	                    if(RoundUnpausing == true) return SendErrorMessage(playerid,"Round is unpausing, please wait.");
 
 						PausePressed = GetTickCount();

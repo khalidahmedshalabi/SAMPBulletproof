@@ -1389,8 +1389,7 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
 
 	if(RoundPaused == true) {
 		TogglePlayerControllable(ToAddID, 0);
-		iString = "~r~~h~Round Paused";
-		TextDrawSetString(PauseTD, iString);
+		TextDrawSetString(PauseTD,  "~r~~h~Round Paused");
 		TextDrawShowForAll(PauseTD);
 	}
 
