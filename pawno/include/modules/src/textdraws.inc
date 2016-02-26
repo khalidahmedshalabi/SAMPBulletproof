@@ -1147,24 +1147,37 @@ HideMatchScoreBoard(playerid = -1)
 UpdateTeamScoreTextDraw()
 {
 	//TextDrawSetString(TeamScoreText, sprintf("%d     %d", TeamScore[ATTACKER], TeamScore[DEFENDER]));
-	new iString[160];
-	format(iString, sizeof(iString), "~r~~h~~h~%s %s(~r~~h~~h~%d%s)  ~b~~h~~h~%s %s(~b~~h~~h~%d%s)",TeamName[ATTACKER],MAIN_TEXT_COLOUR,TeamScore[ATTACKER],MAIN_TEXT_COLOUR,TeamName[DEFENDER],MAIN_TEXT_COLOUR,TeamScore[DEFENDER],MAIN_TEXT_COLOUR);
+	new iString[64];
+	format(iString, sizeof(iString), "~r~~h~~h~%s %s%d - %d ~b~~h~~h~%s", TeamName[ATTACKER], MAIN_TEXT_COLOUR, TeamScore[ATTACKER], TeamScore[DEFENDER], TeamName[DEFENDER]);
     TextDrawSetString(TeamScoreText, iString);
+	UpdateRoundsPlayedTextDraw();
 }
 
 UpdateTeamNameTextDraw()
 {
 	/*TextDrawSetString(TeamAttackerTD, sprintf("~r~~h~~h~%s", TeamName[ATTACKER]));
 	TextDrawSetString(TeamDefenderTD, sprintf("~b~~h~~h~%s", TeamName[DEFENDER]));*/
-	new iString[160];
-	format(iString, sizeof(iString), "~r~~h~~h~%s %s(~r~~h~~h~%d%s)  ~b~~h~~h~%s %s(~b~~h~~h~%d%s)",TeamName[ATTACKER],MAIN_TEXT_COLOUR,TeamScore[ATTACKER],MAIN_TEXT_COLOUR,TeamName[DEFENDER],MAIN_TEXT_COLOUR,TeamScore[DEFENDER],MAIN_TEXT_COLOUR);
+	new iString[64];
+	format(iString, sizeof(iString), "~r~~h~~h~%s %s%d - %d ~b~~h~~h~%s", TeamName[ATTACKER], MAIN_TEXT_COLOUR, TeamScore[ATTACKER], TeamScore[DEFENDER], TeamName[DEFENDER]);
     TextDrawSetString(TeamScoreText, iString);
+	UpdateRoundsPlayedTextDraw();
 }
 
 UpdateRoundsPlayedTextDraw()
 {
 	//TextDrawSetString(RoundsPlayed, sprintf( "~h~Ro~h~un~h~ds: ~h~%d/%d", CurrentRound, TotalRounds));
-	TextDrawSetString(RoundsPlayed, sprintf("%sRounds ~r~~h~~h~%d~r~/~h~~h~%d", MAIN_TEXT_COLOUR, CurrentRound, TotalRounds));
+	if(TeamScore[ATTACKER] == TeamScore[DEFENDER])
+	{
+		TextDrawSetString(RoundsPlayed, sprintf("%sRounds %d/%d", MAIN_TEXT_COLOUR, CurrentRound, TotalRounds));
+	}
+	else if(TeamScore[ATTACKER] > TeamScore[DEFENDER])
+	{
+		TextDrawSetString(RoundsPlayed, sprintf("%sRounds ~r~~h~~h~%d~r~/~h~~h~%d", MAIN_TEXT_COLOUR, CurrentRound, TotalRounds));
+	}
+	else if(TeamScore[DEFENDER] > TeamScore[ATTACKER])
+	{
+		TextDrawSetString(RoundsPlayed, sprintf("%sRounds ~b~~h~~h~%d~b~/~h~~h~%d", MAIN_TEXT_COLOUR, CurrentRound, TotalRounds));
+	}
 }
 
 InitPlayerInterface(playerid)
