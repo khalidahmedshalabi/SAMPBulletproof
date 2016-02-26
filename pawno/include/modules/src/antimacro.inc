@@ -86,9 +86,11 @@ bool:CheckPlayerSprintMacro(playerid, newkeys, oldkeys)
 			#endif
 			AntimacroData[playerid][TimesWarned] = 0;
 			AntimacroData[playerid][LastTimeWarned] = 0; 
-			SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been running like a cheetah and since this ain't no zoo he's kicked!", Player[playerid][Name]));
-			SendClientMessageToAll(-1, ""COL_PRIM"Warning: {FFFFFF}this is rarely a false-positive, however it could still occur due to lag or desync!");
-			SetTimerEx("OnPlayerKicked", 1000, false, "i", playerid);
+			new str[144];
+			format(str, sizeof str, ""COL_PRIM"Anti sprint macro has stopped {FFFFFF}%s "COL_PRIM"from moving for tapping sprint key too fast.", Player[playerid][Name]);
+			SendClientMessageToAll(-1, str);
+			TogglePlayerControllable(playerid, false);
+			TogglePlayerControllable(playerid, true);
 			return true; // PUNISHED
 		}
 		UpdatePlayerSprintMacroData(playerid, speed, tick, false);
