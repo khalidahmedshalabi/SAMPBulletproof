@@ -71,6 +71,7 @@ new ElapsedTime;
 new bool:TeamHasLeader[MAX_TEAMS]; // Whether a team has leader or not
 new TeamLeader[MAX_TEAMS]; // Holds the ID of the current team leader
 new TeamDeathIconTimer[MAX_TEAMS]; // Holds the ID of team death map icon destroyer timer
+new bool:DontPauseRound = false; // If set to true, the round will not pause if a player disconnects when match-mode is on.
 
 // String for round results
 new AttList[256];

@@ -18,13 +18,16 @@ hook OnPlayerDisconnect(playerid, reason)
 		{
 		    PlayerNoLeadTeam(playerid);
 		    StorePlayerVariables(playerid);
-			if(Player[playerid][DontPause] == false && AutoPause == true && Current != -1)
+			if(DontPauseRound == false)
 			{
+				if(AutoPause == true && Current != -1)
 				KillTimer(UnpauseTimer);
 				RoundUnpausing = false;
 				PauseRound();
 				SendClientMessageToAll(-1, ""COL_PRIM"Round has been auto-paused.");
 			}
+			else
+				DontPauseRound = false;
 		}
 		else
 			StorePlayerVariablesMin(playerid);
@@ -1535,6 +1538,7 @@ public OnRCStart()
 {
 	AutoAFKCheck(); // Checks all players and set idle players to afk mode
 	RCArena = true;
+	DontPauseRound = false;
 	new ArenaID = 72; // That's the ID of the RC arena (interior)
 	ClearKillList(); // Clears the kill-list.
     DestroyDynamicVehicles(1); // Destroys vehicles
@@ -1772,6 +1776,7 @@ public OnArenaStart(ArenaID)
 	DeleteAllDeadBodies();
 	GameType = ARENA;
 	RCArena = false;
+	DontPauseRound = false;
 	Current = ArenaID; // Current will be the ID of the base that we just started. We do this so that we can use this ID later on (e.g. check /car command for the use).
     ClearKillList(); // Clears the kill-list.
     ServerLastPlayed = Current;
@@ -2117,6 +2122,7 @@ public OnBaseStart(BaseID)
 	DeleteAllDeadBodies();
 	GameType = BASE;
 	RCArena = false;
+	DontPauseRound = false;
 	Current = BaseID; // Current will be the ID of the base that we just started. We do this so that we can use this ID later on (e.g. check /car command for the use).
    	ClearKillList(); // Clears the kill-list.
     ServerLastPlayed = Current;

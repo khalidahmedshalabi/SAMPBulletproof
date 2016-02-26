@@ -314,21 +314,28 @@ public OnPlayerDisconnect(playerid, reason)
 {
 	// Send public disconnect messages
     new iString[144];
-    switch (reason){
-		case 0:{
-			if(Player[playerid][Playing] == false) format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Timeout{757575}]",Player[playerid][Name]);
-		 	else format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Timeout{757575}] HP {FFFFFF}%d {757575}| Armour {FFFFFF}%d", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
-		} case 1: {
-			if(Player[playerid][Playing] == false) format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Leaving{757575}]",Player[playerid][Name]);
-			else format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Leaving{757575}] HP {FFFFFF}%d {757575}| Armour {FFFFFF}%d", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
-		} case 2: {
-		    if(Player[playerid][Playing] == false) {
-				if(Player[playerid][IsKicked] == true)format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Kicked{757575}]",Player[playerid][Name]);
-				else format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Banned{757575}]",Player[playerid][Name]);
-			} else {
-				if(Player[playerid][IsKicked] == true)format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Kicked{757575}] HP {FFFFFF}%d {757575}| Armour {FFFFFF}%d",Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
-				else format(iString, sizeof(iString), "{FFFFFF}%s {757575}has disconnected [{FFFFFF}Banned{757575}] HP {FFFFFF}%d {757575}| Armour {FFFFFF}%d",Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
-			}
+    switch (reason)
+	{
+		case 0:
+		{
+			if(Player[playerid][Playing] == false)
+				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has had a crash/timeout.", Player[playerid][Name]);
+		 	else
+			 	format(iString, sizeof(iString), "{FFFFFF}%s {757575}has had a crash/timeout {FFFFFF}(HP %d | AP %d).", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
+		}
+		case 1:
+		{
+			if(Player[playerid][Playing] == false)
+				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has quit the server.",Player[playerid][Name]);
+			else
+				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has quit the server {FFFFFF}(HP %d | AP %d).", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
+		}
+		case 2:
+		{
+		    if(Player[playerid][Playing] == false)
+				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has been kicked or banned.",Player[playerid][Name]);
+			else
+				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has been kicked or banned {FFFFFF}(HP %d | AP %d).",Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
 		}
 	}
 	SendClientMessageToAll(-1,iString);
@@ -7817,7 +7824,7 @@ YCMD:ban(playerid, params[], help)
     format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has banned {FFFFFF}%s "COL_PRIM"| Reason: {FFFFFF}%s", Player[playerid][Name], Player[pID][Name], /*IP,*/ Reason);
 	SendClientMessageToAll(-1, iString);
 
-	Player[pID][DontPause] = true;
+	DontPauseRound = true;
 
 	format(iString, sizeof(iString), "%s - %s", Player[playerid][Name], Reason);
 	BanEx(pID, iString);
@@ -7876,7 +7883,7 @@ YCMD:kick(playerid, params[], help)
 		SendClientMessageToAll(-1, iString);
 	}
 
-    Player[pID][DontPause] = true;
+    DontPauseRound = true;
     SetTimerEx("OnPlayerKicked", 500, false, "i", pID);
     LogAdminCommand("kick", playerid, pID);
 	return 1;

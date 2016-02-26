@@ -19,7 +19,6 @@
 
 forward OnPlayerKicked(playerid);
 public OnPlayerKicked(playerid) {
-	Player[playerid][IsKicked] = true;
 	Kick(playerid);
 	return 1;
 }

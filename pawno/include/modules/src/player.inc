@@ -181,7 +181,6 @@ InitPlayer(playerid)
     Player[playerid][Playing] = false;
 	Iter_Remove(PlayersInRound, playerid);
     Player[playerid][WasInCP] = false;
-    Player[playerid][IsKicked] = false;
 	Player[playerid][Spectating] = false;
 	Player[playerid][BeingSpeced] = false;
 	Player[playerid][WasInBase] = false;
@@ -191,11 +190,9 @@ InitPlayer(playerid)
 	Player[playerid][Spawned] = false;
 	Player[playerid][IsAFK] = false;
 	Player[playerid][IsFrozen] = false;
-	Player[playerid][IsGettingKicked] = false;
 	Player[playerid][AskingForHelp] = false;
 	Player[playerid][Mute] = false;
 	Player[playerid][ToAddInRound] = false;
-	Player[playerid][DontPause] = false;
 	Player[playerid][AntiLag] = false;
 	InitPlayerInterface(playerid);
 	Player[playerid][blockedall] = false;
