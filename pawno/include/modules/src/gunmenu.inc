@@ -180,10 +180,6 @@ HidePlayerGunmenu(playerid)
 			DestroyPlayerGunObjects(playerid);
 			CancelEdit(playerid);
 		}
-		case GUNMENU_STYLE_DIALOG:
-		{
-			HideDialogs(playerid);
-		}
 	}
 	SetCameraBehindPlayer(playerid);
 	SetPlayerArmedWeapon(playerid, 0);
@@ -605,19 +601,23 @@ GivePlayerGunmenuWeapon(playerid, index)
 	UpdateGunmenuLimitsTextDraw(Player[playerid][Team]);
 	foreach(new i : Player)
 	{
-		if(Player[i][OnGunmenu] && Player[i][GunmenuStyle] == GUNMENU_STYLE_DIALOG)
-			ShowGunmenuDialog(playerid);
+		if(i != playerid && Player[i][OnGunmenu] && Player[i][GunmenuStyle] == GUNMENU_STYLE_DIALOG)
+			ShowGunmenuDialog(i);
 	}
+	// Count how many weapons they've got so far
 	new ct = 0;
 	for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
 	{
 		if(GunmenuData[i][HasGun][playerid])
 			ct ++;
 	}
+	// Check if they've selected enough weapons
 	if(ct >= 2)
 	{
 		OnPlayerFinishGunmenu(playerid);
 	}
+	else if(Player[playerid][GunmenuStyle] == GUNMENU_STYLE_DIALOG)
+		ShowGunmenuDialog(playerid);
 }
 
 OnPlayerSelectGunmenuObject(playerid, objectid, modelid)
