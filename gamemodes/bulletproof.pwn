@@ -5124,7 +5124,8 @@ YCMD:netcheckme(playerid, params[], help)
 		new tmp;
 		gettime(tmp, Player[playerid][CanNetcheck], tmp);
 		Player[playerid][TempNetcheck] = true;
-		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s (%d) "COL_PRIM"temporarily disabled netcheck on him for 15 seconds. You may want to permanently disable it!", Player[playerid][Name], playerid));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s (%d) "COL_PRIM"requests permanent net-check.", Player[playerid][Name], playerid));
+		SendClientMessage(playerid, -1, ""COL_PRIM"You've been temporarily netchecked for 15 seconds only.");
 		SetTimerEx("RemoveTempNetcheck", 15000, false, "i", playerid);
 	}
 	else
@@ -5134,8 +5135,8 @@ YCMD:netcheckme(playerid, params[], help)
 		if((minute - Player[playerid][CanNetcheck]) > 20)
 		{
 		    Player[playerid][TempNetcheck] = true;
-			SendClientMessageToAll(-1, sprintf("{FFFFFF}%s (%d) "COL_PRIM"temporarily disabled netcheck on him for 15 seconds. You may want to permanently disable it!", Player[playerid][Name], playerid));
-			SetTimerEx("RemoveTempNetcheck", 15000, false, "i", playerid);
+   			SendClientMessageToAll(-1, sprintf("{FFFFFF}%s (%d) "COL_PRIM"requests permanent net-check.", Player[playerid][Name], playerid));
+			SendClientMessage(playerid, -1, ""COL_PRIM"You've been temporarily netchecked for 15 seconds only.");
 			Player[playerid][CanNetcheck] = minute;
 		}
 		else
