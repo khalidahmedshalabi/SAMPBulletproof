@@ -1502,7 +1502,9 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	    // Check whether they are in the round and in the same team or not
 		if(Player[issuerid][Playing] == true && (Player[issuerid][Team] == Player[playerid][Team]))
 		{
-		    SetFakeHealthArmour(playerid);
+			MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "_", sprintf("~y~~h~%s ~w~has fired shots around you. Maybe for a reason?", Player[issuerid][NameWithoutTag]), 5000);
+            MessageBox(issuerid, MSGBOX_TYPE_BOTTOM, "_", sprintf("~w~Watchout! You've fired shots at your team-mate ~y~~h~%s", Player[playerid][NameWithoutTag]), 5000);
+			SetFakeHealthArmour(playerid);
 			return 1;
 		}
 		// If the damaged player is out of the round
