@@ -1602,7 +1602,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 					TextDrawSetString(AttHpLose, str);
 
 					TempDamage[ATTACKER] += rounded_amount;
-					format(str, sizeof(str), "~r~~h~%d", TempDamage[ATTACKER]);
+					format(str, sizeof(str), "~r~~h~-%d", TempDamage[ATTACKER]);
 					TextDrawSetString(TeamHpLose[0], str);
 
 					KillTimer(AttHpTimer);
@@ -1615,7 +1615,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 					TextDrawSetString(DefHpLose, str);
 
 				    TempDamage[DEFENDER] += rounded_amount;
-					format(str,sizeof(str), "~b~~h~%d", TempDamage[DEFENDER]);
+					format(str,sizeof(str), "~b~~h~-%d", TempDamage[DEFENDER]);
 					TextDrawSetString(TeamHpLose[1], str);
 
 			        KillTimer(DefHpTimer);

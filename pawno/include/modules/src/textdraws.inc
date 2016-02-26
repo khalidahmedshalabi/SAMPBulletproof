@@ -617,7 +617,7 @@ RoundTextdrawsCreate()
 	leftRedBG = TextDrawCreate		(	335.540924, 	401.283630, "-");
 	TextDrawLetterSize				(	leftRedBG, 		-28.081052, 7.287504);
 	TextDrawAlignment				(	leftRedBG, 		1							);
-	TextDrawColor					(	leftRedBG, 		0x00000022					);
+	TextDrawColor					(	leftRedBG, 		0x00000011					);
 	TextDrawSetShadow				(	leftRedBG, 		-1							);
 	TextDrawSetOutline				(	leftRedBG, 		0							);
 	TextDrawBackgroundColor			(	leftRedBG, 		0xDE000033					);
@@ -627,7 +627,7 @@ RoundTextdrawsCreate()
 	rightBlueBG = TextDrawCreate	(	311.741302, 	401.283630, "-"				);
 	TextDrawLetterSize				(	rightBlueBG, 	28.770492, 7.287504			);
 	TextDrawAlignment				(	rightBlueBG, 	1							);
-	TextDrawColor					(	rightBlueBG, 	0x00000022					);
+	TextDrawColor					(	rightBlueBG, 	0x00000011					);
 	TextDrawSetShadow				(	rightBlueBG, 	-1							);
 	TextDrawSetOutline				(	rightBlueBG,	0							);
 	TextDrawBackgroundColor			(	rightBlueBG, 	0x3344FF33					);
@@ -716,20 +716,20 @@ RoundTextdrawsCreate()
 	TextDrawAlignment(DefHpLose,3);
 	TextDrawSetShadow(DefHpLose, 0);
 
-	TeamHpLose[0] = TextDrawCreate(170.000000, 403.000000, "_");
+	TeamHpLose[0] = TextDrawCreate(255.000000, 412.000000, "_");
 	TextDrawAlignment(TeamHpLose[0], 2);
 	TextDrawFont(TeamHpLose[0], 2);
-	TextDrawLetterSize(TeamHpLose[0], 0.50000, 2.00000);
+	TextDrawLetterSize(TeamHpLose[0], 0.20000, 1.70000);
 	TextDrawBackgroundColor(TeamHpLose[0],MAIN_BACKGROUND_COLOUR);
 	TextDrawColor(TeamHpLose[0], 0x222222FF);
 	TextDrawSetOutline(TeamHpLose[0], 1);
 	TextDrawSetProportional(TeamHpLose[0], 1);
 	TextDrawSetShadow(TeamHpLose[0],0);
 
-	TeamHpLose[1] = TextDrawCreate(450.000000, 403.000000, "_");
+	TeamHpLose[1] = TextDrawCreate(387.000000, 412.000000, "_");
 	TextDrawAlignment(TeamHpLose[1], 2);
 	TextDrawFont(TeamHpLose[1], 2);
-	TextDrawLetterSize(TeamHpLose[1], 0.50000, 2.00000);
+	TextDrawLetterSize(TeamHpLose[1], 0.20000, 1.70000);
 	TextDrawBackgroundColor(TeamHpLose[1],MAIN_BACKGROUND_COLOUR);
 	TextDrawColor(TeamHpLose[1], 0x222222FF);
 	TextDrawSetOutline(TeamHpLose[1], 1);
