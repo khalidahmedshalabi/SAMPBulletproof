@@ -1937,7 +1937,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			    new str[80];
 			    format(str, sizeof(str), "UPDATE Players SET WeaponBind%d = %d WHERE Name = '%q'", index, weaponid, Player[playerid][Name]);
 			    db_free_result(db_query(sqliteconnection, str));
-			    UpdatePlayerWeaponBindTextDraw(playerid);
 			    ShowPlayerWeaponBindTextDraw(playerid, 5000);
 			}
 	    }

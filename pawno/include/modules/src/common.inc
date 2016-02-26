@@ -371,7 +371,6 @@ public SpawnConnectedPlayer(playerid, team)
 
 	ShowPlayerProgressBar(playerid, HealthBar[playerid]);
 	ShowPlayerProgressBar(playerid, ArmourBar[playerid]);
-	UpdatePlayerWeaponBindTextDraw(playerid);
 	switch(PlayerInterface[playerid][INTERFACE_HP])
 	{
 		case true:
@@ -423,8 +422,6 @@ public SpawnConnectedPlayer(playerid, team)
 	PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid]);
 	PlayerTextDrawShow(playerid, ArmourTextDraw[playerid]);
 	PlayerTextDrawShow(playerid, BaseID_VS[playerid]);
-	ShowPlayerProgressBar(playerid, HealthBar[playerid]);
-	ShowPlayerProgressBar(playerid, ArmourBar[playerid]);
 	#if defined _league_included
 	if(LeagueMode)
 	{

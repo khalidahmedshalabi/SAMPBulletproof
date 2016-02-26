@@ -310,7 +310,6 @@ LoginPlayer(playerid, DBResult:res)
 			WeaponBindData[playerid][BindKeyWeapon][i] = value;
 		}
 	}
-	UpdatePlayerWeaponBindTextDraw(playerid);
 	
 	// Load Gunmenu Style
 	db_get_field_assoc(res, "GunmenuStyle", iString, sizeof(iString));
