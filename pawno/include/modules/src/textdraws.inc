@@ -250,7 +250,7 @@ LoadTextDraws()
 	TextDrawSetOutline(RedDeathScreen, 1);
 	TextDrawSetProportional(RedDeathScreen, 1);
 	TextDrawUseBox(RedDeathScreen, 1);
-	TextDrawBoxColor(RedDeathScreen, 0xFF000055);
+	TextDrawBoxColor(RedDeathScreen, 0x85131333);
 	TextDrawTextSize(RedDeathScreen, -16.000000, 105.000000);
 	
 	for(new i = 0; i < MAX_TEAMS; i ++)
