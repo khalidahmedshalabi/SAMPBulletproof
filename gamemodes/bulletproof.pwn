@@ -3733,7 +3733,7 @@ YCMD:matchtips(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display some guidelines about match mode");
 	    return 1;
 	}
-	new str[1287];
+	new str[1354];
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}To enable Match-Mode, press 'Y' in lobby or 'H' (shortcut to /match) in round and most textdraws will be clickable.");
 	strcat(str, "\nOr use /war if you're in a hurry! Moreover, you can click on match textdraws to set team names, score and etc.");
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}To re-select your weapons in a round, type /gunmenu.");
@@ -3750,6 +3750,7 @@ YCMD:matchtips(playerid, params[], help)
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}You can change your gunmenu style with /gunmenustyle.");
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}Type /shop to start shopping and make use of your league points.");
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}Type /sound to change the sound when you hit someone or get hit.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}Getting distracted by some textdraws? Try /hud");
 	ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,""COL_PRIM"Match help & tips",str,"OK","");
 	return 1;
 }
