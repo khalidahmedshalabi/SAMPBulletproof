@@ -350,7 +350,7 @@ public GameLoopCallback()
 								case true:
 								{
 									timerColonShown = false;
-									format(str, sizeof(str),"~w~%d-%02d", RoundMints,	RoundSeconds);
+									format(str, sizeof(str),"~w~%d~l~:~w~%02d", RoundMints,	RoundSeconds);
 								}
 								case false:
 								{
@@ -367,7 +367,7 @@ public GameLoopCallback()
 								case true:
 								{
 									timerColonShown = false;
-									format(str, sizeof(str), "~w~%d-%02d / ~r~~h~%d", RoundMints,	RoundSeconds, CurrentCPTime );
+									format(str, sizeof(str), "~w~%d~l~:~w~%02d / ~r~~h~%d", RoundMints,	RoundSeconds, CurrentCPTime );
 								}
 								case false:
 								{
@@ -468,7 +468,7 @@ public GameLoopCallback()
 									case true:
 									{
 										timerColonShown = false;
-										format(str, sizeof(str),"~w~%d-%02d", RoundMints,	RoundSeconds);
+										format(str, sizeof(str),"~w~%d~l~:~w~%02d", RoundMints,	RoundSeconds);
 									}
 									case false:
 									{
@@ -485,7 +485,7 @@ public GameLoopCallback()
 									case true:
 									{
 										timerColonShown = false;
-										format(str, sizeof(str), "~w~%d-%02d / %s%d", RoundMints,	RoundSeconds, TDC[TeamCapturingCP], CurrentCPTime );
+										format(str, sizeof(str), "~w~%d~l~:~w~%02d / %s%d", RoundMints,	RoundSeconds, TDC[TeamCapturingCP], CurrentCPTime );
 									}
 									case false:
 									{
