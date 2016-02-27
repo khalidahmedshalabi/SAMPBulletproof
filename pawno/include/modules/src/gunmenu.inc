@@ -599,11 +599,6 @@ GivePlayerGunmenuWeapon(playerid, index)
 	SetPlayerArmedWeapon(playerid, 0);
 	// Update limits for other players (for both styles: dialog and objects)
 	UpdateGunmenuLimitsTextDraw(Player[playerid][Team]);
-	foreach(new i : Player)
-	{
-		if(i != playerid && Player[i][OnGunmenu] && Player[i][GunmenuStyle] == GUNMENU_STYLE_DIALOG)
-			ShowGunmenuDialog(i);
-	}
 	// Count how many weapons they've got so far
 	new ct = 0;
 	for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
