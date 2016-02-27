@@ -20,7 +20,7 @@
 new BodyPartName[10][] = 
 {
 	{"Unknown1"}, {"Unknown2"}, {"Unknown3"}, {"Torso"}, {"Groin"}, 
-	{"Left Arm"}, {"Right Arm"}, {"Left Leg"}, {"Right Leg"}, {"Head"}
+	{"L-Arm"}, {"R-Arm"}, {"L-Leg"}, {"R-Leg"}, {"Head"}
 };
 
 enum VISUAL_DAMAGE_DATA

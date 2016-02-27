@@ -481,7 +481,7 @@ StorePlayerVariables(playerid) {
 			    SaveVariables[i][pSeatID] = -1;
 			}
 
-			if(Current != -1 && AllowStartBase == false && (Player[i][ToAddInRound] || Player[i][Playing])) 
+			if(Current != -1 && (AllowStartBase == false || ElapsedTime < 20) && (Player[i][ToAddInRound] || Player[i][Playing])) 
 				SaveVariables[i][WasCrashedInStart] = true;
 
 	        format(iString,sizeof(iString),"{FFFFFF}%s's "COL_PRIM"data saved.", Player[playerid][Name]);
