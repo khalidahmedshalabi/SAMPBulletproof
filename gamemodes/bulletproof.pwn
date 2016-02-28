@@ -7802,7 +7802,9 @@ YCMD:end(playerid, params[], help)
 	ResetTeamLeaders();
     Iter_Clear(PlayersInRound);
     
-    SetRoundAutoStart(20);
+    if(AutoRoundStarter)
+		SetRoundAutoStart(20);
+		
     LogAdminCommand("end", playerid, INVALID_PLAYER_ID);
 	return 1;
 }
