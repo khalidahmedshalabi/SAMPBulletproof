@@ -28,8 +28,8 @@ MoveIt(playerid, Float:toX, Float:toY, Float:toZ)
 	return 1;
 }
 */
-
-PlayerFlyMode(playerid, bool:frozencamera)
+forward PlayerFlyMode(playerid, bool:frozencamera);
+public PlayerFlyMode(playerid, bool:frozencamera)
 {
 	// If the player is spectating, cancel spectation mode
 	if(Player[playerid][Spectating] == true) 

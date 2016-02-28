@@ -65,8 +65,8 @@ PlayDeathCamera(playerid, bool:deathquote)
 	PlayerTextDrawHide(playerid, PlayerLeagueStatsTD[playerid]);
 	#endif
 	
-	PlayerFlyMode(playerid, true);
 	SetPlayerDrunkLevel(playerid, 50000);
+	SetTimerEx("PlayerFlyMode", 100, false, "ib", playerid, true);
 	
 	Player[playerid][InDeathCamera] = true;
 	SetTimerEx("OnPlayerDeathCameraEnd", DEATH_CAMERA_DURATION, false, "i", playerid);
