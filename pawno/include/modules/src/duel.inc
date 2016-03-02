@@ -146,8 +146,8 @@ StartDuel(dueller1, dueller2, weapon1, weapon2, Float:centerx, Float:centery, ar
 	GameTextForPlayer(dueller2, "~r~~h~rape!!!", 3000, 6);
 	Player[dueller1][IgnoreSpawn] = true;
 	Player[dueller2][IgnoreSpawn] = true;
-	SetPlayerColor(dueller1, 0xFF880088);
-	SetPlayerColor(dueller2, 0xFF880088);
+	SetPlayerColor(dueller1, 0xFAB18488);
+	SetPlayerColor(dueller2, 0xFAB18488);
 	Player[dueller1][TeamBeforeDuel] = Player[dueller1][Team];
 	Player[dueller2][TeamBeforeDuel] = Player[dueller2][Team];
 	Player[dueller1][ToAddInRound] = false;
