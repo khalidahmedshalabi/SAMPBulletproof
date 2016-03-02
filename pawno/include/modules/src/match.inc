@@ -1144,8 +1144,6 @@ PlayerNoLeadTeam(playerid)
 			}
 		}
 	}
-	ColorFix(playerid);
-	RadarFix(playerid);
 	return 1;
 }
 
@@ -1245,6 +1243,9 @@ PlayerRequestBackup(playerid)
 	// Format backup request message to send it later
 	format(str, sizeof(str), "{%s}[HELP] %s {FFFFFF}needs backup [Heading %s | HP %d | Enemies: %d]", (team == ATTACKER) ? ("FF6666") : ("9999FF"), Player[playerid][Name], GetCardinalPoint(facingAngle), totHP, enemiesCt);
 	
+	// This is for players who use colored markers (via /playermarkers)
+	new specialStr[144];
+	
 	// Send backup request message to all teammates
 	foreach(new i : PlayersInRound)
 	{
@@ -1253,7 +1254,14 @@ PlayerRequestBackup(playerid)
 		
 		if(Player[i][Team] == team)
 		{
-			SendClientMessage(i, -1, str);
+			if(!Player[i][PlayerMarkers])
+				SendClientMessage(i, -1, str);
+			else
+			{
+				format(specialStr, sizeof specialStr, "%s[HELP] %s {FFFFFF}needs backup [Heading %s | HP %d | Enemies: %d]", GetColor(GetPlayerCorrectMarkerCol(playerid, i)), Player[playerid][Name], GetCardinalPoint(facingAngle), totHP, enemiesCt);
+				SendClientMessage(i, -1, specialStr);
+			}
+		
 			PlayerPlaySound(i,1137,0.0,0.0,0.0);
 			SetPlayerMapIcon(i, iconID, x, y, z, 19, 0, MAPICON_GLOBAL);
 		}
@@ -1515,7 +1523,8 @@ RemovePlayerFromRound(playerid, bool:remove_iterator = true)
 	PlayerTextDrawHide(playerid, AreaCheckBG[playerid]);
 
 	ResetPlayerGunmenu(playerid, false);
-
+	PlayerNoLeadTeam(playerid);
+	
 	SpawnPlayerEx(playerid);
 	return 1;
 }

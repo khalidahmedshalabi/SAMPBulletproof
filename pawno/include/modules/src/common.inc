@@ -75,6 +75,33 @@ SendUsageMessage(playerid, text[], messagebox_type = MSGBOX_TYPE_MIDDLE)
 	return 1;
 }
 
+GetColor(color)
+{
+    new string[10];
+    format(string,sizeof(string),"{%06x}",ShiftRGBAToRGB(color));
+    return string;
+}
+
+GetPlayerCorrectMarkerCol(playerid, forplayerid)
+{
+	if(Player[forplayerid][PlayerMarkers] == true)
+	{
+		if(TeamHasLeader[Player[playerid][Team]] == true && TeamLeader[Player[playerid][Team]] == playerid)
+		{
+			return TEAM_LEADER_COLOUR;
+		}
+		else if(Player[playerid][AskingForHelp])
+		{
+			return (Player[playerid][Team] == ATTACKER ? ATTACKER_ASKING_HELP : DEFENDER_ASKING_HELP);
+		}
+		else
+		{
+			return PlayerColors[playerid];
+		}
+	}
+	return GetPlayerColor(playerid); // huh?
+}
+
 // Checks all players and set idle players to afk mode
 AutoAFKCheck()
 {
@@ -1647,32 +1674,15 @@ RadarFix(playerid = INVALID_PLAYER_ID)
 		{
 			foreach(new x : Player)
 			{
-				if(Player[i][Team] != Player[x][Team])
-				{
-					SetPlayerMarkerForPlayer(x, i, GetPlayerColor(i) & 0xFFFFFF00);
-				}
-				else
-				{
-					SetPlayerMarkerForPlayer(x, i, GetPlayerColor(i) | 0x00000055);
-				}
+				OnPlayerStreamIn(i, x);
 			}
 		}
 	}
 	else // if only one player's color is changed and needs updating
 	{
-		if(Player[playerid][Playing] == true)
+		foreach(new i : Player)
 		{
-			foreach(new i : Player)
-			{
-				if(Player[playerid][Team] != Player[i][Team])
-				{
-					SetPlayerMarkerForPlayer(i, playerid, GetPlayerColor(playerid) & 0xFFFFFF00);
-				}
-				else
-				{
-					SetPlayerMarkerForPlayer(i, playerid, GetPlayerColor(playerid) | 0x00000055);
-				}
-			}
+			OnPlayerStreamIn(playerid, i);
 		}
 	}
     return 1;

@@ -644,7 +644,7 @@ public OnPlayerText(playerid, text[])
 	        case NON:
 			{ SendErrorMessage(playerid,"You must be part of a team."); return 0; }
 	    }
-	    new ChatString[128];
+	    new ChatString[144];
 		format(ChatString,sizeof(ChatString),"@ Team Chat | %s (%d) | %s", Player[playerid][Name], playerid, text[1]);
 
 		foreach(new i : Player)
@@ -669,7 +669,7 @@ public OnPlayerText(playerid, text[])
 	// Admin chat
 	if(text[0] == '@' && Player[playerid][Level] > 0)
 	{
-	    new ChatString[128];
+	    new ChatString[144];
         format(ChatString, sizeof(ChatString), "@ Admin Chat | %s (%d) | %s", Player[playerid][Name], playerid, text[1]);
         foreach(new i : Player) {
             if(Player[i][Level] > 0) {
@@ -712,7 +712,7 @@ public OnPlayerText(playerid, text[])
 	// Channel chat
 	if(text[0] == '^' && Player[playerid][ChatChannel] != -1)
 	{
-	    new ChatString[128];
+	    new ChatString[144];
         format(ChatString, sizeof(ChatString), "@ Channel Chat | %s | {FFFFFF}%d{FFCC99} | %s", Player[playerid][Name], OnlineInChannel[Player[playerid][ChatChannel]], text[1]);
         OnlineInChannel[Player[playerid][ChatChannel]] = 0;
 
@@ -727,52 +727,11 @@ public OnPlayerText(playerid, text[])
 		}
 	    return 0;
 	}
-
-	// Colorful text
-	new ChatString[128];
-	if(text[0] == '^')
-	{
-	    if(text[1] == 'r' || text[1] == 'R') // red
-	    {
-        	format(ChatString, sizeof(ChatString), "(%d) {FF0000}%s", playerid, text[2]);
-       		SendPlayerMessageToAll(playerid, ChatString);
-			return 0;
-		}
-		else if(text[1] == 'b' || text[1] == 'B') // blue
-	    {
-        	format(ChatString, sizeof(ChatString), "(%d) {0000FF}%s", playerid, text[2]);
-       		SendPlayerMessageToAll(playerid, ChatString);
-			return 0;
-		}
-		else if(text[1] == 'y' || text[1] == 'Y') // yellow
-	    {
-        	format(ChatString, sizeof(ChatString), "(%d) {FFFF00}%s", playerid, text[2]);
-       		SendPlayerMessageToAll(playerid, ChatString);
-			return 0;
-		}
-		else if(text[1] == 'o' || text[1] == 'O') // orange
-	    {
-        	format(ChatString, sizeof(ChatString), "(%d) {FF6600}%s", playerid, text[2]);
-       		SendPlayerMessageToAll(playerid, ChatString);
-			return 0;
-		}
-		else if(text[1] == 'g' || text[1] == 'G') // green
-	    {
-        	format(ChatString, sizeof(ChatString), "(%d) {33FF00}%s", playerid, text[2]);
-       		SendPlayerMessageToAll(playerid, ChatString);
-			return 0;
-		}
-		else if(text[1] == 'p' || text[1] == 'P') // pink
-	    {
-        	format(ChatString, sizeof(ChatString), "(%d) {FF879C}%s", playerid, text[2]);
-       		SendPlayerMessageToAll(playerid, ChatString);
-			return 0;
-		}
-
-	}
+	
 	// Normal chat
-	format(ChatString, sizeof(ChatString),"(%d) %s", playerid, text);
-    SendPlayerMessageToAll(playerid,ChatString);
+    new ChatString[144];
+	format(ChatString, sizeof(ChatString),"%s%s: {FFFFFF}(%d) %s", GetColor(GetPlayerColor(playerid)), Player[playerid][Name], playerid, text);
+	SendClientMessageToAll(-1, ChatString);
 	return 0;
 }
 
@@ -816,7 +775,6 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				SetPlayerPos(playerid, defPos[0]+1.0, defPos[1]+1.0, defPos[2]+1.0);
 				return 1;
 			}
-
 			SetPlayerArmedWeapon(playerid, 0);
 
 			if(Player[playerid][BeingSpeced] == true)
@@ -1257,54 +1215,40 @@ public OnPlayerUpdate(playerid)
 
 public OnPlayerStreamIn(playerid, forplayerid)
 {
-	if(Player[playerid][Playing] == true && Player[forplayerid][Playing] == true)
+	if(Player[playerid][Playing] == true)
 	{
 		if(Player[forplayerid][Team] != Player[playerid][Team])
 		{
-			SetPlayerMarkerForPlayer(forplayerid,playerid, GetPlayerColor(playerid) & 0xFFFFFF00);
+			SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerCorrectMarkerCol(playerid, forplayerid) & 0xFFFFFF00);
 		}
 		else
 		{
-			SetPlayerMarkerForPlayer(forplayerid,playerid,GetPlayerColor(playerid) | 0x00000055);
+			SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerCorrectMarkerCol(playerid, forplayerid) | 0x00000055);
 		}
 	}
-	else if(Player[playerid][Playing] == true && Player[forplayerid][Playing] == false)
+	else if(Player[playerid][Playing] == false && Player[forplayerid][Playing] == false)
 	{
-		if(Player[forplayerid][Team] != Player[playerid][Team])
-		{
-			SetPlayerMarkerForPlayer(forplayerid,playerid, GetPlayerColor(playerid) & 0xFFFFFF00);
-		}
-		else
-		{
-			SetPlayerMarkerForPlayer(forplayerid,playerid,GetPlayerColor(playerid) | 0x00000055);
-		}
+	    SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerCorrectMarkerCol(playerid, forplayerid) | 0x00000055);
 	}
 	return 1;
 }
 
 public OnPlayerStreamOut(playerid, forplayerid)
 {
-	if(Player[playerid][Playing] == true && Player[forplayerid][Playing] == true)
+	if(Player[playerid][Playing] == true)
 	{
 		if(Player[forplayerid][Team] != Player[playerid][Team])
 		{
-			SetPlayerMarkerForPlayer(forplayerid,playerid, GetPlayerColor(playerid) & 0xFFFFFF00);
+			SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerCorrectMarkerCol(playerid, forplayerid) & 0xFFFFFF00);
 		}
 		else
 		{
-			SetPlayerMarkerForPlayer(forplayerid,playerid,GetPlayerColor(playerid) | 0x00000055);
+			SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerCorrectMarkerCol(playerid, forplayerid) | 0x00000055);
 		}
 	}
-	else if(Player[playerid][Playing] == true && Player[forplayerid][Playing] == false)
+	else if(Player[playerid][Playing] == false && Player[forplayerid][Playing] == false)
 	{
-		if(Player[forplayerid][Team] != Player[playerid][Team])
-		{
-			SetPlayerMarkerForPlayer(forplayerid,playerid, GetPlayerColor(playerid) & 0xFFFFFF00);
-		}
-		else
-		{
-			SetPlayerMarkerForPlayer(forplayerid,playerid,GetPlayerColor(playerid) | 0x00000055);
-		}
+	    SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerCorrectMarkerCol(playerid, forplayerid) | 0x00000055);
 	}
 	return 1;
 }
@@ -3733,11 +3677,12 @@ YCMD:matchtips(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display some guidelines about match mode");
 	    return 1;
 	}
-	new str[1354];
+	new str[1440];
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}To enable Match-Mode, press 'Y' in lobby or 'H' (shortcut to /match) in round and most textdraws will be clickable.");
 	strcat(str, "\nOr use /war if you're in a hurry! Moreover, you can click on match textdraws to set team names, score and etc.");
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}To re-select your weapons in a round, type /gunmenu.");
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}Type /melee to get melee weapons menu while in a round.");
+    strcat(str, "\n"COL_PRIM"# {FFFFFF}Want to differentiate your team-mates on radar? Use /playermarkers");
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}Use /weaponbinds to code your own weapon key binds.");
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}To change your fight style, you can use the /fightstyle command.");
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}You can remove a gun by holding it and typing /remgun.");
@@ -3850,6 +3795,33 @@ YCMD:clearadmcmd(playerid, params[], help)
     //if(Player[playerid][Level] < 4) return SendErrorMessage(playerid,"You must be level 4 to use this command.");
     ClearAdminCommandLog();
     SendClientMessage(playerid, -1, "Admin command log has been successfully cleared!");
+	return 1;
+}
+
+YCMD:playermarkers(playerid, params[], help)
+{
+	if(help)
+	{
+	    SendCommandHelpMessage(playerid, "an option to switch the color of the player markers on your radar");
+	    return 1;
+	}
+    Player[playerid][PlayerMarkers] = !Player[playerid][PlayerMarkers];
+    foreach(new i : Player)
+    {
+        OnPlayerStreamIn(i, playerid);
+    }
+	switch(Player[playerid][PlayerMarkers])
+	{
+	    case false:
+	    {
+	        SendClientMessage(playerid, -1, "Changed player markers setting: you will now see marker color based on team color.");
+	    }
+	    case true:
+	    {
+	        SendClientMessage(playerid, -1, "Changed player markers setting: each player has a unique marker color on radar now.");
+	    }
+	}
+	db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Players` SET `PlayerMarkers` = '%d' WHERE `Name` = '%q'", (Player[playerid][PlayerMarkers] == true) ? (1) : (0), Player[playerid][Name])));
 	return 1;
 }
 
@@ -4298,7 +4270,7 @@ YCMD:autopause(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "toggle automatic pausing on player disconnection in war mode");
 	    return 1;
 	}
-	new iString[160];
+	new iString[144];
 
  	if(AutoPause == true) {
 		AutoPause = false;
@@ -5005,8 +4977,7 @@ YCMD:resetscores(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "reset team scores.");
 	    return 1;
 	}
-	new iString[160];
-
+	
     TeamScore[ATTACKER] = 0;
     TeamScore[DEFENDER] = 0;
     CurrentRound = 0;
@@ -5025,7 +4996,7 @@ YCMD:resetscores(playerid, params[], help)
 	    Player[i][TotalBulletsFired] = 0;
 	    Player[i][TotalshotsHit] = 0;
 	}
-
+    new iString[64];
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has reset the scores.", Player[playerid][Name]);
 	SendClientMessageToAll(-1, iString);
 	return 1;
@@ -5478,7 +5449,7 @@ YCMD:war(playerid, params[], help)
 	}
 	if(Current != -1) return SendErrorMessage(playerid,"Can't use this command while round is on.");
 
-	new iString[160], TeamAName[7], TeamBName[7];
+	new TeamAName[7], TeamBName[7];
 	if(sscanf(params, "zz", TeamAName, TeamBName)) return SendUsageMessage(playerid,"/war ([Team A] [Team B]) (end)");
 	if(strcmp(TeamAName, "end", true) == 0 && isnull(TeamBName) && WarMode == true)
 	{
@@ -5501,6 +5472,7 @@ YCMD:war(playerid, params[], help)
 	UpdateTeamScoreTextDraw();
 	UpdateRoundsPlayedTextDraw();
 	UpdateTeamNameTextDraw();
+	new iString[144];
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has enabled the Match-Mode.", Player[playerid][Name]);
 	SendClientMessageToAll(-1, iString);
 	UpdateTeamNamesTextdraw();
@@ -5586,13 +5558,14 @@ YCMD:teamname(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "change the name of a team.");
 	    return 1;
 	}
-	new iString[160], TeamID, TeamNamee[24];
+	new TeamID, TeamNamee[24];
 	if(sscanf(params, "ds", TeamID, TeamNamee)) return SendUsageMessage(playerid,"/teamname [Team ID] [Name] (0 = Attacker | 1 = Defender)");
 
 	if(TeamID < 0 || TeamID > 1) return SendErrorMessage(playerid,"Invalid Team ID.");
 	if(strlen(TeamNamee) > 6) return SendErrorMessage(playerid,"Team name is too long.");
 	if(strfind(TeamNamee, "~") != -1) return SendErrorMessage(playerid,"~ not allowed.");
 
+    new iString[144];
 	switch(TeamID) {
 	    case 0: {
 			format(TeamName[ATTACKER], 24, TeamNamee);
@@ -5824,7 +5797,7 @@ YCMD:cptime(playerid, params[], help)
 	ConfigCPTime = cpTime;
  	CurrentCPTime = ConfigCPTime + 1;
 
-	new iString[160];
+	new iString[144];
 	format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'CP Time'", cpTime);
     db_free_result(db_query(sqliteconnection, iString));
 
@@ -6407,7 +6380,7 @@ YCMD:maxpacket(playerid, params[], help)
 
 	Max_Packetloss = iPacket;
 
-	new iString[160];
+	new iString[144];
 	format(iString, sizeof(iString), "UPDATE Configs SET Value = %.2f WHERE Option = 'Maximum Packetloss'", iPacket);
     db_free_result(db_query(sqliteconnection, iString));
 
@@ -6568,7 +6541,7 @@ YCMD:move(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "teleport a player to another player.");
 	    return 1;
 	}
-    new iString[160], pID[2];
+    new pID[2];
     if(sscanf(params, "dd", pID[0], pID[1])) return SendUsageMessage(playerid,"/move [PlayerToMove ID] [PlayerToMoveTo ID]");
 	if(!IsPlayerConnected(pID[0]) || !IsPlayerConnected(pID[1])) return SendErrorMessage(playerid,"One of the player IDs you used is not connected.");
 
@@ -6585,6 +6558,7 @@ YCMD:move(playerid, params[], help)
     }
     else SetPlayerPos(pID[0], Pos[0]+2, Pos[1], Pos[2]);
 
+    new iString[144];
     format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has moved {FFFFFF}%s "COL_PRIM"to {FFFFFF}%s", Player[playerid][Name], Player[pID[0]][Name], Player[pID[1]][Name]);
     SendClientMessageToAll( -1, iString);
     LogAdminCommand("move", playerid, pID[0]);
@@ -8480,38 +8454,33 @@ YCMD:random(playerid, params[], help)
 	if(Current != -1) return SendErrorMessage(playerid,"A round is in progress, please wait for it to end.");
 	if(AllowStartBase == false)	return SendErrorMessage(playerid,"Please wait.");
 
-	new Params[64], iString[128], CommandID;
-	sscanf(params, "s", Params);
+	if(isnull(params) || IsNumeric(params))
+		return SendUsageMessage(playerid,"/random [base | arena]");
 
+	if(strcmp(params, "base", true) == 0)
+	{
+	    new BaseID = DetermineRandomRound(2, false, BASE);
 
-	if(isnull(Params) || IsNumeric(Params)) return
+		AllowStartBase = false; // Make sure other player or you yourself is not able to start base on top of another base.
+		SetTimerEx("OnBaseStart", 4000, false, "i", BaseID);
 
-	SendUsageMessage(playerid,"/random [base | arena]");
-
-	if(strcmp(Params, "base", true) == 0) CommandID = 1;
-	else if(strcmp(Params, "arena", true) == 0) CommandID = 2;
-	else return
-	SendUsageMessage(playerid,"/random [base | arena]");
-
-	switch(CommandID) {
-		case 1: {
-		    new BaseID = DetermineRandomRound(2, false, BASE);
-
-			AllowStartBase = false; // Make sure other player or you yourself is not able to start base on top of another base.
-			SetTimerEx("OnBaseStart", 4000, false, "i", BaseID);
-
-			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has randomly started Base: {FFFFFF}%s (ID: %d)", Player[playerid][Name], BName[BaseID], BaseID);
-			SendClientMessageToAll(-1, iString);
-		} case 2: {
-		    new ArenaID = DetermineRandomRound(2, false, ARENA);
-
-			AllowStartBase = false; // Make sure other player or you yourself is not able to start base on top of another base.
-			SetTimerEx("OnArenaStart", 4000, false, "i", ArenaID);
-
-			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has randomly started Arena: {FFFFFF}%s (ID: %d)", Player[playerid][Name], AName[ArenaID], ArenaID);
-			SendClientMessageToAll(-1, iString);
-		}
+        new iString[144];
+		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has randomly started Base: {FFFFFF}%s (ID: %d)", Player[playerid][Name], BName[BaseID], BaseID);
+		SendClientMessageToAll(-1, iString);
 	}
+	else if(strcmp(params, "arena", true) == 0)
+	{
+		new ArenaID = DetermineRandomRound(2, false, ARENA);
+
+		AllowStartBase = false; // Make sure other player or you yourself is not able to start base on top of another base.
+		SetTimerEx("OnArenaStart", 4000, false, "i", ArenaID);
+
+        new iString[144];
+		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has randomly started Arena: {FFFFFF}%s (ID: %d)", Player[playerid][Name], AName[ArenaID], ArenaID);
+		SendClientMessageToAll(-1, iString);
+	}
+	else
+		return SendUsageMessage(playerid,"/random [base | arena]");
 
 	foreach(new i : Player) {
 	    if(CanPlay(i)) {
@@ -8533,38 +8502,35 @@ YCMD:randomint(playerid, params[], help)
 	if(Current != -1) return SendErrorMessage(playerid,"A round is in progress, please wait for it to end.");
 	if(AllowStartBase == false) return SendErrorMessage(playerid,"Please wait.");
 
-	new Params[64], iString[160], CommandID;
-	sscanf(params, "s", Params);
-	if(isnull(Params) || IsNumeric(Params)) return
+	if(isnull(params) || IsNumeric(params))
+		return SendUsageMessage(playerid,"/randomint [base | arena]");
+		
+	if(strcmp(params, "base", true) == 0)
+	{
+	    new BaseID = DetermineRandomRound(1, false, BASE);
 
-	SendUsageMessage(playerid,"/randomint [base | arena]");
+		AllowStartBase = false; // Make sure other player or you yourself is not able to start base on top of another base.
+		SetTimerEx("OnBaseStart", 4000, false, "i", BaseID);
 
-	if(strcmp(Params, "base", true) == 0) CommandID = 1;
-	else if(strcmp(Params, "arena", true) == 0) CommandID = 2;
-	else return
-	SendUsageMessage(playerid,"/randomint [base | arena]");
+		new iString[144];
+		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has randomly started interior Base: {FFFFFF}%s (ID: %d)", Player[playerid][Name], BName[BaseID], BaseID);
+		SendClientMessageToAll(-1, iString);
 
-	switch(CommandID) {
-		case 1: {
-		    new BaseID = DetermineRandomRound(1, false, BASE);
-
-			AllowStartBase = false; // Make sure other player or you yourself is not able to start base on top of another base.
-			SetTimerEx("OnBaseStart", 4000, false, "i", BaseID);
-
-			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has randomly started interior Base: {FFFFFF}%s (ID: %d)", Player[playerid][Name], BName[BaseID], BaseID);
-			SendClientMessageToAll(-1, iString);
-
-			GameType = BASE;
-		} case 2: {
-		    new ArenaID = DetermineRandomRound(1, false, ARENA);
-
-			AllowStartBase = false; // Make sure other player or you yourself is not able to start base on top of another base.
-			SetTimerEx("OnArenaStart", 4000, false, "i", ArenaID);
-
-			format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has randomly started interior Arena: {FFFFFF}%s (ID: %d)", Player[playerid][Name], AName[ArenaID], ArenaID);
-			SendClientMessageToAll(-1, iString);
-		}
+		GameType = BASE;
 	}
+	else if(strcmp(params, "arena", true) == 0)
+	{
+	    new ArenaID = DetermineRandomRound(1, false, ARENA);
+
+		AllowStartBase = false; // Make sure other player or you yourself is not able to start base on top of another base.
+		SetTimerEx("OnArenaStart", 4000, false, "i", ArenaID);
+
+        new iString[144];
+		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has randomly started interior Arena: {FFFFFF}%s (ID: %d)", Player[playerid][Name], AName[ArenaID], ArenaID);
+		SendClientMessageToAll(-1, iString);
+	}
+	else
+		return SendUsageMessage(playerid,"/randomint [base | arena]");
 
 	foreach(new i : Player) {
 	    if(CanPlay(i)) {
@@ -8572,7 +8538,6 @@ YCMD:randomint(playerid, params[], help)
 	        Player[i][ToAddInRound] = true;
 		}
 	}
-
 	return 1;
 }
 
@@ -8587,7 +8552,7 @@ YCMD:start(playerid, params[], help)
 	if(Current != -1) return SendErrorMessage(playerid,"A round is in progress, please wait for it to end.");
 	if(AllowStartBase == false) return SendErrorMessage(playerid,"Please wait.");
 
-	new Params[2][64], iString[160], CommandID;
+	new Params[2][64], CommandID;
 	sscanf(params, "ss", Params[0], Params[1]);
 
 	if(isnull(Params[0]) || IsNumeric(Params[0])) return
@@ -8598,6 +8563,7 @@ YCMD:start(playerid, params[], help)
 	    AllowStartBase = false; // Make sure other player or you yourself is not able to start base on top of another base.
 		SetTimer("OnRCStart", 2000, false);
 
+		new iString[144];
 		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has started RC Battlefield round (Interior: 72)", Player[playerid][Name]);
 		SendClientMessageToAll(-1, iString);
 	}
@@ -8615,6 +8581,7 @@ YCMD:start(playerid, params[], help)
 				AllowStartBase = false; // Make sure other player or you yourself is not able to start base on top of another base.
 				SetTimerEx("OnBaseStart", 2000, false, "i", BaseID);
 
+                new iString[144];
 				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has started the last played Base: {FFFFFF}%s (ID: %d)", Player[playerid][Name], BName[BaseID], BaseID);
 				SendClientMessageToAll(-1, iString);
 
@@ -8635,6 +8602,7 @@ YCMD:start(playerid, params[], help)
 				AllowStartBase = false; // Make sure other player or you yourself is not able to start base on top of another base.
 				SetTimerEx("OnArenaStart", 2000, false, "i", ArenaID);
 
+                new iString[144];
 				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has started the last played Arena: {FFFFFF}%s (ID: %d)", Player[playerid][Name], AName[ArenaID], ArenaID);
 				SendClientMessageToAll(-1, iString);
 				goto skipped;
@@ -8659,6 +8627,7 @@ YCMD:start(playerid, params[], help)
 		AllowStartBase = false; // Make sure other player or you yourself is not able to start base on top of another base.
 		SetTimerEx("OnBaseStart", 2000, false, "i", BaseID);
 
+        new iString[144];
 		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has started Base: {FFFFFF}%s (ID: %d)", Player[playerid][Name], BName[BaseID], BaseID);
 		SendClientMessageToAll(-1, iString);
 
@@ -8672,6 +8641,7 @@ YCMD:start(playerid, params[], help)
 		AllowStartBase = false; // Make sure other player or you yourself is not able to start base on top of another base.
 		SetTimerEx("OnArenaStart", 2000, false, "i", ArenaID);
 
+        new iString[144];
 		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has started Arena: {FFFFFF}%s (ID: %d)", Player[playerid][Name], AName[ArenaID], ArenaID);
 		SendClientMessageToAll(-1, iString);
 	}
@@ -9052,10 +9022,9 @@ YCMD:int(playerid,params[], help)
 		SetCameraBehindPlayer(playerid);
 	}
 
-	new iString[160];
+	new iString[144];
 	format(iString,sizeof(iString),"{FFFFFF}%s "COL_PRIM"has entered Interior ID: {FFFFFF}%d "COL_PRIM"| Interior: {FFFFFF}%d",Player[playerid][Name],id,id,Interiors[id][int_interior]);
 	SendClientMessageToAll(-1,iString);
-
 	return 1;
 }
 

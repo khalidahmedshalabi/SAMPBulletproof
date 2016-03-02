@@ -12,6 +12,8 @@
 #define PRESSING(%0,%1) \
 	(%0 & (%1))
 
+#define ShiftRGBAToRGB(%0)	(((%0) >>> 8) & 0xFFFFFF)
+
 new 
 	Iterator:DeadBodyActors<MAX_ACTORS>,
 	Iterator:DeadBodyLabels<_:MAX_3DTEXT_GLOBAL>;
