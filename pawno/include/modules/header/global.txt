@@ -24,7 +24,6 @@ new ChangingSkinOfTeam[MAX_PLAYERS];
 #define MAX_SERVER_PASS_LENGH 6
 new ServerPass[MAX_SERVER_PASS_LENGH + 9]; // contains "password " plus the password itself
 new hostname[64];
-new AKAString[1024];
 new GroupAccessPassword[MAX_GROUP_ACCESS_GROUPS][MAX_GROUP_ACCESS_PASSWORD_LENGTH];
 new RequestedGroupPass[MAX_PLAYERS][MAX_GROUP_ACCESS_GROUPS][MAX_GROUP_ACCESS_PASSWORD_LENGTH];
 

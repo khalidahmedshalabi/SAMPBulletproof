@@ -17,25 +17,28 @@
 #include "modules\header\teamhpbars.txt"
 
 // Checks player AKAs
-GetPlayerAKA(playerid)
+GetPlayerAKA(playerid, str[], len)
 {
     new IP[16];
     GetPlayerIp(playerid, IP, sizeof(IP));
 	new DBResult:dbres = db_query(sqliteconnection, sprintf("SELECT `Names` FROM `AKAs` WHERE `IP` = '%s'", IP));
 
-	AKAString[0] = EOS;
-	if(db_num_rows(dbres) > 0) {
-		db_get_field_assoc(dbres, "Names", AKAString, sizeof(AKAString));
-	} else {
+	if(db_num_rows(dbres) > 0) 
+	{
+		db_get_field_assoc(dbres, "Names", str, len);
+	} 
+	else 
+	{
+		strcat(str, "NULL", len);
 		db_free_result(db_query(sqliteconnection, sprintf("INSERT INTO `AKAs` (`IP`, `Names`) VALUES ('%s', '%s')", IP, "")));
 	}
 	db_free_result(dbres);
-	return AKAString;
 }
 
-MatchAKA(playerid) {
-    AKAString[0] = EOS;
-	AKAString = GetPlayerAKA(playerid);
+MatchAKA(playerid) 
+{
+    new AKAString[256];
+	GetPlayerAKA(playerid, AKAString, sizeof AKAString);
 
 	new idx;
 	do {
@@ -58,8 +61,8 @@ CheckPlayerAKA(playerid)
 	{
 		new str[16];
 		GetPlayerIp(playerid, str, sizeof(str));
-	    AKAString[0] = EOS;
-	    AKAString = GetPlayerAKA(playerid);
+	    new AKAString[256];
+		GetPlayerAKA(playerid, AKAString, sizeof AKAString);
 	    new add[MAX_PLAYER_NAME+1];
 	    format(add, sizeof(add), ",%s", Player[playerid][Name]);
 

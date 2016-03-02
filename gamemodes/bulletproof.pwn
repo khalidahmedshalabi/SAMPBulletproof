@@ -3745,10 +3745,21 @@ YCMD:clearadmcmd(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "clear the admin command log file that is in scriptfiles folder");
 	    return 1;
 	}
-    //if(Player[playerid][Level] < 4) return SendErrorMessage(playerid,"You must be level 4 to use this command.");
     ClearAdminCommandLog();
     SendClientMessage(playerid, -1, "Admin command log has been successfully cleared!");
 	return 1;
+}
+
+YCMD:clearallaka(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "clear all players aka logs from database");
+	    return 1;
+	}
+   	db_free_result(db_query(sqliteconnection, "DELETE FROM `AKAs`"));
+    SendClientMessage(playerid, -1, "AKA logs have been successfully cleared!");
+    return 1;
 }
 
 YCMD:playermarkers(playerid, params[], help)
@@ -7062,7 +7073,6 @@ YCMD:rr(playerid, params[], help)
 
 YCMD:aka(playerid, params[], help) {
 
-    //if(Player[playerid][Level] < 3 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be a level 3 admin to do that.");
     if(help)
 	{
 	    SendCommandHelpMessage(playerid, "fetch AKA data of a player.");
@@ -7074,14 +7084,12 @@ YCMD:aka(playerid, params[], help) {
     }
     if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player is not connected.");
 
-    AKAString[0] = EOS;
-	AKAString = GetPlayerAKA(pID);
-	format(AKAString, sizeof(AKAString), "{FFFFFF}%s", AKAString);
+    new AKAString[256];
+	GetPlayerAKA(pID, AKAString, sizeof AKAString);
 
-	new title[50];
+	new title[39];
 	format(title, sizeof(title), ""COL_PRIM"%s's AKA", Player[pID][Name]);
-    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX,title,AKAString,"Close","");
-
+    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, title, AKAString, "Close", "");
     return 1;
 }
 
