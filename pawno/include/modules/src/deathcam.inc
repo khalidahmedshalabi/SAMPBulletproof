@@ -66,7 +66,8 @@ PlayDeathCamera(playerid, bool:deathquote)
 	#endif
 	
 	SetPlayerDrunkLevel(playerid, 50000);
-	SetTimerEx("PlayerFlyMode", 100, false, "ib", playerid, true);
+	TogglePlayerSpectating(playerid, true);
+	SetTimerEx("PlayerFlyMode", 200, false, "ib", playerid, true);
 	
 	Player[playerid][InDeathCamera] = true;
 	SetTimerEx("OnPlayerDeathCameraEnd", DEATH_CAMERA_DURATION, false, "i", playerid);
