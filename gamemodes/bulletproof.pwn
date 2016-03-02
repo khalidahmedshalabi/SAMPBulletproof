@@ -566,7 +566,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 		    {
 				showdeathquote = !Player[killerid][HasDeathQuote];
 			}
-	        PlayDeathCamera(playerid, showdeathquote);
+	        PlayDeathCamera(playerid, x, y, z, showdeathquote);
 	    }
 	    else // If not
 	    {
@@ -4445,7 +4445,7 @@ YCMD:lobby(playerid, params[], help)
 		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has quit the Anti-Lag zone.", Player[playerid][Name]);
 		SendClientMessageToAll(-1, iString);
 	}
-    SpawnPlayerEx(playerid);
+    SpawnPlayer(playerid);
 	return 1;
 }
 
@@ -7691,7 +7691,7 @@ YCMD:end(playerid, params[], help)
 		TogglePlayerControllable(i, 0);
 		RemovePlayerMapIcon(i, 59);
 
-		SpawnPlayerEx(i);
+		SpawnPlayer(i);
 
 		DisablePlayerCheckpoint(i);
 		SetPlayerScore(i, 0);
@@ -8833,7 +8833,7 @@ YCMD:antilag(playerid, params[], help)
 	new iString[64];
 	if(Player[playerid][AntiLag] == true) {
 	    Player[playerid][AntiLag] = false;
-	    SpawnPlayerEx(playerid);
+	    SpawnPlayer(playerid);
 
 		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has quit the Anti-Lag zone.", Player[playerid][Name]);
 		SendClientMessageToAll(-1, iString);
@@ -8897,8 +8897,8 @@ YCMD:dm(playerid, params[], help)
 	// format for SetPlayerSpawn(Playerid, Team, Skin, X, Y, X, Angle, Weapon 1, Weapon 1 Ammo, Weapon 2, Weapon 2 Ammo, Weapon 3, Weapon 3 Ammo)
 	// I suggest you use SetPlayerSpawn most of the time instead of 'SetPlayerPos' And 'SetPlayerSkin' because using 'SetPlayerSkin' and 'SpawnPlayer' at the same time will crash the player in random even if the player has 100% orginal GTA.
 	SetSpawnInfo(playerid, playerid, Skin[Player[playerid][Team]], DMSpawn[DMID][0]+random(2), DMSpawn[DMID][1]+random(2), DMSpawn[DMID][2], DMSpawn[DMID][3], DMWeapons[DMID][0], 9999, DMWeapons[DMID][1], 9999, DMWeapons[DMID][2], 9999);
-	Player[playerid][IgnoreSpawn] = true; //Make sure you ignore OnPlayerSpawn, else you will just spawn in lobby (because u are about to use SpawnPlayerEx).
-	SpawnPlayerEx(playerid); //Spawns players, in this case we have SetSpawnInfo (but still you need to make sure OnPlayerSpawn is ignored);
+	Player[playerid][IgnoreSpawn] = true; //Make sure you ignore OnPlayerSpawn, else you will just spawn in lobby (because u are about to use SpawnPlayer).
+	SpawnPlayer(playerid); //Spawns players, in this case we have SetSpawnInfo (but still you need to make sure OnPlayerSpawn is ignored);
 	SetPlayerInterior(playerid, DMInterior[DMID]);
 	SetPlayerTeam(playerid, playerid);
 

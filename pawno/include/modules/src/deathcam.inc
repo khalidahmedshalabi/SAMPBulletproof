@@ -11,10 +11,10 @@ public OnPlayerDeathCameraEnd(playerid)
 		return 0;
 	
 	SetPlayerDrunkLevel(playerid, 0);
-	CancelFlyMode(playerid);
 	Player[playerid][InDeathCamera] = false;
 	OnPlayerSpawn(playerid);
 	Player[playerid][IgnoreSpawn] = false;
+	TogglePlayerSpectating(playerid, false);
 	HideMessageBox(playerid, -1);
 	TextDrawHideForPlayer(playerid, RedDeathScreen);
 	switch(PlayerInterface[playerid][INTERFACE_HP])
@@ -44,7 +44,7 @@ public OnPlayerDeathCameraEnd(playerid)
 	return 1;
 }
 
-PlayDeathCamera(playerid, bool:deathquote)
+PlayDeathCamera(playerid, Float:deathX, Float:deathY, Float:deathZ, bool:deathquote)
 {
 	if(Player[playerid][InDeathCamera])
 		return;
@@ -64,9 +64,29 @@ PlayDeathCamera(playerid, bool:deathquote)
 	PlayerTextDrawHide(playerid, PlayerLeagueStatsTD[playerid]);
 	#endif
 	
-	SetPlayerDrunkLevel(playerid, 50000);
 	TogglePlayerSpectating(playerid, true);
-	SetTimerEx("PlayerFlyMode", 200, false, "ib", playerid, true);
+ 	new randomCameraMove = random(3);
+ 	switch(randomCameraMove)
+ 	{
+ 		// Look at the dead body at the beginning from a low height and then get higher with the camera slowly while changing X/Y position
+		case 0:
+ 		{
+ 			InterpolateCameraPos(playerid, deathX + 1.0, deathY, deathZ, deathX, deathY + 1.0, deathZ + 6.0, DEATH_CAMERA_DURATION, CAMERA_MOVE);
+ 		}
+ 		// Look at the dead body at the beginning from a high level and then change X/Y position while getting lower with the camera slowly
+ 		case 1:
+ 		{
+ 			InterpolateCameraPos(playerid, deathX, deathY + 1.0, deathZ + 6.0, deathX + 1.0, deathY, deathZ, DEATH_CAMERA_DURATION, CAMERA_MOVE);
+ 		}
+ 		// Look at the dead body at the beginning from the same level of the body and then change X/Y position while staying at the same height
+ 		case 2:
+ 		{
+ 			InterpolateCameraPos(playerid, deathX - 1.0, deathY, deathZ - 0.2, deathX, deathY + 2.0, deathZ - 0.2, DEATH_CAMERA_DURATION, CAMERA_MOVE);
+ 		}
+ 	}
+ 	InterpolateCameraLookAt(playerid, deathX, deathY, deathZ - 0.2, deathX, deathY, deathZ - 0.2, DEATH_CAMERA_DURATION, CAMERA_MOVE);
+	
+	SetPlayerDrunkLevel(playerid, 50000);
 	
 	Player[playerid][InDeathCamera] = true;
 	SetTimerEx("OnPlayerDeathCameraEnd", DEATH_CAMERA_DURATION, false, "i", playerid);

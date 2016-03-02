@@ -672,7 +672,7 @@ SpawnInAntiLag(playerid) {
 	new Pos = random(6);
 	SetSpawnInfo(playerid, 5, Skin[Player[playerid][Team]], AntiLagSpawn[Pos][0]+random(2), AntiLagSpawn[Pos][1]+random(2), AntiLagSpawn[Pos][2]+0.5, AntiLagSpawn[Pos][3], 0, 0, 0, 0, 0, 0);
 	Player[playerid][IgnoreSpawn] = true;
-	SpawnPlayerEx(playerid);
+	SpawnPlayer(playerid);
 
 	SetPlayerInterior(playerid, 	10);
 	SetPlayerVirtualWorld(playerid, 1);
@@ -1835,7 +1835,7 @@ SyncPlayer(playerid)
 	// Set spawn info and spawn player
 	SetSpawnInfo(playerid, GetPlayerTeam(playerid), GetPlayerSkin(playerid), Pos[0], Pos[1], Pos[2]-0.4, Pos[3], 0, 0, 0, 0, 0, 0);
 	Player[playerid][IgnoreSpawn] = true;
-	SpawnPlayerEx(playerid);
+	SpawnPlayer(playerid);
 	// Set info back after re-spawn
 	SetHP(playerid, Player[playerid][pHealth]);
 	SetAP(playerid, Player[playerid][pArmour]);
@@ -1848,21 +1848,6 @@ SyncPlayer(playerid)
 	Player[playerid][LastTimeSynced] = GetTickCount();
 	return 1;
 }
-
-SpawnPlayerEx(playerid) 
-{
-	if(Player[playerid][Spawned] == true) 
-	{
-		if(Current == -1)
-			HideRoundStats(playerid);
-		SetPlayerPos(playerid, 0, 0, 0);
-	 	SpawnPlayer(playerid);
-	}
-	else
-		SpawnPlayer(playerid);
-	return 1;
-}
-
 
 IsNumeric(string[]){
     for (new i = 0, j = strlen(string); i < j; i++){
@@ -1939,8 +1924,8 @@ SpawnInDM(playerid, DMID)
 	SetSpawnInfo(playerid, playerid, Skin[Player[playerid][Team]], DMSpawn[DMID][0]+random(2), DMSpawn[DMID][1]+random(2), DMSpawn[DMID][2], DMSpawn[DMID][3], DMWeapons[DMID][0], 9999, DMWeapons[DMID][1], 9999, DMWeapons[DMID][2], 9999);
 	SetPlayerInterior(playerid, DMInterior[DMID]);
 
-	Player[playerid][IgnoreSpawn] = true; //Make sure you ignore OnPlayerSpawn, else you will just spawn in lobby (because u are about to use SpawnPlayerEx).
-	SpawnPlayerEx(playerid); //Spawns players, in this case we have SetSpawnInfo (but still you need to make sure OnPlayerSpawn is ignored);
+	Player[playerid][IgnoreSpawn] = true; //Make sure you ignore OnPlayerSpawn, else you will just spawn in lobby (because u are about to use SpawnPlayer).
+	SpawnPlayer(playerid); //Spawns players, in this case we have SetSpawnInfo (but still you need to make sure OnPlayerSpawn is ignored);
 	return 1;
 }
 
@@ -1952,7 +1937,7 @@ QuitDM(playerid)
     Player[playerid][InDM] = false;
     Player[playerid][AntiLag] = false;
     Player[playerid][DMReadd] = 0;
-    SpawnPlayerEx(playerid);
+    SpawnPlayer(playerid);
 
     return 1;
 }

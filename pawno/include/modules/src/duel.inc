@@ -45,8 +45,8 @@ ResetDuellers(dueller1, dueller2, bool:respawn = true)
 	if(respawn)
 	{
 		// spawn
-		SpawnPlayerEx(dueller1);
-		SpawnPlayerEx(dueller2);
+		SpawnPlayer(dueller1);
+		SpawnPlayer(dueller2);
 	}
 }
 
@@ -249,6 +249,6 @@ ProcessDuellerDeath(playerid, killerid, reason)
 	Player[playerid][InDuel] = false;
 	Player[killerid][InDuel] = false;
 	ResetDuellers(playerid, killerid, false);
-	SpawnPlayerEx(killerid);
+	SpawnPlayer(killerid);
 	UpdateDuellersStats(killerid, playerid);
 }

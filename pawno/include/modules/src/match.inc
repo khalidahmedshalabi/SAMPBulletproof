@@ -1525,7 +1525,7 @@ RemovePlayerFromRound(playerid, bool:remove_iterator = true)
 	ResetPlayerGunmenu(playerid, false);
 	PlayerNoLeadTeam(playerid);
 	
-	SpawnPlayerEx(playerid);
+	SpawnPlayer(playerid);
 	return 1;
 }
 
@@ -1718,7 +1718,7 @@ SpawnPlayersInRC()
 					else SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], AAttackerSpawn[Current][0] + random(2), AAttackerSpawn[Current][1] + random(2), AAttackerSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 
 			        SetPlayerColor(i, ATTACKER_PLAYING);
-			        SpawnPlayerEx(i);
+			        SpawnPlayer(i);
                     SetPlayerTeam(i, 1);
                     ShowTeamBarsForPlayer(i);
 				} case DEFENDER: {
@@ -1726,7 +1726,7 @@ SpawnPlayersInRC()
         			else SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], ADefenderSpawn[Current][0] + random(2), ADefenderSpawn[Current][1] + random(2), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 
 					SetPlayerColor(i, DEFENDER_PLAYING);
-					SpawnPlayerEx(i);
+					SpawnPlayer(i);
 					SetPlayerTeam(i, 2);
 			        ShowTeamBarsForPlayer(i);
 				}
@@ -1955,7 +1955,7 @@ SpawnPlayersInArena()
 					else SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], AAttackerSpawn[Current][0] + random(2), AAttackerSpawn[Current][1] + random(2), AAttackerSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 
 			        SetPlayerColor(i, ATTACKER_PLAYING);
-			        SpawnPlayerEx(i);
+			        SpawnPlayer(i);
                     SetPlayerTeam(i, 1);
                     ShowTeamBarsForPlayer(i);
 					if(IsACPluginLoaded() && IsACEnabled())
@@ -1965,7 +1965,7 @@ SpawnPlayersInArena()
         			else SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], ADefenderSpawn[Current][0] + random(2), ADefenderSpawn[Current][1] + random(2), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 
 					SetPlayerColor(i, DEFENDER_PLAYING);
-					SpawnPlayerEx(i);
+					SpawnPlayer(i);
 					SetPlayerTeam(i, 2);
 			        ShowTeamBarsForPlayer(i);
 					if(IsACPluginLoaded() && IsACEnabled())
@@ -2065,7 +2065,7 @@ public AddPlayerToArena(playerid)
 	        SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], AAttackerSpawn[Current][0] + random(2), AAttackerSpawn[Current][1] + random(2), AAttackerSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 			SetPlayerMapIcon(playerid, 59, AAttackerSpawn[Current][0], AAttackerSpawn[Current][1], AAttackerSpawn[Current][2], 59, 0, MAPICON_GLOBAL);
 
-			SpawnPlayerEx(playerid);
+			SpawnPlayer(playerid);
 	        SetPlayerColor(playerid, ATTACKER_PLAYING);
 
             SetPlayerTeam(playerid, 1);
@@ -2075,7 +2075,7 @@ public AddPlayerToArena(playerid)
 		} case DEFENDER: {
 		    SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], ADefenderSpawn[Current][0] + random(2), ADefenderSpawn[Current][1] + random(2), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 
-			SpawnPlayerEx(playerid);
+			SpawnPlayer(playerid);
 	        SetPlayerColor(playerid, DEFENDER_PLAYING);
 	        SetPlayerTeam(playerid, 2);
 	        ShowTeamBarsForPlayer(playerid);
@@ -2083,7 +2083,7 @@ public AddPlayerToArena(playerid)
 				TogglePlayerVehicleBlips(playerid, DefendersSeeVehiclesBlips);
 		} case REFEREE: {
 	        SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], ACPSpawn[Current][0] + random(2), ACPSpawn[Current][1] + random(2), ACPSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
-			SpawnPlayerEx(playerid);
+			SpawnPlayer(playerid);
 	        SetPlayerColor(playerid, REFEREE_COLOR);
 	        SetPlayerTeam(playerid, 3);
 		}
@@ -2366,7 +2366,7 @@ SpawnPlayersInBase()
 					Player[i][IgnoreSpawn] = true;
 					SetCPForPlayer(i);
 				    SetPlayerColor(i, ATTACKER_PLAYING);
-				    SpawnPlayerEx(i);
+				    SpawnPlayer(i);
            			SetPlayerMapIcon(i, 59, BAttackerSpawn[Current][0], BAttackerSpawn[Current][1], BAttackerSpawn[Current][2], 59, 0, MAPICON_GLOBAL);
                     SetPlayerTeam(i, ATTACKER);
                     ShowTeamBarsForPlayer(i);
@@ -2379,7 +2379,7 @@ SpawnPlayersInBase()
 					Player[i][IgnoreSpawn] = true;
 					SetCPForPlayer(i);
 					SetPlayerColor(i, DEFENDER_PLAYING);
-					SpawnPlayerEx(i);
+					SpawnPlayer(i);
 			        SetPlayerTeam(i, DEFENDER);
 			        ShowTeamBarsForPlayer(i);
 					if(IsACPluginLoaded() && IsACEnabled())
@@ -2476,7 +2476,7 @@ public AddPlayerToBase(playerid)
 	switch(Player[playerid][Team]) {
 	    case ATTACKER: {
 	        SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], BAttackerSpawn[Current][0] + random(2), BAttackerSpawn[Current][1] + random(2), BAttackerSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
-			SpawnPlayerEx(playerid);
+			SpawnPlayer(playerid);
 			SetCPForPlayer(playerid);
 	        SetPlayerColor(playerid, ATTACKER_PLAYING);
    			SetPlayerMapIcon(playerid, 59, BAttackerSpawn[Current][0], BAttackerSpawn[Current][1], BAttackerSpawn[Current][2], 59, 0, MAPICON_GLOBAL);
@@ -2486,7 +2486,7 @@ public AddPlayerToBase(playerid)
 				TogglePlayerVehicleBlips(playerid, true);
 		} case DEFENDER: {
 	        SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], BDefenderSpawn[Current][0] + random(2), BDefenderSpawn[Current][1] + random(2), BDefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
-			SpawnPlayerEx(playerid);
+			SpawnPlayer(playerid);
 			SetCPForPlayer(playerid);
 	        SetPlayerColor(playerid, DEFENDER_PLAYING);
 	        SetPlayerTeam(playerid, DEFENDER);
@@ -2495,7 +2495,7 @@ public AddPlayerToBase(playerid)
 				TogglePlayerVehicleBlips(playerid, DefendersSeeVehiclesBlips);
 		} case REFEREE: {
 	        SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], BCPSpawn[Current][0] + random(2), BCPSpawn[Current][1] + random(2), BCPSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
-			SpawnPlayerEx(playerid);
+			SpawnPlayer(playerid);
 			SetCPForPlayer(playerid);
 	        SetPlayerColor(playerid, REFEREE_COLOR);
 	        SetPlayerTeam(playerid, REFEREE);
@@ -2726,7 +2726,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 			if(Player[i][Playing] == true) 
 			{
 				Player[i][Playing] = false;
-				SpawnPlayerEx(i);
+				SpawnPlayer(i);
 				PlayerTextDrawHide(i, DeathText[i][0]);
 				PlayerTextDrawHide(i, DeathText[i][1]);
 			}

@@ -615,7 +615,7 @@ PlayerVoteEndMatch(playerid)
 					TogglePlayerControllable(i, 0);
 					RemovePlayerMapIcon(i, 59);
 
-					SpawnPlayerEx(i);
+					SpawnPlayer(i);
 
 					DisablePlayerCheckpoint(i);
 					SetPlayerScore(i, 0);

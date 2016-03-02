@@ -273,7 +273,7 @@ StopSpectate(playerid, bool:remove_iterator = true)
 		SetSpawnInfo(playerid, GetPlayerTeam(playerid), Skin[Player[playerid][Team]], MainSpawn[0]+random(5),MainSpawn[1]+random(5),MainSpawn[2]+2, MainSpawn[3], 0, 0, 0, 0, 0, 0);
 		SetPlayerInterior(playerid,MainInterior);
 		Player[playerid][IgnoreSpawn] = true;
-		SpawnPlayerEx(playerid);
+		SpawnPlayer(playerid);
 		return 1;
 	}
  	if(Player[playerid][BeingSpeced] == true)

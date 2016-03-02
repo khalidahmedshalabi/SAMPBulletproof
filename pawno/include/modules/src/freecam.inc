@@ -28,8 +28,8 @@ MoveIt(playerid, Float:toX, Float:toY, Float:toZ)
 	return 1;
 }
 */
-forward PlayerFlyMode(playerid, bool:frozencamera);
-public PlayerFlyMode(playerid, bool:frozencamera)
+
+PlayerFlyMode(playerid, bool:frozencamera)
 {
 	// If the player is spectating, cancel spectation mode
 	if(Player[playerid][Spectating] == true) 
@@ -76,7 +76,6 @@ public PlayerFlyMode(playerid, bool:frozencamera)
 	
 	// Attach the players camera to the previously created (invisible) object
 	AttachCameraToPlayerObject(playerid, noclipdata[playerid][flyobject]);
-	return 1;
 }
 
 CancelFlyMode(playerid)
