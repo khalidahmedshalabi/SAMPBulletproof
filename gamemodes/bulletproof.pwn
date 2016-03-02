@@ -2114,40 +2114,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         }
 	    return 1;
 	}
-    if(dialogid == EDITSHORTCUTS_DIALOG)
-    {
-        if(response)
-        {
-            EditingShortcutOf{playerid} = listitem;
-            ShowPlayerDialog(playerid, GETVAL_DIAG, DIALOG_STYLE_INPUT, "Editing shortcut", "Please enter a text", "Done", "Cancel");
-        }
-        return 1;
-    }
-	if(dialogid == GETVAL_DIAG)
-	{
-	    if(response)
-	    {
-	        if(EditingShortcutOf{playerid} != 250)
-	        {
-	            switch(EditingShortcutOf{playerid})
-	            {
-	                case 0:
-	                { format(PlayerShortcut[playerid][Shortcut1], 50, "%s", inputtext); }
-	                case 1:
-	                { format(PlayerShortcut[playerid][Shortcut2], 50, "%s", inputtext); }
-	                case 2:
-	                { format(PlayerShortcut[playerid][Shortcut3], 50, "%s", inputtext); }
-	                case 3:
-	                { format(PlayerShortcut[playerid][Shortcut4], 50, "%s", inputtext); }
-	            }
-	            EditingShortcutOf{playerid} = 250;
-             	CallLocalFunction("OnPlayerCommandText", "ds", playerid, "/shortcuts");
-				return 1;
-	        }
-		}
-		return 1;
-	}
-
 	if(dialogid == DIALOG_REGISTER) {
 	    if(response) {
 			if(isnull(inputtext)) return ShowPlayerDialog(playerid, DIALOG_REGISTER, DIALOG_STYLE_PASSWORD,"{FFFFFF}Registration Dialog","{FFFFFF}Type your password below to register:","Register","Leave");
@@ -2758,20 +2724,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
 				    ShowConfigDialog(playerid);
 				}
-				case 13: {
-				    new iString[144];
-				    if(ShortCuts == false) {
-					    ShortCuts = true;
-	    				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"shortcut team messages.", Player[playerid][Name]);
-						SendClientMessageToAll(-1, iString);
-				    } else {
-				        ShortCuts = false;
-	    				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"shortcut team messages.", Player[playerid][Name]);
-						SendClientMessageToAll(-1, iString);
-					}
-                    ShowConfigDialog(playerid);
-				}
-				case 14:
+				case 13:
 				{
 				    if(!IsACPluginLoaded())
 					{
@@ -2800,7 +2753,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						}
 					}
 				}
-				case 15:
+				case 14:
 				{
 				    #if defined _league_included
 				    new iString[144];
@@ -2828,7 +2781,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					SendErrorMessage(playerid, "This version is not supported and cannot run league features.");
 					#endif
 				}
-				case 16:
+				case 15:
 				{
 				    if(Current != -1) return SendErrorMessage(playerid, "Can't use this while a round is in progress.");
 				    new iString[144];
@@ -2851,7 +2804,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
-				case 17:
+				case 16:
 				{
 				    new iString[144];
 				    switch(AntiMacros)
@@ -2873,7 +2826,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
-				case 18:
+				case 17:
 				{
 				    new iString[144];
 				    switch(DeadBodies)
@@ -2896,7 +2849,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
-				case 19:
+				case 18:
 				{
 				    new iString[144];
 				    switch(DeathCamera)
@@ -2918,7 +2871,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
-				case 20:
+				case 19:
 				{
 				    if(Current != -1) return SendErrorMessage(playerid, "Can't do this while a round is in progress.");
 				    new iString[144];
@@ -2941,7 +2894,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
     			}
-				case 21:
+				case 20:
 				{
 				    new iString[144];
 				    switch(LeagueShop)
@@ -2963,7 +2916,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
-				case 22:
+				case 21:
 				{
 				    new iString[144];
 				    switch(GunmenuRestrictions)
@@ -2983,7 +2936,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
 				    ShowConfigDialog(playerid);
 				}
-				case 23:
+				case 22:
 				{
 				    new iString[144];
 				    switch(MeleeAllowed)
@@ -3005,7 +2958,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
-				case 24:
+				case 23:
 				{
 				    new iString[144];
 				    switch(AutoRoundStarter)
@@ -6565,17 +6518,6 @@ YCMD:move(playerid, params[], help)
     return 1;
 }
 
-YCMD:shortcuts(playerid, params[], help)
-{
-    if(help)
-	{
-	    SendCommandHelpMessage(playerid, "edit your shortcut messages.");
-	    return 1;
-	}
-	ShowPlayerDialog(playerid, EDITSHORTCUTS_DIALOG, DIALOG_STYLE_LIST, "Editing shortcuts", sprintf("Num2: %s\nNum4: %s\nNum6: %s\nNum8: %s", PlayerShortcut[playerid][Shortcut1], PlayerShortcut[playerid][Shortcut2], PlayerShortcut[playerid][Shortcut3], PlayerShortcut[playerid][Shortcut4]), "Edit", "Cancel");
-	return 1;
-}
-
 YCMD:jetpack(playerid,params[], help)
 {
 	//if(Player[playerid][Level] < 1 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be a higher admin level.");
@@ -9023,7 +8965,7 @@ YCMD:int(playerid,params[], help)
 	}
 
 	new iString[144];
-	format(iString,sizeof(iString),"{FFFFFF}%s "COL_PRIM"has entered Interior ID: {FFFFFF}%d "COL_PRIM"| Interior: {FFFFFF}%d",Player[playerid][Name],id,id,Interiors[id][int_interior]);
+	format(iString,sizeof(iString),"{FFFFFF}%s "COL_PRIM"has entered Interior ID: {FFFFFF}%d",Player[playerid][Name],id);
 	SendClientMessageToAll(-1,iString);
 	return 1;
 }

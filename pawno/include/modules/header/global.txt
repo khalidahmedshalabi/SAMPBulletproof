@@ -8,16 +8,6 @@
 new REPLACE_ToAddID[MAX_PLAYERS]; // replace with dialogs
 new ThemeChange_listitem[MAX_PLAYERS char];
 
-enum ShortcutsStruct // shortcut messages
-{
-	Shortcut1[50],
-	Shortcut2[50],
-	Shortcut3[50],
-	Shortcut4[50]
-}
-
-new PlayerShortcut[MAX_PLAYERS][ShortcutsStruct];
-new EditingShortcutOf[MAX_PLAYERS char];
 new LastClickedPlayer[MAX_PLAYERS];
 enum TargetInfoData_STRUCT
 {

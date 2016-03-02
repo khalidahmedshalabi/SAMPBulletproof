@@ -99,16 +99,6 @@ InitPlayerNames(playerid)
 	    Player[playerid][NameWithoutTag] = Player[playerid][Name];
 }
 
-// Loads and format shortcut messages as default
-LoadDefaultShortcuts(playerid)
-{
-	strcat(PlayerShortcut[playerid][Shortcut1], "Back off! Back off!", 50);
-	strcat(PlayerShortcut[playerid][Shortcut2], "I found their sniper", 50);
-	strcat(PlayerShortcut[playerid][Shortcut3], "Spasser is attacking me!!", 50);
-	strcat(PlayerShortcut[playerid][Shortcut4], "Camp! Camp!", 50);
-    EditingShortcutOf{playerid} = 250; // unique
-}
-
 // Initialize player variables
 InitPlayer(playerid)
 {
@@ -219,7 +209,6 @@ InitPlayer(playerid)
 	InitPlayerMessageBox(playerid);
 	InitPlayerNames(playerid);
 	InitPlayerWeaponBind(playerid);
-	LoadDefaultShortcuts(playerid);
 	InitPlayerVisualDamage(playerid);
 	InitPlayerVoting(playerid);
 	

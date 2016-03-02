@@ -70,12 +70,6 @@ ShowConfigDialog(playerid) {
 		strcat(string, "\n{FF6666}Guns in Lobby");
 	}
 
-	if(ShortCuts == true) {
-		strcat(string, "\n{66FF66}Team Chat Shortcuts");
-	} else {
-		strcat(string, "\n{FF6666}Team Chat Shortcuts");
-	}
-
 	if(DefendersSeeVehiclesBlips == true)
 		strcat(string, "\n{66FF66}Defenders see vehicle blips [Disable]");
 	else

@@ -202,22 +202,6 @@ DeleteAllDeadBodies()
 	}
 }
 
-// Gets the name of a location/zone
-Get3DZoneName(Float:x, Float:y, Float:z) 
-{
-	new zone[28];
- 	for(new i = 0; i != sizeof(gSAZones); i ++)
- 	{
-		if(x >= gSAZones[i][SAZONE_AREA][0] && x <= gSAZones[i][SAZONE_AREA][3] && y >= gSAZones[i][SAZONE_AREA][1] && y <= gSAZones[i][SAZONE_AREA][4] && z >= gSAZones[i][SAZONE_AREA][2] && z <= gSAZones[i][SAZONE_AREA][5])
-		{
-		    format(zone, sizeof zone, gSAZones[i][SAZONE_NAME]);
-			return zone;
-		}
-	}
-	format(zone, sizeof zone, "Unknown Zone");
-	return zone;
-}
-
 forward RemoveBloodEffect(objectid);
 public RemoveBloodEffect(objectid)
 {
@@ -1337,7 +1321,7 @@ SwapTeams()
 	TeamScore[ATTACKER] = TeamScore[DEFENDER];
 	TeamScore[DEFENDER] = TempScore;
 
-	new TempName[24], iString[160];
+	new TempName[24];
 	TempName = TeamName[ATTACKER];
 	TeamName[ATTACKER] = TeamName[DEFENDER];
 	TeamName[DEFENDER] = TempName;
@@ -1355,6 +1339,7 @@ SwapTeams()
 	}
 	Iter_Clear(ToFixSwitch);
 
+	new iString[144];
 	format(iString, sizeof(iString), "{FFFFFF}Teams are swapped - {FF0033}Attackers: {FFFFFF}%s | {3344FF}Defenders: {FFFFFF}%s", TeamName[ATTACKER], TeamName[DEFENDER]);
 	SendClientMessageToAll(-1, iString);
 	FixVsTextDraw();
