@@ -2,7 +2,7 @@
 		Gamemode core
 */
 
-new	const Float:GM_VERSION		= 		0.19;
+new	const Float:GM_VERSION		= 		0.199;
 #define		GM_BONUS_VERSION			""
 #define 		GM_NAME				"Bulletproof"
 new 			GM_WEBSITE[50]	=	"www.bulletproof.ml";
