@@ -7555,6 +7555,30 @@ YCMD:add(playerid, params[], help)
 	return 1;
 }
 
+YCMD:addme(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "add yourself to the round.");
+	    return 1;
+	}
+	if(WarMode == true) return SendErrorMessage(playerid, "Cannot do this when match mode is enabled.");
+	if(Player[playerid][Playing] == true) return SendErrorMessage(playerid,"You're already playing.");
+	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"You cannot use this command while in a duel.");
+	if(ElapsedTime > 20) return SendErrorMessage(playerid, "It's late. You cannot add yourself now.");
+	if(Player[playerid][Team] != ATTACKER && Player[playerid][Team] != DEFENDER)
+	    return	SendErrorMessage(playerid,"You must be part of one of the following teams: Attacker or Defender.");
+	    
+    if(Player[playerid][Spectating] == true) StopSpectate(playerid);  //no more need to ask players to do /specoff in order to add them
+	if(GameType == BASE) AddPlayerToBase(playerid);
+	else if(GameType == ARENA) AddPlayerToArena(playerid);
+
+    new iString[144];
+    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has added himself to the round {FFFFFF}(/addme).", Player[playerid][Name]);
+    SendClientMessageToAll(-1, iString);
+	return 1;
+}
+
 YCMD:readd(playerid, params[], help)
 {
     if(help)
