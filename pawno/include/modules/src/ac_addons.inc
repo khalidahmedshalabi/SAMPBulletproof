@@ -68,6 +68,21 @@ public AC_OnScreenshotTaken(playerid)
 	return 1;
 }
 
+public AC_OnPlayerPause(playerid, type, bool:pause)
+{
+	if(pause)
+	{
+		if(Player[playerid][Playing] && Player[playerid][WasInCP] && !RoundPaused)
+		{
+			new iString[144];
+			format(iString, sizeof(iString),"{FFFFFF}%s "COL_PRIM"has paused their game while in CP, so they were forced to leave it.", Player[playerid][Name]);
+			SendClientMessageToAll(-1, iString);
+			OnPlayerLeaveCheckpoint(playerid);
+		}
+	}
+	return 1;
+}
+
 AC_FixServerHostname()
 {
 	if(strlen(hostname) == 0)
