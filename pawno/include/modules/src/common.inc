@@ -99,7 +99,7 @@ GetPlayerCorrectMarkerCol(playerid, forplayerid)
 			return PlayerColors[playerid];
 		}
 	}
-	return GetPlayerColor(playerid); // huh?
+	return GetPlayerColor(playerid);
 }
 
 // Checks all players and set idle players to afk mode

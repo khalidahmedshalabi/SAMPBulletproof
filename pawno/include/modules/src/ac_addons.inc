@@ -6,10 +6,12 @@
 
 public AC_OnFileExecuted(playerid, module[], md5[], bool:isCheat)
 {
-	if(isCheat)
+	// If it's a cheat file, ac is not enabled
+	if(isCheat && !IsACEnabled())
 	{
-		new str[180];
-		format(str, sizeof str, "{FFFFFF}["COL_PRIM"AC{FFFFFF}] File execution report from {FFFFFF}%s "COL_PRIM"/ module: {FFFFFF}%s "COL_PRIM"/ blacklisted: {FFFFFF}Yes", Player[playerid][Name], module);
+	    // Report it to other players
+		new str[144];
+		format(str, sizeof str, ""COL_PRIM"[AC] {FFFFFF}File execution report from "COL_PRIM"%s {FFFFFF}module: %s / blacklisted: Yes", Player[playerid][Name], module);
 		SendClientMessageToAll(-1, str);
 	}
 	return 1;
@@ -17,9 +19,27 @@ public AC_OnFileExecuted(playerid, module[], md5[], bool:isCheat)
 
 public AC_OnImgFileModifed(playerid, filename[], md5[])
 {
-	new str[180];
-	format(str, sizeof str, "{FFFFFF}["COL_PRIM"AC{FFFFFF}] {FFFFFF}%s "COL_PRIM"has got a modified IMG file {FFFFFF}(%s)", Player[playerid][Name], filename);
-	SendClientMessageToAll(-1, str);
+    // If it's a modified file, ac is not enabled
+	if(!IsACEnabled())
+	{
+	    // Report it to other players
+		new str[144];
+		format(str, sizeof str, ""COL_PRIM"[AC] %s {FFFFFF}has got a modified IMG file "COL_PRIM"(%s)", Player[playerid][Name], filename);
+		SendClientMessageToAll(-1, str);
+	}
+	return 1;
+}
+
+public AC_OnFileCalculated(playerid, filename[], md5[], bool:isCheat)
+{
+    // If it's a modified file, ac is not enabled
+    if(isCheat && !IsACEnabled())
+	{
+	    // Report it to other players
+		new str[144];
+		format(str, sizeof str, ""COL_PRIM"[AC] {FFFFFF}File calculation report from "COL_PRIM"%s {FFFFFF}file: %s / blacklisted: Yes", Player[playerid][Name], filename);
+		SendClientMessageToAll(-1, str);
+	}
 	return 1;
 }
 
@@ -32,7 +52,7 @@ public AC_OnScreenshotTaken(playerid)
 		PlayerACData[playerid][ScreenshotWarnings] ++;
 		if(PlayerACData[playerid][ScreenshotWarnings] > SCREENSHOT_TAKE_MAX_WARNINGS)
 		{
-			new iString[128];
+			new iString[144];
 			format(iString, sizeof(iString),"{FFFFFF}%s "COL_PRIM"has likely been abusing F8, so they're kicked!", Player[playerid][Name]);
 			SendClientMessageToAll(-1, iString);
 
@@ -56,7 +76,7 @@ AC_FixServerHostname()
 	}
 	if(IsACPluginLoaded() && IsACEnabled())
 	{
-		format(hostname, sizeof hostname, "%s [ACv2 ENABLED]", hostname);
+		format(hostname, sizeof hostname, "%s [AC]", hostname);
 		SendRconCommand(sprintf("hostname %s", hostname));
 	}
 }
