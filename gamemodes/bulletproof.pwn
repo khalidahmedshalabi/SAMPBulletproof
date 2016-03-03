@@ -1243,7 +1243,7 @@ public OnPlayerStreamIn(playerid, forplayerid)
 	{
 		if(Player[forplayerid][Team] != Player[playerid][Team])
 		{
-			SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerCorrectMarkerCol(playerid, forplayerid) & 0xFFFFFF00);
+			SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerColor(playerid) & 0xFFFFFF00);
 		}
 		else
 		{
@@ -1263,7 +1263,7 @@ public OnPlayerStreamOut(playerid, forplayerid)
 	{
 		if(Player[forplayerid][Team] != Player[playerid][Team])
 		{
-			SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerCorrectMarkerCol(playerid, forplayerid) & 0xFFFFFF00);
+			SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerColor(playerid) & 0xFFFFFF00);
 		}
 		else
 		{
