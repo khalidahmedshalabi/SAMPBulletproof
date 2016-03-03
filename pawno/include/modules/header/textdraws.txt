@@ -62,7 +62,7 @@ new Text: Intro_News;
 
 new Text:leftRedBG;
 new Text:rightBlueBG;
-new Text:timerCenterTD, Text:timerCircleTD, bool:timerColonShown = false;
+new Text:timerCenterTD, Text:timerCircleTD;
 new Text:leftTeamData;
 new Text:rightTeamData;
 new Text:centerTeamNames;

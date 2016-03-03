@@ -316,9 +316,21 @@ public OnPlayerSpawn(playerid)
 	}
 	// Fixes the x Vs y textdraws with current team player count
 	FixVsTextDraw();
-	// If there's no round running, hide the round stats textdraws
+	
 	if(Current == -1)
+	{
+	    // If there's no round running, hide the round stats textdraws
 	    HideRoundStats(playerid);
+ 	}
+ 	else
+ 	{
+ 	    // If there's a round running...
+ 	    
+ 	    if(ElapsedTime <= 20 && !Player[playerid][Playing] && !WarMode)
+ 	    {
+ 	        SendClientMessage(playerid, -1, ""COL_PRIM"You may want to use {FFFFFF}/addme "COL_PRIM"to add yourself to the round.");
+ 	    }
+ 	}
 	return 1;
 }
 

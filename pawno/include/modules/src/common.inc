@@ -475,13 +475,6 @@ ShowPlayerDeathMessage(killerid, playerid)
 	return 1;
 }
 
-AddAimbotBan(playerid) {
-	new str[128];
-	format(str, sizeof(str), "{FFFFFF}** System ** "COL_PRIM"has banned {FFFFFF}%s "COL_PRIM"| Reason: {FFFFFF}Aimbot (Not a bug)", Player[playerid][Name]);
-	SendClientMessageToAll(-1, str);
-	BanEx(playerid, "(SYSTEM BAN) Aimbot");
-}
-
 udb_hash(buf[]) {
     new length=strlen(buf);
     new s1 = 1;

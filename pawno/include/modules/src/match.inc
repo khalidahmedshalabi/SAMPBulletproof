@@ -309,17 +309,11 @@ public GameLoopCallback()
 	{
 		case BASE:
 		{
-			new ammo;
 			foreach(new i : PlayersInRound) // Loop through all players in round
 			{
 				// Plays sound when CP is being taken
 				if(PlayersInCP > 0 && RoundPaused == false)
 					PlayerPlaySound(i,1056,0.0,0.0,0.0);
-				// Aimbot check
-				ammo = 0;
-				GetPlayerWeaponData(i, 0, ammo, ammo);
-				if(ammo == 1000)
-					AddAimbotBan(i);
 				// Net check
 				if(Player[i][NetCheck] == 1 && !Player[i][TempNetcheck])
 				{
@@ -340,62 +334,35 @@ public GameLoopCallback()
 					// Increase elapsed time
 					ElapsedTime++;
 					// Draw round time (and CP time if it's being taken)
-					new str[32];
 					switch(PlayersInCP)
 					{
 						case 0:
 						{
-							switch(timerColonShown)
-							{
-								case true:
-								{
-									timerColonShown = false;
-									format(str, sizeof(str),"~w~%d~l~:~w~%02d", RoundMints,	RoundSeconds);
-								}
-								case false:
-								{
-									timerColonShown = true;
-									format(str, sizeof(str),"~w~%d:%02d", RoundMints,	RoundSeconds);
-								}
-							}
+							new str[16];
+							format(str, sizeof(str),"~w~%d:%02d", RoundMints,	RoundSeconds);
+							TextDrawSetString(timerCenterTD , str);
 						}
 						default:
 						{
+							new str[32];
 							CurrentCPTime --;
-							switch(timerColonShown)
-							{
-								case true:
-								{
-									timerColonShown = false;
-									format(str, sizeof(str), "~w~%d~l~:~w~%02d / ~r~~h~%d", RoundMints,	RoundSeconds, CurrentCPTime );
-								}
-								case false:
-								{
-									timerColonShown = true;
-									format(str, sizeof(str), "~w~%d:%02d / ~r~~h~%d", RoundMints,	RoundSeconds, CurrentCPTime );
-								}
-							}
+							format(str, sizeof(str), "~w~%d:%02d / ~r~~h~%d", RoundMints,	RoundSeconds, CurrentCPTime );
+							
 							if(CurrentCPTime == 0)
 								return EndRound(0); // Attackers Win
 						}
 					}
-					TextDrawSetString(timerCenterTD , str);
+					
 				}
 			}
 		}
 		case ARENA:
 		{
-			new tmp;
 			foreach(new i : PlayersInRound) // Loop through all players in round
 			{
 				// Plays sound when CP is being taken
 				if(PlayersInCP > 0 && RoundPaused == false)
 					PlayerPlaySound(i,1056,0.0,0.0,0.0);
-				// Aimbot check
-				tmp = 0;
-				GetPlayerWeaponData(i, 0, tmp, tmp);
-				if(tmp == 1000)
-					AddAimbotBan(i);
 				// Net check
 				if(Player[i][NetCheck] == 1 && !Player[i][TempNetcheck])
 				{
@@ -420,7 +387,7 @@ public GameLoopCallback()
 
 							PlayerTextDrawHide(i, AreaCheckTD[i]);
 							PlayerTextDrawHide(i, AreaCheckBG[i]);
-							tmp = i;
+							new tmp = i;
 							Iter_SafeRemove(PlayersInRound, i, i);
 							RemovePlayerFromRound(tmp, false);
 							break;
@@ -458,60 +425,40 @@ public GameLoopCallback()
 						}
 						ElapsedTime++;
 						// Draw round time (and CP time if it's being taken)
-						new str[32];
 						switch(PlayersInCP)
 						{
 							case 0:
 							{
-								switch(timerColonShown)
-								{
-									case true:
-									{
-										timerColonShown = false;
-										format(str, sizeof(str),"~w~%d~l~:~w~%02d", RoundMints,	RoundSeconds);
-									}
-									case false:
-									{
-										timerColonShown = true;
-										format(str, sizeof(str),"~w~%d:%02d", RoundMints,	RoundSeconds);
-									}
-								}
+								new str[16];
+								format(str, sizeof(str),"~w~%d:%02d", RoundMints,	RoundSeconds);
+								TextDrawSetString(timerCenterTD , str);
 							}
 							default:
 							{
 								CurrentCPTime --;
-								switch(timerColonShown)
-								{
-									case true:
-									{
-										timerColonShown = false;
-										format(str, sizeof(str), "~w~%d~l~:~w~%02d / %s%d", RoundMints,	RoundSeconds, TDC[TeamCapturingCP], CurrentCPTime );
-									}
-									case false:
-									{
-										timerColonShown = true;
-										format(str, sizeof(str), "~w~%d:%02d / %s%d", RoundMints,	RoundSeconds, TDC[TeamCapturingCP], CurrentCPTime );
-									}
-								}
+								new str[32];
+								format(str, sizeof(str), "~w~%d:%02d / %s%d", RoundMints,	RoundSeconds, TDC[TeamCapturingCP], CurrentCPTime );
+								TextDrawSetString(timerCenterTD , str);
 								if(CurrentCPTime == 0)
 								{
-									new winid = 4;
 									switch(TeamCapturingCP)
 									{
 										case ATTACKER:
 										{
-											winid = 5;
+											return EndRound(5);
 										}
 										case DEFENDER:
 										{
-											winid = 6;
+											return EndRound(6);
+										}
+										default:
+										{
+											return EndRound(4);
 										}
 									}
-									return EndRound(winid);
 								}
 							}
 						}
-						TextDrawSetString(timerCenterTD , str);
 					}
 				}
 			}
