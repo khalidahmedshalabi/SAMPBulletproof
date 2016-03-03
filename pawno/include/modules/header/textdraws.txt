@@ -54,6 +54,9 @@ new Text: GunmenuLimitsTD[MAX_TEAMS];
 #if defined _league_included
 new Text: LeagueRoundResultTD;
 #endif
+new Text: Intro_GoWebsite;
+new Text: Intro_GetStarted;
+new Text: Intro_News;
 
 // - Round Textdraws - credits to Niko_boy for the old design I just tweaked it to be quite lagfree -
 

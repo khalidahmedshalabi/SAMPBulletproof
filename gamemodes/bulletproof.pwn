@@ -221,6 +221,7 @@ public OnPlayerRequestClass(playerid, classid)
 			    SendClientMessage(playerid, -1, "{009933}Server account: {FFFFFF}automatically logged in!");
 				LoginPlayer(playerid, res);
 			    db_free_result(res);
+			    ShowIntroTextDraws(playerid);
 			    ShowPlayerClassSelection(playerid);
 			}
 			else
@@ -232,6 +233,7 @@ public OnPlayerRequestClass(playerid, classid)
 	}
 	else
 	{
+	    ShowIntroTextDraws(playerid);
 	    ShowPlayerClassSelection(playerid);
 	}
 	return 1;
@@ -2137,6 +2139,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
             SendClientMessage(playerid, -1, sprintf("{009933}Server account: {FFFFFF}registered your account with the password: %s", inputtext));
 
+            ShowIntroTextDraws(playerid);
             ShowPlayerClassSelection(playerid);
 
 			Player[playerid][Level] = 0;
@@ -2239,6 +2242,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(db_num_rows(res))
 			{
 				LoginPlayer(playerid, res);
+				ShowIntroTextDraws(playerid);
 				ShowPlayerClassSelection(playerid);
 			}
 			else
@@ -3083,7 +3087,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    if(!response)
 		{
 		    if(!Player[playerid][Spawned])
+		    {
+		        ShowIntroTextDraws(playerid);
 				ShowPlayerClassSelection(playerid);
+			}
  			return 1;
 		}
 	    new groupID = Player[playerid][RequestedClass];
@@ -3331,7 +3338,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			SpawnConnectedPlayer(playerid, listitem);
 		}
 		else
+		{
+		    ShowIntroTextDraws(playerid);
 		    ShowPlayerClassSelection(playerid);
+		}
 		return 1;
 	}
 	#if defined _league_included

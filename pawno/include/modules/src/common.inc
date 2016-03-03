@@ -444,6 +444,7 @@ public SpawnConnectedPlayer(playerid, team)
 	{
 		ShowMatchScoreBoard(playerid);
 	}
+	HideIntroTextDraws(playerid);
 	Player[playerid][Spawned] = true;
 	SpawnPlayer(playerid);
 	HideAllTeamBarsForPlayer(playerid);
