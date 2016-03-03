@@ -149,17 +149,6 @@ public OnPlayerConnect(playerid)
 	return 1;
 }
 
-forward InitClassSelectionCamera(playerid);
-public InitClassSelectionCamera(playerid)
-{
-    // Position and camera...
-    SetPlayerTime(playerid, 12, 0);
-	SetPlayerInterior(playerid, MainInterior);
-	SetPlayerCameraPos(playerid, MainSpawn[0] + random(12), MainSpawn[1] + random(12), MainSpawn[2] + random(10) + 3);
-	SetPlayerCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2]);
-	return 1;
-}
-
 public OnPlayerRequestClass(playerid, classid)
 {
     // If database is still loading, then we must not let this player login or access data now
@@ -173,7 +162,28 @@ public OnPlayerRequestClass(playerid, classid)
 
 	if(GetPlayerState(playerid) != PLAYER_STATE_SPECTATING)
     	TogglePlayerSpectating(playerid, true);
-	SetTimerEx("InitClassSelectionCamera", 200, false, "i", playerid);
+    	
+	SetPlayerTime(playerid, 12, 0);
+	SetPlayerInterior(playerid, MainInterior);
+	
+	switch(random(3))
+	{
+	    case 0:
+	    {
+	        InterpolateCameraPos(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 25.0, MainSpawn[0] - 7.0, MainSpawn[1] + 7.0, MainSpawn[2] + 5.0, 15000, CAMERA_MOVE);
+			InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 27.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 7000, CAMERA_MOVE);
+	    }
+	    case 1:
+	    {
+	        InterpolateCameraPos(playerid, MainSpawn[0] + 5.0, MainSpawn[1] + 5.0, MainSpawn[2] + 2.0, MainSpawn[0] - 7.0, MainSpawn[1] + 7.0, MainSpawn[2] + 25.0, 15000, CAMERA_MOVE);
+			InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 10.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 7000, CAMERA_MOVE);
+	    }
+	    case 2:
+	    {
+	        InterpolateCameraPos(playerid, MainSpawn[0] + 10.0, MainSpawn[1] - 10.0, MainSpawn[2] + 10.0, MainSpawn[0] - 5.0, MainSpawn[1] + 5.0, MainSpawn[2] + 5.0, 15000, CAMERA_MOVE);
+			InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 5.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 10000, CAMERA_MOVE);
+	    }
+	}
         
     #if defined _league_included
 	// League account login check
