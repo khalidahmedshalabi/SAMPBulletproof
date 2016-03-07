@@ -347,6 +347,7 @@ public GameLoopCallback()
 							new str[32];
 							CurrentCPTime --;
 							format(str, sizeof(str), "~w~%d:%02d / ~r~~h~%d", RoundMints,	RoundSeconds, CurrentCPTime );
+							TextDrawSetString(timerCenterTD , str);
 							
 							if(CurrentCPTime == 0)
 								return EndRound(0); // Attackers Win
