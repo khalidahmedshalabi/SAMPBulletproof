@@ -41,3 +41,21 @@ stock _H_SetPlayerSkin(playerid, skinid)
 #endif
  
 #define SetPlayerSkin _H_SetPlayerSkin
+
+// Hook SpawnPlayer to fix spawning player when in vehicle
+stock _H_SpawnPlayer(playerid)
+{
+	if(GetPlayerVehicleID(playerid))
+	{
+		SetPlayerPos(playerid, 0.0, 0.0, 0.0);
+	}
+	return SpawnPlayer(playerid);
+}
+ 
+#if defined _ALS_SpawnPlayer
+	#undef SpawnPlayer
+#else
+	#define _ALS_SpawnPlayer
+#endif
+ 
+#define SpawnPlayer _H_SpawnPlayer
