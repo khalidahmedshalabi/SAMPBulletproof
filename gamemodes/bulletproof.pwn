@@ -1472,6 +1472,8 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		{
 			MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "_", sprintf("~y~~h~%s ~w~has fired shots around you. Maybe for a reason?", Player[issuerid][NameWithoutTag]), 5000);
             MessageBox(issuerid, MSGBOX_TYPE_BOTTOM, "_", sprintf("~w~Watchout! You've fired shots at your team-mate ~y~~h~%s", Player[playerid][NameWithoutTag]), 5000);
+            PlayerPlaySound(issuerid, 1135, 0.0, 0.0, 0.0);
+        	PlayerPlaySound(playerid, 1135, 0.0, 0.0, 0.0);
 			SetFakeHealthArmour(playerid);
 			return 1;
 		}
