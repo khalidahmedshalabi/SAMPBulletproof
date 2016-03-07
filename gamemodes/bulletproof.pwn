@@ -7600,10 +7600,11 @@ YCMD:addme(playerid, params[], help)
 	if(Player[playerid][Playing] == true) return SendErrorMessage(playerid,"You're already playing.");
 	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"You cannot use this command while in a duel.");
 	if(ElapsedTime > 20) return SendErrorMessage(playerid, "It's late. You cannot add yourself now.");
-	if(Player[playerid][Team] != ATTACKER && Player[playerid][Team] != DEFENDER)
-	    return	SendErrorMessage(playerid,"You must be part of one of the following teams: Attacker or Defender.");
 	    
-    if(Player[playerid][Spectating] == true) StopSpectate(playerid);  //no more need to ask players to do /specoff in order to add them
+    Player[playerid][Team] = GetTeamWithLessPlayers();
+ 	SwitchTeamFix(playerid, false, false);
+	    
+    if(Player[playerid][Spectating] == true) StopSpectate(playerid);
 	if(GameType == BASE) AddPlayerToBase(playerid);
 	else if(GameType == ARENA) AddPlayerToArena(playerid);
 
