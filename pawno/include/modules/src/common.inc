@@ -107,7 +107,7 @@ AutoAFKCheck()
 {
 	foreach(new i : Player)
 	{
-		if(Player[i][PauseCount] > 30) // If they've been away for more than 30 seconds
+		if(Player[i][PauseCount] > 30 && !Player[i][IsAFK]) // If they've been away for more than 30 seconds
 		{
 			if(Player[i][Playing] == true)
 				RemovePlayerFromRound(i);
@@ -123,7 +123,7 @@ AutoAFKCheck()
 			TogglePlayerControllable(i, 0);
 			Player[i][IsAFK] = true;
 
-			SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been set to AFK mode automatically due to %d seconds of inactivity!", Player[i][Name], Player[i][PauseCount]));
+			SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been set to AFK mode automatically due to 30+ seconds of inactivity!", Player[i][Name]));
 		}
 	}
 }
