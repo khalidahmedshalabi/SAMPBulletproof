@@ -1594,6 +1594,7 @@ public ViewRCForPlayers()
 	{
 	    SpawnPlayersInRC();
 	    ResetTeamLeaders();
+		TextDrawSetString(centerTeamNames, " ");
 	    return 1;
 	}
 	
@@ -1829,6 +1830,7 @@ public ViewArenaForPlayers()
 	{
 	    SpawnPlayersInArena();
 	    ResetTeamLeaders();
+		TextDrawSetString(centerTeamNames, " ");
 	    return 1;
 	}
 	
@@ -2180,6 +2182,7 @@ public ViewBaseForPlayers()
 	{
 	    SpawnPlayersInBase();
 	    ResetTeamLeaders();
+		TextDrawSetString(centerTeamNames, " ");
 	    return 1;
 	}
 	

@@ -720,6 +720,26 @@ RoundTextdrawsCreate()
 	TextDrawBackgroundColor			(	centerTeamNames, 	0x00000033				);
 	TextDrawFont					(	centerTeamNames,	1						);
 	TextDrawSetProportional			(	centerTeamNames, 	1						);
+	
+	attackerNameTD = TextDrawCreate	(	190.000000, 428.000000, "~r~~h~~h~__- __ -");
+	TextDrawLetterSize				(	attackerNameTD, 	0.200000, 	2.000000	);
+	TextDrawAlignment				(	attackerNameTD, 	2						);
+	TextDrawColor					(	attackerNameTD, 	-1						);
+	TextDrawSetShadow				(	attackerNameTD,	0						);
+	TextDrawSetOutline				(	attackerNameTD, 	1						);
+	TextDrawBackgroundColor			(	attackerNameTD, 	0x00000033				);
+	TextDrawFont					(	attackerNameTD,	1						);
+	TextDrawSetProportional			(	attackerNameTD, 	1						);
+	
+	defenderNameTD = TextDrawCreate	(	448.000000, 428.000000, "~r~~h~~h~__- __ -");
+	TextDrawLetterSize				(	defenderNameTD, 	0.200000, 	2.000000	);
+	TextDrawAlignment				(	defenderNameTD, 	2						);
+	TextDrawColor					(	defenderNameTD, 	-1						);
+	TextDrawSetShadow				(	defenderNameTD,	0						);
+	TextDrawSetOutline				(	defenderNameTD, 	1						);
+	TextDrawBackgroundColor			(	defenderNameTD, 	0x00000033				);
+	TextDrawFont					(	defenderNameTD,	1						);
+	TextDrawSetProportional			(	defenderNameTD, 	1						);
 
 	PauseTD = TextDrawCreate(324.000000, 413.000000, "_");
 	TextDrawBackgroundColor(PauseTD, MAIN_BACKGROUND_COLOUR);
@@ -990,9 +1010,11 @@ LoadPlayerTextDraws(playerid)
 
 UpdateTeamNamesTextdraw()
 {
-	new str[159];
-	format(str, sizeof(str), "~r~~h~~h~%s \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ~b~~h~~h~%s", TeamName[ATTACKER], TeamName[DEFENDER]);
-	TextDrawSetString(centerTeamNames , str);
+	new str[16];
+	format(str, sizeof(str), "~r~~h~~h~%s", TeamName[ATTACKER]);
+	TextDrawSetString(attackerNameTD, str);
+	format(str, sizeof(str), "~b~~h~~h~%s", TeamName[DEFENDER]);
+	TextDrawSetString(defenderNameTD, str);
 	return 1;
 }
 
@@ -1013,6 +1035,8 @@ ShowRoundStats(playerid)
 	TextDrawShowForPlayer(playerid,leftTeamData);
 	TextDrawShowForPlayer(playerid,rightTeamData);
 	TextDrawShowForPlayer(playerid,centerTeamNames);
+	TextDrawShowForPlayer(playerid,attackerNameTD);
+	TextDrawShowForPlayer(playerid,defenderNameTD);
 }
 
 HideRoundStats(playerid)
@@ -1024,6 +1048,8 @@ HideRoundStats(playerid)
 	TextDrawHideForPlayer(playerid,leftTeamData);
 	TextDrawHideForPlayer(playerid,rightTeamData);
 	TextDrawHideForPlayer(playerid,centerTeamNames);
+	TextDrawHideForPlayer(playerid,attackerNameTD);
+	TextDrawHideForPlayer(playerid,defenderNameTD);
 	if(!RoundPaused)
 		TextDrawHideForPlayer(playerid, PauseTD);
 }

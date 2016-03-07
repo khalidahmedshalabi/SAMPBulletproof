@@ -66,6 +66,7 @@ new Text:timerCenterTD, Text:timerCircleTD;
 new Text:leftTeamData;
 new Text:rightTeamData;
 new Text:centerTeamNames;
+new Text:attackerNameTD, Text:defenderNameTD;
 
 // - Result Textdraws - added by Niko_boy // -
 
