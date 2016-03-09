@@ -2,8 +2,8 @@
 		Makes textdraws auto fade
 */
 
-#define DEFAULT_FADE_UPDATE_RATE	35
-#define DEFAULT_FADE_DISPLAY_TIME	7000
+#define DEFAULT_FADE_UPDATE_RATE	30
+#define DEFAULT_FADE_DISPLAY_TIME	1500
 
 enum HookTextDraw_STRUCT
 {
