@@ -5504,7 +5504,7 @@ YCMD:war(playerid, params[], help)
 	    Player[i][TotalBulletsFired] = 0;
 	    Player[i][TotalshotsHit] = 0;
 
-		if(Player[i][InDuel] == true || Player[i][IsAFK])
+		if(Player[i][InDuel] == true || Player[i][IsAFK] || !Player[i][Spawned])
 	        continue;
 
 		MyVehicle = -1;
@@ -7737,6 +7737,9 @@ YCMD:end(playerid, params[], help)
 
 	foreach(new i : Player) {
 
+        if(Player[i][InDuel] == true || Player[i][IsAFK] || !Player[i][Spawned])
+	        continue;
+	        
 		Player[i][Playing] = false;
 		Player[i][WasInCP] = false;
 		if(Player[i][Spectating] == true)
