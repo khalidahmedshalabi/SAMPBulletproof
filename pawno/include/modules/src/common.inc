@@ -386,8 +386,8 @@ public SpawnConnectedPlayer(playerid, team)
 	{
 		case true:
 		{
-			PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid]);
-			PlayerTextDrawShow(playerid, ArmourTextDraw[playerid]);
+			PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid], true);
+			PlayerTextDrawShow(playerid, ArmourTextDraw[playerid], true);
 		}
 		case false:
 		{
@@ -395,20 +395,20 @@ public SpawnConnectedPlayer(playerid, team)
 			PlayerTextDrawHide(playerid, ArmourTextDraw[playerid]);
 		}
 	}
-	PlayerTextDrawShow(playerid, BaseID_VS[playerid]);
+	PlayerTextDrawShow(playerid, BaseID_VS[playerid], true);
 	
 	switch(PlayerInterface[playerid][INTERFACE_NET])
 	{
 		case true:
 		{
-			PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
+			PlayerTextDrawShow(playerid, FPSPingPacket[playerid], true);
 		}
 		case false:
 		{
 			PlayerTextDrawHide(playerid, FPSPingPacket[playerid]);
 		}
 	}
-	PlayerTextDrawShow(playerid, RoundKillDmgTDmg[playerid]);
+	PlayerTextDrawShow(playerid, RoundKillDmgTDmg[playerid], true);
 
 	if(Current != -1)
 	{
@@ -430,13 +430,13 @@ public SpawnConnectedPlayer(playerid, team)
 	TextDrawShowForPlayer(playerid, DefHpLose);
 
 	PlayerTextDrawShow(playerid, TD_RoundSpec[playerid]);
-	PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid]);
-	PlayerTextDrawShow(playerid, ArmourTextDraw[playerid]);
-	PlayerTextDrawShow(playerid, BaseID_VS[playerid]);
+	PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid], true);
+	PlayerTextDrawShow(playerid, ArmourTextDraw[playerid], true);
+	PlayerTextDrawShow(playerid, BaseID_VS[playerid], true);
 	#if defined _league_included
 	if(LeagueMode)
 	{
-		PlayerTextDrawShow(playerid, PlayerLeagueStatsTD[playerid]);
+		PlayerTextDrawShow(playerid, PlayerLeagueStatsTD[playerid], true);
 	}
 	#endif
 	
@@ -469,8 +469,8 @@ ShowPlayerDeathMessage(killerid, playerid)
 	}
 	PlayerTextDrawSetString(playerid, DeathMessage[playerid][0], sprintf("A death diss from %s", Player[killerid][Name]));
     PlayerTextDrawSetString(playerid, DeathMessage[playerid][1], sprintf("%s", DeathMessageStr[killerid]));
-	PlayerTextDrawShow(playerid, DeathMessage[playerid][0]);
-    PlayerTextDrawShow(playerid, DeathMessage[playerid][1]);
+	PlayerTextDrawShow(playerid, DeathMessage[playerid][0], true);
+    PlayerTextDrawShow(playerid, DeathMessage[playerid][1], true);
     SetTimerEx("HidePlayerDeathMessage", 6000, false, "i", playerid);
 	return 1;
 }
@@ -625,7 +625,7 @@ ShowTargetInfo(playerid, targetid)
 			GetPlayerPing(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][FPS], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], NetStats_PacketLossPercent(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], (Player[targetid][pHealth] + Player[targetid][pArmour]), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], vHP / 100);
 	}
 	PlayerTextDrawSetString(playerid, TargetInfoData[playerid][TargetInfoTD], str);
-	PlayerTextDrawShow(playerid, TargetInfoData[playerid][TargetInfoTD]);
+	PlayerTextDrawShow(playerid, TargetInfoData[playerid][TargetInfoTD], true);
 	TargetInfoData[playerid][TargetInfoLastTick] = GetTickCount() + 2000;
 	TargetInfoData[playerid][TargetInfoLastTarget] = targetid;
 
@@ -1496,11 +1496,11 @@ EnableMatchInterface(playerid)
 		return;
 
 	SelectTextDraw(playerid, 0xFF0000FF);
-	TextDrawShowForPlayer(playerid, LeagueToggleTD);
-	TextDrawShowForPlayer(playerid, WarModeText);
-	TextDrawShowForPlayer(playerid, SettingBox);
-	TextDrawShowForPlayer(playerid, LockServerTD);
-	TextDrawShowForPlayer(playerid, CloseText);
+	TextDrawShowForPlayer(playerid, LeagueToggleTD, true);
+	TextDrawShowForPlayer(playerid, WarModeText, true);
+	TextDrawShowForPlayer(playerid, SettingBox, true);
+	TextDrawShowForPlayer(playerid, LockServerTD, true);
+	TextDrawShowForPlayer(playerid, CloseText, true);
 	PlayerOnInterface{playerid} = true;
 }
 

@@ -30,6 +30,7 @@ new bool:AntiMacros = true;
 new bool:LeagueAllowed = true;
 new bool:MeleeAllowed = false;
 new bool:AutoRoundStarter = false;
+new bool:TextDrawFading = true;
 
 new RoundHP = 100, RoundAR = 100;
 

@@ -132,22 +132,22 @@ MessageBox(playerid, type, caption[], info[], interval = 6000, bool:sound = true
 		{
 			PlayerTextDrawSetString(playerid, MsgBoxData[playerid][caption_TD][type], caption);
 			PlayerTextDrawSetString(playerid, MsgBoxData[playerid][info_TD][type], info);
-			PlayerTextDrawShow(playerid, MsgBoxData[playerid][caption_TD][type]);
-			PlayerTextDrawShow(playerid, MsgBoxData[playerid][info_TD][type]);
+			PlayerTextDrawShow(playerid, MsgBoxData[playerid][caption_TD][type], true);
+			PlayerTextDrawShow(playerid, MsgBoxData[playerid][info_TD][type], true);
 		}
 		case MSGBOX_TYPE_MIDDLE:
 		{
 			PlayerTextDrawSetString(playerid, MsgBoxData[playerid][caption_TD][type], caption);
 			PlayerTextDrawSetString(playerid, MsgBoxData[playerid][info_TD][type], info);
-			PlayerTextDrawShow(playerid, MsgBoxData[playerid][caption_TD][type]);
+			PlayerTextDrawShow(playerid, MsgBoxData[playerid][caption_TD][type], true);
 			PlayerTextDrawShow(playerid, MsgBoxData[playerid][info_TD][type]);
 		}
 		case MSGBOX_TYPE_BOTTOM:
 		{
 			PlayerTextDrawSetString(playerid, MsgBoxData[playerid][caption_TD][type], caption);
 			PlayerTextDrawSetString(playerid, MsgBoxData[playerid][info_TD][type], info);
-			PlayerTextDrawShow(playerid, MsgBoxData[playerid][caption_TD][type]);
-			PlayerTextDrawShow(playerid, MsgBoxData[playerid][info_TD][type]);
+			PlayerTextDrawShow(playerid, MsgBoxData[playerid][caption_TD][type], true);
+			PlayerTextDrawShow(playerid, MsgBoxData[playerid][info_TD][type], true);
 		}
 		default:
 			return 0;

@@ -377,7 +377,7 @@ public GameLoopCallback()
 						Player[i][OutOfArena] --;
 
 						PlayerTextDrawSetString(i, AreaCheckTD[i], sprintf("%sStay in Arena. (~r~~h~%d%s)", MAIN_TEXT_COLOUR, Player[i][OutOfArena], MAIN_TEXT_COLOUR));
-						PlayerTextDrawShow(i, AreaCheckTD[i]);
+						PlayerTextDrawShow(i, AreaCheckTD[i], true);
 						PlayerTextDrawShow(i, AreaCheckBG[i]);
 
 						if(Player[i][OutOfArena] == 0) 
@@ -931,10 +931,10 @@ public UnpauseRound()
 		foreach(new i : PlayersInRound)
 			PlayerPlaySound(i, 1056, 0.0, 0.0, 0.0);
 			
-		new iString[40];
-		format(iString, sizeof(iString), "~g~~h~Round resuming in ~r~~h~%d", PauseCountdown);
+		new iString[32];
+		format(iString, sizeof(iString), "~g~~h~Round resuming in ~g~%d", PauseCountdown);
 		TextDrawSetString(PauseTD, iString);
-		TextDrawShowForAll(PauseTD);
+		TextDrawShowForAll(PauseTD, true);
 		UnpauseTimer = SetTimer("UnpauseRound", 1000, 0);
 	}
 	else
@@ -959,6 +959,7 @@ public UnpauseRound()
 	    RoundPaused = false;
 	    RoundUnpausing = false;
 	    TextDrawHideForAll(PauseTD);
+		TextDrawSetString(PauseTD, "~r~~h~~h~Round paused");
 	    RecountPlayersOnCP();
 		CheckTeamElimination();
 	    foreach(new g : DynamicVehicle)
@@ -1009,8 +1010,7 @@ PauseRound()
 		if(GetPlayerWeapon(i) == WEAPON_PARACHUTE)
 			Player[i][ToGiveParachute] = true;
 	}
-	TextDrawSetString(PauseTD, "~r~~h~Round Paused");
-	TextDrawShowForAll(PauseTD);
+	TextDrawShowForAll(PauseTD, true);
 	RoundPaused = true;
 }
 
@@ -1348,8 +1348,7 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
 
 	if(RoundPaused == true) {
 		TogglePlayerControllable(ToAddID, 0);
-		TextDrawSetString(PauseTD,  "~r~~h~Round Paused");
-		TextDrawShowForAll(PauseTD);
+		TextDrawShowForAll(PauseTD, true);
 	}
 
     format(iString,sizeof(iString),"{FFFFFF}%s "COL_PRIM"has replaced {FFFFFF}%s "COL_PRIM"by {FFFFFF}%s", Player[playerid][Name], Player[ToReplaceID][Name], Player[ToAddID][Name]);
@@ -1414,7 +1413,7 @@ public OnPlayerInGameReplace(ToAddID, i, playerid) {
 
 	if(RoundPaused == true) {
 		TogglePlayerControllable(ToAddID, 0);
-		TextDrawShowForAll(PauseTD);
+		TextDrawShowForAll(PauseTD, true);
 	}
     format(iString,sizeof(iString),"{FFFFFF}%s "COL_PRIM"has replaced {FFFFFF}%s "COL_PRIM"by {FFFFFF}%s", Player[playerid][Name], SaveVariables[i][pName], Player[ToAddID][Name]);
 	SendClientMessageToAll(-1, iString);
@@ -3097,6 +3096,7 @@ public WarEnded()
 	UpdateTeamScoreTextDraw();
 	UpdateRoundsPlayedTextDraw();
 	UpdateTeamNameTextDraw();
+	UpdateTeamNamesTextdraw();
 
 	foreach(new i : Player)
 	{

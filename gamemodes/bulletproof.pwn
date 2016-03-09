@@ -13,6 +13,7 @@
 #include <sampac> 			// THE MIGHTY NEW ANTICHEAT
 #include <mSelection>       // Selection with preview models feature library
 #include <gBugFix>			// Fix false vehicle entry as passenger (G (teleport/distance) bug)
+#include <fader>            // Global and player textdraw fading functions
 
 // YSI Libraries (updated)
 #define YSI_NO_MASTER
@@ -35,6 +36,7 @@ native IsValidVehicle(vehicleid);
 // Server modules (find them in "/pawno/include/modules") (note: modules that consists of hooking have to be first)
 #include "modules\src\hooking\tickcount.inc"
 #include "modules\src\hooking\safegametext.inc"
+#include "modules\src\hooking\fadefunction.inc"
 #include "modules\src\hooking\vehicle.inc"
 #include "modules\src\hooking\commonhooking.inc"
 #tryinclude "modules\header\http_destinations.txt" // (closed source)
@@ -478,7 +480,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 			}
 		}
 		PlayerTextDrawSetString(killerid, DeathText[killerid][0], killText);
-        PlayerTextDrawShow(killerid, DeathText[killerid][0]);
+        PlayerTextDrawShow(killerid, DeathText[killerid][0], true);
 
         switch(reason)
 		{
@@ -507,7 +509,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 			}
 		}
         PlayerTextDrawSetString(playerid, DeathText[playerid][1], killText);
-        PlayerTextDrawShow(playerid, DeathText[playerid][1]);
+        PlayerTextDrawShow(playerid, DeathText[playerid][1], true);
 
 	    SetTimerEx("DeathMessageF", 4000, false, "ii", killerid, playerid);
 
@@ -911,8 +913,8 @@ public OnPlayerEnterCheckpoint(playerid)
 						    if(!Player[i][Spawned])
 						        continue;
 						        
-                            TextDrawShowForPlayer(i, EN_CheckPoint);
-                            TextDrawShowForPlayer(i, timerCircleTD);
+                            TextDrawShowForPlayer(i, EN_CheckPoint, true);
+                            TextDrawShowForPlayer(i, timerCircleTD, true);
 						}
 
 					}
@@ -988,7 +990,7 @@ public OnPlayerEnterCheckpoint(playerid)
 						    if(!Player[i][Spawned])
 						        continue;
 
-                            TextDrawShowForPlayer(i, EN_CheckPoint);
+                            TextDrawShowForPlayer(i, EN_CheckPoint, true);
                             TextDrawShowForPlayer(i, timerCircleTD);
 						}
 			        }
@@ -1019,7 +1021,7 @@ public OnPlayerEnterCheckpoint(playerid)
 							    if(!Player[i][Spawned])
 							        continue;
 
-	                            TextDrawShowForPlayer(i, EN_CheckPoint);
+	                            TextDrawShowForPlayer(i, EN_CheckPoint, true);
 							}
 					    }
 					    else
@@ -2409,6 +2411,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			UpdateTeamScoreTextDraw();
 			UpdateRoundsPlayedTextDraw();
 			UpdateTeamNameTextDraw();
+			UpdateTeamNamesTextdraw();
 
 
 			format(iString, sizeof iString, "%sWar Mode: ~r~OFF", MAIN_TEXT_COLOUR);
@@ -4310,7 +4313,7 @@ YCMD:ann(playerid, params[], help)
 	KillTimer(AnnTimer);
 
 	TextDrawSetString(AnnTD, str);
-	TextDrawShowForAll(AnnTD);
+	TextDrawShowForAll(AnnTD, true);
 	AnnTimer = SetTimer("HideAnnForAll", 5000, false);
 
 	format(str, sizeof(str), "{FFFFFF}%s "COL_PRIM"made an announcement.", Player[playerid][Name]);
@@ -9372,10 +9375,10 @@ public OnScriptUpdate()
 	    Player[i][PauseCount] ++;
 	    ShowTargetInfo(i, GetPlayerTargetPlayer(i));
 		// Update net info textdraws
-		GetPlayerFPS(i);
+  		GetPlayerFPS(i);
 		if(PlayerInterface[i][INTERFACE_NET])
   			PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS %s%d %sPing %s%d %sPacketLoss %s%.1f%%", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][FPS], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], GetPlayerPing(i), MAIN_TEXT_COLOUR, TDC[Player[i][Team]], NetStats_PacketLossPercent(i)));
-	}
+ }
 	return 1;
 }
 

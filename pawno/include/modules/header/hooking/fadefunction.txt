@@ -1,0 +1,24 @@
+/*
+		Makes textdraws auto fade
+*/
+
+#define DEFAULT_FADE_UPDATE_RATE	35
+#define DEFAULT_FADE_DISPLAY_TIME	7000
+
+enum HookTextDraw_STRUCT
+{
+	TDColor,
+	TDUseBox,
+	TDBoxColor
+}
+
+new HookTextDraw[Text:MAX_TEXT_DRAWS][HookTextDraw_STRUCT];
+
+enum HookPlayerTextDraw_STRUCT
+{
+	PTDColor,
+	PTDUseBox,
+	PTDBoxColor
+}
+
+new HookPlayerTextDraw[PlayerText:MAX_PLAYER_TEXT_DRAWS][HookPlayerTextDraw_STRUCT];

@@ -57,7 +57,7 @@ ShowPlayerWeaponBindTextDraw(playerid, time)
 		return;
 	
 	UpdatePlayerWeaponBindTextDraw(playerid);
-	PlayerTextDrawShow(playerid, WeaponBindData[playerid][WeaponBindTextDraw]);
+	PlayerTextDrawShow(playerid, WeaponBindData[playerid][WeaponBindTextDraw], true);
 	WeaponBindData[playerid][WeaponBindTDShown] = true;
 	SetTimerEx("HidePlayerWeaponBindTextDraw", time, false, "i", playerid);
 }

@@ -21,20 +21,20 @@ public OnPlayerDeathCameraEnd(playerid)
 	{
 		case true:
 		{
-			PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid]);
-			PlayerTextDrawShow(playerid, ArmourTextDraw[playerid]);
+			PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid], true);
+			PlayerTextDrawShow(playerid, ArmourTextDraw[playerid], true);
 		}
 	}
-	PlayerTextDrawShow(playerid, RoundKillDmgTDmg[playerid]);
+	PlayerTextDrawShow(playerid, RoundKillDmgTDmg[playerid], true);
 	if(PlayerInterface[playerid][INTERFACE_NET])
-		PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
-	PlayerTextDrawShow(playerid, BaseID_VS[playerid]);
+		PlayerTextDrawShow(playerid, FPSPingPacket[playerid], true);
+	PlayerTextDrawShow(playerid, BaseID_VS[playerid], true);
 	ShowPlayerProgressBar(playerid, HealthBar[playerid]);
 	ShowPlayerProgressBar(playerid, ArmourBar[playerid]);
 	#if defined _league_included
 	if(LeagueMode)
 	{
-		PlayerTextDrawShow(playerid, PlayerLeagueStatsTD[playerid]);
+		PlayerTextDrawShow(playerid, PlayerLeagueStatsTD[playerid], true);
 	}
 	#endif
 	if(Current != -1)

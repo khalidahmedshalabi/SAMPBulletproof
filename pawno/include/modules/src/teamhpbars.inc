@@ -79,7 +79,7 @@ CreatePlayerTeamBar(playerid)
 				{
 					if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
 					{
-						TextDrawShowForPlayer(i, TeamBarsData[playerid][TeamBarText]);
+						TextDrawShowForPlayer(i, TeamBarsData[playerid][TeamBarText], true);
 						ShowProgressBarForPlayer(i, TeamBarsData[playerid][TeamBar]);
 						TeamBarShownForPlayer[i][_:TeamBarsData[playerid][TeamBar]] = true;
 						UpdateProgressBar(TeamBarsData[playerid][TeamBar], i);
@@ -114,7 +114,7 @@ CreatePlayerTeamBar(playerid)
 				{
 					if(IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
 					{
-						TextDrawShowForPlayer(i, TeamBarsData[playerid][TeamBarText]);
+						TextDrawShowForPlayer(i, TeamBarsData[playerid][TeamBarText], true);
 						ShowProgressBarForPlayer(i, TeamBarsData[playerid][TeamBar]);
 						TeamBarShownForPlayer[i][_:TeamBarsData[playerid][TeamBar]] = true;
 						UpdateProgressBar(TeamBarsData[playerid][TeamBar], i);
@@ -159,7 +159,7 @@ ShowTeamBarsForPlayer(playerid)
 			continue;
 		
 		TeamBarShownForPlayer[playerid][_:barid] = true;
-		TextDrawShowForPlayer(playerid, TeamBarsData[i][TeamBarText]);
+		TextDrawShowForPlayer(playerid, TeamBarsData[i][TeamBarText], true);
 		ShowProgressBarForPlayer(playerid, barid);
 		UpdateProgressBar(barid, playerid);
 	}
