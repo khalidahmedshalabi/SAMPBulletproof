@@ -677,7 +677,6 @@ LoadPlayerVariables(playerid)
 			}
 			if(RoundPaused == true) {
 				TogglePlayerControllable(playerid, 0);
-				TextDrawSetString(PauseTD, "~r~~h~Round Paused");
 				TextDrawShowForAll(PauseTD);
 			}
 			else

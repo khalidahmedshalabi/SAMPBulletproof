@@ -959,6 +959,7 @@ public UnpauseRound()
 	    RoundPaused = false;
 	    RoundUnpausing = false;
 	    TextDrawHideForAll(PauseTD);
+		TextDrawSetString(PauseTD, "~r~~h~~h~Round paused");
 	    RecountPlayersOnCP();
 		CheckTeamElimination();
 	    foreach(new g : DynamicVehicle)
@@ -1009,7 +1010,6 @@ PauseRound()
 		if(GetPlayerWeapon(i) == WEAPON_PARACHUTE)
 			Player[i][ToGiveParachute] = true;
 	}
-	TextDrawSetString(PauseTD, "~r~~h~Round Paused");
 	TextDrawShowForAll(PauseTD);
 	RoundPaused = true;
 }
@@ -1348,7 +1348,6 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
 
 	if(RoundPaused == true) {
 		TogglePlayerControllable(ToAddID, 0);
-		TextDrawSetString(PauseTD,  "~r~~h~Round Paused");
 		TextDrawShowForAll(PauseTD);
 	}
 
