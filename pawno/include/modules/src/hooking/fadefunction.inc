@@ -4,6 +4,8 @@
 
 #include "modules\header\hooking\fadefunction.txt"
 
+#include "modules\header\config.txt"
+
 // Hooked textdraw functions to store color, usebox, boxcolor in variables
 
 stock Text:_HOOKED_TextDrawCreate(Float:x, Float:y, text[])
@@ -124,7 +126,7 @@ stock _HOOKED_PlayerTextDrawBoxColor(playerid, PlayerText:text, color)
 
 stock _HOOKED_TextDrawShowForPlayer(playerid, Text:text, bool:fade = false)
 {
-	if(HookTextDraw[text][TDUseBox] == 0 && fade)
+	if(HookTextDraw[text][TDUseBox] == 0 && fade && TextDrawFading)
 	{
 		return TextDrawFadeForPlayer(playerid, text, HookTextDraw[text][TDColor], 0, DEFAULT_FADE_UPDATE_RATE, DEFAULT_FADE_DISPLAY_TIME);
 	}
@@ -144,7 +146,7 @@ stock _HOOKED_TextDrawShowForPlayer(playerid, Text:text, bool:fade = false)
 
 stock _HOOKED_TextDrawShowForAll(Text:text, bool:fade = false)
 {
-	if(HookTextDraw[text][TDUseBox] == 0 && fade)
+	if(HookTextDraw[text][TDUseBox] == 0 && fade && TextDrawFading)
 	{
 		return TextDrawFadeForAll(text, HookTextDraw[text][TDColor], 0, DEFAULT_FADE_UPDATE_RATE, DEFAULT_FADE_DISPLAY_TIME);
 	}
@@ -164,7 +166,7 @@ stock _HOOKED_TextDrawShowForAll(Text:text, bool:fade = false)
 
 stock _HOOKED_PlayerTextDrawShow(playerid, PlayerText:text, bool:fade = false)
 {
-	if(HookPlayerTextDraw[text][PTDUseBox] == 0 && fade)
+	if(HookPlayerTextDraw[text][PTDUseBox] == 0 && fade && TextDrawFading)
 	{
 		return PlayerTextDrawFade(playerid, text, HookPlayerTextDraw[text][PTDColor], 0, DEFAULT_FADE_UPDATE_RATE, DEFAULT_FADE_DISPLAY_TIME);
 	}
