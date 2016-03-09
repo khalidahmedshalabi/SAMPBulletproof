@@ -217,7 +217,6 @@ AddBloodEffect(Float:x, Float:y, Float:z)
 
 CheckPlayerNet(playerid)
 {	
-	GetPlayerFPS(playerid);
 	if(Player[playerid][FPS] < Min_FPS && Player[playerid][PauseCount] < 5 && Player[playerid][FPSCheck] == 1) 
 	{
 		Player[playerid][FPSKick] ++;
@@ -609,7 +608,6 @@ ShowTargetInfo(playerid, targetid)
 		return 1;
 	
 	new str[170];
-	GetPlayerFPS(targetid);
 	if(GetPlayerVehicleID(targetid) == 0)
 	{
 		format(str, sizeof str, "~n~~n~%sName: %s%s~n~%sPing: %s%d   %sFPS: %s%d~n~%sPL: %s%.1f   %sHP: %s%d",
