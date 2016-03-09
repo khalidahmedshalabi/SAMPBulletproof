@@ -1450,20 +1450,43 @@ SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
 GetTeamWithLessPlayers()
 {
     new attacker, defender;
-    foreach(new i : Player) 
+	switch(Current)
 	{
-		switch(Player[i][Team])
+		case -1:
 		{
-			case DEFENDER:
+			foreach(new i : Player) 
 			{
-				defender ++;
-			}
-			case ATTACKER:
-			{
-				attacker ++;
+				switch(Player[i][Team])
+				{
+					case DEFENDER:
+					{
+						defender ++;
+					}
+					case ATTACKER:
+					{
+						attacker ++;
+					}
+				}
 			}
 		}
-    }
+		default:
+		{
+			foreach(new i : PlayersInRound) 
+			{
+				switch(Player[i][Team])
+				{
+					case DEFENDER:
+					{
+						defender ++;
+					}
+					case ATTACKER:
+					{
+						attacker ++;
+					}
+				}
+			}
+		}
+	}
     return (defender <= attacker) ? DEFENDER : ATTACKER;
 }
 
