@@ -13,7 +13,6 @@
 #include <sampac> 			// THE MIGHTY NEW ANTICHEAT
 #include <mSelection>       // Selection with preview models feature library
 #include <gBugFix>			// Fix false vehicle entry as passenger (G (teleport/distance) bug)
-#include <fader>            // Global and player textdraw fading functions
 
 // YSI Libraries (updated)
 #define YSI_NO_MASTER
@@ -36,7 +35,6 @@ native IsValidVehicle(vehicleid);
 // Server modules (find them in "/pawno/include/modules") (note: modules that consists of hooking have to be first)
 #include "modules\src\hooking\tickcount.inc"
 #include "modules\src\hooking\safegametext.inc"
-#include "modules\src\hooking\fadefunction.inc"
 #include "modules\src\hooking\vehicle.inc"
 #include "modules\src\hooking\commonhooking.inc"
 #tryinclude "modules\header\http_destinations.txt" // (closed source)
@@ -480,7 +478,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 			}
 		}
 		PlayerTextDrawSetString(killerid, DeathText[killerid][0], killText);
-        PlayerTextDrawShow(killerid, DeathText[killerid][0], true);
+        PlayerTextDrawShow(killerid, DeathText[killerid][0]);
 
         switch(reason)
 		{
@@ -509,7 +507,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 			}
 		}
         PlayerTextDrawSetString(playerid, DeathText[playerid][1], killText);
-        PlayerTextDrawShow(playerid, DeathText[playerid][1], true);
+        PlayerTextDrawShow(playerid, DeathText[playerid][1]);
 
 	    SetTimerEx("DeathMessageF", 4000, false, "ii", killerid, playerid);
 
@@ -913,8 +911,8 @@ public OnPlayerEnterCheckpoint(playerid)
 						    if(!Player[i][Spawned])
 						        continue;
 						        
-                            TextDrawShowForPlayer(i, EN_CheckPoint, true);
-                            TextDrawShowForPlayer(i, timerCircleTD, true);
+                            TextDrawShowForPlayer(i, EN_CheckPoint);
+                            TextDrawShowForPlayer(i, timerCircleTD);
 						}
 
 					}
@@ -990,7 +988,7 @@ public OnPlayerEnterCheckpoint(playerid)
 						    if(!Player[i][Spawned])
 						        continue;
 
-                            TextDrawShowForPlayer(i, EN_CheckPoint, true);
+                            TextDrawShowForPlayer(i, EN_CheckPoint);
                             TextDrawShowForPlayer(i, timerCircleTD);
 						}
 			        }
@@ -1021,7 +1019,7 @@ public OnPlayerEnterCheckpoint(playerid)
 							    if(!Player[i][Spawned])
 							        continue;
 
-	                            TextDrawShowForPlayer(i, EN_CheckPoint, true);
+	                            TextDrawShowForPlayer(i, EN_CheckPoint);
 							}
 					    }
 					    else
@@ -2410,7 +2408,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			UpdateTeamScoreTextDraw();
 			UpdateRoundsPlayedTextDraw();
 			UpdateTeamNameTextDraw();
-			UpdateTeamNamesTextdraw();
 
 
 			format(iString, sizeof iString, "%sWar Mode: ~r~OFF", MAIN_TEXT_COLOUR);
@@ -3011,28 +3008,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						}
 					}
 					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'AutoRoundStarter'", (AutoRoundStarter == false ? 0 : 1));
-				    db_free_result(db_query(sqliteconnection, iString));
-				    ShowConfigDialog(playerid);
-				}
-				case 24:
-				{
-				    new iString[144];
-				    switch(TextDrawFading)
-				    {
-						case false:
-						{
-						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"textdraw fading{FFFFFF} option.", Player[playerid][Name]);
-							SendClientMessageToAll(-1, iString);
-							TextDrawFading = true;
-						}
-						case true:
-						{
-						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"textdraw fading{FFFFFF} option.", Player[playerid][Name]);
-							SendClientMessageToAll(-1, iString);
-							TextDrawFading = false;
-						}
-					}
-					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'TextDrawFading'", (TextDrawFading == false ? 0 : 1));
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
@@ -4334,7 +4309,7 @@ YCMD:ann(playerid, params[], help)
 	KillTimer(AnnTimer);
 
 	TextDrawSetString(AnnTD, str);
-	TextDrawShowForAll(AnnTD, true);
+	TextDrawShowForAll(AnnTD);
 	AnnTimer = SetTimer("HideAnnForAll", 5000, false);
 
 	format(str, sizeof(str), "{FFFFFF}%s "COL_PRIM"made an announcement.", Player[playerid][Name]);

@@ -124,11 +124,6 @@ ShowConfigDialog(playerid) {
 		strcat(string, "\n{66FF66}Auto round starter");
 	else
 		strcat(string, "\n{FF6666}Auto round starter");
-	
-	if(TextDrawFading == true)
-		strcat(string, "\n{66FF66}Text-draw fading");
-	else
-		strcat(string, "\n{FF6666}Text-draw fading");
 
     ShowPlayerDialog(playerid, DIALOG_CONFIG, DIALOG_STYLE_LIST, ""COL_PRIM"Config Settings", string, "OK", "Cancel");
     return 1;
@@ -250,10 +245,6 @@ LoadConfig()
 	
 	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // AutoRoundStarter
     AutoRoundStarter = (strval(iString) == 1 ? true : false);
-    db_next_row(res);
-	
-	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // TextDrawFading
-    TextDrawFading = (strval(iString) == 1 ? true : false);
     db_next_row(res);
 
 	db_free_result(res);

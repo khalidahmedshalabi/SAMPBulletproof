@@ -187,7 +187,7 @@ SpectatePlayer(playerid, specid)
 	{
 		// Spectation info textdraws
 		for(new i; i < 4; i++) 
-			PlayerTextDrawShow(playerid, SpecText[playerid][i], true);
+			PlayerTextDrawShow(playerid, SpecText[playerid][i]);
 		
 		// Team damage textdraws
 		ShowTeamBarsForPlayer(playerid);
@@ -314,21 +314,21 @@ StopSpectate(playerid, bool:remove_iterator = true)
 	#if defined _league_included
 	if(LeagueMode)
 	{
-		PlayerTextDrawShow(playerid, PlayerLeagueStatsTD[playerid], true);
+		PlayerTextDrawShow(playerid, PlayerLeagueStatsTD[playerid]);
 	}
 	#endif
 	switch(PlayerInterface[playerid][INTERFACE_HP])
 	{
 		case true:
 		{
-			PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid], true);
-			PlayerTextDrawShow(playerid, ArmourTextDraw[playerid], true);
+			PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid]);
+			PlayerTextDrawShow(playerid, ArmourTextDraw[playerid]);
 		}
 	}
-	PlayerTextDrawShow(playerid, RoundKillDmgTDmg[playerid], true);
+	PlayerTextDrawShow(playerid, RoundKillDmgTDmg[playerid]);
 	if(PlayerInterface[playerid][INTERFACE_NET])
-		PlayerTextDrawShow(playerid, FPSPingPacket[playerid], true);
-	PlayerTextDrawShow(playerid, BaseID_VS[playerid], true);
+		PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
+	PlayerTextDrawShow(playerid, BaseID_VS[playerid]);
 	ShowPlayerProgressBar(playerid, HealthBar[playerid]);
 	ShowPlayerProgressBar(playerid, ArmourBar[playerid]);
 

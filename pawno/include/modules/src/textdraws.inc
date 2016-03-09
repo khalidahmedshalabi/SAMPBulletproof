@@ -741,7 +741,7 @@ RoundTextdrawsCreate()
 	TextDrawFont					(	defenderNameTD,	1						);
 	TextDrawSetProportional			(	defenderNameTD, 	1						);
 
-	PauseTD = TextDrawCreate(324.000000, 413.000000, "~r~~h~~h~Round paused");
+	PauseTD = TextDrawCreate(324.000000, 413.000000, "_");
 	TextDrawBackgroundColor(PauseTD, MAIN_BACKGROUND_COLOUR);
 	TextDrawFont(PauseTD, 1);
 	TextDrawLetterSize(PauseTD, 0.200000, 1.500000);
@@ -1024,18 +1024,19 @@ ShowRoundStats(playerid)
 		TextDrawHideForPlayer(playerid, PauseTD);
 	else
 	{
-		TextDrawShowForPlayer(playerid, PauseTD, true);
+		TextDrawSetString(PauseTD, "~r~~h~Round Paused");
+		TextDrawShowForPlayer(playerid, PauseTD);
 	}
 	
 	TextDrawShowForPlayer(playerid,leftRedBG);
 	TextDrawShowForPlayer(playerid,rightBlueBG);
 	TextDrawShowForPlayer(playerid,timerCenterTD);
 	TextDrawShowForPlayer(playerid,timerCircleTD);
-	TextDrawShowForPlayer(playerid,leftTeamData, true);
-	TextDrawShowForPlayer(playerid,rightTeamData, true);
-	TextDrawShowForPlayer(playerid,centerTeamNames, true);
-	TextDrawShowForPlayer(playerid,attackerNameTD, true);
-	TextDrawShowForPlayer(playerid,defenderNameTD, true);
+	TextDrawShowForPlayer(playerid,leftTeamData);
+	TextDrawShowForPlayer(playerid,rightTeamData);
+	TextDrawShowForPlayer(playerid,centerTeamNames);
+	TextDrawShowForPlayer(playerid,attackerNameTD);
+	TextDrawShowForPlayer(playerid,defenderNameTD);
 }
 
 HideRoundStats(playerid)
@@ -1059,35 +1060,35 @@ ShowEndRoundTextDraw(playerid)
 	TextDrawShowForPlayer( playerid, leftUpBG	); 		TextDrawShowForPlayer( playerid, rightUpBG  	);
 	TextDrawShowForPlayer( playerid, leftHeader );		TextDrawShowForPlayer( playerid, rightHeader 	);
 	TextDrawShowForPlayer( playerid, leftULine	); 		TextDrawShowForPlayer( playerid, rightULine 	);
-	TextDrawShowForPlayer( playerid, leftUpText, true); 		TextDrawShowForPlayer( playerid, rightUpText, true);
-	TextDrawShowForPlayer( playerid, leftText, true); 		TextDrawShowForPlayer( playerid, rightText, true);
+	TextDrawShowForPlayer( playerid, leftUpText ); 		TextDrawShowForPlayer( playerid, rightUpText 	);
+	TextDrawShowForPlayer( playerid, leftText	); 		TextDrawShowForPlayer( playerid, rightText	 	);
  	TextDrawShowForPlayer( playerid, leftTop	);		//TextDrawShowForPlayer( playerid, rightTop      	);
  	TextDrawShowForPlayer( playerid, lowerBG	);		TextDrawShowForPlayer( playerid, lowerULine 	);
- 	TextDrawShowForPlayer( playerid, topTextScore, true);
+ 	TextDrawShowForPlayer( playerid, topTextScore);
 
  	//contents:
-    TextDrawShowForPlayer( playerid, leftNames, true); 		TextDrawShowForPlayer( playerid, rightNames, true);
-    TextDrawShowForPlayer( playerid, leftKills, true); 		TextDrawShowForPlayer( playerid, rightKills, true);
+    TextDrawShowForPlayer( playerid, leftNames	); 		TextDrawShowForPlayer( playerid, rightNames 	);
+    TextDrawShowForPlayer( playerid, leftKills	); 		TextDrawShowForPlayer( playerid, rightKills 	);
     if(MatchEnded == false){
-		TextDrawHideForPlayer( playerid, leftDeaths);      TextDrawHideForPlayer( playerid, rightDeaths);
-		TextDrawShowForPlayer( playerid, leftHP, true); 		TextDrawShowForPlayer( playerid, rightHP, true);
+		TextDrawHideForPlayer( playerid, leftDeaths );      TextDrawHideForPlayer( playerid, rightDeaths    );
+		TextDrawShowForPlayer( playerid, leftHP		); 		TextDrawShowForPlayer( playerid, rightHP		);
 	} else {
-		TextDrawHideForPlayer( playerid, leftHP);      TextDrawHideForPlayer( playerid, rightHP);
-		TextDrawShowForPlayer( playerid, leftDeaths, true); 		TextDrawShowForPlayer( playerid, rightDeaths, true);
+		TextDrawHideForPlayer( playerid, leftHP 	);      TextDrawHideForPlayer( playerid, rightHP    	);
+		TextDrawShowForPlayer( playerid, leftDeaths	); 		TextDrawShowForPlayer( playerid, rightDeaths	);
 	}
-	TextDrawShowForPlayer( playerid, leftDmg, true); 		TextDrawShowForPlayer( playerid, rightDmg, true);
-    TextDrawShowForPlayer( playerid, leftAcc, true); 		TextDrawShowForPlayer( playerid, rightAcc, true);
+	TextDrawShowForPlayer( playerid, leftDmg	); 		TextDrawShowForPlayer( playerid, rightDmg	 	);
+    TextDrawShowForPlayer( playerid, leftAcc	); 		TextDrawShowForPlayer( playerid, rightAcc	 	);
 
 	if( MatchEnded == true )
 	{
-		TextDrawShowForPlayer( playerid, leftPlayed, true);
-		TextDrawShowForPlayer( playerid, rightPlayed, true);
+		TextDrawShowForPlayer( playerid, leftPlayed 	);
+		TextDrawShowForPlayer( playerid, rightPlayed	);
 
 		TextDrawHideForPlayer( playerid, teamWonHow	);
 	}
 	else
 	{
-		TextDrawShowForPlayer( playerid, teamWonHow, true);
+		TextDrawShowForPlayer( playerid, teamWonHow	);
 	}
 
 	for(new i = 0; i < 3; i++) {
@@ -1151,8 +1152,8 @@ ShowMatchScoreBoard(playerid = -1)
 			TextDrawShowForAll(TeamDefenderTD);
 			TextDrawShowForAll(MatchVersusTD);
 			TextDrawShowForAll(MatchScoreBoardSprite);*/
-			TextDrawShowForAll(TeamScoreText, true);
-			TextDrawShowForAll(RoundsPlayed, true);
+			TextDrawShowForAll(TeamScoreText);
+			TextDrawShowForAll(RoundsPlayed);
 		}
 		default:
 		{
@@ -1164,8 +1165,8 @@ ShowMatchScoreBoard(playerid = -1)
 			TextDrawShowForPlayer(playerid, TeamDefenderTD);
 			TextDrawShowForPlayer(playerid, MatchVersusTD);
 			TextDrawShowForPlayer(playerid, MatchScoreBoardSprite);*/
-			TextDrawShowForPlayer(playerid, TeamScoreText, true);
-			TextDrawShowForPlayer(playerid, RoundsPlayed, true);
+			TextDrawShowForPlayer(playerid, TeamScoreText);
+			TextDrawShowForPlayer(playerid, RoundsPlayed);
 		}
 	}
 }
@@ -1266,10 +1267,10 @@ TogglePlayerInterface(playerid, bool:toggle, interface = -1)
 				}
 				case true:
 				{
-					PlayerTextDrawShow(playerid, WhoSpec[playerid], true);
-					PlayerTextDrawShow(playerid, FPSPingPacket[playerid], true);
-					PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid], true);
-					PlayerTextDrawShow(playerid, ArmourTextDraw[playerid], true);
+					PlayerTextDrawShow(playerid, WhoSpec[playerid]);
+					PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
+					PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid]);
+					PlayerTextDrawShow(playerid, ArmourTextDraw[playerid]);
 				}
 			}
 			new str[70];
@@ -1309,7 +1310,7 @@ TogglePlayerInterface(playerid, bool:toggle, interface = -1)
 				}
 				case true:
 				{
-					PlayerTextDrawShow(playerid, FPSPingPacket[playerid], true);
+					PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
 				}
 			}
 			new str[70];
@@ -1328,8 +1329,8 @@ TogglePlayerInterface(playerid, bool:toggle, interface = -1)
 				}
 				case true:
 				{
-					PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid], true);
-					PlayerTextDrawShow(playerid, ArmourTextDraw[playerid], true);
+					PlayerTextDrawShow(playerid, HPTextDraw_TD[playerid]);
+					PlayerTextDrawShow(playerid, ArmourTextDraw[playerid]);
 				}
 			}
 			new str[70];
