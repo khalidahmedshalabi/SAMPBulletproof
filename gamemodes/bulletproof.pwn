@@ -6208,26 +6208,27 @@ YCMD:pm(playerid,params[], help)
 	}
     if(Player[playerid][Mute] == true) return SendErrorMessage(playerid,"You are muted.");
 
-	new recieverid, text[180];
+	new recieverid, message[144];
 
-	if(sscanf(params,"is",recieverid, text)) return SendUsageMessage(playerid,"/pm [Player ID] [Text]");
+	if(sscanf(params,"is",recieverid, message)) return SendUsageMessage(playerid,"/pm [Player ID] [Message]");
 	if(!IsPlayerConnected(recieverid)) return SendErrorMessage(playerid,"Player not connected.");
-
+	
 	if(Player[recieverid][blockedid] == playerid) return SendErrorMessage(playerid,"That player has blocked PMs from you.");
 	if(Player[recieverid][blockedall] == true) return SendErrorMessage(playerid,"That player has blocked PMs from everyone.");
-
-	new String[180];
-	format(String,sizeof(String),"{FFCC00}*** PM from %s (%d): %s",Player[playerid][Name], playerid, text);
-	SendClientMessage(recieverid,-1,String);
-	SendClientMessage(recieverid,-1,""COL_PRIM"Use {FFFFFF}/r [Message]"COL_PRIM" to reply");
-
+	if(Player[recieverid][Mute] == true) return SendErrorMessage(playerid, "That player is currently muted and can not reply!");
+	if(strlen(message) > 103) return SendErrorMessage(playerid, "This message is quite long (max: 103 characters).");
+	
+	new str[144];
+	format(str, sizeof(str), "PM from %s (%d): %s", Player[playerid][Name], playerid, message);
+	SendClientMessage(recieverid, 0x90C3D4FF, str);
+	
+	SendClientMessage(recieverid, -1, ""COL_PRIM"Use {FFFFFF}/r [Message]"COL_PRIM" to reply quicker!");
 	Player[recieverid][LastMsgr] = playerid;
 
-	format(String,sizeof(String),"{FF9900}*** PM to %s (%d): %s",Player[recieverid][Name], recieverid, text);
-	SendClientMessage(playerid,-1,String);
+	format(str, sizeof(str),"PM to %s (%d): %s", Player[recieverid][Name], recieverid, message);
+	SendClientMessage(playerid, 0x79A4B3FF, str);
 
-	PlayerPlaySound(recieverid,1054,0,0,0);
-
+	PlayerPlaySound(recieverid, 1054, 0, 0, 0);
 	return 1;
 }
 
@@ -6238,33 +6239,28 @@ YCMD:r(playerid,params[], help)
 	    SendCommandHelpMessage(playerid, "reply to someone's private message to you.");
 	    return 1;
 	}
+	
     if(Player[playerid][Mute] == true) return SendErrorMessage(playerid,"You are muted.");
+    if(Player[playerid][LastMsgr] == -1) return SendErrorMessage(playerid,"You have not received any private messages since last login.");
 
-	new replytoid, text[180];
-    replytoid = Player[playerid][LastMsgr];
-
-   	if(!IsPlayerConnected(replytoid)) return SendErrorMessage(playerid,"That player is not connected.");
-	if(Player[playerid][LastMsgr] == -1) return SendErrorMessage(playerid,"That player is not connected.");
-
+	new replytoid = Player[playerid][LastMsgr];
+	if(!IsPlayerConnected(replytoid)) return SendErrorMessage(playerid,"That player is not connected.");
 	if(Player[replytoid][blockedid] == playerid) return SendErrorMessage(playerid,"That player has blocked PMs from you.");
 	if(Player[replytoid][blockedall] == true) return SendErrorMessage(playerid,"That player has blocked PMs from everyone.");
 
+	if(isnull(params)) return SendUsageMessage(playerid,"/r [Message]");
+	if(strlen(params) > 103) return SendErrorMessage(playerid, "This message is quite long (max: 103 characters).");
+	
+	new str[144];
+	format(str, sizeof(str), "PM from %s (%d): %s", Player[playerid][Name], playerid, params);
+	SendClientMessage(replytoid, 0x90C3D4FF, str);
 
-	sscanf(params, "s", text);
-
-	if(isnull(text)) return SendUsageMessage(playerid,"/r [Message]");
-	if(strlen(text) > 100) return SendErrorMessage(playerid,"Message length should be less than 100 characters.");
-
-	new String[180];
-	format(String,sizeof(String),"{FFCC00}*** PM from %s (%d): %s",Player[playerid][Name], playerid, text);
-	SendClientMessage(replytoid,-1,String);
-	format(String,sizeof(String),"{FF9900}*** PM to %s (%d): %s",Player[replytoid][Name], replytoid, text);
-	SendClientMessage(playerid,-1,String);
+	format(str, sizeof(str),"PM to %s (%d): %s", Player[replytoid][Name], replytoid, params);
+	SendClientMessage(playerid, 0x79A4B3FF, str);
 
     Player[replytoid][LastMsgr] = playerid;
 
 	PlayerPlaySound(replytoid,1054,0,0,0);
-
 	return 1;
 }
 
@@ -6296,8 +6292,19 @@ YCMD:blockpmall(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "block private messages from everyone.");
 	    return 1;
 	}
-  	Player[playerid][blockedall] = true;
-  	SendClientMessage(playerid,-1,""COL_PRIM"You have blocked PMs from everyone.");
+	switch(Player[playerid][blockedall])
+	{
+	    case false:
+	    {
+    		Player[playerid][blockedall] = true;
+  			SendClientMessage(playerid,-1,""COL_PRIM"You have blocked PMs from everyone. To unblock type /blockpmall one more time!");
+	    }
+	    case true:
+	    {
+	    	Player[playerid][blockedall] = false;
+  			SendClientMessage(playerid,-1,""COL_PRIM"PMs enabled!");
+	    }
+	}
 	return 1;
 }
 
