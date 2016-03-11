@@ -105,6 +105,7 @@ public OnPlayerConnect(playerid)
     	SendClientMessage(playerid, -1, sprintf(""COL_PRIM"Visit {FFFFFF}%s "COL_PRIM"to get the latest version", GM_WEBSITE));
 		SendClientMessage(playerid, -1, sprintf(""COL_PRIM"Server version: {FFFFFF}%.2f "COL_PRIM"| Newest version: {FFFFFF}%.2f", GM_VERSION, LatestVersion));
         SetTimerEx("OnPlayerKicked", 500, false, "i", playerid);
+        CallLocalFunction("OnPlayerCommandText", "ds", playerid, "/changelog");
 		return 0;
 	}
 	// If database is still loading, temporarily disable the player from connecting
