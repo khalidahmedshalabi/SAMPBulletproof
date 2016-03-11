@@ -972,6 +972,9 @@ public UnpauseRound()
 		}
 		KillTimer(PauseAirVehicles_Timer);
 		Iter_Clear(TempAirVehicles);
+		
+		KillTimer(TipTimerDuringPause);
+		TipTimerDuringPause = -1;
 	}
 	return 1;
 }
@@ -1003,6 +1006,11 @@ PauseRound()
 	}
 	if(airVehiclesFound != 0)
 		PauseAirVehicles_Timer = SetTimer("PauseAirVehicles_Handler", 50, true);
+	
+	if(TipTimerDuringPause != -1)
+		KillTimer(TipTimerDuringPause);
+	
+	TipTimerDuringPause = SetTimer("SendTipMessageToAll", 30000, false);
 	
 	foreach(new i : PlayersInRound)
 	{

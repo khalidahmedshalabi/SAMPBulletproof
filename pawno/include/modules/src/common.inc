@@ -23,6 +23,71 @@ public OnPlayerKicked(playerid) {
 	return 1;
 }
 
+forward SendTipMessageToAll();
+public SendTipMessageToAll()
+{
+	switch(random(14))
+	{
+		case 0:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"Try different gunmenu styles with {FFFFFF}/gunmenustyle");
+		}
+		case 1:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"Want to differentiate your team-mates on radar by color? Use {FFFFFF}/playermarkers");
+		}
+		case 2:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"Use {FFFFFF}/weaponbinds "COL_TIP"to code your own weapon key binds.");
+		}
+		case 3:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"You can drop a gun by holding it and typing {FFFFFF}/remgun");
+		}
+		case 4:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"If you're lagging, you can request netcheck with {FFFFFF}/netcheckme");
+		}
+		case 5:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"Disrespect noobs, use {FFFFFF}/deathdiss "COL_TIP"command.");
+		}
+		case 6:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"Getting distracted by some textdraws? Try {FFFFFF}/hud");
+		}
+		case 7:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"");
+		}
+		case 8:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"Play in different duel arenas by means of 'custom' parameter in {FFFFFF}/duel "COL_TIP"command.");
+		}
+		case 9:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"Use {FFFFFF}/cmdhelp [Command name] "COL_TIP"to get info about any command.");
+		}
+		case 10:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"Change your hit sounds with {FFFFFF}/sound "COL_TIP"command.");
+		}
+		case 11:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"Change your time and weather with {FFFFFF}/time "COL_TIP"and {FFFFFF}/weather "COL_TIP"commands.");
+		}
+		case 12:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"Press 'Tab' key and click on a player for quicker operations/commands.");
+		}
+		case 13:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"");
+		}
+	}
+	return 1;
+}
+
 SendCommandHelpMessage(playerid, text[], messagebox_type = MSGBOX_TYPE_MIDDLE)
 {
 	if(messagebox_type < 0 || messagebox_type == MAX_MSGBOX_TYPES)
