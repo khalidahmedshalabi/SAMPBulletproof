@@ -5961,7 +5961,6 @@ YCMD:vworld(playerid, params[], help)
 	if(vID <= 5) return SendErrorMessage(playerid,"Pick a virtual world above 5.");
 
 	SetPlayerVirtualWorld(playerid, vID);
-
 	return 1;
 }
 
@@ -5972,19 +5971,23 @@ YCMD:pchannel(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display players in a channel.");
 	    return 1;
 	}
-	if(Player[playerid][ChatChannel] != -1) {
-		new iString[356];
-		iString = "{FF3333}Players in channel:\n\n";
+	if(Player[playerid][ChatChannel] != -1)
+	{
+		new iString[200];
 
-		foreach(new i : Player) {
-		    if(Player[i][ChatChannel] == Player[playerid][ChatChannel]) {
-		        format(iString, sizeof(iString), "%s{FF3333} - {FFFFFF}%s (%d)\n", iString, Player[i][Name], i);
+		foreach(new i : Player)
+		{
+		    if(Player[i][ChatChannel] == Player[playerid][ChatChannel])
+			{
+		        format(iString, sizeof(iString), "%s%s (%d)\n", iString, Player[i][Name], i);
 			}
 		}
 
-		ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,"{FFFFFF}Players In Channel", iString, "Close","");
-	} else {
-    	SendErrorMessage(playerid,"You are not in any channel.");
+		ShowPlayerDialog(playerid,DIALOG_NO_RESPONSE,DIALOG_STYLE_MSGBOX,""COL_PRIM"Players in current channel", iString, "Close","");
+	}
+	else
+	{
+    	SendErrorMessage(playerid,"You are not in any channel. To join one, use /cchannel");
 	}
 
 	return 1;
@@ -5997,35 +6000,39 @@ YCMD:cchannel(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "enable you to join a chat channel.");
 	    return 1;
 	}
-	new iString[128];
-	if(isnull(params)) {
-		if(Player[playerid][ChatChannel] != -1) {
-		    format(iString, sizeof(iString), "{FFFFFF}>> "COL_PRIM"Current chat channel ID: {FFFFFF}%d", Player[playerid][ChatChannel]);
+	if(isnull(params))
+	{
+		if(Player[playerid][ChatChannel] != -1)
+		{
+		    new iString[128];
+		    format(iString, sizeof(iString), ""COL_PRIM"Current chat channel ID: {FFFFFF}%d"COL_PRIM". To join another one use /cchannel [Channel ID]", Player[playerid][ChatChannel]);
 		    SendClientMessage(playerid, -1, iString);
-		} else {
-			SendUsageMessage(playerid,"/chatchannel [Channel ID]");
+		}
+		else
+		{
+			SendUsageMessage(playerid,"/cchannel [Channel ID]");
 		}
 		return 1;
 	}
 
 	new Channel = strval(params);
-	if(Channel <= -1 || Channel > 1000) return SendErrorMessage(playerid,"Invalid channel ID.");
+	if(Channel < 0 || Channel > MAX_CHANNELS)
+		return SendErrorMessage(playerid, sprintf("Invalid channel ID (Maximum chat channels: %d)", MAX_CHANNELS));
 
 	Player[playerid][ChatChannel] = Channel;
 
-	format(iString, sizeof(iString), "UPDATE Players SET ChatChannel = %d WHERE Name = '%q'", Channel, Player[playerid][Name]);
-    db_free_result(db_query(sqliteconnection, iString));
+    new str[144];
 
-	foreach(new i : Player) {
-	    if(Player[i][ChatChannel] == Player[playerid][ChatChannel] && i != playerid) {
-	        format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has joined this chat channel.", Player[playerid][Name]);
-	        SendClientMessage(i, -1, iString);
-		} else {
-	        format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has joined a chat channel.", Player[playerid][Name]);
-	        SendClientMessage(i, -1, iString);
-		}
+	format(str, sizeof(str), "UPDATE Players SET ChatChannel = %d WHERE Name = '%q'", Channel, Player[playerid][Name]);
+    db_free_result(db_query(sqliteconnection, str));
+    
+    SendClientMessage(playerid, -1, ""COL_PRIM"You've joined the chat channel, to know who else is here, type {FFFFFF}/pchannel. "COL_PRIM"Use ^ symbol to chat!");
+
+	format(str, sizeof(str), "{FFFFFF}%s "COL_PRIM"has joined chat channel ID: {FFFFFF}%d.", Player[playerid][Name], Channel);
+	foreach(new i : Player)
+	{
+	    SendClientMessage(i, -1, str);
 	}
-
 	return 1;
 }
 
