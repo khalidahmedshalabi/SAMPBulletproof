@@ -15,8 +15,6 @@ new 			GM_WEBSITE[50]	=	"www.bulletproof.ml";
 #define MAX_TEAMS 			6
 #define MAX_CHANNELS    	50
 #define DRAW_DISTANCE   	25
-#define MAX_STATS       	30
-#define MAX_INI_ENTRY_TEXT 	80
 
 new DB:sqliteconnection; // SQLite Databases
 new teamskinlist = mS_INVALID_LISTID;
