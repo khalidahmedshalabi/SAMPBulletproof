@@ -5916,7 +5916,7 @@ YCMD:replace(playerid, params[], help)
 	new str[2048];
 	foreach(new i : Player)
 	{
-	    if(Player[i][InDuel] == true || Player[i][Playing] == true)
+	    if(Player[i][InDuel] == true || Player[i][IsAFK] || !Player[i][Spawned])
 	        continue;
 
 		format(str, sizeof str, "%s%s\n", str, Player[i][Name]);
@@ -6498,7 +6498,7 @@ YCMD:allvs(playerid,params[], help)
 	ct[1] = 0;
 	foreach(new i : Player)
 	{
-		if(Player[i][InDuel] == true)
+		if(Player[i][InDuel] == true || Player[i][IsAFK] || !Player[i][Spawned])
 	        continue;
 
 		if(Player[i][Team] != ATTACKER && Player[i][Team] != DEFENDER)
