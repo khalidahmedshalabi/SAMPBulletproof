@@ -148,6 +148,8 @@ StartDuel(dueller1, dueller2, weapon1, weapon2, Float:centerx, Float:centery, ar
 	Player[dueller2][IgnoreSpawn] = true;
 	SetPlayerColor(dueller1, 0xFAB18488);
 	SetPlayerColor(dueller2, 0xFAB18488);
+	SetPlayerSkin(dueller1, Skin[Player[dueller1][Team]]);
+	SetPlayerSkin(dueller2, Skin[Player[dueller2][Team]]);
 	Player[dueller1][TeamBeforeDuel] = Player[dueller1][Team];
 	Player[dueller2][TeamBeforeDuel] = Player[dueller2][Team];
 	Player[dueller1][ToAddInRound] = false;
@@ -159,22 +161,6 @@ StartDuel(dueller1, dueller2, weapon1, weapon2, Float:centerx, Float:centery, ar
 	Player[dueller1][Team] = REFEREE;
 	Player[dueller2][Team] = REFEREE;
 	
-	new skin = random(5);
-	switch(skin)
-	{
-		case 0:
-			skin = 88;
-		case 1:
-			skin = 53;
-		case 2:
-			skin = 230;
-		case 3:
-			skin = 137;
-		case 4:
-			skin = 250;
-	}
-	SetPlayerSkin(dueller1, skin);
-	SetPlayerSkin(dueller2, skin);
 	if(weapon1 == weapon2)
 	{
 		GivePlayerWeapon(dueller1, weapon1, 9999);
