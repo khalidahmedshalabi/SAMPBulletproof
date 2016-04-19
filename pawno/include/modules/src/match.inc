@@ -2506,9 +2506,6 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 		    MatchRoundsRecord[ MatchRoundsStarted - 1 ][ round__completed ] = true;
 		}
 	}
-	#if MATCH_SYNC == 1
-	MATCHSYNC_UpdateAllPlayers(WHEN_ROUND_END);
-	#endif
 
     ElapsedTime = 0;
 	TeamCapturingCP = NON;
@@ -2872,10 +2869,6 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 forward WarEnded();
 public WarEnded()
 {
-	#if MATCH_SYNC == 1
-	MATCHSYNC_InsertMatchStats();
-	#endif
-
     ClearKillList(); // Clears the kill-list.
 
 	new iString[256], TopString[3][128];

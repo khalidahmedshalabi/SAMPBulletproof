@@ -56,7 +56,6 @@ native IsValidVehicle(vehicleid);
 #include "modules\src\global.inc"
 //#include "modules\src\dynamic_coloring.inc"
 #include "modules\src\weaponshot.inc"
-#include "modules\src\match_sync.inc"
 #include "modules\src\version_checker.inc"
 #include "modules\src\database.inc"
 #include "modules\src\duel.inc"
@@ -90,9 +89,6 @@ public OnGameModeInit()
 public OnGameModeExit()
 {
 	db_close(sqliteconnection);
-	#if MATCH_SYNC == 1
-	mysql_close();
-	#endif
 	return 1;
 }
 

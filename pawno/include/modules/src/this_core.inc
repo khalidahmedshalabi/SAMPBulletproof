@@ -82,9 +82,6 @@ InitScriptSecondarySettings()
 	#endif
 	SendRconCommand("stream_distance 400.0");
 	SendRconCommand("stream_rate 50");
-	#if MATCH_SYNC == 1
-    MATCHSYNC_Init();
-	#endif
 	SetTeamDefaultColors();
     SetTeamDefaultNames();
     SetAltCommands();
