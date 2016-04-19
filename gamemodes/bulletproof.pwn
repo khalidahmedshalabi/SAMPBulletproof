@@ -4139,7 +4139,10 @@ YCMD:shop(playerid, params[], help)
 	}
 	#if defined _league_included
 	if(LeagueShop)
-		ShowPlayerShopDialog(playerid);
+	    if(LeagueAllowed)
+			ShowPlayerShopDialog(playerid);
+		else
+		    SendErrorMessage(playerid, "League mode is not enabled in this server");
 	else
 	    SendErrorMessage(playerid, "League shop is disabled in this server");
 	#else
