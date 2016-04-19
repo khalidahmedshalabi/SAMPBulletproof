@@ -82,7 +82,7 @@ public SendTipMessageToAll()
 		}
 		case 13:
 		{
-			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"");
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"You can change your skin with /skin while in lobby, DM or duel.");
 		}
 	}
 	return 1;
