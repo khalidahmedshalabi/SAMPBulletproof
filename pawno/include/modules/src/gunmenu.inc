@@ -246,7 +246,10 @@ ShowGunmenuDialog(playerid)
 forward FreezePlayerPlane(playerid, planeid);
 public FreezePlayerPlane(playerid, planeid)
 {
-	SetVehiclePos(planeid, TempAirVehicles_Pos[planeid][0], TempAirVehicles_Pos[planeid][1], TempAirVehicles_Pos[planeid][2]);	
+	if(GetPlayerVehicleID(playerid) != planeid)
+		KillTimer(GunmenuData[playerid][GunFreezePlane]);
+	else
+		SetVehiclePos(planeid, TempAirVehicles_Pos[planeid][0], TempAirVehicles_Pos[planeid][1], TempAirVehicles_Pos[planeid][2]);	
 	return 1;
 }
 
