@@ -327,7 +327,7 @@ public OnPlayerSpawn(playerid)
  	{
  	    // If there's a round running...
  	    
- 	    if(ElapsedTime <= 20 && !Player[playerid][Playing] && !WarMode)
+ 	    if(ElapsedTime <= 20 && !Player[playerid][Playing] && !WarMode && (Player[playerid][Team] == ATTACKER || Player[playerid][Team] == DEFENDER))
  	    {
  	        SendClientMessage(playerid, -1, ""COL_PRIM"You may want to use {FFFFFF}/addme "COL_PRIM"to add yourself to the round.");
  	    }
@@ -7639,6 +7639,7 @@ YCMD:addme(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "add yourself to the round.");
 	    return 1;
 	}
+	if(Player[playerid][Team] != ATTACKER && Player[playerid][Team] != DEFENDER) return SendErrorMessage(playerid, "You must be either in attacker or defender team");
 	if(WarMode == true) return SendErrorMessage(playerid, "Cannot do this when match mode is enabled.");
 	if(Player[playerid][Playing] == true) return SendErrorMessage(playerid,"You're already playing.");
 	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"You cannot use this command while in a duel.");
