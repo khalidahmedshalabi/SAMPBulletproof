@@ -8254,15 +8254,15 @@ YCMD:vr(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "repair your vehicle.");
 	    return 1;
 	}
-    if(!IsPlayerInAnyVehicle(playerid)) return 1;
+    if(!IsPlayerInAnyVehicle(playerid))
+		return SendErrorMessage(playerid, "You aren't in any vehicle");
 
-	new Float:Pos[4];
+	new Float:Pos[3];
 	GetPlayerPos(playerid, Pos[0], Pos[1], Pos[2]);
-	GetPlayerFacingAngle(playerid, Pos[3]);
 
 	if(Player[playerid][Playing] == true)
 	{
-		if(Pos[0] > BAttackerSpawn[Current][0] + 100 || Pos[0] < BAttackerSpawn[Current][0] - 100 || Pos[1] > BAttackerSpawn[Current][1] + 100 || Pos[1] < BAttackerSpawn[Current][1] - 100)
+		if(Pos[0] > BAttackerSpawn[Current][0] + 150 || Pos[0] < BAttackerSpawn[Current][0] - 150 || Pos[1] > BAttackerSpawn[Current][1] + 150 || Pos[1] < BAttackerSpawn[Current][1] - 150)
 		{
 			return SendErrorMessage(playerid,"You are too far from attacker spawn."); //If attacker is too far away from his spawn.
 		}
