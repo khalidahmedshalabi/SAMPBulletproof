@@ -107,6 +107,7 @@ InitScriptSecondarySettings()
     MAIN_BACKGROUND_COLOUR = 0x00000055;
 
 	teamskinlist = LoadModelSelectionMenu("skins.txt");
+	playerskinlist = LoadModelSelectionMenu("skins.txt");
 	return 1;
 }
 

@@ -1676,7 +1676,7 @@ public OnPlayerModelSelection(playerid, response, listid, modelid)
 {
 	if(listid == teamskinlist)
 	{
-	    if(response)
+	    if(response && ChangingSkinOfTeam[playerid] != -1)
 	    {
 		    new iString[128];
 			switch(ChangingSkinOfTeam[playerid])
@@ -1723,7 +1723,13 @@ public OnPlayerModelSelection(playerid, response, listid, modelid)
 	        ChangingSkinOfTeam[playerid] = -1;
 			SendClientMessage(playerid, -1, "Canceled team skin selection");
 		}
-    	return 1;
+	}
+	else if(listid == playerskinlist)
+	{
+	    if(response && !Player[playerid][Playing] && !Player[playerid][Spectating])
+	    {
+		    SetPlayerSkin(playerid, modelid);
+	    }
 	}
 	return 1;
 }
@@ -5962,6 +5968,20 @@ YCMD:vworld(playerid, params[], help)
 	if(vID <= 5) return SendErrorMessage(playerid,"Pick a virtual world above 5.");
 
 	SetPlayerVirtualWorld(playerid, vID);
+	return 1;
+}
+
+YCMD:skin(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "view a catalog of different skins.");
+	    return 1;
+	}
+	if(Player[playerid][Playing] == true) return SendErrorMessage(playerid,"Can't use this command while playing.");
+	if(Player[playerid][Spectating] == true) return 1;
+
+    ShowModelSelectionMenu(playerid, playerskinlist, "Select a skin", 0x000000BB, 0x44444499, 0x99999999);
 	return 1;
 }
 
