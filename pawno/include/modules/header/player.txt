@@ -28,7 +28,6 @@ enum PlayerVariables
 	bool:AskingForHelp,
 	bool:Mute,
 	bool:ToAddInRound,
-	bool:AntiLag,
 	bool:blockedall,
 	bool:FakePacketRenovation,
 	bool:AlreadyDying,

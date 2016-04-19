@@ -710,29 +710,6 @@ IsValidSound(soundid) {
 	return 0;
 }
 
-
-SpawnInAntiLag(playerid) {
-
-	new Pos = random(6);
-	SetSpawnInfo(playerid, 5, Skin[Player[playerid][Team]], AntiLagSpawn[Pos][0]+random(2), AntiLagSpawn[Pos][1]+random(2), AntiLagSpawn[Pos][2]+0.5, AntiLagSpawn[Pos][3], 0, 0, 0, 0, 0, 0);
-	Player[playerid][IgnoreSpawn] = true;
-	SpawnPlayer(playerid);
-
-	SetPlayerInterior(playerid, 	10);
-	SetPlayerVirtualWorld(playerid, 1);
-
-	SetHP(playerid,	100);
-	SetAP(playerid,	100);
-
-    GivePlayerWeapon(playerid, WEAPON_SHOTGUN, 9996);
-    GivePlayerWeapon(playerid, WEAPON_SNIPER, 	9996);
-    GivePlayerWeapon(playerid, WEAPON_M4, 		9996);
-    GivePlayerWeapon(playerid, WEAPON_MP5, 	9996);
-	GivePlayerWeapon(playerid, WEAPON_DEAGLE, 	9996);
-
-	SetPlayerTeam(playerid, 5);
-}
-
 GetWeaponID(weaponname[]) {
     for(new i = 0; i < 55; ++i) {
         if(strfind(WeaponNames[i], weaponname, true) != -1)
@@ -2002,7 +1979,6 @@ QuitDM(playerid)
 	if(Player[playerid][InDM] == false) return 1;
 	
     Player[playerid][InDM] = false;
-    Player[playerid][AntiLag] = false;
     Player[playerid][DMReadd] = 0;
     SpawnPlayer(playerid);
 

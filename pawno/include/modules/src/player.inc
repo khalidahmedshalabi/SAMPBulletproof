@@ -186,7 +186,6 @@ InitPlayer(playerid)
 	Player[playerid][AskingForHelp] = false;
 	Player[playerid][Mute] = false;
 	Player[playerid][ToAddInRound] = false;
-	Player[playerid][AntiLag] = false;
 	InitPlayerInterface(playerid);
 	Player[playerid][blockedall] = false;
 	Player[playerid][OnGunmenu] = false;

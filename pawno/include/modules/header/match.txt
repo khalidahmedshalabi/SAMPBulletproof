@@ -11,7 +11,6 @@
 #define REFEREE 			3 	// Referee team
 #define ATTACKER_SUB 		4 	// Attacker sub team
 #define DEFENDER_SUB 		5	// Defender sub team
-#define ANTILAG_TEAM    	6	// Anti-lag arena team
 
 // Game Types
 #define BASE            0		// A game of 2 teams, one defends a checkpoint while the other tries to capture it 

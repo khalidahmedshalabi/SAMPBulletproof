@@ -1559,8 +1559,6 @@ public OnRCStart()
     			Player[i][DMReadd] = 0;
 			}
 
-			Player[i][AntiLag] = false;
-
 	        SetPlayerVirtualWorld(i, 2); //Set player virtual world to something different that that for lobby and DM so that they don't collide with each other. e.g. You shouldn't be able to see players in lobby or DM while you are in base.
 			TogglePlayerControllable(i, 0); //Pause players.
 
@@ -1793,8 +1791,6 @@ public OnArenaStart(ArenaID)
     			Player[i][DMReadd] = 0;
 			}
 
-			Player[i][AntiLag] = false;
-
 	        SetPlayerVirtualWorld(i, 2); //Set player virtual world to something different that that for lobby and DM so that they don't collide with each other. e.g. You shouldn't be able to see players in lobby or DM while you are in base.
 			TogglePlayerControllable(i, 0); //Pause players.
 
@@ -1981,7 +1977,6 @@ public AddPlayerToArena(playerid)
 	    Player[playerid][InDM] = false;
 		Player[playerid][DMReadd] = 0;
 	}
-	Player[playerid][AntiLag] = false;
 
 	if(Player[playerid][LastVehicle] != -1) {
 		DestroyVehicle(Player[playerid][LastVehicle]);
@@ -2145,7 +2140,6 @@ public OnBaseStart(BaseID)
 			    Player[i][InDM] = false;
     			Player[i][DMReadd] = 0;
 			}
-			Player[i][AntiLag] = false;
 
 			Player[i][Playing] = true;
 			Iter_Add(PlayersInRound, i);
@@ -2286,7 +2280,6 @@ SpawnPlayersInBase()
 			    Player[i][InDM] = false;
     			Player[i][DMReadd] = 0;
 			}
-			Player[i][AntiLag] = false;
 
             if(Player[i][Spectating] == true) 
 				StopSpectate(i);
@@ -2396,7 +2389,6 @@ public AddPlayerToBase(playerid)
 	    Player[playerid][InDM] = false;
 		Player[playerid][DMReadd] = 0;
 	}
-	Player[playerid][AntiLag] = false;
 	if(Player[playerid][LastVehicle] != -1) {
 		DestroyVehicle(Player[playerid][LastVehicle]);
 		Player[playerid][LastVehicle] = -1;

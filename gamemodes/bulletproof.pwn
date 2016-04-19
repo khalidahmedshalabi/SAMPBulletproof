@@ -271,13 +271,6 @@ public OnPlayerSpawn(playerid)
 	    SpawnInDM(playerid, Player[playerid][DMReadd]);
 	    return 1;
 	}
-	// If they're in Anti lag zone
-	if(Player[playerid][AntiLag] == true)
-	{
-	    // Respawn them there
-	    SpawnInAntiLag(playerid);
-	    return 1;
-	}
 	// If they're selecting from gunmenu
     if(Player[playerid][OnGunmenu])
     {
@@ -413,18 +406,6 @@ forward ServerOnPlayerDeath(playerid, killerid, reason);
 public ServerOnPlayerDeath(playerid, killerid, reason)
 {
     Player[playerid][AlreadyDying] = false; // Player is no longer dying, server-sided death is taking place
-    // Fix invalid death reasons for antilag zone players
-	if(Player[playerid][AntiLag] == true)
-	{
-	    if(reason == 255)
-			reason = 53;
-
-		if(reason == 47 || reason == 51 || reason == 53 || reason == 54)
-		{
-			Player[playerid][HitBy] = INVALID_PLAYER_ID;
-			Player[playerid][HitWith] = 47;
-		}
-	}
 	killerid = Player[playerid][HitBy];
 	reason = Player[playerid][HitWith];
 	Player[playerid][HitBy] = INVALID_PLAYER_ID;
@@ -1159,7 +1140,7 @@ public OnPlayerLeaveCheckpoint(playerid)
 
 public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 {
-	if(Player[playerid][Level] >= 1 && Player[playerid][Playing] == false && Player[playerid][InDM] == false && Player[playerid][InDuel] == false && Player[playerid][Spectating] == false && Player[playerid][AntiLag] == false)
+	if(Player[playerid][Level] >= 1 && Player[playerid][Playing] == false && Player[playerid][InDM] == false && Player[playerid][InDuel] == false && Player[playerid][Spectating] == false)
 	{
 		SetPlayerPosFindZ(playerid, fX, fY, fZ);
 	}
@@ -1303,11 +1284,6 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 		OnPlayerTakeDamage(damagedid, playerid, Player[damagedid][pHealth] + Player[damagedid][pArmour], WEAPON_KNIFE, bodypart);
 		return 1;
 	}
-	// Check if they're in antilag zone
-    if(Player[damagedid][AntiLag] == false)
-		return 1;
-    if(playerid != INVALID_PLAYER_ID && Player[playerid][AntiLag] == false)
-		return 1;
 
     //OnPlayerTakeDamage(damagedid, playerid, amount, weaponid, bodypart);
 	return 1;
@@ -2001,8 +1977,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(Player[ToAddID][InDuel] == true)
 					return SendErrorMessage(playerid,"That player is in a duel.");  //duel
 
-		        Player[ToAddID][AntiLag] = false;
-
 				if(Player[ToAddID][LastVehicle] != -1)
 				{
 					DestroyVehicle(Player[ToAddID][LastVehicle]);
@@ -2040,8 +2014,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 					if(Player[ToAddID][InDuel] == true)
 						return SendErrorMessage(playerid,"That player is in a duel.");  //duel
-
-					Player[ToAddID][AntiLag] = false;
 
 					if(Player[ToAddID][LastVehicle] != -1)
 					{
@@ -4241,7 +4213,6 @@ YCMD:getgun(playerid, params[], help)
 	if(Player[playerid][Playing] == true) return SendErrorMessage(playerid,"Can't use this command while playing.");
 	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"Can't use this command during duel. Use /rq instead.");
 	if(Player[playerid][InDM] == true) return SendErrorMessage(playerid,"Can't use this command during DM.");
-	if(Player[playerid][AntiLag] == true) return SendErrorMessage(playerid,"Can't use this command in anti-lag zone.");
 
 	new Weapon[50], Ammo, iString[128];
 
@@ -4355,7 +4326,6 @@ YCMD:freecam(playerid, params[], help)
 	if(Player[playerid][Playing] == true) return 1;
 	if(Player[playerid][InDM] == true) return 1;
 	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"Can't use this command during duel.");
-	if(Player[playerid][AntiLag] == true) return 1;
 	if(Player[playerid][Spectating] == true && !noclipdata[playerid][FlyMode]) return 1;
 	if(GetPlayerVehicleID(playerid)) return SendErrorMessage(playerid, "You cannot use this command while in vehicle.");
 
@@ -4492,19 +4462,12 @@ YCMD:lobby(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "teleport you to the lobby.");
 	    return 1;
 	}
-	new iString[128];
 
 	if(Player[playerid][InDM] == true) QuitDM(playerid);
    	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"Can't use this command during duel. Use /rq instead.");
    	if(Player[playerid][Playing] == true)
         return SendErrorMessage(playerid, "Cannot go to lobby while you're playing. Use /rem maybe?");
-
-	if(Player[playerid][AntiLag] == true) {
-	    Player[playerid][AntiLag] = false;
-
-		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has quit the Anti-Lag zone.", Player[playerid][Name]);
-		SendClientMessageToAll(-1, iString);
-	}
+        
     SpawnPlayer(playerid);
 	return 1;
 }
@@ -5047,8 +5010,6 @@ YCMD:view(playerid, params[], help)
     	Player[playerid][DMReadd] = 0;
 	}
 	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"Can't use this command during duel. Use /rq instead.");
-
-	Player[playerid][AntiLag] = false;
 
 	if(Player[playerid][Spectating] == true) StopSpectate(playerid);
 
@@ -7086,7 +7047,6 @@ YCMD:heal(playerid, params[], help)
 	    return 1;
 	}
 	if(Player[playerid][Playing] == true) return SendErrorMessage(playerid,"Can't heal while playing.");
-	if(Player[playerid][AntiLag] == true) return SendErrorMessage(playerid,"Can't heal in anti-lag zone.");
 	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"Can't use this command during duel.");
 
 	SetHP(playerid, 100);
@@ -8197,7 +8157,6 @@ YCMD:spec(playerid, params[], help)
 	    Player[playerid][InDM] = false;
 		Player[playerid][DMReadd] = 0;
 	}
-	Player[playerid][AntiLag] = false;
 
 	SpectatePlayer(playerid, specid);
 	return 1;
@@ -8940,47 +8899,6 @@ YCMD:time(playerid, params[], help)
     return 1;
 }
 
-YCMD:antilag(playerid, params[], help)
-{
-    if(help)
-	{
-	    SendCommandHelpMessage(playerid, "teleport you to the anti-lag zone.");
-	    return 1;
-	}
-	new iString[64];
-	if(Player[playerid][AntiLag] == true) {
-	    Player[playerid][AntiLag] = false;
-	    SpawnPlayer(playerid);
-
-		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has quit the Anti-Lag zone.", Player[playerid][Name]);
-		SendClientMessageToAll(-1, iString);
-	    return 1;
-	}
-
-	if(Player[playerid][Playing] == true) return SendErrorMessage(playerid,"Can't use this command while playing.");
-    if(Player[playerid][Spectating] == true) StopSpectate(playerid);
-	if(Player[playerid][InDM] == true) {
-	    Player[playerid][InDM] = false;
-    	Player[playerid][DMReadd] = 0;
-	}
-	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"Can't use this command during duel.");
-
-	Player[playerid][AntiLag] = true;
-	SpawnInAntiLag(playerid);
-
-	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has joined Anti-Lag zone.", Player[playerid][Name]);
-	SendClientMessageToAll(-1, iString);
-
-	if(Player[playerid][BeingSpeced] == true) {
-	    foreach(new i : Player) {
-	        if(Player[i][Spectating] == true && Player[i][IsSpectatingID] == playerid) {
-	            StopSpectate(i);
-			}
-		}
-	}
-	return 1;
-}
-
 YCMD:dm(playerid, params[], help)
 {
     if(help)
@@ -9000,7 +8918,6 @@ YCMD:dm(playerid, params[], help)
 	if(DMExist[DMID] == false) return SendErrorMessage(playerid,"This DM does not exist.");
 
 	if(Player[playerid][Spectating] == true) StopSpectate(playerid);
-	if(Player[playerid][AntiLag] == true) Player[playerid][AntiLag] = false;
 
 	ResetPlayerWeapons(playerid); // Reset all player weapons
 	SetPlayerVirtualWorld(playerid, 1); // Put player in a different virtual world so that if you create a DM in your lobby and you join the DM, you won't be able to see other players in the lobby.
@@ -9068,8 +8985,6 @@ YCMD:int(playerid,params[], help)
 	if(Player[playerid][Spectating] == true) StopSpectate(playerid);
 	if(Player[playerid][InDM] == true) QuitDM(playerid);
 	if(Player[playerid][Spectating] == true) StopSpectate(playerid);
-	if(Player[playerid][AntiLag] == true) Player[playerid][AntiLag] = false;
-
 
  	if(IsPlayerInAnyVehicle(playerid)) {
   	    new vehicleid = GetPlayerVehicleID(playerid);
