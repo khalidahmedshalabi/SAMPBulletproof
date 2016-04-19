@@ -267,19 +267,6 @@ DeleteAllDeadBodies()
 	}
 }
 
-forward RemoveBloodEffect(objectid);
-public RemoveBloodEffect(objectid)
-{
-	DestroyObject(objectid);
-	return 1;
-}
-
-AddBloodEffect(Float:x, Float:y, Float:z)
-{
-	new objID = CreateObject(18668, x, y, z - 1.5, 0.0, 0.0, 0.0);
-	SetTimerEx("RemoveBloodEffect", 1000, false, "i", objID);
-}
-
 CheckPlayerNet(playerid)
 {	
 	if(Player[playerid][FPS] < Min_FPS && Player[playerid][PauseCount] < 5 && Player[playerid][FPSCheck] == 1) 

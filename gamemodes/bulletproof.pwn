@@ -549,11 +549,10 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 			}
 		}
 	}
-	new Float:x, Float:y, Float:z;
-	GetPlayerPos(playerid, x, y, z);
-	AddBloodEffect(x, y, z);
 	if(Player[playerid][Playing] == true)
 	{
+	    new Float:x, Float:y, Float:z;
+		GetPlayerPos(playerid, x, y, z);
 	    PlayersDead[Player[playerid][Team]] ++;
 	    #if defined _league_included
 		if(LeagueMode && PlayerShop[playerid][SHOP_EXPLOSIVE_DEATH])
