@@ -4119,13 +4119,13 @@ YCMD:settings(playerid, params[], help)
 	SendClientMessage(playerid, -1, string);
 	format(string, sizeof(string), "{FFFFFF}Auto-Pause = %s {FFFFFF}| Guns in Lobby = %s", (AutoPause == true ? ("{66FF66}Enabled") : ("{FF6666}Disabled")), (LobbyGuns == true ? ("{66FF66}Enabled") : ("{FF6666}Disabled")));
 	SendClientMessage(playerid, -1, string);
-	format(string, sizeof(string), "{FFFFFF}Team Chat Shortcuts = %s {FFFFFF}| League mode = %s", (ShortCuts == true ? ("{66FF66}Enabled") : ("{FF6666}Disabled")), (LeagueAllowed == true ? ("{66FF66}Enabled") : ("{FF6666}Disabled")));
+	format(string, sizeof(string), "{FFFFFF}League shop = %s {FFFFFF}| League mode = %s", (LeagueShop == true ? ("{66FF66}Enabled") : ("{FF6666}Disabled")), (LeagueAllowed == true ? ("{66FF66}Enabled") : ("{FF6666}Disabled")));
 	SendClientMessage(playerid, -1, string);
 	format(string, sizeof(string), "{FFFFFF}Antimacros = %s {FFFFFF}| Death camera = %s", (AntiMacros == true ? ("{66FF66}Enabled") : ("{FF6666}Disabled")), (DeathCamera == true ? ("{66FF66}Enabled") : ("{FF6666}Disabled")));
 	SendClientMessage(playerid, -1, string);
 	format(string, sizeof(string), "{FFFFFF}Melee weapons menu = %s {FFFFFF}| Dead bodies = %s", (MeleeAllowed == true ? ("{66FF66}Enabled") : ("{FF6666}Disabled")), (DeadBodies == true ? ("{66FF66}Enabled") : ("{FF6666}Disabled")));
 	SendClientMessage(playerid, -1, string);
-	format(string, sizeof(string), "{FFFFFF}CP in arenas = %s {FFFFFF}| League shop = %s", (CPInArena == true ? ("{66FF66}Enabled") : ("{FF6666}Disabled")), (LeagueShop == true ? ("{66FF66}Enabled") : ("{FF6666}Disabled")));
+	format(string, sizeof(string), "{FFFFFF}CP in arenas = %s {FFFFFF}", (CPInArena == true ? ("{66FF66}Enabled") : ("{FF6666}Disabled")));
 	SendClientMessage(playerid, -1, string);
 	return 1;
 }

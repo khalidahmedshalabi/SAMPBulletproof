@@ -20,7 +20,6 @@ new bool:DeathCamera = true;
 new bool:ShowHPBars = true;
 new bool:LeagueShop = true;
 new bool:AntiSpam = true;
-new bool:ShortCuts = false;
 new bool:LobbyGuns = true;
 new bool:ServerLocked 	= false;
 new bool:PermLocked 	= false;
