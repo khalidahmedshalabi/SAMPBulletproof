@@ -118,6 +118,10 @@ public OnPlayerConnect(playerid)
 	{
 	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}database is not loaded. Make sure 'AAD.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE));
 	}
+	if(CorrectDatabase == false)
+	{
+	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}this server is not using the correct database. Visit %s for further help!", GM_WEBSITE));
+	}
 	// Check if players count exceeded the limit
 	if(Iter_Count(Player) == MAX_PLAYERS)
 	{

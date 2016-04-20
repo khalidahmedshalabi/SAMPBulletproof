@@ -29,6 +29,5 @@ new RequestedGroupPass[MAX_PLAYERS][MAX_GROUP_ACCESS_GROUPS][MAX_GROUP_ACCESS_PA
 
 new bool:PlayerOnInterface[MAX_PLAYERS char];
 new bool:AllMuted = false;
-new bool:DatabaseLoading = false;
 new AnnTimer;
 

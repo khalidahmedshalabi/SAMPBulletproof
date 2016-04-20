@@ -9,6 +9,7 @@
 #include "modules\header\global.txt"
 #include "modules\header\dialogs.txt"
 #include "modules\header\fields.txt"
+#include "modules\header\database.txt"
 
 // Functions
 ShowConfigDialog(playerid) {
@@ -245,6 +246,10 @@ LoadConfig()
 	
 	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // AutoRoundStarter
     AutoRoundStarter = (strval(iString) == 1 ? true : false);
+    db_next_row(res);
+	
+	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // GMVersion
+    CorrectDatabase = (floatstr(iString) == GM_VERSION ? true : false);
     db_next_row(res);
 
 	db_free_result(res);
