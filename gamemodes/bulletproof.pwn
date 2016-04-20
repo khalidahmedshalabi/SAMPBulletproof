@@ -2227,9 +2227,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    else
 	    {
 	        new iString[128];
-			format(iString, sizeof(iString),"{FFFFFF}%s "COL_PRIM"has been kicked for not entering league account password.", Player[playerid][Name]);
+			format(iString, sizeof(iString),"{FFFFFF}%s "COL_PRIM"has NOT logged into their league account.", Player[playerid][Name]);
 			SendClientMessageToAll(-1, iString);
-			SetTimerEx("OnPlayerKicked", 500, false, "i", playerid);
+			
+			Player[playerid][MustLeaguePass] = false;
+			Player[playerid][MustLeagueRegister] = false;
+			Player[playerid][LeagueLogged] = false;
 	    }
 	    return 1;
 	}
