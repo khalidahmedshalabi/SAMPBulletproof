@@ -660,7 +660,7 @@ SetPlayerDamageBubble(playerid)
 
 // This shows taken and given damage textdraws on damager/damaged player's screen
 // Mainly used under On Player Damage callbacks
-HandleVisualDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
+HandleVisualDamage(playerid, issuerid, Float:amount, weaponid)
 {
 	new 
 		bool:doneOfGivenDmg = false,	// Indicate whether we're done of showing given-damage textdraws or not
@@ -687,9 +687,9 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 				{
 					VisualDamage[issuerid][TDamageGiven][i] += amount; // Add to total given damage
 					VisualDamage[issuerid][GivenDamageWeapon][i] = weaponid;
-					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%d%s] [%s]",  // Write correct damage info into our string
+					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%d%s]",  // Write correct damage info into our string
 						Player[playerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[issuerid][TDamageGiven][i], 
-						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR, BodyPartName[bodypart]);
+						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 					PlayerTextDrawSetString(issuerid, DoingDamage[issuerid][i], str); // Update the textdraw with correct info
 					VisualDamage[issuerid][GivenDamageTick][i] = tick; // When the last time this damage textdraw was shown
 					ShowVisualDamageForSpectators(issuerid, i, str, 0, tick); // Show these textdraws to anyone spectating this player
@@ -706,9 +706,9 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 					VisualDamage[issuerid][DamagingWho][i] = playerid; // Assign the ID of the damaged player to the issuer variable
 					Iter_Add(PlayersDamaged[issuerid], playerid); // Add this player to damaged players list of the issuer/damager
 					Iter_Add(PlayerHasGVisualDmg, issuerid);
-					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%d%s] [%s]", 
+					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%d%s]", 
 						Player[playerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[issuerid][TDamageGiven][i], 
-						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR, BodyPartName[bodypart]);
+						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 					PlayerTextDrawSetString(issuerid, DoingDamage[issuerid][i], str); // Update the textdraw with the correct info
 					VisualDamage[issuerid][GivenDamageTick][i] = tick; // When the last time this damage textdraw was shown
 					ShowVisualDamageForSpectators(issuerid, i, str, 0, tick); // Show these textdraws to anyone spectating this player
@@ -724,9 +724,9 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 				{
 					VisualDamage[playerid][TDamageTaken][i] += amount;
 					VisualDamage[playerid][TakenDamageWeapon][i] = weaponid;
-					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%d%s] [%s]", 
+					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%d%s]", 
 						Player[issuerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i], 
-						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR, BodyPartName[bodypart]);
+						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 					PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], str);
 					VisualDamage[playerid][TakenDamageTick][i] = tick;
 					ShowVisualDamageForSpectators(playerid, i, str, 1, tick);
@@ -744,9 +744,9 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 					VisualDamage[playerid][WhoDamaging][i] = issuerid;
 					Iter_Add(PlayersDamagedBy[playerid], issuerid);
 					Iter_Add(PlayerHasTVisualDmg, playerid);
-					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%d%s] [%s]", 
+					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%d%s]", 
 						Player[issuerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i], 
-						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR, BodyPartName[bodypart]);
+						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 					PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], str);
 					VisualDamage[playerid][TakenDamageTick][i] = tick;
 					ShowVisualDamageForSpectators(playerid, i, str, 1, tick);

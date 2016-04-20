@@ -1516,7 +1516,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		PlayerPlaySound(issuerid, Player[issuerid][HitSound], 0.0, 0.0, 0.0);
         PlayerPlaySound(playerid, Player[playerid][GetHitSound], 0.0, 0.0, 0.0);
 
-        HandleVisualDamage(playerid, issuerid, float(rounded_amount), weaponid, bodypart);
+        HandleVisualDamage(playerid, issuerid, float(rounded_amount), weaponid);
 
 		if(Player[issuerid][Playing] == true && Player[playerid][Playing] == true)
 		{

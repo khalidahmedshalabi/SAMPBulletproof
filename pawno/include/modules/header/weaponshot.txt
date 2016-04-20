@@ -16,13 +16,6 @@
 #define	GRENADE_MEDIUM_DAMAGE		GRENADE_HIGH_DAMAGE / 2		// Modified grenade damage
 #define	GRENADE_LOW_DAMAGE			GRENADE_HIGH_DAMAGE / 3		// Modified grenade damage
 
-// Body part names
-new BodyPartName[10][] = 
-{
-	{"Unknown1"}, {"Unknown2"}, {"Unknown3"}, {"Torso"}, {"Groin"}, 
-	{"L-Arm"}, {"R-Arm"}, {"L-Leg"}, {"R-Leg"}, {"Head"}
-};
-
 enum VISUAL_DAMAGE_DATA
 {
 	Float:TDamageTaken[MAX_VISUAL_DAMAGES], 	// Total damage taken
