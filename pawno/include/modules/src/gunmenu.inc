@@ -715,6 +715,7 @@ OnPlayerFinishGunmenu(playerid)
 		}
 	}
 	ShowGunmenuHelp(playerid);
+	SetTimerEx("AimbotCheck", 3000, false, "i", playerid);
 }
 
 forward ShowPlayerMeleeWeaponsMenu(playerid);
