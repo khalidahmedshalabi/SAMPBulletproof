@@ -277,10 +277,6 @@ LoadTextDraws()
 	TextDrawTextSize(LeagueRoundResultTD, 710.000000, 0.000000);
 	#endif
 	
-	#if GTAV_SWITCH_MENU != 0
-	CreateGunSwitchGlobalTextDraws();
-	#endif
-	
 	Intro_GoWebsite = TextDrawCreate(22.000000, 175.000000, "~w~Use your account to login to ~r~~h~bulletproof.ml ~w~where you can chat, find matches, read papers and many more features");
 	TextDrawBackgroundColor(Intro_GoWebsite, 255);
 	TextDrawFont(Intro_GoWebsite, 2);
@@ -1002,9 +998,6 @@ LoadPlayerTextDraws(playerid)
 	#endif
 	CreatePlayerWeaponBindTextDraw(playerid);
 	CreateMessageBoxTextDraws(playerid);
-	#if GTAV_SWITCH_MENU != 0
-	CreateGunSwitchTextDraws(playerid);
-	#endif
 	return 1;
 }
 

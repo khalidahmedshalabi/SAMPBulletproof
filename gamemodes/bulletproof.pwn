@@ -65,9 +65,6 @@ native IsValidVehicle(vehicleid);
 #include "modules\src\messagebox.inc"
 #include "modules\src\deathcam.inc"
 #include "modules\src\gunmenu.inc"
-#if GTAV_SWITCH_MENU != 0
-#include "modules\src\gunswitch.inc"
-#endif
 #include "modules\src\weaponbinds.inc"
 #include "modules\src\ac_addons.inc"
 #include "modules\src\vote.inc"
@@ -3386,29 +3383,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 {
-    #if GTAV_SWITCH_MENU != 0
-    if(Player[playerid][OnGunSwitch])
-    {
-        new index = -1;
-        for(new i = 0; i < MAX_GUN_SWITCH_SLOTS; i ++)
-		{
-			if(!GunSwitchData[playerid][GunSwitchSlotShown][i])
-				continue;
-
-			if(GunSwitchData[playerid][GunSlotTextDraw][i] == playertextid)
-			{
-			    index = i;
-				break;
-			}
-		}
-		if(GetPlayerVehicleID(playerid) == 0)
-        	SetPlayerArmedWeapon(playerid, GetWeaponIDFromModelID(GunSwitchData[playerid][GunSwitchModelID][index]));
-		else
-		    SetPlayerArmedWeapon(playerid, 0);
-
-		DisablePlayerGunSwitchInterface(playerid);
-    }
-    #endif
 	return 1;
 }
 
@@ -3416,13 +3390,6 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
     if(clickedid == Text:INVALID_TEXT_DRAW)
 	{
-	    #if GTAV_SWITCH_MENU != 0
-	    if(Player[playerid][OnGunSwitch])
-	    {
-	        DisablePlayerGunSwitchInterface(playerid);
-	        return 1;
-	    }
-		#endif
 		if(PlayerOnInterface{playerid} == true)
 		{
 		    DisableMatchInterface(playerid);
@@ -9189,13 +9156,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
     if(CheckKeysForWeaponBind(playerid, newkeys, oldkeys) == 1)
 	    return 1;
 
-    #if GTAV_SWITCH_MENU != 0
-	if(newkeys & 16 && !(newkeys & KEY_HANDBRAKE))
-	{
-        EnablePlayerGunSwitchInterface(playerid);
-	    return 1;
-	}
-	#endif
 	if(GetPlayerVehicleID(playerid) && PRESSED(KEY_FIRE) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
  		AddVehicleComponent(GetPlayerVehicleID(playerid), 1010);
 		return 1;

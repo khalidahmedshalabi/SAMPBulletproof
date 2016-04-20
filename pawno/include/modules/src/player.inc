@@ -196,9 +196,6 @@ InitPlayer(playerid)
 	Player[playerid][LeagueLogged] = false;
 	Player[playerid][InDeathCamera] = false;
 	Player[playerid][HasDeathQuote] = false;
-	#if GTAV_SWITCH_MENU != 0
-	Player[playerid][OnGunSwitch] = false;
-	#endif
 	
 	ResetPlayerMoney(playerid);
 	SetPlayerColor(playerid, 0xAAAAAAAA);

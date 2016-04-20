@@ -6,7 +6,6 @@ new	const Float:GM_VERSION		= 		0.20;
 #define 		GM_NAME				"Bulletproof"
 new 			GM_WEBSITE[50]	=	"www.bulletproof.ml";
 
-#define GTAV_SWITCH_MENU			0	// Toggles the gta v switch menu (gunswitch library)
 #define SAFE_GAMETEXT_AUTO_CHECK	0 	// When enabled, most of textdraw and gametext functions are hooked to automatically reject unsafe use of tildes.
 
 // Limits

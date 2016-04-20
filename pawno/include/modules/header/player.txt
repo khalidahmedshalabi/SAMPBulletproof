@@ -40,9 +40,6 @@ enum PlayerVariables
 	bool:PlayerMarkers,
 	GunmenuModdingType,
 	GunmenuModdingIndex,
-	#if GTAV_SWITCH_MENU != 0
-	bool:OnGunSwitch,
-	#endif
 	NetCheck,
 	FPSCheck,
 	PLCheck,
