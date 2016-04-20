@@ -3,7 +3,6 @@
 */
 
 new	const Float:GM_VERSION		= 		0.20;
-#define		GM_BONUS_VERSION			""
 #define 		GM_NAME				"Bulletproof"
 new 			GM_WEBSITE[50]	=	"www.bulletproof.ml";
 
