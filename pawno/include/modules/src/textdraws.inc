@@ -671,7 +671,7 @@ RoundTextdrawsCreate()
 	TextDrawColor					(	timerCenterTD, 		-1						);
 	TextDrawSetShadow				(	timerCenterTD, 		0						);
 	TextDrawSetOutline				(	timerCenterTD, 		1						);
-	TextDrawBackgroundColor			(	timerCenterTD,	 	0x00000077						);
+	TextDrawBackgroundColor			(	timerCenterTD,	 	0x00000066						);
 	TextDrawFont					(	timerCenterTD, 		2						);
 	TextDrawSetProportional			(	timerCenterTD, 		1						);
 	
@@ -793,7 +793,7 @@ LoadPlayerTextDraws(playerid)
 	ArmourBar[playerid] = CreatePlayerProgressBar(playerid, 547.000000, 46.000000, 64.000000, 6.000000, 0xE1E1E1FF, 100.000000, BAR_DIRECTION_RIGHT);
 	
 	HPTextDraw_TD[playerid] = CreatePlayerTextDraw(playerid,577, 67.1, "_");
-	PlayerTextDrawBackgroundColor(playerid, HPTextDraw_TD[playerid], 0x00000044);
+	PlayerTextDrawBackgroundColor(playerid, HPTextDraw_TD[playerid], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, HPTextDraw_TD[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, HPTextDraw_TD[playerid], 0.2600, 0.8000);
 	PlayerTextDrawColor(playerid, HPTextDraw_TD[playerid], 16711935);
@@ -803,7 +803,7 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawAlignment(playerid, HPTextDraw_TD[playerid], 2);
 
 	ArmourTextDraw[playerid] = CreatePlayerTextDraw(playerid,577, 45.1, "_");
-	PlayerTextDrawBackgroundColor(playerid, ArmourTextDraw[playerid], 0x00000044);
+	PlayerTextDrawBackgroundColor(playerid, ArmourTextDraw[playerid], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, ArmourTextDraw[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, ArmourTextDraw[playerid], 0.2600, 0.8000);
 	PlayerTextDrawColor(playerid, ArmourTextDraw[playerid], 16711935);
@@ -871,7 +871,7 @@ LoadPlayerTextDraws(playerid)
 		DoingDamage[playerid][i] = CreatePlayerTextDraw(playerid,170.0,y,"_");
 		PlayerTextDrawFont(playerid, DoingDamage[playerid][i], 1);
 		PlayerTextDrawLetterSize(playerid, DoingDamage[playerid][i], 0.20000, 1.000);
-		PlayerTextDrawBackgroundColor(playerid, DoingDamage[playerid][i],0x00000022);
+		PlayerTextDrawBackgroundColor(playerid, DoingDamage[playerid][i],MAIN_BACKGROUND_COLOUR);
 		PlayerTextDrawColor(playerid, DoingDamage[playerid][i], 16727295);
 		PlayerTextDrawSetProportional(playerid, DoingDamage[playerid][i], 1);
 		PlayerTextDrawSetOutline(playerid, DoingDamage[playerid][i],1);
@@ -880,7 +880,7 @@ LoadPlayerTextDraws(playerid)
 		GettingDamaged[playerid][i] = CreatePlayerTextDraw(playerid,380.0,y,"_");
 		PlayerTextDrawFont(playerid, GettingDamaged[playerid][i], 1);
 		PlayerTextDrawLetterSize(playerid, GettingDamaged[playerid][i], 0.20000, 1.000);
-		PlayerTextDrawBackgroundColor(playerid, GettingDamaged[playerid][i],0x00000022);
+		PlayerTextDrawBackgroundColor(playerid, GettingDamaged[playerid][i],MAIN_BACKGROUND_COLOUR);
 		PlayerTextDrawColor(playerid, GettingDamaged[playerid][i], 16727295);
 		PlayerTextDrawSetProportional(playerid, GettingDamaged[playerid][i], 1);
 		PlayerTextDrawSetOutline(playerid, GettingDamaged[playerid][i],1);
@@ -990,7 +990,7 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawSetOutline(playerid, DeathMessage[playerid][1], 1);
 	PlayerTextDrawSetProportional(playerid, DeathMessage[playerid][1], 1);
 	PlayerTextDrawUseBox(playerid, DeathMessage[playerid][1], 1);
-	PlayerTextDrawBoxColor(playerid, DeathMessage[playerid][1], 0x00000077);
+	PlayerTextDrawBoxColor(playerid, DeathMessage[playerid][1], 0x00000066);
 	PlayerTextDrawTextSize(playerid, DeathMessage[playerid][1], 794.000000, 271.000000);
 	
 	#if defined _league_included

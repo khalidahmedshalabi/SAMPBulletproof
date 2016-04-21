@@ -45,7 +45,7 @@ ChangeTheme(playerid, listitem)
 		case 1: // Black (Background) & White (Text)
 		{
             format(MAIN_TEXT_COLOUR, sizeof MAIN_TEXT_COLOUR, "~w~");
-		    MAIN_BACKGROUND_COLOUR = 0x00000022;
+		    MAIN_BACKGROUND_COLOUR = 0x00000066;
 		}
 		case 2: // White (Background) & Red (Text)
 		{
@@ -55,7 +55,7 @@ ChangeTheme(playerid, listitem)
 		case 3: // Black (Background) & Red (Text)
 		{
             format(MAIN_TEXT_COLOUR, sizeof MAIN_TEXT_COLOUR, "~r~");
-		    MAIN_BACKGROUND_COLOUR = 0x00000022;
+		    MAIN_BACKGROUND_COLOUR = 0x00000066;
 		}
 		case 4: // White (Background) & Blue (Text)
 		{
@@ -65,7 +65,7 @@ ChangeTheme(playerid, listitem)
 		case 5: // Black (Background) & Blue (Text)
 		{
             format(MAIN_TEXT_COLOUR, sizeof MAIN_TEXT_COLOUR, "~b~");
-		    MAIN_BACKGROUND_COLOUR = 0x00000022;
+		    MAIN_BACKGROUND_COLOUR = 0x00000066;
 		}
 		case 6: // White (Background) & Green (Text)
 		{
@@ -75,7 +75,7 @@ ChangeTheme(playerid, listitem)
 		case 7: // Black (Background) & Green (Text)
 		{
             format(MAIN_TEXT_COLOUR, sizeof MAIN_TEXT_COLOUR, "~g~");
-		    MAIN_BACKGROUND_COLOUR = 0x00000022;
+		    MAIN_BACKGROUND_COLOUR = 0x00000066;
 		}
 		case 8: // White (Background) & Purple (Text)
 		{
@@ -85,7 +85,7 @@ ChangeTheme(playerid, listitem)
 		case 9: // Black (Background) & Purple (Text)
 		{
             format(MAIN_TEXT_COLOUR, sizeof MAIN_TEXT_COLOUR, "~p~");
-		    MAIN_BACKGROUND_COLOUR = 0x00000022;
+		    MAIN_BACKGROUND_COLOUR = 0x00000066;
 		}
 	}
 	SaveThemeSettings();

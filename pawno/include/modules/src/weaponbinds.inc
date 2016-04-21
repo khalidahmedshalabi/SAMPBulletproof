@@ -19,7 +19,7 @@ CreatePlayerWeaponBindTextDraw(playerid)
 {
 	WeaponBindData[playerid][WeaponBindTextDraw] = CreatePlayerTextDraw(playerid, 491.000000, 25.000000, "_");
 	PlayerTextDrawAlignment(playerid, WeaponBindData[playerid][WeaponBindTextDraw], 3);
-	PlayerTextDrawBackgroundColor(playerid, WeaponBindData[playerid][WeaponBindTextDraw], 0x00000033);
+	PlayerTextDrawBackgroundColor(playerid, WeaponBindData[playerid][WeaponBindTextDraw], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, WeaponBindData[playerid][WeaponBindTextDraw], 2);
 	PlayerTextDrawLetterSize(playerid, WeaponBindData[playerid][WeaponBindTextDraw], 0.169999, 0.900000);
 	PlayerTextDrawColor(playerid, WeaponBindData[playerid][WeaponBindTextDraw], -1);
