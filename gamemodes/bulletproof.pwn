@@ -2211,6 +2211,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			Player[playerid][MustLeaguePass] = false;
 			Player[playerid][MustLeagueRegister] = false;
 			Player[playerid][LeagueLogged] = false;
+			
+			OnPlayerRequestClass(playerid, 0);
+			InitLeaguePlayer(playerid);
 	    }
 	    return 1;
 	}
@@ -2237,6 +2240,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			Player[playerid][MustLeaguePass] = false;
 			Player[playerid][MustLeagueRegister] = false;
 			Player[playerid][LeagueLogged] = false;
+			
+			OnPlayerRequestClass(playerid, 0);
+			InitLeaguePlayer(playerid);
 	    }
 	    return 1;
 	}
