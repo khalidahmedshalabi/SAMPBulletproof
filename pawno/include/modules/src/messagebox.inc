@@ -52,7 +52,7 @@ CreateMessageBoxTextDraws(playerid)
 	MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_BOTTOM] = CreatePlayerTextDraw(playerid, 162.000000, 363.000000, "~y~~h~caption");
 	PlayerTextDrawBackgroundColor(playerid, MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_BOTTOM], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_BOTTOM], 3);
-	PlayerTextDrawLetterSize(playerid, MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_BOTTOM], 0.519999, 1.899999);
+	PlayerTextDrawLetterSize(playerid, MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_BOTTOM], 0.3, 1.6);
 	PlayerTextDrawColor(playerid, MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_BOTTOM], -1);
 	PlayerTextDrawSetOutline(playerid, MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_BOTTOM], 0);
 	PlayerTextDrawSetProportional(playerid, MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_BOTTOM], 1);
@@ -61,7 +61,7 @@ CreateMessageBoxTextDraws(playerid)
 	MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM] = CreatePlayerTextDraw(playerid, 161.000000, 393.000000, "This is the message. We tell the user what's going on here!");
 	PlayerTextDrawBackgroundColor(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], 1);
-	PlayerTextDrawLetterSize(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], 0.199999, 1.199999);
+	PlayerTextDrawLetterSize(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], 0.15, 1.15);
 	PlayerTextDrawColor(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], -1);
 	PlayerTextDrawSetOutline(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], 0);
 	PlayerTextDrawSetProportional(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], 1);
