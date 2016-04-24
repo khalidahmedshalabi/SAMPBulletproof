@@ -1010,7 +1010,7 @@ PauseRound()
 	if(TipTimerDuringPause != -1)
 		KillTimer(TipTimerDuringPause);
 	
-	TipTimerDuringPause = SetTimer("SendTipMessageToAll", 30000, false);
+	TipTimerDuringPause = SetTimer("SendTipMessageToAll", 15000, false);
 	
 	foreach(new i : PlayersInRound)
 	{
@@ -2863,6 +2863,13 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 		SetRoundAutoStart(20);
 	
     SetTimer("NotEndingRound", 3000, false);
+	
+	switch(random(4))
+	{
+		case 2:
+			SetTimer("SendTipMessageToAll", 7000, false);
+
+	}
 	return 1;
 }
 
