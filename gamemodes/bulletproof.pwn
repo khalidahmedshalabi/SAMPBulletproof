@@ -229,8 +229,16 @@ public OnPlayerRequestClass(playerid, classid)
 			    SendClientMessage(playerid, -1, "{009933}Server account: {FFFFFF}automatically logged in!");
 				LoginPlayer(playerid, res);
 			    db_free_result(res);
-			    ShowIntroTextDraws(playerid);
-			    ShowPlayerClassSelection(playerid);
+				new teamid = ShouldPlayerBeReadded(playerid);
+			    if(teamid != -1)
+			    {
+			        SpawnConnectedPlayer(playerid, teamid);
+			    }
+			    else
+			    {
+			    	ShowIntroTextDraws(playerid);
+			    	ShowPlayerClassSelection(playerid);
+				}
 			}
 			else
 			{
@@ -241,8 +249,16 @@ public OnPlayerRequestClass(playerid, classid)
 	}
 	else
 	{
-	    ShowIntroTextDraws(playerid);
-	    ShowPlayerClassSelection(playerid);
+	    new teamid = ShouldPlayerBeReadded(playerid);
+	    if(teamid != -1)
+	    {
+	        SpawnConnectedPlayer(playerid, teamid);
+	    }
+	    else
+	    {
+	    	ShowIntroTextDraws(playerid);
+	    	ShowPlayerClassSelection(playerid);
+		}
 	}
 	return 1;
 }

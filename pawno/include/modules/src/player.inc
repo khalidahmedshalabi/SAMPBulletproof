@@ -483,6 +483,26 @@ StorePlayerVariables(playerid) {
 	}
 }
 
+// Note: this function returns team id if the player is supposed to be re-added to round, otherwise -1
+ShouldPlayerBeReadded(playerid)
+{
+	for(new i = 0; i < SAVE_SLOTS; i ++)
+	{
+		if( strlen( SaveVariables[i][pName] ) > 2 && strcmp( SaveVariables[i][pName], Player[playerid][Name], true ) == 0 )
+		{
+			if(SaveVariables[i][RoundID] != Current || Current == -1 || SaveVariables[i][ToBeAdded] == false)
+			{
+				return -1;
+			}
+			else
+			{
+				return SaveVariables[i][pTeam];
+			}
+		}
+	}
+	return -1;
+}
+
 LoadPlayerVariables(playerid)
 {
  	new iString[160];
@@ -527,7 +547,6 @@ LoadPlayerVariables(playerid)
 
 				format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
 				PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
-
 				return 1;
 			}
 			else if(SaveVariables[i][ToBeAdded] == false)
@@ -545,6 +564,25 @@ LoadPlayerVariables(playerid)
 
 				Player[playerid][WasInBase]         =   true;
 
+				#if defined _league_included
+				PlayerShop[playerid][SHOP_POINTS_DOUBLER] = PlayerShopSaves[i][SHOP_POINTS_DOUBLER];
+				PlayerShop[playerid][SHOP_EXPLOSIVE_BELT] = PlayerShopSaves[i][SHOP_EXPLOSIVE_BELT];
+				PlayerShop[playerid][SHOP_EXPLOSIVE_DEATH] = PlayerShopSaves[i][SHOP_EXPLOSIVE_DEATH];
+				PlayerShop[playerid][SHOP_JETPACK] = PlayerShopSaves[i][SHOP_JETPACK];
+				PlayerShop[playerid][SHOP_CHAINSAW] = PlayerShopSaves[i][SHOP_CHAINSAW];
+				PlayerShop[playerid][SHOP_SPRAYCAN] = PlayerShopSaves[i][SHOP_SPRAYCAN];
+				PlayerShop[playerid][SHOP_NINJA] = PlayerShopSaves[i][SHOP_NINJA];
+				
+				if(PlayerShop[playerid][SHOP_CHAINSAW])
+				{
+					GivePlayerWeapon(playerid, WEAPON_CHAINSAW, 1);
+				}
+				if(PlayerShop[playerid][SHOP_SPRAYCAN])
+				{
+					GivePlayerWeapon(playerid, WEAPON_SPRAYCAN, 9999);
+				}
+				#endif
+				
                 ResetSaveVariables(i);
 
 				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has spawned as: {FFFFFF}%s", Player[playerid][Name], TeamName[Player[playerid][Team]]);
@@ -552,7 +590,6 @@ LoadPlayerVariables(playerid)
 
 				format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
 				PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
-
 				return 1;
 			}
 
