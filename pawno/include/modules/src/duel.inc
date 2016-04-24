@@ -178,6 +178,8 @@ StartDuel(dueller1, dueller2, weapon1, weapon2, Float:centerx, Float:centery, ar
 	SetPlayerInterior(dueller1, interior);
 	SetPlayerInterior(dueller2, interior);
 	PositionPlayersInDuel(dueller1, dueller2, centerx, centery, arena_size);
+	RadarFix(dueller1);
+	RadarFix(dueller2);
 	new Float:zoneX[2], Float:zoneY[2];
 	DetermineDuelArena(centerx, centery, arena_size, zoneX[0], zoneY[0], zoneX[1], zoneY[1]);
 	new gangzone = GangZoneCreate(zoneX[0], zoneY[0], zoneX[1], zoneY[1]);

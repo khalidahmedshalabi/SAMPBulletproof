@@ -1228,6 +1228,10 @@ public OnPlayerStreamIn(playerid, forplayerid)
 			SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerCorrectMarkerCol(playerid, forplayerid) | 0x00000055);
 		}
 	}
+	else if(Player[playerid][InDuel] == true && Player[forplayerid][InDuel] == true)
+	{
+	    SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerColor(playerid) & 0xFFFFFF00);
+	}
 	else if(Player[playerid][Playing] == false && Player[forplayerid][Playing] == false)
 	{
 	    SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerCorrectMarkerCol(playerid, forplayerid) | 0x00000055);
@@ -1247,6 +1251,10 @@ public OnPlayerStreamOut(playerid, forplayerid)
 		{
 			SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerCorrectMarkerCol(playerid, forplayerid) | 0x00000055);
 		}
+	}
+	else if(Player[playerid][InDuel] == true && Player[forplayerid][InDuel] == true)
+	{
+	    SetPlayerMarkerForPlayer(forplayerid, playerid, GetPlayerColor(playerid) & 0xFFFFFF00);
 	}
 	else if(Player[playerid][Playing] == false && Player[forplayerid][Playing] == false)
 	{
