@@ -650,7 +650,7 @@ RoundTextdrawsCreate()
 	TextDrawColor					(	leftRedBG, 		0x00000011					);
 	TextDrawSetShadow				(	leftRedBG, 		-1							);
 	TextDrawSetOutline				(	leftRedBG, 		0							);
-	TextDrawBackgroundColor			(	leftRedBG, 		0xDE000033					);
+	TextDrawBackgroundColor			(	leftRedBG, 		0xDE000011					);
 	TextDrawFont					(	leftRedBG, 		1							);
 	TextDrawSetProportional			(	leftRedBG, 		1							);
 
@@ -660,7 +660,7 @@ RoundTextdrawsCreate()
 	TextDrawColor					(	rightBlueBG, 	0x00000011					);
 	TextDrawSetShadow				(	rightBlueBG, 	-1							);
 	TextDrawSetOutline				(	rightBlueBG,	0							);
-	TextDrawBackgroundColor			(	rightBlueBG, 	0x3344FF33					);
+	TextDrawBackgroundColor			(	rightBlueBG, 	0x3344FF11					);
 	TextDrawFont					(	rightBlueBG, 	1							);
 	TextDrawSetProportional			(	rightBlueBG, 	1							);
 
@@ -692,7 +692,7 @@ RoundTextdrawsCreate()
 	TextDrawColor					(	leftTeamData, 		-1						);
 	TextDrawSetShadow				(	leftTeamData, 		0						);
 	TextDrawSetOutline				(	leftTeamData, 		-1						);
-	TextDrawBackgroundColor			(	leftTeamData, 		-16777131				);
+	TextDrawBackgroundColor			(	leftTeamData, 		0xDE000011				);
 	TextDrawFont					(	leftTeamData, 		1						);
 	TextDrawSetProportional			(	leftTeamData, 		1						);
 
@@ -702,7 +702,7 @@ RoundTextdrawsCreate()
 	TextDrawColor					(	rightTeamData, 		-1						);
 	TextDrawSetShadow				(	rightTeamData, 		0						);
 	TextDrawSetOutline				(	rightTeamData, 		-1						);
-	TextDrawBackgroundColor			(	rightTeamData, 		0x3278FF33				);
+	TextDrawBackgroundColor			(	rightTeamData, 		0x3344FF11				);
 	TextDrawFont					(	rightTeamData, 		1						);
 	TextDrawSetProportional			(	rightTeamData, 		1						);
 
