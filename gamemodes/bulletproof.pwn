@@ -1443,18 +1443,18 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	    // Check whether they are in the round and in the same team or not
 		if(Player[issuerid][Playing] == true && (Player[issuerid][Team] == Player[playerid][Team]))
 		{
-			MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "_", sprintf("%s%s ~w~has fired shots around you. Maybe for a reason?", TDC[Player[playerid][Team]], Player[issuerid][NameWithoutTag]), 5000);
+			MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "_", sprintf("%s%s ~w~has fired shots at you. Maybe for a reason?", TDC[Player[playerid][Team]], Player[issuerid][NameWithoutTag]), 5000);
             // Loop through the array that contains playerid's spectators
 			foreach(new i : PlayerSpectators[playerid])
 			{
-                MessageBox(i, MSGBOX_TYPE_BOTTOM, "_", sprintf("%s%s ~w~has fired shots around %s%s", TDC[Player[playerid][Team]], Player[issuerid][NameWithoutTag], TDC[Player[playerid][Team]], Player[playerid][NameWithoutTag]), 5000);
+                MessageBox(i, MSGBOX_TYPE_BOTTOM, "_", sprintf("%s%s ~w~has fired shots at %s%s", TDC[Player[playerid][Team]], Player[issuerid][NameWithoutTag], TDC[Player[playerid][Team]], Player[playerid][NameWithoutTag]), 5000);
 			}
 
-			MessageBox(issuerid, MSGBOX_TYPE_BOTTOM, "_", sprintf("~w~Watchout! You've fired shots at your team-mate %s%s", Player[playerid][NameWithoutTag], TDC[Player[playerid][Team]]), 5000);
+			MessageBox(issuerid, MSGBOX_TYPE_BOTTOM, "_", sprintf("~w~Watchout! You've fired shots at your team-mate %s%s", TDC[Player[playerid][Team]], Player[playerid][NameWithoutTag]), 5000);
             // Loop through the array that contains issuerid's spectators
 			foreach(new i : PlayerSpectators[issuerid])
 			{
-                MessageBox(i, MSGBOX_TYPE_BOTTOM, "_", sprintf("~w~This player has fired shots at their team-mate %s%s", Player[playerid][NameWithoutTag], TDC[Player[playerid][Team]]), 5000);
+                MessageBox(i, MSGBOX_TYPE_BOTTOM, "_", sprintf("~w~This player has fired shots at their team-mate %s%s", TDC[Player[playerid][Team]], Player[playerid][NameWithoutTag]), 5000);
 			}
 
 			PlayerPlaySound(issuerid, 1135, 0.0, 0.0, 0.0);
