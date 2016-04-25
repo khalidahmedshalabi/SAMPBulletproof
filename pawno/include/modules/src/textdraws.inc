@@ -644,25 +644,18 @@ ResultTextdrawsCreate()
 
 RoundTextdrawsCreate()
 {
-	leftRedBG = TextDrawCreate		(	335.540924, 	401.283630, "-");
-	TextDrawLetterSize				(	leftRedBG, 		-28.081052, 7.287504);
-	TextDrawAlignment				(	leftRedBG, 		1							);
-	TextDrawColor					(	leftRedBG, 		0x00000011					);
-	TextDrawSetShadow				(	leftRedBG, 		-1							);
-	TextDrawSetOutline				(	leftRedBG, 		0							);
-	TextDrawBackgroundColor			(	leftRedBG, 		0xDE000011					);
-	TextDrawFont					(	leftRedBG, 		1							);
-	TextDrawSetProportional			(	leftRedBG, 		1							);
-
-	rightBlueBG = TextDrawCreate	(	311.741302, 	401.283630, "-"				);
-	TextDrawLetterSize				(	rightBlueBG, 	28.770492, 7.287504			);
-	TextDrawAlignment				(	rightBlueBG, 	1							);
-	TextDrawColor					(	rightBlueBG, 	0x00000011					);
-	TextDrawSetShadow				(	rightBlueBG, 	-1							);
-	TextDrawSetOutline				(	rightBlueBG,	0							);
-	TextDrawBackgroundColor			(	rightBlueBG, 	0x3344FF11					);
-	TextDrawFont					(	rightBlueBG, 	1							);
-	TextDrawSetProportional			(	rightBlueBG, 	1							);
+	centerBG = TextDrawCreate(318.0,431.5,"_");
+	TextDrawUseBox(centerBG,1);
+	TextDrawBoxColor(centerBG,0x0000022);
+	TextDrawFont(centerBG, 1);
+	TextDrawTextSize(centerBG,14.0,640.0);
+	TextDrawLetterSize(centerBG, 0.31, 1.55);
+	TextDrawBackgroundColor(centerBG,MAIN_BACKGROUND_COLOUR);
+	TextDrawColor(centerBG,-65281);
+	TextDrawSetOutline(centerBG,1);
+	TextDrawSetShadow(centerBG,0);
+    TextDrawAlignment(centerBG,2);
+    TextDrawSetProportional(centerBG, 1);
 
 	timerCenterTD = TextDrawCreate	(	324.140991, 		434.872528, "~w~0:00 / ~r~~h~00");
 	TextDrawLetterSize				(	timerCenterTD, 		0.200410, 	1.300164	);
@@ -671,7 +664,7 @@ RoundTextdrawsCreate()
 	TextDrawColor					(	timerCenterTD, 		-1						);
 	TextDrawSetShadow				(	timerCenterTD, 		0						);
 	TextDrawSetOutline				(	timerCenterTD, 		1						);
-	TextDrawBackgroundColor			(	timerCenterTD,	 	0x00000066						);
+	TextDrawBackgroundColor			(	timerCenterTD,	 	MAIN_BACKGROUND_COLOUR	);
 	TextDrawFont					(	timerCenterTD, 		2						);
 	TextDrawSetProportional			(	timerCenterTD, 		1						);
 	
@@ -687,7 +680,7 @@ RoundTextdrawsCreate()
 	TextDrawTextSize(timerCircleTD, 88.000000, -82.000000);
 
 	leftTeamData = TextDrawCreate	(	255.400375, 		435.060705, "~w~_");
-	TextDrawLetterSize				(	leftTeamData, 		0.2, 1.2				);
+	TextDrawLetterSize				(	leftTeamData, 		0.22, 1.22				);
 	TextDrawAlignment				(	leftTeamData, 		2						);
 	TextDrawColor					(	leftTeamData, 		-1						);
 	TextDrawSetShadow				(	leftTeamData, 		0						);
@@ -697,7 +690,7 @@ RoundTextdrawsCreate()
 	TextDrawSetProportional			(	leftTeamData, 		1						);
 
 	rightTeamData = TextDrawCreate	(	387.682586, 		435.050573, "~w~_");
-	TextDrawLetterSize				(	rightTeamData, 		0.2, 1.2				);
+	TextDrawLetterSize				(	rightTeamData, 		0.22, 1.22				);
 	TextDrawAlignment				(	rightTeamData, 		2						);
 	TextDrawColor					(	rightTeamData, 		-1						);
 	TextDrawSetShadow				(	rightTeamData, 		0						);
@@ -723,7 +716,7 @@ RoundTextdrawsCreate()
 	TextDrawColor					(	attackerNameTD, 	-1						);
 	TextDrawSetShadow				(	attackerNameTD,	0						);
 	TextDrawSetOutline				(	attackerNameTD, 	1						);
-	TextDrawBackgroundColor			(	attackerNameTD, 	0x00000033				);
+	TextDrawBackgroundColor			(	attackerNameTD, 	MAIN_BACKGROUND_COLOUR);
 	TextDrawFont					(	attackerNameTD,	1						);
 	TextDrawSetProportional			(	attackerNameTD, 	1						);
 	
@@ -733,7 +726,7 @@ RoundTextdrawsCreate()
 	TextDrawColor					(	defenderNameTD, 	-1						);
 	TextDrawSetShadow				(	defenderNameTD,	0						);
 	TextDrawSetOutline				(	defenderNameTD, 	1						);
-	TextDrawBackgroundColor			(	defenderNameTD, 	0x00000033				);
+	TextDrawBackgroundColor			(	defenderNameTD, 	MAIN_BACKGROUND_COLOUR);
 	TextDrawFont					(	defenderNameTD,	1						);
 	TextDrawSetProportional			(	defenderNameTD, 	1						);
 
@@ -1020,9 +1013,7 @@ ShowRoundStats(playerid)
 		TextDrawShowForPlayer(playerid, PauseTD);
 	}
 	
-	TextDrawShowForPlayer(playerid,leftRedBG);
-	TextDrawShowForPlayer(playerid,rightBlueBG);
-	TextDrawShowForPlayer(playerid,timerCenterTD);
+	TextDrawShowForPlayer(playerid,centerBG);
 	TextDrawShowForPlayer(playerid,timerCircleTD);
 	TextDrawShowForPlayer(playerid,leftTeamData);
 	TextDrawShowForPlayer(playerid,rightTeamData);
@@ -1033,8 +1024,7 @@ ShowRoundStats(playerid)
 
 HideRoundStats(playerid)
 {
-	TextDrawHideForPlayer(playerid,leftRedBG);
-	TextDrawHideForPlayer(playerid,rightBlueBG);
+	TextDrawHideForPlayer(playerid,centerBG);
 	TextDrawHideForPlayer(playerid,timerCenterTD);
 	TextDrawHideForPlayer(playerid,timerCircleTD);
 	TextDrawHideForPlayer(playerid,leftTeamData);

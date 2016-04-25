@@ -58,10 +58,9 @@ new Text: Intro_GoWebsite;
 new Text: Intro_GetStarted;
 new Text: Intro_News;
 
-// - Round Textdraws - credits to Niko_boy for the old design I just tweaked it to be quite lagfree -
+// - Round Textdraws - a mix between bulletproof and attdef textdraws
 
-new Text:leftRedBG;
-new Text:rightBlueBG;
+new Text:centerBG;
 new Text:timerCenterTD, Text:timerCircleTD;
 new Text:leftTeamData;
 new Text:rightTeamData;

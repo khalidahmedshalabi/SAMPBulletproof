@@ -6,7 +6,7 @@
 
 // Team bars constant co-ordinates
 #define TEAMBARS_BAR_START_X		557.00
-#define TEAMBARS_BAR_START_Y		422.00
+#define TEAMBARS_BAR_START_Y		418.00
 #define TEAMBARS_TEXT_START_X		559.00
 #define TEAMBARS_DIFF_Y				14.00
 #define TEAMBARS_ATTACKER_COLOR		0xFF6A5622
