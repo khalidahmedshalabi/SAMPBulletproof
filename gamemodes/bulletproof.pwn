@@ -229,15 +229,15 @@ public OnPlayerRequestClass(playerid, classid)
 			    SendClientMessage(playerid, -1, "{009933}Server account: {FFFFFF}automatically logged in!");
 				LoginPlayer(playerid, res);
 			    db_free_result(res);
-				new teamid = ShouldPlayerBeReadded(playerid);
-			    if(teamid != -1)
-			    {
-			        SpawnConnectedPlayer(playerid, teamid);
-			    }
-			    else
-			    {
-			    	ShowIntroTextDraws(playerid);
-			    	ShowPlayerClassSelection(playerid);
+			    new teamid = ShouldPlayerBeReadded(playerid);
+				if(teamid != -1)
+				{
+					SetTimerEx("SpawnConnectedPlayer", 250, false, "ii", playerid, teamid);
+				}
+				else
+				{
+					ShowIntroTextDraws(playerid);
+   					ShowPlayerClassSelection(playerid);
 				}
 			}
 			else
@@ -250,14 +250,14 @@ public OnPlayerRequestClass(playerid, classid)
 	else
 	{
 	    new teamid = ShouldPlayerBeReadded(playerid);
-	    if(teamid != -1)
-	    {
-	        SpawnConnectedPlayer(playerid, teamid);
-	    }
-	    else
-	    {
-	    	ShowIntroTextDraws(playerid);
-	    	ShowPlayerClassSelection(playerid);
+		if(teamid != -1)
+		{
+			SetTimerEx("SpawnConnectedPlayer", 250, false, "ii", playerid, teamid);
+		}
+		else
+		{
+			ShowIntroTextDraws(playerid);
+			ShowPlayerClassSelection(playerid);
 		}
 	}
 	return 1;
@@ -265,8 +265,12 @@ public OnPlayerRequestClass(playerid, classid)
 
 public OnPlayerRequestSpawn(playerid)
 {
-	OnPlayerRequestClass(playerid, 0);
-	return 0;
+	if(Player[playerid][Spawned] == false)
+	{
+		OnPlayerRequestClass(playerid, 0);
+		return 0;
+	}
+	return 1;
 }
 
 public OnPlayerSpawn(playerid)
@@ -2179,8 +2183,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
             SendClientMessage(playerid, -1, sprintf("{009933}Server account: {FFFFFF}registered your account with the password: %s", inputtext));
 
-            ShowIntroTextDraws(playerid);
-            ShowPlayerClassSelection(playerid);
+            new teamid = ShouldPlayerBeReadded(playerid);
+			if(teamid != -1)
+			{
+				SetTimerEx("SpawnConnectedPlayer", 250, false, "ii", playerid, teamid);
+			}
+			else
+			{
+				ShowIntroTextDraws(playerid);
+				ShowPlayerClassSelection(playerid);
+			}
 
 			Player[playerid][Level] = 0;
 			Player[playerid][Weather] = MainWeather;
@@ -2294,8 +2306,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(db_num_rows(res))
 			{
 				LoginPlayer(playerid, res);
-				ShowIntroTextDraws(playerid);
-				ShowPlayerClassSelection(playerid);
+				new teamid = ShouldPlayerBeReadded(playerid);
+				if(teamid != -1)
+				{
+					SetTimerEx("SpawnConnectedPlayer", 250, false, "ii", playerid, teamid);
+				}
+				else
+				{
+					ShowIntroTextDraws(playerid);
+   					ShowPlayerClassSelection(playerid);
+				}
 			}
 			else
 			{
