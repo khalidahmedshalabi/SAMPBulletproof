@@ -58,7 +58,7 @@ public SendTipMessageToAll()
 		}
 		case 7:
 		{
-			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"");
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"Enter no-clip camera mode with /freecam command.");
 		}
 		case 8:
 		{
