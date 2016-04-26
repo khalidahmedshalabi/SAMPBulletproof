@@ -59,3 +59,22 @@ stock _H_SpawnPlayer(playerid)
 #endif
  
 #define SpawnPlayer _H_SpawnPlayer
+
+// Hook GetPlayerWeaponData to fix a bug: "old weapons with no ammo left are still returned"
+stock _H_GetPlayerWeaponData(playerid, slot, &weapons, &ammo)
+{
+	// This reuses the "slot" variable so we don't have to declare a new one
+	// and can put all the code in a single statement.
+	return
+		slot = GetPlayerWeaponData(playerid, slot, weapons, ammo),
+		weapons = ammo ? weapons : 0,
+		slot;
+}
+
+#if defined _ALS_GetPlayerWeaponData
+	#undef GetPlayerWeaponData
+#else
+	#define _ALS_GetPlayerWeaponData
+#endif
+ 
+#define GetPlayerWeaponData _H_GetPlayerWeaponData
