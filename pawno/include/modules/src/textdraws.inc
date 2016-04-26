@@ -1014,6 +1014,7 @@ ShowRoundStats(playerid)
 	}
 	
 	TextDrawShowForPlayer(playerid,centerBG);
+	TextDrawShowForPlayer(playerid,timerCenterTD);
 	TextDrawShowForPlayer(playerid,timerCircleTD);
 	TextDrawShowForPlayer(playerid,leftTeamData);
 	TextDrawShowForPlayer(playerid,rightTeamData);
