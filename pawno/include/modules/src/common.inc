@@ -487,7 +487,11 @@ public SpawnConnectedPlayer(playerid, team)
 	#if defined _league_included
 	if(LeagueMode)
 	{
-		PlayerTextDrawShow(playerid, PlayerLeagueStatsTD[playerid]);
+		if(Player[playerid][LeagueLogged])
+		{
+			RefreshPlayerLeagueData(playerid);
+			PlayerTextDrawShow(playerid, PlayerLeagueStatsTD[playerid]);
+		}
 	}
 	#endif
 	
