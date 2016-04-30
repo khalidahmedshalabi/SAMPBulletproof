@@ -1324,6 +1324,12 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	}
     if(issuerid != INVALID_PLAYER_ID)
     {
+        if(Player[issuerid][AlreadyDying])
+		{
+			// Dead players cannot cause damage
+		    SetFakeHealthArmour(playerid);
+			return 1;
+		}
         new Float:dist;
 		if(!IsValidHitRange(playerid, issuerid, weaponid, dist) && GetPlayerTeam(issuerid) != GetPlayerTeam(playerid))
 	    {
