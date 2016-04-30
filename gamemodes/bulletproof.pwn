@@ -3682,9 +3682,10 @@ YCMD:matchtips(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display some guidelines about match mode");
 	    return 1;
 	}
-	new str[1440];
+	new str[1561];
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}To enable Match-Mode, press 'Y' in lobby or 'H' (shortcut to /match) in round and most textdraws will be clickable.");
 	strcat(str, "\nOr use /war if you're in a hurry! Moreover, you can click on match textdraws to set team names, score and etc.");
+	strcat(str, "\n"COL_PRIM"# {FFFFFF}Useful match cmds: /teamname, /teamskin, /tr, /cr, /resetscores, /setscore, /roundtime, /cptime, /allvs, /rr");
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}To re-select your weapons in a round, type /gunmenu.");
 	strcat(str, "\n"COL_PRIM"# {FFFFFF}Type /melee to get melee weapons menu while in a round.");
     strcat(str, "\n"COL_PRIM"# {FFFFFF}Want to differentiate your team-mates on radar? Use /playermarkers");
