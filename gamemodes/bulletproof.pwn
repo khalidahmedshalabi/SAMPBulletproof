@@ -9333,18 +9333,15 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	}
 	if(Current == -1)
 	{
-		if(PRESSED(KEY_YES) && Player[playerid][Level] > 1)
+		if(PRESSED(KEY_YES) && Player[playerid][Level] > 1 && GetPlayerVehicleID(playerid) == 0)
 		{
 			EnableMatchInterface(playerid);
 			return 1;
 		}
-		else if(PRESSED(131072))
+		else if(PRESSED(131072) && GetPlayerVehicleID(playerid) == 0)
 		{
-		    if(GetPlayerVehicleID(playerid) == 0)
-		    {
-				ShowEndRoundTextDraw(playerid);
-		    	return 1;
-   			}
+			ShowEndRoundTextDraw(playerid);
+  			return 1;
 		}
 	}
 	return 1;
