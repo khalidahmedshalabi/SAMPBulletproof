@@ -113,7 +113,7 @@ public OnPlayerConnect(playerid)
 	// If there was a problem loading the database, warn them
 	if(sqliteconnection == DB:0)
 	{
-	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}database is not loaded. Make sure 'AAD.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE));
+	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}database is not loaded. Make sure 'BulletproofDatabase.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE));
 	}
 	if(CorrectDatabase == false)
 	{
