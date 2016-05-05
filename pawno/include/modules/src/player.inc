@@ -166,6 +166,7 @@ InitPlayer(playerid)
 	Player[playerid][RequestedClass] = NON;
 	Player[playerid][GunmenuModdingType] = 0;
 	Player[playerid][GunmenuModdingIndex] = 0;
+	Player[playerid][RoundTDStyle] = 0;
 	
     Player[playerid][Logged] = false;
     Player[playerid][IgnoreSpawn] = false;
@@ -310,6 +311,10 @@ LoginPlayer(playerid, DBResult:res)
 	// Load player markers setting
 	db_get_field_assoc(res, "PlayerMarkers", iString, sizeof(iString));
 	Player[playerid][PlayerMarkers] = (strval(iString) == 0 ? false : true);
+	
+	// Load round textdraws style
+	db_get_field_assoc(res, "RoundTDStyle", iString, sizeof(iString));
+	Player[playerid][RoundTDStyle] = strval(iString);
 	
 	// Get current IP address
 	new IP[16];

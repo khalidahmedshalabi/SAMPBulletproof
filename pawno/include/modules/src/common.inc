@@ -26,7 +26,7 @@ public OnPlayerKicked(playerid) {
 forward SendTipMessageToAll();
 public SendTipMessageToAll()
 {
-	switch(random(14))
+	switch(random(15))
 	{
 		case 0:
 		{
@@ -83,6 +83,10 @@ public SendTipMessageToAll()
 		case 13:
 		{
 			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"You can change your skin with /skin while in lobby, DM or duel.");
+		}
+		case 14:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"Switch round textdraws style with {FFFFFF}/style");
 		}
 	}
 	return 1;

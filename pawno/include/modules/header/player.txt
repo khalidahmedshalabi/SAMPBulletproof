@@ -114,8 +114,8 @@ enum PlayerVariables
 	LastWasKnifed,
 	LastKnifeAbuse,
 	bool:InDeathCamera,
-	RequestedClass
-
+	RequestedClass,
+	RoundTDStyle
 }
 new Player[MAX_PLAYERS][PlayerVariables];
 

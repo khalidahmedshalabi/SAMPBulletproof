@@ -644,6 +644,26 @@ ResultTextdrawsCreate()
 
 RoundTextdrawsCreate()
 {
+	leftRedBG = TextDrawCreate		(	335.540924, 	401.283630, "-");
+	TextDrawLetterSize				(	leftRedBG, 		-28.081052, 7.287504);
+	TextDrawAlignment				(	leftRedBG, 		1							);
+	TextDrawColor					(	leftRedBG, 		0x00000011					);
+	TextDrawSetShadow				(	leftRedBG, 		-1							);
+	TextDrawSetOutline				(	leftRedBG, 		0							);
+	TextDrawBackgroundColor			(	leftRedBG, 		0xDE000033					);
+	TextDrawFont					(	leftRedBG, 		1							);
+	TextDrawSetProportional			(	leftRedBG, 		1							);
+
+	rightBlueBG = TextDrawCreate	(	311.741302, 	401.283630, "-"				);
+	TextDrawLetterSize				(	rightBlueBG, 	28.770492, 7.287504			);
+	TextDrawAlignment				(	rightBlueBG, 	1							);
+	TextDrawColor					(	rightBlueBG, 	0x00000011					);
+	TextDrawSetShadow				(	rightBlueBG, 	-1							);
+	TextDrawSetOutline				(	rightBlueBG,	0							);
+	TextDrawBackgroundColor			(	rightBlueBG, 	0x3344FF33					);
+	TextDrawFont					(	rightBlueBG, 	1							);
+	TextDrawSetProportional			(	rightBlueBG, 	1							);
+	
 	centerBG = TextDrawCreate(318.0,431.5,"_");
 	TextDrawUseBox(centerBG,1);
 	TextDrawBoxColor(centerBG,0x0000022);
@@ -1013,7 +1033,13 @@ ShowRoundStats(playerid)
 		TextDrawShowForPlayer(playerid, PauseTD);
 	}
 	
-	TextDrawShowForPlayer(playerid,centerBG);
+	if(Player[playerid][RoundTDStyle] == 0)
+		TextDrawShowForPlayer(playerid,centerBG);
+	else
+	{
+		TextDrawShowForPlayer(playerid,leftRedBG);
+		TextDrawShowForPlayer(playerid,rightBlueBG);
+	}
 	TextDrawShowForPlayer(playerid,timerCenterTD);
 	TextDrawShowForPlayer(playerid,timerCircleTD);
 	TextDrawShowForPlayer(playerid,leftTeamData);
@@ -1025,7 +1051,13 @@ ShowRoundStats(playerid)
 
 HideRoundStats(playerid)
 {
-	TextDrawHideForPlayer(playerid,centerBG);
+	if(Player[playerid][RoundTDStyle] == 0)
+		TextDrawHideForPlayer(playerid,centerBG);
+	else
+	{
+		TextDrawHideForPlayer(playerid,leftRedBG);
+		TextDrawHideForPlayer(playerid,rightBlueBG);
+	}
 	TextDrawHideForPlayer(playerid,timerCenterTD);
 	TextDrawHideForPlayer(playerid,timerCircleTD);
 	TextDrawHideForPlayer(playerid,leftTeamData);

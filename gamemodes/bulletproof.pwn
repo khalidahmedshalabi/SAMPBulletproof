@@ -3821,6 +3821,34 @@ YCMD:clearallaka(playerid, params[], help)
     return 1;
 }
 
+YCMD:style(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "an option to switch the style of round textdraws on your screen");
+	    return 1;
+	}
+	HideRoundStats(playerid);
+	switch(Player[playerid][RoundTDStyle])
+	{
+	    case 0:
+		{
+		    db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Players` SET `RoundTDStyle`=1 WHERE `Name`='%q'", Player[playerid][Name])));
+		    Player[playerid][RoundTDStyle] = 1;
+		    SendClientMessage(playerid, -1, "Round textdraws style changed to new Bulletproof design.");
+		}
+		case 1:
+		{
+			db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Players` SET `RoundTDStyle`=0 WHERE `Name`='%q'", Player[playerid][Name])));
+		    Player[playerid][RoundTDStyle] = 0;
+		    SendClientMessage(playerid, -1, "Round textdraws style changed to old-school design.");
+		}
+	}
+	if(Current != -1)
+	    ShowRoundStats(playerid);
+	return 1;
+}
+
 YCMD:playermarkers(playerid, params[], help)
 {
 	if(help)
