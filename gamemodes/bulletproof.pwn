@@ -3426,14 +3426,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	// League login dialog lock - so that players can't escape the league clan login check
 	if(Player[playerid][MustLeaguePass] == true)
 	{
-	    ShowPlayerDialog(
-			playerid,
-			DIALOG_LEAGUE_LOGIN,
-			DIALOG_STYLE_PASSWORD,
-			"{FFFFFF}League Clan Login","{FFFFFF}Looks like your name is registered in our league system database.\nIf this isn't you, then please quit the game and join with another name or type your league account\nPASSWORD below to continue:",
-			"Login",
-			"Quit"
-		);
+	    ShowPlayerLeagueLoginDialog(playerid);
 		return 1;
 	}
 	#endif
