@@ -218,7 +218,7 @@ public OnPlayerRequestClass(playerid, classid)
 		    GetPlayerIp(playerid, IP, sizeof(IP));
 
 		    // Construct query to check if the player with the same name and IP has connected before to this server
-		    format(Query, sizeof(Query), "SELECT * FROM `Players` WHERE `Name` = '%q' AND `IP` = '%q'", Player[playerid][Name], IP);
+		    format(Query, sizeof(Query), "SELECT * FROM `Players` WHERE `Name` = '%q' AND `IP` = '%s'", Player[playerid][Name], IP);
 
 		    // execute
 			new DBResult:res = db_query(sqliteconnection, Query);
@@ -2184,7 +2184,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new day, month, year;
 			getdate(year, month, day);
 			new query[240];
-			format(query, sizeof(query), "INSERT INTO Players (Name, Password, IP, LastSeen_Day, LastSeen_Month, LastSeen_Year) VALUES('%q', '%q', '%q', %d, %d, %d)", Player[playerid][Name], HashPass, IP, day, month, year);
+			format(query, sizeof(query), "INSERT INTO Players (Name, Password, IP, LastSeen_Day, LastSeen_Month, LastSeen_Year) VALUES('%q', '%q', '%s', %d, %d, %d)", Player[playerid][Name], HashPass, IP, day, month, year);
 			db_free_result(db_query(sqliteconnection, query));
 
             SendClientMessage(playerid, -1, sprintf("{009933}Server account: {FFFFFF}registered your account with the password: %s", inputtext));
