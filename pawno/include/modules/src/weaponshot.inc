@@ -180,6 +180,7 @@ SetHP(playerid, amount)
 		Player[playerid][pHealth] = 0;
 		SetPlayerScore(playerid, 0);
 		SetPlayerHealth(playerid, 65536);
+		SetPlayerArmedWeapon(playerid, 0);
 		SetPlayerArmour(playerid, 0);
 		Player[playerid][pArmour] = 0;
 	}
