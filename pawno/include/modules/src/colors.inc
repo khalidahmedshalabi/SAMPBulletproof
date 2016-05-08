@@ -25,7 +25,7 @@ SaveThemeSettings()
 {
     new query[128];
 
-	format(query, sizeof(query), "UPDATE `Configs` SET `Value` = '%q' WHERE `Option` = 'MainTextColour'", MAIN_TEXT_COLOUR);
+	format(query, sizeof(query), "UPDATE `Configs` SET `Value` = '%s' WHERE `Option` = 'MainTextColour'", MAIN_TEXT_COLOUR);
 	db_free_result(db_query(sqliteconnection, query));
 
 	format(query, sizeof(query), "UPDATE `Configs` SET `Value` = %d WHERE `Option` = 'MainBackgroundColour'", MAIN_BACKGROUND_COLOUR);
