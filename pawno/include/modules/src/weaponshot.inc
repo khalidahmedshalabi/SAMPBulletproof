@@ -164,6 +164,144 @@ SetFakeHealthArmour(playerid)
 	SetAP(playerid, Player[playerid][pArmour]);
 }
 
+IsLegalHit(playerid, issuerid, Float:amount, weaponid)
+{
+	if(Player[playerid][AlreadyDying])
+	{
+		// Dead players cannot be damaged
+		return 0;
+	}
+    if(issuerid != INVALID_PLAYER_ID)
+    {
+        if(Player[issuerid][AlreadyDying])
+		{
+			// Dead players cannot cause damage
+		    SetFakeHealthArmour(playerid);
+			return 0;
+		}
+        new Float:dist;
+		if(!IsValidHitRange(playerid, issuerid, weaponid, dist) && GetPlayerTeam(issuerid) != GetPlayerTeam(playerid))
+	    {
+	    	// Weapon range exceeded
+			SendClientMessage(issuerid, -1, sprintf("{FF0000}Hit out range: {FFFFFF}On: %s / Weapon: %s / Hit range: %.2f / Max range (exceeded): %.2f", Player[playerid][Name], WeaponNames[weaponid], dist, WeaponRanges[weaponid]));
+		    SetFakeHealthArmour(playerid);
+			return 0;
+	    }
+	    if(Player[issuerid][PauseCount] > 4)
+	    {
+	        // Trying to damage while game paused
+	        SendClientMessageToAll(-1, sprintf(""COL_PRIM"Rejected damage caused by {FFFFFF}%s "COL_PRIM"as they've their game paused (timeout/lag expected or pause abuse)", Player[issuerid][Name]));
+	        SetFakeHealthArmour(playerid);
+			return 0;
+	    }
+	    if(!IsValidWeaponDamageAmount(weaponid, amount))
+	    {
+	    	// Invalid weapon damage amount
+		    SetFakeHealthArmour(playerid);
+			return 0;
+	    }
+    }
+    if(Player[playerid][IsAFK])
+	{
+	    /* Players who are in AFK mode should not be damaged */
+	    SetFakeHealthArmour(playerid);
+	    return 0;
+	}
+	if(Player[playerid][Playing])
+	{
+	    if(Player[playerid][OnGunmenu]) // Player is picking weapons from the gunmenu
+		{
+		    /* Players who are picking weapons from gun-menu should not be damaged */
+	    	SetFakeHealthArmour(playerid);
+	    	return 0;
+	 	}
+	    if(weaponid == 49 || weaponid == 50 || (weaponid == 54 && Player[playerid][pArmour] > 0) || (weaponid == 54 && amount <= 10))
+	    {
+	        /* Cancel damage done by vehicle, explosion, heli-blades and collision (equal to or less than 10 only) */
+	    	SetFakeHealthArmour(playerid);
+	        return 0;
+	    }
+	    if(FallProtection == true) // If round fall protection is on and this player is in round
+		{
+			if(weaponid == 54) // If it's a collision (fell from a very high building?)
+			{
+			    SetFakeHealthArmour(playerid);
+		    	return 0;
+			}
+			else // If it's not a collision, then real fire is going on maybe; check if we should turn off protection or not
+			{
+			    if(issuerid != INVALID_PLAYER_ID) // If someone started firing real shots
+				{
+					if(Player[issuerid][Team] != Player[playerid][Team]) // They're not at the same time
+					{
+			    		FallProtection = false; // Turn fall protection off
+					}
+				}
+			}
+		}
+		#if defined _league_included
+		if(LeagueMode)
+		{
+		    if(PlayerShop[playerid][SHOP_NINJA] && weaponid == WEAPON_COLLISION && issuerid == INVALID_PLAYER_ID)
+		    {
+		        /* Player has got ninja style pack from league shop */
+		        SetFakeHealthArmour(playerid);
+		        PlayerShop[playerid][SHOP_NINJA] = false;
+				MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~p~~h~~h~ninja mode off", "You're no longer a ninja! Jump normally!", 3000);
+	    		return 0;
+		    }
+		}
+		#endif
+	}
+	// Weapon bugs check
+ 	if(issuerid == INVALID_PLAYER_ID && (IsBulletWeapon(weaponid) || IsMeleeWeapon(weaponid)))
+	{
+	    SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been forced to relog for having weapon bugs. {FFFFFF}(Most likely Sniper Bug)", Player[playerid][Name]));
+		MessageBox(playerid, MSGBOX_TYPE_MIDDLE, "~r~~h~Sniper Bug", "You likely to have Sniper Bug and a relog is needed", 3000);
+		SetTimerEx("OnPlayerKicked", 500, false, "i", playerid);
+ 		return 0;
+	}
+	// Some checks need to be done if there's a damager
+	if(issuerid != INVALID_PLAYER_ID)
+	{
+	    // Check whether they are in the round and in the same team or not
+		if(Player[issuerid][Playing] == true && (Player[issuerid][Team] == Player[playerid][Team]))
+		{
+			MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "_", sprintf("%s%s ~w~has fired shots at you. Maybe for a reason?", TDC[Player[playerid][Team]], Player[issuerid][NameWithoutTag]), 5000);
+            // Loop through the array that contains playerid's spectators
+			foreach(new i : PlayerSpectators[playerid])
+			{
+                MessageBox(i, MSGBOX_TYPE_BOTTOM, "_", sprintf("%s%s ~w~has fired shots at %s%s", TDC[Player[playerid][Team]], Player[issuerid][NameWithoutTag], TDC[Player[playerid][Team]], Player[playerid][NameWithoutTag]), 5000);
+			}
+
+			MessageBox(issuerid, MSGBOX_TYPE_BOTTOM, "_", sprintf("~w~Watchout! You've fired shots at your team-mate %s%s", TDC[Player[playerid][Team]], Player[playerid][NameWithoutTag]), 5000);
+            // Loop through the array that contains issuerid's spectators
+			foreach(new i : PlayerSpectators[issuerid])
+			{
+                MessageBox(i, MSGBOX_TYPE_BOTTOM, "_", sprintf("~w~This player has fired shots at their team-mate %s%s", TDC[Player[playerid][Team]], Player[playerid][NameWithoutTag]), 5000);
+			}
+
+			PlayerPlaySound(issuerid, 1135, 0.0, 0.0, 0.0);
+        	PlayerPlaySound(playerid, 1135, 0.0, 0.0, 0.0);
+			SetFakeHealthArmour(playerid);
+			return 0;
+		}
+		// If the damaged player is out of the round
+		if(Player[issuerid][Playing] == true && Player[playerid][Playing] == false)
+		{
+		    SetFakeHealthArmour(playerid);
+			return 0;
+		}
+		// If it's a referee trying to do damage
+		if(Player[issuerid][Playing] == true && Player[issuerid][Team] == REFEREE)
+		{
+		    SetFakeHealthArmour(playerid);
+			return 0;
+		}
+ 	}
+	return 1;
+}
+
 SetHP(playerid, amount)
 {
 	new bool:WasPlaying = false;
