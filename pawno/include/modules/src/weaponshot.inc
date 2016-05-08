@@ -234,7 +234,7 @@ SetHP(playerid, amount)
 
 SetAP(playerid, amount)
 {
-	if(amount <= 0.0)
+	if(amount <= 0)
 	{
 	    SetPlayerArmour(playerid, 0.0);
 	    HidePlayerProgressBar(playerid, ArmourBar[playerid]);
@@ -353,111 +353,6 @@ HandleHeadshot(playerid, issuerid, weaponid)
 		}
 	}
 	return 1;
-}
-
-// When a player is knifed (slit throat), actual death has to wait for a few seconds
-// This function is called when the knifing is done and the player must be completely dead
-// Usually called by a timer
-forward ApplyKnifeDeath(playerid);
-public ApplyKnifeDeath(playerid)
-{
-	SetHP(playerid, 0);
-	return 1;
-}
-
-// Yes, the system detects illegal/desynced knifing attempts
-// however it's not 100 percent reliable/accurate and can be
-// bypassed by abusive players, so let's give those some :)
-// >>> When to call: this function is called once a knife abuse is suspected
-CheckKnifeAbuse(playerid)
-{
-	if(GetTickCount() < Player[playerid][LastKnifeAbuse])
-	{
-		new iString[128];
-		format(iString, sizeof(iString),"{FFFFFF}%s "COL_PRIM"has been kicked for abusing knife and causing de-sync.", Player[playerid][Name]);
-		SendClientMessageToAll(-1, iString);
-
-		SetTimerEx("OnPlayerKicked", 100, false, "i", playerid);
-	}
-	else
-	{
-		Player[playerid][LastKnifeAbuse] = GetTickCount() + 10000;
-	}	
-}
-
-// Checks distance, team and last knifing attempts and other things
-// to see if knifing process is legal or not and fixes it (fixes desync)
-forward FixKnifeDesync(playerid, newkeys);
-public FixKnifeDesync(playerid, newkeys)
-{
-	// Invalid players check
-	new targetid = GetPlayerTargetPlayer(playerid);
-	if(targetid == INVALID_PLAYER_ID)
-		return 1;
-	
-	// If they're being knifed already
-	if(GetTickCount() <= Player[targetid][LastWasKnifed])
-		return 1;
-	
-	// Distance check
-	if(GetDistanceBetweenPlayers(playerid, targetid) <= 1.05)
-	{
-		/*
-			The next move seems to fix a 
-			really strange run-time error
-			which usually occurs at this
-			line >>
-				Player[targetid][LastWasKnifed] = GetTickCount() + 7000;
-			Error from crashdetect output >> 
-				Accessing element at index 1321652 past array upper bound 39
-		*/
-		new tmpvv = targetid; 
-		#pragma unused tmpvv
-		// Team check
-		if(GetPlayerTeam(playerid) != GetPlayerTeam(targetid))
-		{
-			if((newkeys & KEY_FIRE))
-			{
-				// Successful knifing
-				Player[targetid][LastWasKnifed] = GetTickCount() + 7000;
-			}
-		}
-		else
-		{
-			// Illegal knifing attempt, cancel it
-			SetPlayerArmedWeapon(playerid, 0);
-			SyncPlayer(playerid);
-		}
-	}
-	else
-	{
-		// Illegal knifing attempt, cancel it
-		SetPlayerArmedWeapon(playerid, 0);
-		SyncPlayer(playerid);
-	}
-	return 1;
-}
-
-// This is a function to stop knife desync from happening
-CheckKnifeSync(playerid, newkeys)
-{
-	// If player is holding a knife and has the knifing animation
-	if(GetPlayerWeapon(playerid) == WEAPON_KNIFE && (GetPlayerAnimationIndex(playerid) == 748 || GetPlayerAnimationIndex(playerid) == 1189))
-	{
-		// Check if keys are the AIM key
-		if(newkeys & KEY_HANDBRAKE)
-		{
-			// They're knifing, let's do the real checks now
-			SetTimerEx("FixKnifeDesync", 30, false, "ii", playerid, newkeys);
-			/*
-				A delay (using timers) is needed here
-				because GetPlayerTargetPlayer returns
-				INVALID_PLAYER_ID when used directly
-				from OnPlayerKeyStateChange which is
-				where CheckKnifeSync is placed
-			*/
-		}
-	}
 }
 
 /*

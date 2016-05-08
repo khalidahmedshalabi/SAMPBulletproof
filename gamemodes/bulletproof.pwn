@@ -1287,28 +1287,8 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 {
     // Show target player info for the shooter (HP, PL, Ping and many other things)
  	ShowTargetInfo(playerid, damagedid);
-    if(GetTickCount() <= Player[playerid][LastWasKnifed])
-	{
-	    /* Players who are being knifed can not be damaged */
-	    return 1;
-	}
     if(amount == 1833.33154296875)
         return 1;
-    // Slit throat with a knife
-    if(amount == 0.0 && GetPlayerAnimationIndex(playerid) == 748 && damagedid != INVALID_PLAYER_ID)
-	{
-	    // Team and distance check
-     	if(GetTickCount() < Player[playerid][LastWasKnifed] || GetDistanceBetweenPlayers(playerid, damagedid) > 1.05 || (Player[damagedid][Team] == Player[playerid][Team] && Player[playerid][Playing] && Player[damagedid][Playing]))
-		{
-		    SetPlayerArmedWeapon(playerid, 0);
-			SyncPlayer(playerid);
-	    	SyncPlayer(damagedid);
-	    	CheckKnifeAbuse(playerid);
-	    	return 1;
-		}
-		OnPlayerTakeDamage(damagedid, playerid, Player[damagedid][pHealth] + Player[damagedid][pArmour], WEAPON_KNIFE, bodypart);
-		return 1;
-	}
 
     //OnPlayerTakeDamage(damagedid, playerid, amount, weaponid, bodypart);
 	return 1;
@@ -1319,7 +1299,6 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	if(Player[playerid][AlreadyDying])
 	{
 		// Dead players cannot be damaged
-	    SetFakeHealthArmour(playerid);
 		return 1;
 	}
     if(issuerid != INVALID_PLAYER_ID)
@@ -1353,12 +1332,6 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	    }
     }
 	// <start> HP Protection for some things
-	if(GetTickCount() <= Player[playerid][LastWasKnifed])
-	{
-	    /* Players who are being knifed can not be damaged */
-	    SetFakeHealthArmour(playerid);
-	    return 1;
-	}
 	if(Player[playerid][IsAFK])
 	{
 	    /* Players who are in AFK mode should not be damaged */
@@ -1440,23 +1413,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
        	    amount = GRENADE_LOW_DAMAGE;
        	}
     }
-    // Slit throat with a knife
-    new bool:KnifeSlitThroat = false;
-    if(GetPlayerAnimationIndex(issuerid) == 748 && issuerid != INVALID_PLAYER_ID)
-	{
-	    // Team and distance check
-	    if(GetTickCount() < Player[playerid][LastWasKnifed] || GetDistanceBetweenPlayers(playerid, issuerid) > 1.05 || (Player[issuerid][Team] == Player[playerid][Team] && Player[playerid][Playing] && Player[issuerid][Playing]))
-		{
-		    SetPlayerArmedWeapon(issuerid, 0);
-			SyncPlayer(issuerid);
-			SyncPlayer(playerid);
-		    SetFakeHealthArmour(playerid);
-		    CheckKnifeAbuse(issuerid);
-		    return 1;
-		}
-		KnifeSlitThroat = true;
-		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"is stabbing and slitting {FFFFFF}%s's "COL_PRIM"throat with a knife", Player[issuerid][Name], Player[playerid][Name]));
-	}
+	// Weapon bugs check
  	if(issuerid == INVALID_PLAYER_ID && (IsBulletWeapon(weaponid) || IsMeleeWeapon(weaponid)))
 	{
 	    SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been forced to relog for having weapon bugs. {FFFFFF}(Most likely Sniper Bug)", Player[playerid][Name]));
@@ -1532,11 +1489,6 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		}
 		else
 		    SetAP(playerid, diff);
-	}
-	// If it's a knife kill (slitting throat)
-	else if(KnifeSlitThroat != false)
-	{
-	    SetTimerEx("ApplyKnifeDeath", 3000, false, "d", playerid);
 	}
 	else // It's not a collision and the player got no armour
 	    SetHP(playerid, Player[playerid][pHealth] - rounded_amount);
@@ -9231,8 +9183,8 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	    TogglePlayerControllable(playerid, 1);
 		return 0;
  	}
+ 	
 	// - Low priority key functions
-    CheckKnifeSync(playerid, newkeys);
 
     if(CheckKeysForWeaponBind(playerid, newkeys, oldkeys) == 1)
 	    return 1;

@@ -160,7 +160,6 @@ InitPlayer(playerid)
     Player[playerid][FightStyle] = 4;
     SetPlayerFightingStyle(playerid, Player[playerid][FightStyle]);
     TargetInfoData[playerid][TargetInfoTimer] = -1;
-	Player[playerid][LastKnifeAbuse] = 0;
 	ChangingSkinOfTeam[playerid] = -1;
 	Player[playerid][LastEnterVehicleAttempt] = 0;
 	Player[playerid][RequestedClass] = NON;
