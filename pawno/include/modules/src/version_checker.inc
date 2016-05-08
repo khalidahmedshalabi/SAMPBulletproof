@@ -41,6 +41,14 @@ public SaveVersionInStr(index, response_code, data[])
 		else // Couldn't connect to the version checker server
 		{
 			printf("Could not connect to the Bulletproof servers to fetch latest version data.");
+			#if defined _league_included
+			if(LeagueAllowed)
+			{
+				LeagueAllowed = false;
+				CancelLeagueMode();
+				db_free_result(db_query(sqliteconnection, "UPDATE Configs SET Value = 0 WHERE Option = 'LeagueAllowed'"));
+			}
+			#endif
 		}
 	}
 	return 1;
