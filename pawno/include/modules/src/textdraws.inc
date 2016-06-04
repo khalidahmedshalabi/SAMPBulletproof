@@ -343,7 +343,7 @@ ResultTextdrawsCreate()
 	TextDrawAlignment          	(	leftUpBG, 		1							);
 	TextDrawColor            	(	leftUpBG, 		0							);
 	TextDrawUseBox            	(	leftUpBG, 		true						);
-	TextDrawBoxColor            (	leftUpBG, 		0x00000066					);
+	TextDrawBoxColor            (	leftUpBG, 		0x00000044					);
 	TextDrawSetShadow          	(	leftUpBG, 		0							);
 	TextDrawSetOutline         	(	leftUpBG, 		0							);
 	TextDrawFont            	(	leftUpBG, 		0							);
@@ -354,7 +354,7 @@ ResultTextdrawsCreate()
 	TextDrawAlignment           (	rightUpBG, 		1							);
 	TextDrawColor            	(	rightUpBG, 		0							);
 	TextDrawUseBox            	(	rightUpBG, 		true						);
-	TextDrawBoxColor            (	rightUpBG, 		0x00000066					);
+	TextDrawBoxColor            (	rightUpBG, 		0x00000044					);
 	TextDrawSetShadow          	(	rightUpBG, 		0							);
 	TextDrawSetOutline     	  	(	rightUpBG, 		0							);
 	TextDrawFont            	(	rightUpBG, 		1							);
@@ -1003,7 +1003,7 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawSetOutline(playerid, DeathMessage[playerid][1], 1);
 	PlayerTextDrawSetProportional(playerid, DeathMessage[playerid][1], 1);
 	PlayerTextDrawUseBox(playerid, DeathMessage[playerid][1], 1);
-	PlayerTextDrawBoxColor(playerid, DeathMessage[playerid][1], 0x00000066);
+	PlayerTextDrawBoxColor(playerid, DeathMessage[playerid][1], 0x00000044);
 	PlayerTextDrawTextSize(playerid, DeathMessage[playerid][1], 794.000000, 271.000000);
 	
 	#if defined _league_included

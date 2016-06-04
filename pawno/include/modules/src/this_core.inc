@@ -101,7 +101,7 @@ InitScriptSecondarySettings()
 	    MatchRoundsRecord[ i ][ round__completed ] = false;
 	}
 	format(MAIN_TEXT_COLOUR, sizeof MAIN_TEXT_COLOUR, "~w~");
-    MAIN_BACKGROUND_COLOUR = 0x00000066;
+    MAIN_BACKGROUND_COLOUR = 0x00000044;
 
 	teamskinlist = LoadModelSelectionMenu("skins.txt");
 	playerskinlist = LoadModelSelectionMenu("skins.txt");
