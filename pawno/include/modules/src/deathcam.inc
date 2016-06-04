@@ -9,7 +9,7 @@ public OnPlayerDeathCameraEnd(playerid)
 {
 	if(!Player[playerid][InDeathCamera])
 		return 0;
-	
+
 	SetPlayerDrunkLevel(playerid, 0);
 	Player[playerid][InDeathCamera] = false;
 	OnPlayerSpawn(playerid);
@@ -48,12 +48,12 @@ PlayDeathCamera(playerid, Float:deathX, Float:deathY, Float:deathZ, bool:deathqu
 {
 	if(Player[playerid][InDeathCamera])
 		return;
-	
+
 	if(deathquote)
 	{
 		ShowPlayerDeathQuote(playerid, DEATH_CAMERA_DURATION);
 	}
-	
+
 	TextDrawShowForPlayer(playerid, RedDeathScreen);
 	// Hide some HUD textdraws
 	PlayerTextDrawHide(playerid, RoundKillDmgTDmg[playerid]);
@@ -63,10 +63,9 @@ PlayDeathCamera(playerid, Float:deathX, Float:deathY, Float:deathZ, bool:deathqu
 	#if defined _league_included
 	PlayerTextDrawHide(playerid, PlayerLeagueStatsTD[playerid]);
 	#endif
-	
+
 	TogglePlayerSpectating(playerid, true);
- 	new randomCameraMove = random(3);
- 	switch(randomCameraMove)
+ 	switch(random(3))
  	{
  		// Look at the dead body at the beginning from a low height and then get higher with the camera slowly while changing X/Y position
 		case 0:
@@ -85,9 +84,9 @@ PlayDeathCamera(playerid, Float:deathX, Float:deathY, Float:deathZ, bool:deathqu
  		}
  	}
  	InterpolateCameraLookAt(playerid, deathX, deathY, deathZ - 0.2, deathX, deathY, deathZ - 0.2, DEATH_CAMERA_DURATION, CAMERA_MOVE);
-	
+
 	SetPlayerDrunkLevel(playerid, 50000);
-	
+
 	Player[playerid][InDeathCamera] = true;
 	SetTimerEx("OnPlayerDeathCameraEnd", DEATH_CAMERA_DURATION, false, "i", playerid);
 	MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "~y~~h~~h~~h~tip", "Press ~r~~h~~h~~k~~PED_FIREWEAPON~ ~w~to skip death camera!", DEATH_CAMERA_DURATION);
