@@ -16,6 +16,7 @@
 #tryinclude "modules\header\league.txt"
 #include "modules\header\weaponbinds.txt"
 #include "modules\header\messagebox.txt"
+#include "modules\header\deathcam.txt"
 
 forward OnPlayerKicked(playerid);
 public OnPlayerKicked(playerid) {
@@ -104,7 +105,7 @@ SendErrorMessage(playerid, text[], messagebox_type = MSGBOX_TYPE_MIDDLE)
 {
 	if(messagebox_type < 0 || messagebox_type == MAX_MSGBOX_TYPES)
 		return 0;
-	
+
 	switch(messagebox_type)
 	{
 		case MSGBOX_TYPE_MIDDLE:
@@ -126,7 +127,7 @@ SendUsageMessage(playerid, text[], messagebox_type = MSGBOX_TYPE_MIDDLE)
 {
 	if(messagebox_type < 0 || messagebox_type == MAX_MSGBOX_TYPES)
 		return 0;
-	
+
 	switch(messagebox_type)
 	{
 		case MSGBOX_TYPE_MIDDLE:
@@ -182,9 +183,9 @@ AutoAFKCheck()
 				RemovePlayerFromRound(i);
 			else if(Player[i][ToAddInRound] == true)
 				Player[i][ToAddInRound] = false;
-			else if(Player[i][Spectating] == true) 
+			else if(Player[i][Spectating] == true)
 				StopSpectate(i);
-			else if(Player[i][InDM] == true) 
+			else if(Player[i][InDM] == true)
 				QuitDM(i);
 
 			Player[i][Team] = NON;
@@ -201,7 +202,7 @@ CreateDeadBody(playerid, killerid, reason, Float:distance = 0.0, Float:x = 0.0, 
 {
 	if(!DeadBodies)
 		return;
-	
+
 	if(x == 0.0 && y == 0.0 && z == 0.0)
 	{
 		GetPlayerPos(playerid, x, y, z);
@@ -253,54 +254,54 @@ DeleteAllDeadBodies()
 {
 	if(!DeadBodies)
 		return;
-	
+
 	if(Iter_Count(DeadBodyLabels) != 0)
 	{
 		foreach(new i : DeadBodyLabels)
 		{
 			Delete3DTextLabel(Text3D:i);
-		}	
+		}
 		Iter_Clear(DeadBodyLabels);
 	}
 	if(Iter_Count(DeadBodyActors) != 0)
 	{
 		foreach(new i : DeadBodyActors)
 			DestroyActor(i);
-			
+
 		Iter_Clear(DeadBodyActors);
 	}
 }
 
 CheckPlayerNet(playerid)
-{	
-	if(Player[playerid][FPS] < Min_FPS && Player[playerid][PauseCount] < 5 && Player[playerid][FPSCheck] == 1) 
+{
+	if(Player[playerid][FPS] < Min_FPS && Player[playerid][PauseCount] < 5 && Player[playerid][FPSCheck] == 1)
 	{
 		Player[playerid][FPSKick] ++;
 		SendClientMessage(playerid, -1, sprintf("{FF756D}Low FPS! Warning %d/7 - use /netcheckme", Player[playerid][FPSKick]));
 
-		if (Player[playerid][FPSKick] == 7) 
+		if (Player[playerid][FPSKick] == 7)
 		{
 			SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been kicked from the server .: {FFFFFF}Low FPS | %d/%d "COL_PRIM":.", Player[playerid][Name], Player[playerid][FPS], Min_FPS));
 			SetTimerEx("OnPlayerKicked", 500, false, "i", playerid);
 		}
-	} 
-	else  
+	}
+	else
 	{
 		Player[playerid][FPSKick] = 0;
 	}
-	
+
 	if(NetStats_PacketLossPercent(playerid) >= Max_Packetloss && Player[playerid][FakePacketRenovation] == false && Player[playerid][PLCheck] == 1)
 	{
 		Player[playerid][PacketKick]++;
 		SendClientMessage(playerid, -1, sprintf("{FF756D}High PL! Warning %d/15 - use /netcheckme", Player[playerid][PacketKick]));
 
-		if(Player[playerid][PacketKick] == 15) 
+		if(Player[playerid][PacketKick] == 15)
 		{
 			SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been kicked from the server .: {FFFFFF}High Packetloss | %.2f/%.2f "COL_PRIM":.", Player[playerid][Name], NetStats_PacketLossPercent(playerid), Max_Packetloss));
 			SetTimerEx("OnPlayerKicked", 500, false, "i", playerid);
-		} 
-	} 
-	else  
+		}
+	}
+	else
 	{
 		Player[playerid][PacketKick] = 0;
 	}
@@ -310,13 +311,13 @@ CheckPlayerNet(playerid)
 		Player[playerid][PingKick]++;
 		SendClientMessage(playerid, -1, sprintf("{FF756D}High Ping! Warning %d/10 - use /netcheckme", Player[playerid][PingKick]));
 
-		if(Player[playerid][PingKick] == 10) 
+		if(Player[playerid][PingKick] == 10)
 		{
 			SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been kicked from the server .: {FFFFFF}High Ping | %d/%d "COL_PRIM":.", Player[playerid][Name], GetPlayerPing(playerid), Max_Ping));
 			SetTimerEx("OnPlayerKicked", 500, false, "i", playerid);
-		} 
-	} 
-	else 
+		}
+	}
+	else
 	{
 		Player[playerid][PingKick] = 0;
 	}
@@ -347,7 +348,7 @@ ShowPlayerClassSelection(playerid)
 	{
 		if(i == playerid)
 			continue;
-			
+
 		switch(Player[i][Team])
 		{
 			case ATTACKER:
@@ -400,11 +401,11 @@ public SpawnConnectedPlayer(playerid, team)
 				}
 				case true:
 				{
-					if(strfind(Player[playerid][Name], TeamName[ATTACKER], true) != -1) 
+					if(strfind(Player[playerid][Name], TeamName[ATTACKER], true) != -1)
 						Player[playerid][Team] = ATTACKER;
-					else if(strfind(Player[playerid][Name], TeamName[DEFENDER], true) != -1) 
+					else if(strfind(Player[playerid][Name], TeamName[DEFENDER], true) != -1)
 						Player[playerid][Team] = DEFENDER;
-					else 
+					else
 						Player[playerid][Team] = GetTeamWithLessPlayers();
 				}
 			}
@@ -430,7 +431,7 @@ public SpawnConnectedPlayer(playerid, team)
 			Player[playerid][Team] = DEFENDER_SUB;
 		}
 	}
-	
+
 	SwitchTeamFix(playerid, false, false);
 	SetPlayerWeather(playerid, Player[playerid][Weather]);
 	SetPlayerTime(playerid, Player[playerid][Time], 0);
@@ -451,7 +452,7 @@ public SpawnConnectedPlayer(playerid, team)
 		}
 	}
 	PlayerTextDrawShow(playerid, BaseID_VS[playerid]);
-	
+
 	switch(PlayerInterface[playerid][INTERFACE_NET])
 	{
 		case true:
@@ -498,7 +499,7 @@ public SpawnConnectedPlayer(playerid, team)
 		}
 	}
 	#endif
-	
+
 	if(WarMode == true)
 	{
 		ShowMatchScoreBoard(playerid);
@@ -512,25 +513,13 @@ public SpawnConnectedPlayer(playerid, team)
 	return 1;
 }
 
-forward HidePlayerDeathMessage(playerid);
-public HidePlayerDeathMessage(playerid)
-{
-    PlayerTextDrawHide(playerid, DeathMessage[playerid][0]);
-    PlayerTextDrawHide(playerid, DeathMessage[playerid][1]);
-	return 1;
-}
-
 ShowPlayerDeathMessage(killerid, playerid)
 {
 	if(!Player[killerid][HasDeathQuote] || !DeathCamera)
 	{
 	    return 0;
 	}
-	PlayerTextDrawSetString(playerid, DeathMessage[playerid][0], sprintf("A death diss from %s", Player[killerid][Name]));
-    PlayerTextDrawSetString(playerid, DeathMessage[playerid][1], sprintf("%s", DeathMessageStr[killerid]));
-	PlayerTextDrawShow(playerid, DeathMessage[playerid][0]);
-    PlayerTextDrawShow(playerid, DeathMessage[playerid][1]);
-    SetTimerEx("HidePlayerDeathMessage", 6000, false, "i", playerid);
+	MessageBox(playerid, MSGBOX_TYPE_MIDDLE, sprintf("%s~h~%s ~w~is dissing you", TDC[Player[killerid][Team]], Player[killerid][Name]), sprintf("%s", DeathMessageStr[killerid]), DEATH_CAMERA_DURATION);
 	return 1;
 }
 
@@ -568,7 +557,7 @@ RecountPlayersOnCP()
 		{
 			if(!Player[i][Spawned])
 				continue;
-			
+
 			TextDrawShowForPlayer(i, timerCircleTD);
 		}
 	}
@@ -663,10 +652,10 @@ ShowTargetInfo(playerid, targetid)
 {
 	if(targetid == INVALID_PLAYER_ID || playerid == INVALID_PLAYER_ID)
 		return 1;
-	
+
 	if(targetid == TargetInfoData[playerid][TargetInfoLastTarget] && GetTickCount() < TargetInfoData[playerid][TargetInfoLastTick])
 		return 1;
-	
+
 	new str[170];
 	if(GetPlayerVehicleID(targetid) == 0)
 	{
@@ -1186,7 +1175,7 @@ sscanf(string[], format[], {Float,_}:...)
 
 OnPlayerAmmoUpdate(playerid) {
 
-	if(Player[playerid][Playing] == true) 
+	if(Player[playerid][Playing] == true)
 	{
 	    new weapons;
 		new Ammo, TotalShots, Float:accuracy;
@@ -1251,17 +1240,17 @@ bool:DoesPlayerHaveWeapon(playerid, weaponid)
 	return false;
 }
 
-RemovePlayerWeapon(playerid, weaponid) 
+RemovePlayerWeapon(playerid, weaponid)
 {
 	if(!DoesPlayerHaveWeapon(playerid, weaponid))
 		return 0;
-	
+
 	new plyWeapons[12];
 	new plyAmmo[12], armedID;
 
 	new wep, ammo;
 	for(new slot = 0; slot != 12; slot++)
-	{	
+	{
 		GetPlayerWeaponData(playerid, slot, wep, ammo);
 
 		if(wep != weaponid)
@@ -1290,16 +1279,16 @@ GetCardinalPoint(Float:degree)
 	// Create string and initialize it to hold the direction text
     new CardinalPoint[11];
 	CardinalPoint[0] = EOS;
-	
+
 	/*
 		From SA:MP wiki
-		
-		"Angles are reversed in GTA:SA; 90 degrees would be 
-		East in the real world, but in GTA:SA 90 degrees is 
+
+		"Angles are reversed in GTA:SA; 90 degrees would be
+		East in the real world, but in GTA:SA 90 degrees is
 		in fact West. North and South are still 0/360 and 180
 	*/
 	degree = 360.0 - degree; // correct conversion
-	
+
     // each cardinal point cover 45degree (45 X 8 = 360)
     if(337.5 <= degree <= 360) strcat(CardinalPoint,"North");
     else if(0 <= degree <= 22.5) strcat(CardinalPoint,"North");
@@ -1357,10 +1346,10 @@ SwapTeams()
 	TempName = TeamName[ATTACKER_SUB];
 	TeamName[ATTACKER_SUB] = TeamName[DEFENDER_SUB];
 	TeamName[DEFENDER_SUB] = TempName;
-	
+
 	UpdateTeamScoreTextDraw();
 	UpdateTeamNameTextDraw();
-	
+
 	// Fix player teams after switching
 	foreach(new i : ToFixSwitch)
 	{
@@ -1401,8 +1390,8 @@ BalanceTeams() {
 			{
 				Player[i][Team] = DEFENDER;
 			    TotalDefenders++;
-			} 
-			else if (tid == 1) 
+			}
+			else if (tid == 1)
 			{
 		 		Player[i][Team] = ATTACKER;
 			    TotalAttackers++;
@@ -1413,14 +1402,14 @@ BalanceTeams() {
 
     new Divisor = floatround((TotalDefenders + TotalAttackers) / 2);
 
-	foreach(new i : Player) 
+	foreach(new i : Player)
 	{
-		if(Player[i][InDuel] == false && (Player[i][Team] == ATTACKER || Player[i][Team] == DEFENDER)) 
+		if(Player[i][InDuel] == false && (Player[i][Team] == ATTACKER || Player[i][Team] == DEFENDER))
 		{
 			new randomnum = random(2);
-			switch(randomnum) 
+			switch(randomnum)
 			{
-				case 0: 
+				case 0:
 				{
 		    		if(TotalDefenders <= Divisor) {
 		       	 		if(Player[i][Team] == ATTACKER) TotalAttackers--;
@@ -1434,15 +1423,15 @@ BalanceTeams() {
 						TotalAttackers++;
 						SwitchTeamFix(i, false, false);
 					}
-				} 
-				case 1: 
+				}
+				case 1:
 				{
 			    	if(TotalAttackers <= Divisor) {
 		        		if(Player[i][Team] == DEFENDER) TotalDefenders--;
 					 	Player[i][Team] = ATTACKER;
 						TotalAttackers++;
 						SwitchTeamFix(i, false, false);
-						
+
 					} else if(TotalDefenders <= Divisor) {
 		       	 		if(Player[i][Team] == ATTACKER) TotalAttackers--;
 						Player[i][Team] = DEFENDER;
@@ -1451,7 +1440,7 @@ BalanceTeams() {
 		    		}
 				}
 			}
-			if(TotalDefenders == TotalAttackers) 
+			if(TotalDefenders == TotalAttackers)
 				break;
 		}
 	}
@@ -1459,7 +1448,7 @@ BalanceTeams() {
 	return 1;
 }
 
-SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true) 
+SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
 {
 	new iString[160];
 	if(message)
@@ -1467,7 +1456,7 @@ SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
 		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has switched to: {FFFFFF}%s", Player[playerid][Name], TeamName[Player[playerid][Team]]);
 		SendClientMessageToAll(-1, iString);
 	}
-	
+
 	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
 	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
 
@@ -1489,7 +1478,7 @@ GetTeamWithLessPlayers()
 	{
 		case -1:
 		{
-			foreach(new i : Player) 
+			foreach(new i : Player)
 			{
 				switch(Player[i][Team])
 				{
@@ -1506,7 +1495,7 @@ GetTeamWithLessPlayers()
 		}
 		default:
 		{
-			foreach(new i : PlayersInRound) 
+			foreach(new i : PlayersInRound)
 			{
 				switch(Player[i][Team])
 				{
@@ -1525,7 +1514,7 @@ GetTeamWithLessPlayers()
     return (defender <= attacker) ? DEFENDER : ATTACKER;
 }
 
-EnableMatchInterface(playerid) 
+EnableMatchInterface(playerid)
 {
 	SelectTextDraw(playerid, 0xFF0000FF);
 	TextDrawShowForPlayer(playerid, LeagueToggleTD);
@@ -1728,7 +1717,7 @@ ClearChat()
 	return 1;
 }
 
-ClearChatForPlayer(playerid) 
+ClearChatForPlayer(playerid)
 {
 	PP_LOOP<10>(SendClientMessage(playerid, -1, " ");)()
 }
@@ -1745,7 +1734,7 @@ bool:IsAirVehicle(vehicleid)
 {
 	if(vehicleid == 0 || vehicleid == INVALID_VEHICLE_ID)
 		return false;
-	
+
 	switch(GetVehicleModel(vehicleid))
 	{
 		case
@@ -1769,7 +1758,7 @@ bool:IsAirVehicle(vehicleid)
 			577,
 			592,
 			593:
-		{	
+		{
 			return true;
 		}
 	}
@@ -1788,7 +1777,7 @@ ClearKillList() {
 	1 to destroy unoccupied vehicles only
 	2 to destroy occupied vehicles only
 */
-DestroyDynamicVehicles(whatvehicles) 
+DestroyDynamicVehicles(whatvehicles)
 {
 	switch(whatvehicles)
 	{
@@ -1868,7 +1857,7 @@ SyncPlayer(playerid)
 	if(AllowStartBase == false) return 1;
 	if(GetPlayerVehicleID(playerid)) return 1;
 	if(Player[playerid][IsAFK] == true || Player[playerid][IsFrozen]) return SendErrorMessage(playerid, "Can't sync while frozen or in AFK mode");
-	
+
 	// Set spectators to re-spectate
 	if(Player[playerid][BeingSpeced])
 		SetTimerEx("ForceRespectate", 1000, false, "i", playerid);
@@ -1930,7 +1919,7 @@ FixVsTextDraw(exception = -1)
 		{
 			if(i == exception)
 				continue;
-			
+
 			switch(Player[i][Team])
 			{
 			    case ATTACKER:
@@ -1950,11 +1939,11 @@ FixVsTextDraw(exception = -1)
 	return 1;
 }
 
-Float:GetDistanceBetweenPlayers(playerid, toplayerid) 
+Float:GetDistanceBetweenPlayers(playerid, toplayerid)
 {
 	if(playerid == INVALID_PLAYER_ID || toplayerid == INVALID_PLAYER_ID)
 		return -1.0;
-	
+
 	new Float:Pos[2][3];
 	GetPlayerPos(playerid, Pos[0][0], Pos[0][1], Pos[0][2]);
 	GetPlayerPos(toplayerid, Pos[1][0], Pos[1][1], Pos[1][2]);
@@ -1982,7 +1971,7 @@ QuitDM(playerid)
 {
 	if(Player[playerid][Playing] == true) return 1;
 	if(Player[playerid][InDM] == false) return 1;
-	
+
     Player[playerid][InDM] = false;
     Player[playerid][DMReadd] = 0;
     SpawnPlayer(playerid);
@@ -2024,12 +2013,12 @@ IsSafeGametext(text[])
 }
 
 // Function written by Slice to help fix vehicle bad modding (tweaked it a little bit)
-IsVehicleComponentLegal(vehiclemodel, componentid) 
+IsVehicleComponentLegal(vehiclemodel, componentid)
 {
 	// These is the only case with componentids > 1191 (saves ~1kb in the array)
 	if (vehiclemodel == 576 && (componentid == 1192 || componentid == 1193))
 		return true;
-	
+
 	new s_LegalMods[][] = {
 		{54273792, 0, 16776704, 7, 0, 0},
 		{35268602, 0, 16776704, 7, 245760, 0},
@@ -2247,7 +2236,7 @@ IsVehicleComponentLegal(vehiclemodel, componentid)
 	if (1000 <= componentid <= 1191 && 400 <= vehiclemodel <= 611) {
 		componentid -= 1000;
 		vehiclemodel -= 400;
-		
+
 		return (s_LegalMods[vehiclemodel][componentid >>> 5] & 1 << (componentid & 31)) || false;
 	}
 	return false;

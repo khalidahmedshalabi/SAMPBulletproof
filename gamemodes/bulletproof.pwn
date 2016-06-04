@@ -6493,17 +6493,17 @@ YCMD:deathdiss(playerid, params[], help)
 {
     if(help)
 	{
-	    SendCommandHelpMessage(playerid, "set a message to be shown for players whom you kill.");
+	    SendCommandHelpMessage(playerid, "set a disrespect message to be shown for players whom you kill.");
 	    return 1;
 	}
-    if(isnull(params)) return SendUsageMessage(playerid,"/deathdiss [Message]");
+    if(isnull(params)) return SendUsageMessage(playerid,"/deathdiss [Disrespect Message]");
 	if(strlen(params) <= 3) return SendErrorMessage(playerid,"Too short!");
-	if(strlen(params) >= 64) return SendErrorMessage(playerid,"Too long!");
+	if(strlen(params) >= 32) return SendErrorMessage(playerid,"Too long!");
 
-	new iString[128];
 	DeathMessageStr[playerid][0] = EOS;
-	strcat(DeathMessageStr[playerid], params, 64);
+	strcat(DeathMessageStr[playerid], params, 32);
 
+    new iString[128];
 	format(iString, sizeof(iString), "UPDATE `Players` SET `DeathMessage` = '%q' WHERE `Name` = '%q'", params, Player[playerid][Name]);
 	db_free_result(db_query(sqliteconnection, iString));
 	Player[playerid][HasDeathQuote] = true;

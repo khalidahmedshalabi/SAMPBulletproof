@@ -1,5 +1,5 @@
 /*
-		All textdraws: Global, per-player and 3D 
+		All textdraws: Global, per-player and 3D
 */
 
 #include "modules\header\weaponshot.txt"
@@ -91,7 +91,7 @@ new Text:attackerNameTD, Text:defenderNameTD;
         Text: leftPlayed	, 	Text: rightPlayed
 
 	;
-	
+
 // - Player Textdraws -
 
 new PlayerText:FPSPingPacket[MAX_PLAYERS]; // Ping, FPS and Packetloss textdraw on top right corner.
@@ -110,5 +110,5 @@ new PlayerText:BaseID_VS[MAX_PLAYERS];
 #if defined _league_included
 new PlayerText:PlayerLeagueStatsTD[MAX_PLAYERS];
 #endif
-new PlayerText:DeathMessage[MAX_PLAYERS][2]; new DeathMessageStr[MAX_PLAYERS][64];
+new DeathMessageStr[MAX_PLAYERS][32];
 new PlayerBar:HealthBar[MAX_PLAYERS], PlayerBar:ArmourBar[MAX_PLAYERS]; // Server-sided health/armour
