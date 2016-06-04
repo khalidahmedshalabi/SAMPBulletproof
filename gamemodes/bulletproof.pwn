@@ -447,63 +447,46 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	}
 	else if(KillerConnected)
 	{
-		new killText[64];
 		switch(reason)
 		{
 		    case WEAPON_KNIFE:
 		    {
-		        format(killText, sizeof(killText), "%sYou knifed %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]);
+		        PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s knifed you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
+		        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou knifed %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
 		    }
 		    case WEAPON_GRENADE:
 		    {
-		        format(killText, sizeof(killText), "%sYou bombed %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]);
+				PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s bombed you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
+		        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou bombed %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
 		    }
 		    default:
-		    {
-				new randomInt = random(4);
-				switch(randomInt)
+			{
+				switch(random(4))
 				{
 				    case 0:
-				        format(killText, sizeof(killText), "%sYou raped %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]);
-		            case 1:
-				        format(killText, sizeof(killText), "%sYou owned %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]);
-		            case 2:
-				        format(killText, sizeof(killText), "%sYou took %s~h~%s%s's life", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name], MAIN_TEXT_COLOUR);
-		            case 3:
-				        format(killText, sizeof(killText), "%sYou sent %s~h~%s%s to cemetery", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name], MAIN_TEXT_COLOUR);
+				    {
+						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s raped you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
+						PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou raped %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
+					}
+					case 1:
+					{
+						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s owned you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
+						PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou owned %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
+					}
+					case 2:
+				    {
+        				PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s murdered you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
+					    PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou murdered %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
+					}
+					case 3:
+					{
+						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s sent you to cemetery", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
+                        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou sent %s~h~%s%s to cemetery", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name], MAIN_TEXT_COLOUR));
+					}
 				}
 			}
 		}
-		PlayerTextDrawSetString(killerid, DeathText[killerid][0], killText);
         PlayerTextDrawShow(killerid, DeathText[killerid][0]);
-
-        switch(reason)
-		{
-		    case WEAPON_KNIFE:
-		    {
-                format(killText, sizeof(killText), "%s~h~%s%s knifed you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR);
-		    }
-		    case WEAPON_GRENADE:
-		    {
-                format(killText, sizeof(killText), "%s~h~%s%s bombed you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR);
-		    }
-		    default:
-		    {
-		        new randomInt = random(4);
-		        switch(randomInt)
-				{
-				    case 0:
-				        format(killText, sizeof(killText), "%s~h~%s%s owned you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR);
-		            case 1:
-				        format(killText, sizeof(killText), "%s~h~%s%s raped you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR);
-		            case 2:
-				        format(killText, sizeof(killText), "%s~h~%s%s murdered you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR);
-		            case 3:
-				        format(killText, sizeof(killText), "%sKilled by %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][Name]);
-				}
-			}
-		}
-        PlayerTextDrawSetString(playerid, DeathText[playerid][1], killText);
         PlayerTextDrawShow(playerid, DeathText[playerid][1]);
 
 	    SetTimerEx("DeathMessageF", 4000, false, "ii", killerid, playerid);
