@@ -13,7 +13,7 @@
 #define DEFENDER_SUB 		5	// Defender sub team
 
 // Game Types
-#define BASE            0		// A game of 2 teams, one defends a checkpoint while the other tries to capture it 
+#define BASE            0		// A game of 2 teams, one defends a checkpoint while the other tries to capture it
 #define ARENA           1		// A game of 2 teams, each team has to eliminate the other to win
 
 // Const
@@ -42,7 +42,7 @@ new Float:TempAirVehicles_Pos[MAX_VEHICLES][3]; // Temporarily store velocity of
 new Iterator:TempAirVehicles<MAX_VEHICLES>; // Temporarily contains IDs of air vehicles when round is paused
 new Iterator:PlayersInRound<MAX_PLAYERS>; // The IDs of players in round (alive/playing) are to be stored in this array
 new ViewTimer; // This is used when viewing a round to players as a countdown
-new Float:ViewBaseCamPos[3]; // Current position of base viewer camera 
+new Float:ViewBaseCamPos[3]; // Current position of base viewer camera
 new PauseCountdown; // Countdown of pause
 new CurrentCPTime; // Current count of checkpoint
 new TeamCapturingCP = NON; // What team is capturing the checkpoint (used in arenas)
@@ -71,7 +71,6 @@ new ElapsedTime;
 new bool:TeamHasLeader[MAX_TEAMS]; // Whether a team has leader or not
 new TeamLeader[MAX_TEAMS]; // Holds the ID of the current team leader
 new TeamDeathIconTimer[MAX_TEAMS]; // Holds the ID of team death map icon destroyer timer
-new bool:DontPauseRound = false; // If set to true, the round will not pause if a player disconnects when match-mode is on.
 
 // String for round results
 new AttList[256];

@@ -7696,8 +7696,6 @@ YCMD:ban(playerid, params[], help)
     format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has banned {FFFFFF}%s "COL_PRIM"| Reason: {FFFFFF}%s", Player[playerid][Name], Player[pID][Name], /*IP,*/ Reason);
 	SendClientMessageToAll(-1, iString);
 
-	DontPauseRound = true;
-
 	format(iString, sizeof(iString), "%s - %s", Player[playerid][Name], Reason);
 	BanEx(pID, iString);
 
@@ -7757,8 +7755,7 @@ YCMD:kick(playerid, params[], help)
 		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has kicked {FFFFFF}%s "COL_PRIM"| Reason: {FFFFFF}%s", Player[playerid][Name], Player[pID][Name], Params[1]);
 		SendClientMessageToAll(-1, iString);
 	}
-
-    DontPauseRound = true;
+	
     SetTimerEx("OnPlayerKicked", 500, false, "i", pID);
     LogAdminCommand("kick", playerid, pID);
 	return 1;

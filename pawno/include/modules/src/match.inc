@@ -11,27 +11,27 @@
 
 hook OnPlayerDisconnect(playerid, reason)
 {
-	// Handle war mode
-    if(WarMode == true)
+    // If this player was in round
+	if(Player[playerid][Playing] == true)
 	{
-		if(Player[playerid][Playing] == true)
-		{
-		    PlayerNoLeadTeam(playerid);
-		    StorePlayerVariables(playerid);
-			if(DontPauseRound == false)
-			{
-				if(AutoPause == true && Current != -1)
-				KillTimer(UnpauseTimer);
-				RoundUnpausing = false;
-				PauseRound();
-				SendClientMessageToAll(-1, ""COL_PRIM"Round has been auto-paused.");
-			}
-			else
-				DontPauseRound = false;
-		}
-		else
-			StorePlayerVariablesMin(playerid);
+        // Reset team leading status
+	    PlayerNoLeadTeam(playerid);
+
+        // Store player data temporarily in case they come back to the game again
+	    StorePlayerVariables(playerid);
+
+        // If configured to pause the round automatically
+		if(AutoPause == true)
+        {
+    		KillTimer(UnpauseTimer);
+    		RoundUnpausing = false;
+    		PauseRound();
+    		SendClientMessageToAll(-1, ""COL_PRIM"Round has been auto-paused.");
+        }
 	}
+	else
+		StorePlayerVariablesMin(playerid);
+
 	// Handle match
  	Iter_Remove(PlayersInRound, playerid);
 	UpdateTeamPlayerCount(Player[playerid][Team], true, playerid);
@@ -58,13 +58,13 @@ public StartRoundAutomatically()
 {
 	if(!AutoRoundStarter || Current != -1 || AllowStartBase == false)
 		return 0;
-	
+
 	new ct[2] = {0, 0};
 	foreach(new i : Player)
 	{
 		if(noclipdata[i][FlyMode] == true || Player[i][InDuel])
-			continue;	
-		
+			continue;
+
 		switch(Player[i][Team])
 		{
 			case ATTACKER:
@@ -84,14 +84,14 @@ public StartRoundAutomatically()
 		SetTimer("StartRoundAutomatically", 60000, false);
 		return 0;
 	}
-	
+
 	BalanceTeams();
 	SendClientMessageToAll(-1, "{FFFFFF}System "COL_PRIM"has balanced the teams!");
-	
+
 	AllowStartBase = false; // Make sure other player or you yourself is not able to start round on top of another round.
-	foreach(new i : Player) 
+	foreach(new i : Player)
 	{
-		if(CanPlay(i)) 
+		if(CanPlay(i))
 		{
 			TogglePlayerControllable(i, 0); // Pause all the players.
 			Player[i][ToAddInRound] = true;
@@ -103,7 +103,7 @@ public StartRoundAutomatically()
 		{
 			new id = DetermineRandomRound(0, true, ARENA);
 			SetTimerEx("OnArenaStart", 2000, false, "i", id);
-			
+
 			new str[144];
 			format(str, sizeof(str), "{FFFFFF}System "COL_PRIM"has randomly started Arena: {FFFFFF}%s (ID: %d)", AName[id], id);
 			SendClientMessageToAll(-1, str);
@@ -112,7 +112,7 @@ public StartRoundAutomatically()
 		{
 			new id = DetermineRandomRound(0, true, BASE);
 			SetTimerEx("OnBaseStart", 2000, false, "i", id);
-			
+
 			new str[144];
 			format(str, sizeof(str), "{FFFFFF}System "COL_PRIM"has randomly started Base: {FFFFFF}%s (ID: %d)", BName[id], id);
 			SendClientMessageToAll(-1, str);
@@ -151,7 +151,7 @@ CheckTeamElimination()
 	// If round is paused or there's no active round at all, we should stop the process
 	if(RoundPaused || Current == -1)
 		return -1;
-	
+
 	// Reset teams player count to 0
 	PlayersAlive[ATTACKER] = 0;
 	PlayersAlive[DEFENDER] = 0;
@@ -185,11 +185,11 @@ CheckTeamElimination()
 		return 0;
 	}
 	// If defender team has no players, attackers win
-	else if(PlayersAlive[DEFENDER] == 0) 
+	else if(PlayersAlive[DEFENDER] == 0)
 	{
 		EndRound(3); // Attackers Win
 		return 0;
-	}	
+	}
 	return 1;
 }
 
@@ -207,7 +207,7 @@ UpdateTeamPlayerCount(teamid, bool:elimination_check, exception = -1)
 	// If there's no active round, we should stop the process
 	if(Current == -1 || (ArenaStarted == false && BaseStarted == false))
 		return;
-	
+
 	// Reset team player count variable
 	PlayersAlive[teamid] = 0;
 	// Loop through players in round
@@ -215,11 +215,11 @@ UpdateTeamPlayerCount(teamid, bool:elimination_check, exception = -1)
 	{
 		if(i == exception)
 			continue;
-		
+
 		// If this player isn't in the team we want to check
 		if(Player[i][Team] != teamid)
 			continue; // Skip this index
-		
+
 		PlayersAlive[teamid] ++; // Increase team player count by 1
 	}
 	// Update round textdraws
@@ -239,7 +239,7 @@ UpdateTeamPlayerCount(teamid, bool:elimination_check, exception = -1)
 		}
 	}
 	// If we're asked to check team/round elimination
-	if(elimination_check) 
+	if(elimination_check)
 	{
 		// If round is not paused
 		if(!RoundPaused)
@@ -247,7 +247,7 @@ UpdateTeamPlayerCount(teamid, bool:elimination_check, exception = -1)
 			// Handle lack of players (or elimination)
 			if(PlayersAlive[ATTACKER] == 0)
 				EndRound(2); // Defenders Win
-			else if(PlayersAlive[DEFENDER] == 0) 
+			else if(PlayersAlive[DEFENDER] == 0)
 				EndRound(3); // Attackers Win
 		}
 	}
@@ -261,7 +261,7 @@ UpdateTeamHP(teamid, exception = -1)
 	// If there's no active round, this call is a waste
 	if(Current == -1 || (ArenaStarted == false && BaseStarted == false))
 		return;
-	
+
 	// Reset team hp variable
 	TeamHP[teamid] = 0;
 	// Loop through players playing current round
@@ -269,11 +269,11 @@ UpdateTeamHP(teamid, exception = -1)
 	{
 		if(i == exception)
 			continue;
-		
+
 		// If he isn't in the specified team
 		if(Player[i][Team] != teamid)
 			continue; // Skip this index
-		
+
 		// Add total HP of this player (at this index) to team total HP
 		TeamHP[teamid] += Player[i][pHealth] + Player[i][pArmour];
 	}
@@ -348,12 +348,12 @@ public GameLoopCallback()
 							CurrentCPTime --;
 							format(str, sizeof(str), "~w~%d:%02d / ~r~~h~%d", RoundMints,	RoundSeconds, CurrentCPTime );
 							TextDrawSetString(timerCenterTD , str);
-							
+
 							if(CurrentCPTime == 0)
 								return EndRound(0); // Attackers Win
 						}
 					}
-					
+
 				}
 			}
 		}
@@ -380,7 +380,7 @@ public GameLoopCallback()
 						PlayerTextDrawShow(i, AreaCheckTD[i]);
 						PlayerTextDrawShow(i, AreaCheckBG[i]);
 
-						if(Player[i][OutOfArena] == 0) 
+						if(Player[i][OutOfArena] == 0)
 						{
 							SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has been removed for not staying in Arena. {FFFFFF}(%d | %d)", Player[i][Name], Player[i][pHealth], Player[i][pArmour]));
 
@@ -409,14 +409,14 @@ public GameLoopCallback()
 			{
 				if( GameType == ARENA )
 				{
-					if(RoundPaused == false) 
+					if(RoundPaused == false)
 					{
 						RoundSeconds--;
-						if(RoundSeconds <= 0) 
+						if(RoundSeconds <= 0)
 						{
 							RoundSeconds = 59;
 							RoundMints--;
-							if(RoundMints < 0) 
+							if(RoundMints < 0)
 							{
 								if(TeamHP[ATTACKER] < TeamHP[DEFENDER]) EndRound(2);
 								else if(TeamHP[DEFENDER] < TeamHP[ATTACKER]) EndRound(3);
@@ -472,7 +472,7 @@ StartGameLoop()
 {
 	if(GameLoop != -1)
 		return 0;
-	
+
 	GameLoop = SetTimer("GameLoopCallback", 1000, true);
 	return 1;
 }
@@ -481,7 +481,7 @@ KillGameLoop()
 {
 	if(GameLoop == -1)
 		return;
-	
+
 	KillTimer(GameLoop);
 	GameLoop = -1;
 }
@@ -501,16 +501,16 @@ ForgetPlayedBases()
 
 /*
 	DOES: Generate a random ID to start a round
-	
+
 	PARAMETERS:
 	mode: 0 for int and ext, 1 interior only, 2 exterior only
 	ignore: false to skip already played bases, true to ignore that
 	type: ARENA for arena, BASE for base, ...
-	
+
 	RETURN:
 	Random ID of mode to start
 	or -1 if an error occurred
-	
+
 	NOTE:
 	If arenas/bases created are not much enough, this function just returns the last created base/arena or 0.
 */
@@ -522,15 +522,15 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 		{
 			if(TotalArenas <= 1)
 				return TotalArenas;
-			
-			switch(mode) 
+
+			switch(mode)
 			{
-				case 0: // Exterior and interior 
+				case 0: // Exterior and interior
 				{
-					new 
+					new
 						timesSearched, // How many times we searched for an arena
 						id = random(MAX_ARENAS); // Generate a random ID
-						
+
 					switch(ignore)
 					{
 						case false: // If we're told not to ignore arenas that's already been played
@@ -542,7 +542,7 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							// WHILE arena is already played or doesn't exist, and we haven't searched all arenas yet
 							// only then this loop will be going, if any of those statements above are false
 							// the loop will break out
-							while((IsArenaPlayed[id] || !AExist[id]) && timesSearched < TotalArenas) 
+							while((IsArenaPlayed[id] || !AExist[id]) && timesSearched < TotalArenas)
 							{
 								id = random(MAX_ARENAS); // Generate another ID randomly
 								timesSearched ++; // We searched so increase the count by one
@@ -568,7 +568,7 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							// WHILE arena doesn't exist, and we haven't searched all arenas yet
 							// only then this loop will be going, if any of those statements above are false
 							// the loop will break out
-							while(!AExist[id] && timesSearched < TotalArenas) 
+							while(!AExist[id] && timesSearched < TotalArenas)
 							{
 								id = random(MAX_ARENAS); // Generate another ID randomly
 								timesSearched ++; // We searched so increase the count by one
@@ -586,13 +586,13 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							return id;
 						}
 					}
-				} 
+				}
 				case 1: // Interior only
 				{
-					new 
+					new
 						timesSearched, // How many times we searched for an arena
 						id = random(MAX_ARENAS); // Generate a random ID
-						
+
 					switch(ignore)
 					{
 						case false: // If we're told not to ignore arenas that's already been played
@@ -601,11 +601,11 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							// Will only happen if all arenas are already played.
 							RedoSearch:
 							timesSearched = 0; // We haven't searched yet so initialize it with the value 0
-							// WHILE arena is already played or doesn't exist or isn't in interior, and we 
+							// WHILE arena is already played or doesn't exist or isn't in interior, and we
 							// haven't searched all arenas yet
 							// only then this loop will be going, if any of those statements above are false
 							// the loop will break out
-							while((IsArenaPlayed[id] || !AExist[id] || AInterior[id] == 0) && timesSearched < TotalArenas) 
+							while((IsArenaPlayed[id] || !AExist[id] || AInterior[id] == 0) && timesSearched < TotalArenas)
 							{
 								id = random(MAX_ARENAS); // Generate another ID randomly
 								timesSearched ++; // We searched so increase the count by one
@@ -628,11 +628,11 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							// Will only happen if all arenas are already played.
 							RedoSearch:
 							timesSearched = 0; // We haven't searched yet so initialize it with the value 0
-							// WHILE arena doesn't exist or is not in an interior, and we haven't searched 
+							// WHILE arena doesn't exist or is not in an interior, and we haven't searched
 							// all arenas yet
 							// only then this loop will be going, if any of those statements above are false
 							// the loop will break out
-							while((!AExist[id] || AInterior[id] == 0) && timesSearched < TotalArenas) 
+							while((!AExist[id] || AInterior[id] == 0) && timesSearched < TotalArenas)
 							{
 								id = random(MAX_ARENAS); // Generate another ID randomly
 								timesSearched ++; // We searched so increase the count by one
@@ -650,13 +650,13 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							return id;
 						}
 					}
-				} 
+				}
 				case 2: // Exterior only
 				{
-					new 
+					new
 						timesSearched, // How many times we searched for an arena
 						id = random(MAX_ARENAS); // Generate a random ID
-						
+
 					switch(ignore)
 					{
 						case false: // If we're told not to ignore arenas that's already been played
@@ -665,11 +665,11 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							// Will only happen if all arenas are already played.
 							RedoSearch:
 							timesSearched = 0; // We haven't searched yet so initialize it with the value 0
-							// WHILE arena is already played or doesn't exist or is in interior, and we 
+							// WHILE arena is already played or doesn't exist or is in interior, and we
 							// haven't searched all arenas yet
 							// only then this loop will be going, if any of those statements above are false
 							// the loop will break out
-							while((IsArenaPlayed[id] || !AExist[id] || AInterior[id] != 0) && timesSearched < TotalArenas) 
+							while((IsArenaPlayed[id] || !AExist[id] || AInterior[id] != 0) && timesSearched < TotalArenas)
 							{
 								id = random(MAX_ARENAS); // Generate another ID randomly
 								timesSearched ++; // We searched so increase the count by one
@@ -692,11 +692,11 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							// Will only happen if all arenas are already played.
 							RedoSearch:
 							timesSearched = 0; // We haven't searched yet so initialize it with the value 0
-							// WHILE arena doesn't exist or is in an interior, and we haven't searched 
+							// WHILE arena doesn't exist or is in an interior, and we haven't searched
 							// all arenas yet
 							// only then this loop will be going, if any of those statements above are false
 							// the loop will break out
-							while((!AExist[id] || AInterior[id] != 0) && timesSearched < TotalArenas) 
+							while((!AExist[id] || AInterior[id] != 0) && timesSearched < TotalArenas)
 							{
 								id = random(MAX_ARENAS); // Generate another ID randomly
 								timesSearched ++; // We searched so increase the count by one
@@ -721,15 +721,15 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 		{
 			if(TotalBases <= 1)
 				return TotalBases;
-			
-			switch(mode) 
+
+			switch(mode)
 			{
-				case 0: // Exterior and interior 
+				case 0: // Exterior and interior
 				{
-					new 
+					new
 						timesSearched, // How many times we searched for a base
 						id = random(MAX_BASES); // Generate a random ID
-						
+
 					switch(ignore)
 					{
 						case false: // If we're told not to ignore bases that's already been played
@@ -741,7 +741,7 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							// WHILE base is already played or doesn't exist, and we haven't searched all bases yet
 							// only then this loop will be going, if any of those statements above are false
 							// the loop will break out
-							while((IsBasePlayed[id] || !BExist[id]) && timesSearched < TotalBases) 
+							while((IsBasePlayed[id] || !BExist[id]) && timesSearched < TotalBases)
 							{
 								id = random(MAX_BASES); // Generate another ID randomly
 								timesSearched ++; // We searched so increase the count by one
@@ -767,7 +767,7 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							// WHILE base doesn't exist, and we haven't searched all bases yet
 							// only then this loop will be going, if any of those statements above are false
 							// the loop will break out
-							while(!BExist[id] && timesSearched < TotalBases) 
+							while(!BExist[id] && timesSearched < TotalBases)
 							{
 								id = random(MAX_BASES); // Generate another ID randomly
 								timesSearched ++; // We searched so increase the count by one
@@ -785,13 +785,13 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							return id;
 						}
 					}
-				} 
+				}
 				case 1: // Interior only
 				{
-					new 
+					new
 						timesSearched, // How many times we searched for a base
 						id = random(MAX_BASES); // Generate a random ID
-						
+
 					switch(ignore)
 					{
 						case false: // If we're told not to ignore bases that's already been played
@@ -800,11 +800,11 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							// Will only happen if all bases are already played.
 							RedoSearch:
 							timesSearched = 0; // We haven't searched yet so initialize it with the value 0
-							// WHILE base is already played or doesn't exist or isn't in interior, and we 
+							// WHILE base is already played or doesn't exist or isn't in interior, and we
 							// haven't searched all bases yet
 							// only then this loop will be going, if any of those statements above are false
 							// the loop will break out
-							while((IsBasePlayed[id] || !BExist[id] || BInterior[id] == 0) && timesSearched < TotalBases) 
+							while((IsBasePlayed[id] || !BExist[id] || BInterior[id] == 0) && timesSearched < TotalBases)
 							{
 								id = random(MAX_BASES); // Generate another ID randomly
 								timesSearched ++; // We searched so increase the count by one
@@ -827,11 +827,11 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							// Will only happen if all bases are already played.
 							RedoSearch:
 							timesSearched = 0; // We haven't searched yet so initialize it with the value 0
-							// WHILE base doesn't exist or is not in an interior, and we haven't searched 
+							// WHILE base doesn't exist or is not in an interior, and we haven't searched
 							// all bases yet
 							// only then this loop will be going, if any of those statements above are false
 							// the loop will break out
-							while((!BExist[id] || BInterior[id] == 0) && timesSearched < TotalBases) 
+							while((!BExist[id] || BInterior[id] == 0) && timesSearched < TotalBases)
 							{
 								id = random(MAX_BASES); // Generate another ID randomly
 								timesSearched ++; // We searched so increase the count by one
@@ -849,13 +849,13 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							return id;
 						}
 					}
-				} 
+				}
 				case 2: // Exterior only
 				{
-					new 
+					new
 						timesSearched, // How many times we searched for an base
 						id = random(MAX_BASES); // Generate a random ID
-						
+
 					switch(ignore)
 					{
 						case false: // If we're told not to ignore bases that's already been played
@@ -864,11 +864,11 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							// Will only happen if all bases are already played.
 							RedoSearch:
 							timesSearched = 0; // We haven't searched yet so initialize it with the value 0
-							// WHILE base is already played or doesn't exist or is in interior, and we 
+							// WHILE base is already played or doesn't exist or is in interior, and we
 							// haven't searched all bases yet
 							// only then this loop will be going, if any of those statements above are false
 							// the loop will break out
-							while((IsBasePlayed[id] || !BExist[id] || BInterior[id] != 0) && timesSearched < TotalBases) 
+							while((IsBasePlayed[id] || !BExist[id] || BInterior[id] != 0) && timesSearched < TotalBases)
 							{
 								id = random(MAX_BASES); // Generate another ID randomly
 								timesSearched ++; // We searched so increase the count by one
@@ -891,11 +891,11 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 							// Will only happen if all arenas are already played.
 							RedoSearch:
 							timesSearched = 0; // We haven't searched yet so initialize it with the value 0
-							// WHILE arena doesn't exist or is in an interior, and we haven't searched 
+							// WHILE arena doesn't exist or is in an interior, and we haven't searched
 							// all arenas yet
 							// only then this loop will be going, if any of those statements above are false
 							// the loop will break out
-							while((!BExist[id] || BInterior[id] != 0) && timesSearched < TotalBases) 
+							while((!BExist[id] || BInterior[id] != 0) && timesSearched < TotalBases)
 							{
 								id = random(MAX_BASES); // Generate another ID randomly
 								timesSearched ++; // We searched so increase the count by one
@@ -930,7 +930,7 @@ public UnpauseRound()
 	{
 		foreach(new i : PlayersInRound)
 			PlayerPlaySound(i, 1056, 0.0, 0.0, 0.0);
-			
+
 		new iString[40];
 		format(iString, sizeof(iString), "~g~~h~Round resuming in ~r~~h~%d", PauseCountdown);
 		TextDrawSetString(PauseTD, iString);
@@ -946,7 +946,7 @@ public UnpauseRound()
 				TogglePlayerControllable(i, 1);
 			else
 				TogglePlayerControllable(i, 0);
-			
+
 			if(!Player[i][ToGiveParachute])
 				SetPlayerArmedWeapon(i, 0);
 			else
@@ -972,7 +972,7 @@ public UnpauseRound()
 		}
 		KillTimer(PauseAirVehicles_Timer);
 		Iter_Clear(TempAirVehicles);
-		
+
 		KillTimer(TipTimerDuringPause);
 		TipTimerDuringPause = -1;
 	}
@@ -984,34 +984,34 @@ public PauseAirVehicles_Handler()
 {
 	if(Iter_Count(TempAirVehicles) == 0)
 		return KillTimer(PauseAirVehicles_Timer);
-	
+
 	foreach(new i : TempAirVehicles)
-		SetVehiclePos(i, TempAirVehicles_Pos[i][0], TempAirVehicles_Pos[i][1], TempAirVehicles_Pos[i][2]);	
+		SetVehiclePos(i, TempAirVehicles_Pos[i][0], TempAirVehicles_Pos[i][1], TempAirVehicles_Pos[i][2]);
 	return 1;
 }
 
-PauseRound() 
+PauseRound()
 {
 	new airVehiclesFound = 0;
 	foreach(new g : DynamicVehicle)
-	{	
+	{
 		if(IsAirVehicle(g))
 		{
 			airVehiclesFound ++;
 			GetVehiclePos(g, TempAirVehicles_Pos[g][0], TempAirVehicles_Pos[g][1], TempAirVehicles_Pos[g][2]);
 			Iter_Add(TempAirVehicles, g);
 			continue;
-		}	
+		}
 		GetVehicleVelocity(g, VehicleVelc[g][0], VehicleVelc[g][1], VehicleVelc[g][2]);
 	}
 	if(airVehiclesFound != 0)
 		PauseAirVehicles_Timer = SetTimer("PauseAirVehicles_Handler", 50, true);
-	
+
 	if(TipTimerDuringPause != -1)
 		KillTimer(TipTimerDuringPause);
-	
+
 	TipTimerDuringPause = SetTimer("SendTipMessageToAll", 15000, false);
-	
+
 	foreach(new i : PlayersInRound)
 	{
 		TogglePlayerControllable(i, 0);
@@ -1129,17 +1129,17 @@ ResetTeamLeaders()
 }
 
 forward EndTeamBackupRequest(playerid, iconid);
-public EndTeamBackupRequest(playerid, iconid) 
+public EndTeamBackupRequest(playerid, iconid)
 {
 	new team = Player[playerid][Team];
 	TeamHelp[team] = false;
 	Player[playerid][AskingForHelp] = false;
-	
-	foreach(new i : Player) 
+
+	foreach(new i : Player)
 	{
 		RemovePlayerMapIcon(i, iconid);
 	}
-	
+
 	if(TeamHasLeader[team] == true && TeamLeader[team] == playerid)
 	    PlayerLeadTeam(playerid, true, false);
 	else
@@ -1154,22 +1154,22 @@ public EndTeamBackupRequest(playerid, iconid)
 PlayerRequestBackup(playerid)
 {
 	new team = Player[playerid][Team];
-	
+
 	// Check if there's someone in their team already requesting backup
 	if(TeamHelp[team])
 		return 0; // fail
-	
+
 	// Calculate the player's total HP
 	new totHP = Player[playerid][pHealth] + Player[playerid][pArmour];
-	
+
 	// Get the player's facing angle
 	new Float:facingAngle;
 	GetPlayerFacingAngle(playerid, facingAngle);
-	
+
 	// Get player's position
 	new Float:x, Float:y, Float:z;
 	GetPlayerPos(playerid, x, y, z);
-	
+
 	// Find how many players are in range
 	new enemiesCt = 0;
 	foreach(new i : PlayersInRound)
@@ -1186,28 +1186,28 @@ PlayerRequestBackup(playerid)
 	}
 	// Inform the player that their backup request is a success
 	SendClientMessage(playerid, -1, sprintf("{%s}[HELP] {FFFFFF}You have requested for backup.", (team == ATTACKER) ? ("FF6666" ): ("9999FF")));
-	
+
 	// Get map icon id based off the team which the player is in
 	new iconID = (team == DEFENDER) ? DEFENDER_BACKUP_ICON : ATTACKER_BACKUP_ICON;
-	
+
 	// Set map icon for the player in the location where they requested backup
 	SetPlayerMapIcon(playerid, iconID, x, y, z, 19, 0, MAPICON_GLOBAL);
-	
+
 	// Create a variable to hold request backup message
 	new str[144];
-	
+
 	// Format backup request message to send it later
 	format(str, sizeof(str), "{%s}[HELP] %s {FFFFFF}needs backup [Heading %s | HP %d | Enemies: %d]", (team == ATTACKER) ? ("FF6666") : ("9999FF"), Player[playerid][Name], GetCardinalPoint(facingAngle), totHP, enemiesCt);
-	
+
 	// This is for players who use colored markers (via /playermarkers)
 	new specialStr[144];
-	
+
 	// Send backup request message to all teammates
 	foreach(new i : PlayersInRound)
 	{
 		if(i == playerid)
 			continue;
-		
+
 		if(Player[i][Team] == team)
 		{
 			if(!Player[i][PlayerMarkers])
@@ -1217,34 +1217,34 @@ PlayerRequestBackup(playerid)
 				format(specialStr, sizeof specialStr, "%s[HELP] %s {FFFFFF}needs backup [Heading %s | HP %d | Enemies: %d]", GetColor(GetPlayerCorrectMarkerCol(playerid, i)), Player[playerid][Name], GetCardinalPoint(facingAngle), totHP, enemiesCt);
 				SendClientMessage(i, -1, specialStr);
 			}
-		
+
 			PlayerPlaySound(i,1137,0.0,0.0,0.0);
 			SetPlayerMapIcon(i, iconID, x, y, z, 19, 0, MAPICON_GLOBAL);
 		}
 	}
-	
+
 	// Set the player's color
 	SetPlayerColor(playerid, team == ATTACKER ? ATTACKER_ASKING_HELP : DEFENDER_ASKING_HELP);
-	
+
 	// Set a timer to end backup request later
 	SetTimerEx("EndTeamBackupRequest", 7000, 0, "ii", playerid, iconID);
-	
+
 	// Set values to tell that this team has someone requesting for backup now
 	TeamHelp[team] = true;
 	Player[playerid][AskingForHelp] = true;
-	
+
 	// Fix the players radar
 	RadarFix(playerid);
-	
+
 	// Update the team bar so that its color changes
 	UpdatePlayerTeamBar(playerid);
 	return 1; // success
 }
 
 forward RemoveTeamDeathMapIcon(teamid, iconid);
-public RemoveTeamDeathMapIcon(teamid, iconid) 
+public RemoveTeamDeathMapIcon(teamid, iconid)
 {
-	foreach(new i : Player) 
+	foreach(new i : Player)
 	{
 		RemovePlayerMapIcon(i, iconid);
 	}
@@ -1254,10 +1254,10 @@ public RemoveTeamDeathMapIcon(teamid, iconid)
 CreateTeamDeathMapIcon(teamid, Float:x, Float:y, Float:z)
 {
 	new iconID = (teamid == DEFENDER) ? DEFENDER_DEATH_ICON : ATTACKER_DEATH_ICON;
-	
+
 	if(TeamDeathIconTimer[teamid] != -1)
 		KillTimer(TeamDeathIconTimer[teamid]);
-	
+
 	TeamDeathIconTimer[teamid] = SetTimerEx("RemoveTeamDeathMapIcon", 5000, false, "ii", teamid, iconID);
 	foreach(new i : PlayersInRound)
 	{
@@ -1312,7 +1312,7 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
 	for(new i = 0; i < 13; i++){
 		GetPlayerWeaponData(ToReplaceID, i, Weapons[i], Ammo[i]);
 	}
-	
+
 	Player[ToAddID][Playing] = true;
 	Player[ToAddID][WasInBase] = true;
 	Iter_Add(PlayersInRound, ToAddID);
@@ -1349,7 +1349,7 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
 	{
 		SetCPForPlayer(ToAddID);
 	}
-	
+
 	CreatePlayerTeamBar(ToAddID);
 	ShowTeamBarsForPlayer(ToAddID);
 	UpdateTeamPlayerCount(Player[ToAddID][Team], false);
@@ -1434,7 +1434,7 @@ public OnPlayerInGameReplace(ToAddID, i, playerid) {
 }
 
 /* Note:
-	set remove_iterator to false if you're using this in a loop 
+	set remove_iterator to false if you're using this in a loop
 	and safely remove, for example
 
 	foreach(new i : PlayersInRound)
@@ -1449,7 +1449,7 @@ RemovePlayerFromRound(playerid, bool:remove_iterator = true)
 	if(remove_iterator)
 		Iter_Remove(PlayersInRound, playerid);
 
-	if(Current != -1) 
+	if(Current != -1)
 	{
 	    OnPlayerLeaveCheckpoint(playerid);
 	}
@@ -1469,7 +1469,7 @@ RemovePlayerFromRound(playerid, bool:remove_iterator = true)
 		CheckLeagueMatchValidity(1000);
 	}
 	#endif
-	
+
 	DisablePlayerCheckpoint(playerid);
 	SetPlayerScore(playerid, 0);
 	HideDialogs(playerid);
@@ -1479,7 +1479,7 @@ RemovePlayerFromRound(playerid, bool:remove_iterator = true)
 
 	ResetPlayerGunmenu(playerid, false);
 	PlayerNoLeadTeam(playerid);
-	
+
 	SpawnPlayer(playerid);
 	return 1;
 }
@@ -1502,7 +1502,6 @@ public OnRCStart()
 {
 	AutoAFKCheck(); // Checks all players and set idle players to afk mode
 	RCArena = true;
-	DontPauseRound = false;
 	new ArenaID = 72; // That's the ID of the RC arena (interior)
 	ClearKillList(); // Clears the kill-list.
     DestroyDynamicVehicles(1); // Destroys vehicles
@@ -1514,7 +1513,7 @@ public OnRCStart()
     ServerLastPlayedType = 0;
 
 	ElapsedTime = 0;
-	
+
 	TeamCapturingCP = NON;
 	PlayersInCP = 0;
  	ElapsedTime = 0;
@@ -1524,10 +1523,10 @@ public OnRCStart()
 	{
 		if(!Player[i][Spawned])
 			continue;
-		
+
 		TextDrawShowForPlayer(i, timerCircleTD);
 	}
-	
+
 	ResetGunmenuSelections();
 
     new iString[32];
@@ -1536,17 +1535,17 @@ public OnRCStart()
 	TextDrawSetString( rightTeamData, "_");
 	TextDrawSetString( centerTeamNames, "_");
 	TextDrawSetString( timerCenterTD, "_");
-	
+
 	CPZone = GangZoneCreate(ACPSpawn[Current][0]-50, ACPSpawn[Current][1]-50, ACPSpawn[Current][0]+50, ACPSpawn[Current][1]+50);
 	GangZoneShowForAll(CPZone, 0xFF000044);
-	
+
 	foreach(new i : Player)
 	{
 	    Player[i][LastVehicle] = -1;
 		Player[i][WasInCP] = false;
 
 		ShowRoundStats(i);
-		
+
 
 	    if(Player[i][ToAddInRound] == true)
 		{
@@ -1569,7 +1568,7 @@ public OnRCStart()
 		}
 		PlayerTextDrawSetString(i, BaseID_VS[i], iString);
 	}
-	
+
 	ArenaZone = GangZoneCreate(AMin[Current][0],AMin[Current][1],AMax[Current][0],AMax[Current][1]);
 	format(iString, sizeof(iString), "mapname RC: %d", Current);
 	SendRconCommand(iString);
@@ -1595,14 +1594,14 @@ public OnRCStart()
 forward ViewRCForPlayers();
 public ViewRCForPlayers()
 {
-	if(ViewTimer == 0) 
+	if(ViewTimer == 0)
 	{
 	    SpawnPlayersInRC();
 	    ResetTeamLeaders();
 		TextDrawSetString(centerTeamNames, " ");
 	    return 1;
 	}
-	
+
 	new iString[64];
 	format(iString,sizeof(iString),"~w~RC starting in ~r~~h~%d ~w~seconds", ViewTimer);
 	TextDrawSetString( centerTeamNames, iString);
@@ -1636,9 +1635,9 @@ SpawnPlayersInRC()
 	ClearChat();
 	SendClientMessageToAll(-1, sprintf(""COL_PRIM"RC Battlefield started: {FFFFFF}%s (ID: %d)", AName[Current], Current));
 	new iString[160];
-	foreach(new i : Player) 
+	foreach(new i : Player)
 	{
-	    if(Player[i][ToAddInRound] == true) 
+	    if(Player[i][ToAddInRound] == true)
 		{
 	        if(Player[i][Spectating] == true) StopSpectate(i);
 
@@ -1647,7 +1646,7 @@ SpawnPlayersInRC()
 				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", i, NetStats_PacketLossPercent(i), false);
 				Player[i][FakePacketRenovation] = true;
 			}
-			
+
 	        Player[i][Playing] = true;
 	        Player[i][WasInBase] = true;
 			Player[i][WasInTeam] = Player[i][Team];
@@ -1689,7 +1688,7 @@ SpawnPlayersInRC()
 			if(RoundPaused == false) TogglePlayerControllable(i, 1);
 			else TogglePlayerControllable(i, 0);
             Player[i][ToAddInRound] = false;
-			
+
 			format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][TotalDamage]);
 			PlayerTextDrawSetString(i, RoundKillDmgTDmg[i], iString);
 		}
@@ -1697,7 +1696,7 @@ SpawnPlayersInRC()
 
 	RoundMints = ConfigRoundTime;
 	RoundSeconds = 0;
-	
+
 	if(CheckTeamElimination() != 0)
 	{
 		foreach(new i:Player)
@@ -1739,14 +1738,13 @@ public OnArenaStart(ArenaID)
 	DeleteAllDeadBodies();
 	GameType = ARENA;
 	RCArena = false;
-	DontPauseRound = false;
 	Current = ArenaID; // Current will be the ID of the base that we just started. We do this so that we can use this ID later on (e.g. check /car command for the use).
     ClearKillList(); // Clears the kill-list.
     ServerLastPlayed = Current;
     ServerLastPlayedType = 0;
 
 	ElapsedTime = 0;
-	
+
 	TeamCapturingCP = NON;
 	PlayersInCP = 0;
  	ElapsedTime = 0;
@@ -1756,10 +1754,10 @@ public OnArenaStart(ArenaID)
 	{
 		if(!Player[i][Spawned])
 			continue;
-		
+
 		TextDrawShowForPlayer(i, timerCircleTD);
 	}
-	
+
 	ResetGunmenuSelections();
 
     new iString[32];
@@ -1768,17 +1766,17 @@ public OnArenaStart(ArenaID)
 	TextDrawSetString( rightTeamData, "_");
 	TextDrawSetString( centerTeamNames, "_");
 	TextDrawSetString( timerCenterTD, "_");
-	
+
 	CPZone = GangZoneCreate(ACPSpawn[Current][0]-50, ACPSpawn[Current][1]-50, ACPSpawn[Current][0]+50, ACPSpawn[Current][1]+50);
 	GangZoneShowForAll(CPZone, 0xFF000044);
-	
+
 	foreach(new i : Player)
 	{
 	    Player[i][LastVehicle] = -1;
 		Player[i][WasInCP] = false;
 
 		ShowRoundStats(i);
-		
+
 
 	    if(Player[i][ToAddInRound] == true)
 		{
@@ -1802,7 +1800,7 @@ public OnArenaStart(ArenaID)
 		}
 		PlayerTextDrawSetString(i, BaseID_VS[i], iString);
 	}
-	
+
 	ArenaZone = GangZoneCreate(AMin[Current][0],AMin[Current][1],AMax[Current][0],AMax[Current][1]);
 	format(iString, sizeof(iString), "mapname Arena: %d", Current);
 	SendRconCommand(iString);
@@ -1829,14 +1827,14 @@ public OnArenaStart(ArenaID)
 forward ViewArenaForPlayers();
 public ViewArenaForPlayers()
 {
-	if(ViewTimer == 0) 
+	if(ViewTimer == 0)
 	{
 	    SpawnPlayersInArena();
 	    ResetTeamLeaders();
 		TextDrawSetString(centerTeamNames, " ");
 	    return 1;
 	}
-	
+
 	new iString[64];
 	format(iString,sizeof(iString),"~w~Arena starting in ~r~~h~%d ~w~seconds", ViewTimer);
 	TextDrawSetString( centerTeamNames, iString);
@@ -1870,9 +1868,9 @@ SpawnPlayersInArena()
 	ClearChat();
 	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Arena has completely started: {FFFFFF}%s (ID: %d)", AName[Current], Current));
 	new iString[160];
-	foreach(new i : Player) 
+	foreach(new i : Player)
 	{
-	    if(Player[i][ToAddInRound] == true) 
+	    if(Player[i][ToAddInRound] == true)
 		{
 	        if(Player[i][Spectating] == true) StopSpectate(i);
 
@@ -1881,7 +1879,7 @@ SpawnPlayersInArena()
 				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", i, NetStats_PacketLossPercent(i), false);
 				Player[i][FakePacketRenovation] = true;
 			}
-			
+
 	        Player[i][Playing] = true;
 	        Player[i][WasInBase] = true;
 			Player[i][WasInTeam] = Player[i][Team];
@@ -1899,7 +1897,7 @@ SpawnPlayersInArena()
 			SetAP(i, RoundAR);
 			SetHP(i, RoundHP);
 			CreatePlayerTeamBar(i);
-			
+
 			SetCPForPlayer(i);
 
 			switch(Player[i][Team]) {
@@ -1929,7 +1927,7 @@ SpawnPlayersInArena()
 			if(RoundPaused == false) TogglePlayerControllable(i, 1);
 			else TogglePlayerControllable(i, 0);
             Player[i][ToAddInRound] = false;
-			
+
 			format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][TotalDamage]);
 			PlayerTextDrawSetString(i, RoundKillDmgTDmg[i], iString);
 		}
@@ -1937,7 +1935,7 @@ SpawnPlayersInArena()
 
 	RoundMints = ConfigRoundTime;
 	RoundSeconds = 0;
-	
+
 	if(CheckTeamElimination() != 0)
 	{
 		foreach(new i:Player)
@@ -1982,13 +1980,13 @@ public AddPlayerToArena(playerid)
 		DestroyVehicle(Player[playerid][LastVehicle]);
 		Player[playerid][LastVehicle] = -1;
 	}
-	
+
 	if(!Player[playerid][FakePacketRenovation] && Player[playerid][NetCheck] && NetStats_GetConnectedTime(playerid) < 300000)
 	{
 		SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", playerid, NetStats_PacketLossPercent(playerid), false);
 		Player[playerid][FakePacketRenovation] = true;
 	}
-	
+
     Player[playerid][Playing] = true;
     Player[playerid][WasInBase] = true;
 	Player[playerid][WasInTeam] = Player[playerid][Team];
@@ -2040,7 +2038,7 @@ public AddPlayerToArena(playerid)
 	        SetPlayerTeam(playerid, 3);
 		}
 	}
-	
+
 	#if defined _league_included
 	if(LeagueAllowed)
 	{
@@ -2050,7 +2048,7 @@ public AddPlayerToArena(playerid)
 
 	if(RoundPaused == false) TogglePlayerControllable(playerid, 1);
 	else TogglePlayerControllable(playerid, 0);
-	
+
 	if(!RCArena)
 		ShowPlayerGunmenu(playerid, 500);
 	else
@@ -2083,7 +2081,6 @@ public OnBaseStart(BaseID)
 	DeleteAllDeadBodies();
 	GameType = BASE;
 	RCArena = false;
-	DontPauseRound = false;
 	Current = BaseID; // Current will be the ID of the base that we just started. We do this so that we can use this ID later on (e.g. check /car command for the use).
    	ClearKillList(); // Clears the kill-list.
     ServerLastPlayed = Current;
@@ -2098,10 +2095,10 @@ public OnBaseStart(BaseID)
 	{
 		if(!Player[i][Spawned])
 			continue;
-		
+
 		TextDrawShowForPlayer(i, timerCircleTD);
 	}
-	
+
 	ResetGunmenuSelections();
 
     new iString[32];
@@ -2111,15 +2108,15 @@ public OnBaseStart(BaseID)
 	TextDrawSetString( rightTeamData, "_");
 	TextDrawSetString( centerTeamNames, "_");
 	TextDrawSetString( timerCenterTD, "_");
-	
+
 	ViewBaseCamPos[0] = BCPSpawn[Current][0];
 	ViewBaseCamPos[1] = BCPSpawn[Current][1];
 	ViewBaseCamPos[2] = BCPSpawn[Current][2];
 	ViewTimer = 9;
-	
+
 	CPZone = GangZoneCreate(BCPSpawn[Current][0]-50, BCPSpawn[Current][1]-50, BCPSpawn[Current][0]+50, BCPSpawn[Current][1]+50);
 	GangZoneShowForAll(CPZone, 0xFF000044);
-	
+
 	foreach(new i : Player) {
 		Player[i][LastVehicle] = -1;
 
@@ -2178,17 +2175,17 @@ public ViewBaseForPlayers()
 {
 	if(Current == -1)
 		return 1;
-	
-	if(ViewTimer == 0) 
+
+	if(ViewTimer == 0)
 	{
 	    SpawnPlayersInBase();
 	    ResetTeamLeaders();
 		TextDrawSetString(centerTeamNames, " ");
 	    return 1;
 	}
-	
+
 	new Float:LastCamPos[3];
-		
+
 	switch(ViewTimer)
 	{
 		case 9:
@@ -2199,8 +2196,8 @@ public ViewBaseForPlayers()
 			ViewBaseCamPos[0] = BCPSpawn[Current][0] + 50.0;
 			ViewBaseCamPos[1] = BCPSpawn[Current][1] - 20.0;
 			ViewBaseCamPos[2] = BCPSpawn[Current][2] + 70.0;
-			
-			foreach(new i : Player) 
+
+			foreach(new i : Player)
 			{
 				if(Player[i][ToAddInRound] == true)
 				{
@@ -2218,8 +2215,8 @@ public ViewBaseForPlayers()
 			ViewBaseCamPos[0] = BCPSpawn[Current][0] - 20.0;
 			ViewBaseCamPos[1] = BCPSpawn[Current][1] + 50.0;
 			ViewBaseCamPos[2] = BCPSpawn[Current][2] + 15.0;
-			
-			foreach(new i : Player) 
+
+			foreach(new i : Player)
 			{
 				if(Player[i][ToAddInRound] == true)
 				{
@@ -2237,8 +2234,8 @@ public ViewBaseForPlayers()
 			ViewBaseCamPos[0] = BCPSpawn[Current][0] + 5.0;
 			ViewBaseCamPos[1] = BCPSpawn[Current][1] - 5.0;
 			ViewBaseCamPos[2] = BCPSpawn[Current][2] + 3.0;
-			
-			foreach(new i : Player) 
+
+			foreach(new i : Player)
 			{
 				if(Player[i][ToAddInRound] == true)
 				{
@@ -2250,7 +2247,7 @@ public ViewBaseForPlayers()
 		}
 		default:
 		{
-			foreach(new i : Player) 
+			foreach(new i : Player)
 			{
 				if(Player[i][ToAddInRound] == true)
 					PlayerPlaySound(i,1139,0.0,0.0,0.0);
@@ -2271,7 +2268,7 @@ SpawnPlayersInBase()
 	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Base has completely started: {FFFFFF}%s (ID: %d)", BName[Current], Current));
 	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Current base set: {FFFFFF}%s. "COL_PRIM"Type {FFFFFF}/loadbases "COL_PRIM"to switch base sets!", CurrentBaseSet));
 	new iString[160];
-	foreach(new i : Player) 
+	foreach(new i : Player)
 	{
 	    if(Player[i][ToAddInRound] == true)
 		{
@@ -2281,7 +2278,7 @@ SpawnPlayersInBase()
     			Player[i][DMReadd] = 0;
 			}
 
-            if(Player[i][Spectating] == true) 
+            if(Player[i][Spectating] == true)
 				StopSpectate(i);
 
 			if(!Player[i][FakePacketRenovation] && Player[i][NetCheck] && NetStats_GetConnectedTime(i) < 300000)
@@ -2289,7 +2286,7 @@ SpawnPlayersInBase()
 				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", i, NetStats_PacketLossPercent(i), false);
 				Player[i][FakePacketRenovation] = true;
 			}
-			
+
 	        Player[i][Playing] = true;
 	        Player[i][WasInBase] = true;
 			Player[i][WasInTeam] = Player[i][Team];
@@ -2326,7 +2323,7 @@ SpawnPlayersInBase()
 				} case DEFENDER: {
 			        if(BInterior[Current] == 0) SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], BDefenderSpawn[Current][0] + random(6), BDefenderSpawn[Current][1] + random(6), BDefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 					else  SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], BDefenderSpawn[Current][0] + random(2), BDefenderSpawn[Current][1] + random(2), BDefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
-					
+
 					Player[i][IgnoreSpawn] = true;
 					SetCPForPlayer(i);
 					SetPlayerColor(i, DEFENDER_PLAYING);
@@ -2341,7 +2338,7 @@ SpawnPlayersInBase()
 			if(RoundPaused == false) TogglePlayerControllable(i, 1);
 			else TogglePlayerControllable(i, 0);
 			Player[i][ToAddInRound] = false;
-			
+
 			format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][TotalDamage]);
 			PlayerTextDrawSetString(i, RoundKillDmgTDmg[i], iString);
 		}
@@ -2400,7 +2397,7 @@ public AddPlayerToBase(playerid)
 		Player[playerid][RoundDamage] = 0;
 	    Player[playerid][shotsHit] = 0;
 	}
-	
+
 	if(!Player[playerid][FakePacketRenovation] && Player[playerid][NetCheck] && NetStats_GetConnectedTime(playerid) < 300000)
 	{
 		SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", playerid, NetStats_PacketLossPercent(playerid), false);
@@ -2458,7 +2455,7 @@ public AddPlayerToBase(playerid)
 		CheckLeagueMatchValidity(1000);
 	}
 	#endif
-	
+
 	if(RoundPaused == false) TogglePlayerControllable(playerid, 1);
 	else TogglePlayerControllable(playerid, 0);
 
@@ -2517,7 +2514,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 
 	PlayersAlive[ATTACKER] = 0;
 	PlayersAlive[DEFENDER] = 0;
-	
+
 	PlayersDead[ATTACKER] = 0;
 	PlayersDead[DEFENDER] = 0;
 
@@ -2525,34 +2522,34 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	GangZoneDestroy(ArenaZone);
 
 	new iString[256], TopString[3][128];
-	
+
 	TextDrawHideForAll(EN_CheckPoint);
 
 	#if defined _league_included
 	new winnerid = -1;
 	#endif
-	if(WinID == 0 || WinID == 3 ||  WinID == 5) 
+	if(WinID == 0 || WinID == 3 ||  WinID == 5)
 	{
 		format(iString, sizeof(iString), "~n~~r~~h~%s ~w~Won The Round", TeamName[ATTACKER]);
 		#if defined _league_included
 		winnerid = ATTACKER;
 		#endif
 		if(WarMode == true) TeamScore[ATTACKER]++;
-	} 
-	else if(WinID == 1 || WinID == 2 || WinID == 6) 
+	}
+	else if(WinID == 1 || WinID == 2 || WinID == 6)
 	{
 		format(iString, sizeof(iString), "~n~~b~~h~%s ~w~Won The Round", TeamName[DEFENDER]);
 		#if defined _league_included
 		winnerid = DEFENDER;
 		#endif
 		if(WarMode == true) TeamScore[DEFENDER]++;
- 	} 
-	else if(WinID == 4) 
+ 	}
+	else if(WinID == 4)
 	{
 		iString = "~n~~w~No One Won, Same Team HPs";
 	}
 	TextDrawSetString(topTextScore, iString);
-	
+
 	UpdateTeamScoreTextDraw();
 	UpdateTeamNameTextDraw();
 
@@ -2580,14 +2577,14 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	    aalive, dalive
 	;
 
-	foreach(new i : Player) 
+	foreach(new i : Player)
 	{
 		HideRoundStats(i);
-		if(Player[i][Spawned] == true) 
+		if(Player[i][Spawned] == true)
 		{
-			if(Player[i][WasInBase] == true) 
+			if(Player[i][WasInBase] == true)
 			{
-				if(Player[i][Playing] == true) 
+				if(Player[i][Playing] == true)
 				{
 					OnPlayerAmmoUpdate(i);
 
@@ -2649,7 +2646,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 			}
 			Player[i][WasInCP] = false;
 			Player[i][ToAddInRound] = false;
-			if(Player[i][Spectating] == true) 
+			if(Player[i][Spectating] == true)
 				StopSpectate(i);
 			Player[i][WasInBase] = false;
 			Player[i][WasInTeam] = NON;
@@ -2669,16 +2666,16 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 
 			if(Player[i][InDeathCamera])
 				OnPlayerDeathCameraEnd(i);
-			
-			if(Player[i][Playing] == true) 
+
+			if(Player[i][Playing] == true)
 			{
 				Player[i][Playing] = false;
 				SpawnPlayer(i);
 				PlayerTextDrawHide(i, DeathText[i][0]);
 				PlayerTextDrawHide(i, DeathText[i][1]);
 			}
-			
-			if(Player[i][InDuel] == false) 
+
+			if(Player[i][InDuel] == false)
 				ShowEndRoundTextDraw(i);
 			DisablePlayerCheckpoint(i);
 			SetPlayerScore(i, 0);
@@ -2686,7 +2683,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 			HidePlayerGunmenu(i);
 		}
 	}
-	
+
 	for(new i=0; i < SAVE_SLOTS; ++i) {
 		if(strlen(SaveVariables[i][pName]) > 2 && Current == SaveVariables[i][RoundID] && SaveVariables[i][CheckScore] == true) {
 	    	playerScores[index][player_Score] = SaveVariables[i][RDamage];
@@ -2778,7 +2775,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
     if( topAccID >= 0 ) format( iString, sizeof(iString) , "%s~w~~h~Top Acc: %s~h~~h~%s ~w~~h~%d%%", iString, TDC[playerScores[topAccID][player_Team]], names[topAccID] , topAcc  );
 	else format( iString, sizeof(iString) , "%s~w~~h~Top Acc: None", iString );
 	TextDrawSetString( leftTop, iString );
-	
+
     iString = "";
 
     switch( WinID )
@@ -2789,7 +2786,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 		case 5: format( iString, sizeof(iString), "~r~~h~~h~%s ~w~captured the ~r~~h~~h~Checkpoint", TeamName[ATTACKER]);
 		case 6: format( iString, sizeof(iString), "~b~~h~~h~%s ~w~captured the ~b~~h~~h~Checkpoint", TeamName[DEFENDER]);
 	}
-	
+
 	TextDrawSetString( teamWonHow, iString);
 	TextDrawSetString(leftNames, AttList);
 	TextDrawSetString(leftKills, AttKills);
@@ -2815,15 +2812,15 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	SendClientMessageToAll(-1, TopString[1]);
 	SendClientMessageToAll(-1, TopString[2]);
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
-	
+
 	#if defined _league_included
 	UpdateOnlineMatchesList(WarMode);
 	if(LeagueMode)
-	{	
+	{
 		OnLeagueRoundEnd();
 	}
 	#endif
-	
+
 	AllowStartBase = false;
 
 	if(WarMode == true) {
@@ -2861,9 +2858,9 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 
 	if(AutoRoundStarter)
 		SetRoundAutoStart(20);
-	
+
     SetTimer("NotEndingRound", 3000, false);
-	
+
 	switch(random(4))
 	{
 		case 2:
@@ -2879,16 +2876,16 @@ public WarEnded()
     ClearKillList(); // Clears the kill-list.
 
 	new iString[256], TopString[3][128];
-	
-    if(TeamScore[ATTACKER] > TeamScore[DEFENDER]) 
+
+    if(TeamScore[ATTACKER] > TeamScore[DEFENDER])
 	{
  		format(iString, sizeof(iString),"~r~%s ~w~Won The Match~n~~r~%s ~h~%d		~b~~h~%s ~h~%d", TeamName[ATTACKER], TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
-	} 
-	else if(TeamScore[DEFENDER] > TeamScore[ATTACKER]) 
+	}
+	else if(TeamScore[DEFENDER] > TeamScore[ATTACKER])
 	{
 	    format(iString,sizeof(iString),"~b~~h~%s ~w~Won The Match~n~~b~~h~%s ~h~%d		~r~%s ~h~%d", TeamName[DEFENDER], TeamName[DEFENDER], TeamScore[DEFENDER], TeamName[ATTACKER], TeamScore[ATTACKER]);
-	} 
-	else 
+	}
+	else
 	{
 	    format(iString,sizeof(iString),"~w~No One Won The Match~n~~r~%s ~h~%d		~b~~h~%s ~h~%d", TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
 	}
@@ -2926,9 +2923,9 @@ public WarEnded()
 	;
 
 
-	foreach(new i : Player) 
+	foreach(new i : Player)
 	{
-		if(Player[i][TotalDamage] > 0) 
+		if(Player[i][TotalDamage] > 0)
 		{
 			playerScores[index][player_Score] = Player[i][TotalDamage];
 			playerScores[index][player_Team] = Player[i][Team];
@@ -3041,7 +3038,7 @@ public WarEnded()
     if( topAccID >= 0 ) format( iString, sizeof(iString) , "%s~w~~h~Top Acc: %s~h~~h~%s ~w~~h~%d%%", iString, TDC[playerScores[topAccID][player_Team]], names[topAccID] , topAcc  );
 	else format( iString, sizeof(iString) , "%s~w~~h~Top Acc: None", iString );
 	TextDrawSetString( leftTop, iString );
-	
+
 	TextDrawSetString(leftPlayed, AttPlayed );
 	TextDrawSetString(leftNames, AttList);
 	TextDrawSetString(leftKills, AttKills);
@@ -3068,7 +3065,7 @@ public WarEnded()
 	SendClientMessageToAll(-1, TopString[1]);
 	SendClientMessageToAll(-1, TopString[2]);
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
-	
+
 	#if defined _league_included
 	UpdateOnlineMatchesList(false);
 	if(LeagueMode)
