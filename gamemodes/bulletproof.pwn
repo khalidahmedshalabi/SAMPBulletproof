@@ -7476,7 +7476,7 @@ YCMD:addme(playerid, params[], help)
 	if(WarMode == true) return SendErrorMessage(playerid, "Cannot do this when match mode is enabled.");
 	if(Player[playerid][Playing] == true) return SendErrorMessage(playerid,"You're already playing.");
 	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"You cannot use this command while in a duel.");
-	if(ElapsedTime > 20) return SendErrorMessage(playerid, "It's late. You cannot add yourself now.");
+	if(ElapsedTime > 60) return SendErrorMessage(playerid, "It's late. You cannot add yourself now.");
 	    
     Player[playerid][Team] = GetTeamWithLessPlayers();
  	SwitchTeamFix(playerid, false, false);
