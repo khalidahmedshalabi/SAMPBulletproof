@@ -7687,6 +7687,10 @@ YCMD:ban(playerid, params[], help)
 	if(sscanf(params, "ds", pID, Reason)) return SendUsageMessage(playerid,"/ban [Player ID] [Reason]");
 
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isn't connected.");
+	
+	if(Player[pID][Level] >= Player[playerid][Level])
+	    return SendErrorMessage(playerid, "Cannot ban someone of the same admin level as you or higher.");
+	
 	if(strlen(Reason) > 128) return SendErrorMessage(playerid,"Reason is too big.");
 
     format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has banned {FFFFFF}%s "COL_PRIM"| Reason: {FFFFFF}%s", Player[playerid][Name], Player[pID][Name], /*IP,*/ Reason);
@@ -7738,6 +7742,9 @@ YCMD:kick(playerid, params[], help)
 	new pID = strval(Params[0]);
 
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isn't connected.");
+	
+	if(Player[pID][Level] >= Player[playerid][Level])
+	    return SendErrorMessage(playerid, "Cannot kick someone of the same admin level as you or higher.");
 
 	new bool:GiveReason;
 	if(isnull(Params[1])) GiveReason = false;
