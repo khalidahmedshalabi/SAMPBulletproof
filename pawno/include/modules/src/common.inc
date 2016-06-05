@@ -27,7 +27,7 @@ public OnPlayerKicked(playerid) {
 forward SendTipMessageToAll();
 public SendTipMessageToAll()
 {
-	switch(random(15))
+	switch(random(16))
 	{
 		case 0:
 		{
@@ -88,6 +88,10 @@ public SendTipMessageToAll()
 		case 14:
 		{
 			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"Switch round textdraws style with {FFFFFF}/style");
+		}
+		case 15:
+		{
+			SendClientMessageToAll(-1, ""COL_TIP_PRIM"Tips: "COL_TIP"Check {FFFFFF}/leaguecmds "COL_TIP"to know stuff about League.");
 		}
 	}
 	return 1;
