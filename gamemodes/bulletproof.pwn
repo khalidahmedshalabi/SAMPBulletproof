@@ -445,7 +445,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	        SendDeathMessage(INVALID_PLAYER_ID, playerid, reason);
 	    }
 	}
-	else if(KillerConnected)
+	else
 	{
 		switch(reason)
 		{
@@ -614,9 +614,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	// If he's spectating, stop it
  	if(Player[playerid][Spectating])
 	    StopSpectate(playerid);
-	if(Current == -1)
-		HideRoundStats(playerid);
-
+	    
 	if(!Player[playerid][InDeathCamera])
 	{
 		OnPlayerSpawn(playerid);
