@@ -18,15 +18,15 @@ TIMER(UpdateInfoForSpectators)
 {
 	if(Iter_Count(AllSpectators) == 0)
 		return 0;
-	
+
 	new specStr[235], specid;
 	foreach(new i : AllSpectators)
 	{
 		specid = Player[i][IsSpectatingID];
 		format(specStr, sizeof(specStr),"%s%s ~r~~h~%d~n~~n~%s(%d) (~r~~h~%d%s)~n~FPS: ~r~~h~%d %sPing: ~r~~h~%d~n~%sPacket-Loss: ~r~~h~%.1f~n~%sKills: ~r~~h~%d~n~%sDamage: ~r~~h~%d~n~%sTotal Dmg: ~r~~h~%d",
-			MAIN_TEXT_COLOUR, Player[specid][Name], specid, MAIN_TEXT_COLOUR, Player[specid][pArmour], Player[specid][pHealth], MAIN_TEXT_COLOUR, GetPlayerFPS(specid), MAIN_TEXT_COLOUR, GetPlayerPing(specid), 
+			MAIN_TEXT_COLOUR, Player[specid][Name], specid, MAIN_TEXT_COLOUR, Player[specid][pArmour], Player[specid][pHealth], MAIN_TEXT_COLOUR, GetPlayerFPS(specid), MAIN_TEXT_COLOUR, GetPlayerPing(specid),
 			MAIN_TEXT_COLOUR, NetStats_PacketLossPercent(specid), MAIN_TEXT_COLOUR, Player[specid][RoundKills], MAIN_TEXT_COLOUR, Player[specid][RoundDamage], MAIN_TEXT_COLOUR, Player[specid][TotalDamage]);
-			
+
 		#if defined _league_included
 		format(specStr, sizeof specStr, "%s~n~%sPoints: ~r~~h~%d/%d", specStr, MAIN_TEXT_COLOUR, GetPlayerLeagueRoundPoints(specid), GetPlayerLeagueTotalPoints(specid));
 		#endif
@@ -43,7 +43,7 @@ InitSpectate()
 	SetTimer("UpdateInfoForSpectators", UPDATE_SPECINFO_INTERVAL, true); // start timer to update the textdraws of spectators
 	return 1;
 }
-	
+
 // This will empty the iteration array that holds the IDs of the spectators of this player
 // This will be used to initialize spectate mode for a player when they connect to the server
 InitPlayerSpectate(playerid)
@@ -56,7 +56,7 @@ HandleSpectatedPlayerDisconnect(playerid)
 {
 	if(!Player[playerid][BeingSpeced])
 		return 0;
-	
+
 	printf("HandleSpectatedPlayerDisconnect(%d)", playerid);
 	foreach(new i : AllSpectators)
 	{
@@ -66,11 +66,11 @@ HandleSpectatedPlayerDisconnect(playerid)
 				SpectateAnyPlayer(i, false, true, playerid);
 			else
 			{
-				if(Current != -1) 
+				if(Current != -1)
 				{
 					SpectateAnyPlayer(i, true, true, playerid);
 				}
-				else 
+				else
 				{
 					SpectateAnyPlayer(i, false, true, playerid);
 				}
@@ -83,7 +83,7 @@ HandleSpectatedPlayerDisconnect(playerid)
 // Returns a list of the weapons which playerid got
 ListWeapsSpec(playerid)
 {
-	new 
+	new
 		str[256],
 		wep, ammo;
 	format(str, sizeof str, "   %sWeapons~n~~n~", MAIN_TEXT_COLOUR);
@@ -122,7 +122,7 @@ ForgetSpectator(playerid)
 UpdatePlayerSpectators(playerid)
 {
 	// Iter_Count(PlayerSpectators[playerid]); ==  how many are spectating this guy?
-	if(Iter_Count(PlayerSpectators[playerid]) == 0) // if none are spectating 
+	if(Iter_Count(PlayerSpectators[playerid]) == 0) // if none are spectating
 	{
 		PlayerTextDrawSetString(playerid, WhoSpec[playerid], " ");
 		Player[playerid][BeingSpeced] = false;
@@ -131,11 +131,11 @@ UpdatePlayerSpectators(playerid)
 	else
 	{
 		new str[SPECTATORS_STRING_SIZE];
-		format(str, sizeof str, "%sSPECING~n~~n~", MAIN_TEXT_COLOUR); // This is what the 17 characters are for in SPECTATORS_STRING_SIZE
+		format(str, sizeof str, "%sWATCHING~n~~n~", MAIN_TEXT_COLOUR);
 		foreach(new i : PlayerSpectators[playerid]) // Loop through the array that contains this player's spectators
 		{
 			// Format string with spectator name
-			format(str, sizeof str, "%s%s%s~n~", str, MAIN_TEXT_COLOUR, Player[i][NameWithoutTag]);
+			format(str, sizeof str, "%s%s~n~", str, Player[i][NameWithoutTag]);
 		}
 		foreach(new i : PlayerSpectators[playerid])
 			PlayerTextDrawSetString(i, WhoSpec[i], str);
@@ -144,14 +144,14 @@ UpdatePlayerSpectators(playerid)
 	return 1;
 }
 
-SpectatePlayer(playerid, specid) 
+SpectatePlayer(playerid, specid)
 {
 	if(playerid == specid)
 		return 0;
-	
+
 	if(!IsPlayerConnected(playerid) || !IsPlayerConnected(specid))
 		return 0;
-	
+
 	if(Iter_Count(PlayerSpectators[specid]) == MAX_PLAYER_SPECTATORS)
 	{
 		SendErrorMessage(playerid, "This player does already have enough spectators.");
@@ -159,7 +159,7 @@ SpectatePlayer(playerid, specid)
 			StopSpectate(playerid);
 		return 0;
 	}
-		
+
 	if(TargetInfoData[playerid][TargetInfoTimer] != -1)
 		HideTargetInfo(playerid); // hides the target info textdraws
 	new OldSpecID = -1;
@@ -168,27 +168,27 @@ SpectatePlayer(playerid, specid)
 	{
 		foreach(new i : AllSpectators)
 		{
-		    if(Player[i][IsSpectatingID] == playerid) 
+		    if(Player[i][IsSpectatingID] == playerid)
 			{
 				tmp = i;
 				Iter_SafeRemove(AllSpectators, i, i);
 				StopSpectate(tmp, false);
 			}
 		}
-	} 
-	else if (Player[playerid][Spectating] == true && specid != Player[playerid][IsSpectatingID]) 
+	}
+	else if (Player[playerid][Spectating] == true && specid != Player[playerid][IsSpectatingID])
 	{
 	    OldSpecID = Player[playerid][IsSpectatingID];
 	}
-	
+
 	RememberSpectator(playerid); // Remember that this player is a spectator
-	
+
 	if(!Player[playerid][Spectating]) // If he's specing for the first time (i.e not from next/previous spectate functions)
 	{
 		// Spectation info textdraws
-		for(new i; i < 4; i++) 
+		for(new i; i < 4; i++)
 			PlayerTextDrawShow(playerid, SpecText[playerid][i]);
-		
+
 		// Team damage textdraws
 		ShowTeamBarsForPlayer(playerid);
 		// Hide some HUD textdraws
@@ -201,14 +201,14 @@ SpectatePlayer(playerid, specid)
 		PlayerTextDrawHide(playerid, PlayerLeagueStatsTD[playerid]);
 		#endif
 	}
-	
+
 	// This will hide any damage textdraws shown for the spectator sooner
 	for(new i = 0; i < MAX_VISUAL_DAMAGES; i ++)
 	{
 		VisualDamage[playerid][TakenDamageTick][i] = 0;
 		VisualDamage[playerid][GivenDamageTick][i] = 0;
 	}
-	
+
 	// Update variables
 	Player[playerid][IsSpectatingID] = specid;
 	Player[playerid][Spectating] = true;
@@ -218,12 +218,12 @@ SpectatePlayer(playerid, specid)
 	SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(specid));
 	SetPlayerInterior(playerid, GetPlayerInterior(specid));
     TogglePlayerSpectating(playerid, 1);
-	if(GetPlayerVehicleID(specid)) 
+	if(GetPlayerVehicleID(specid))
 		PlayerSpectateVehicle(playerid, GetPlayerVehicleID(specid));
-	else 
+	else
 		PlayerSpectatePlayer(playerid, specid);
 
- 	if(Player[specid][Playing] == true && Current != -1) 
+ 	if(Player[specid][Playing] == true && Current != -1)
 	{
 	    SetCPForPlayer(playerid);
 	}
@@ -234,18 +234,18 @@ SpectatePlayer(playerid, specid)
 		UpdatePlayerSpectators(OldSpecID); // Update who-specing textdraws
 	}
 	Iter_Add(PlayerSpectators[specid], playerid); // State that this player is one of the spectators of 'specid'
-	UpdatePlayerSpectators(specid); // Update who-specing 
+	UpdatePlayerSpectators(specid); // Update who-specing
 
  	if(Player[specid][Playing] == true && Current != -1) // Show them the checkpoint of the current base
 	    SetCPForPlayer(playerid);
-	
+
 	RadarFix(playerid);
 	RadarFix(specid);
     return 1;
 }
 
 /* Note:
-	set remove_iterator to false if you're using this in a loop 
+	set remove_iterator to false if you're using this in a loop
 	and safely remove, for example
 
 	new tmp
@@ -261,10 +261,10 @@ StopSpectate(playerid, bool:remove_iterator = true)
 	printf("START:StopSpectate(%d, %b)", playerid, remove_iterator);
 	if(!Player[playerid][Spectating])
 		return 0;
-	
+
 	if(playerid == INVALID_PLAYER_ID)
 		return 0;
-	
+
 	if(Player[playerid][SpectatingRound] != -1)
 	{
 	    Player[playerid][SpectatingRound] = -1;
@@ -283,8 +283,8 @@ StopSpectate(playerid, bool:remove_iterator = true)
 		{
 		    if(i == playerid) // Absence of this causes a stupid error on crashdetect "stack heap size". Endless loop?
 		        continue;
-		        
-			if(Player[i][IsSpectatingID] == playerid) 
+
+			if(Player[i][IsSpectatingID] == playerid)
 			{
 			    tmp = i;
 				Iter_SafeRemove(AllSpectators, i, i);
@@ -295,16 +295,16 @@ StopSpectate(playerid, bool:remove_iterator = true)
 	new specid = Player[playerid][IsSpectatingID];
 	Player[playerid][IgnoreSpawn] = noclipdata[playerid][FlyMode];
 	CancelFlyMode(playerid); // Cancel freecam
-	
+
 	// Reset variables
 	if(remove_iterator)
 		ForgetSpectator(playerid);
-	
+
 	Player[playerid][Spectating] = false;
 	Player[playerid][IsSpectatingID] = -1;
 	Player[playerid][BeingSpeced] = false;
 	// Hide spec textdraws
-	for(new i; i < 4; i++) 
+	for(new i; i < 4; i++)
 		PlayerTextDrawHide(playerid, SpecText[playerid][i]);
 	// Hide team damage textdraws
 	HideTeamBarsForPlayer(playerid);
@@ -351,7 +351,7 @@ StopSpectate(playerid, bool:remove_iterator = true)
 	SetPlayerInterior(playerid, MainInterior);
 	SetPlayerVirtualWorld(playerid, 0);
 	SetCameraBehindPlayer(playerid);
-	
+
 	if(IsPlayerConnected(specid))
 	{
 		Iter_Remove(PlayerSpectators[specid], playerid); // State that this player is no longer a spectator of 'specid'
@@ -366,24 +366,24 @@ SpectateNextTeamPlayer(playerid, bool:stop_spectate = false)
 	// Calling Iter_Next inside loop comparison stage makes the starting index equal to the next player after spectator
 	// Loop through all connected players ignoring players with IDs lower than spectator's
 	for(new i = Player[playerid][IsSpectatingID]; (i = Iter_Next(Player, i)) != Iter_End(Player);)
-	{	
+	{
 		if(Player[i][Team] == NON || GetPlayerState(i) == PLAYER_STATE_WASTED)
 			continue; // Skip this player if they're dead/wasted or not spawned yet
-		
+
 		if(!Player[i][Playing])
 			continue; // Skip this player if they're not playing
-		
-		if(Player[playerid][Team] != REFEREE && !IsTeamTheSame(Player[i][Team], Player[playerid][Team])) 
+
+		if(Player[playerid][Team] != REFEREE && !IsTeamTheSame(Player[i][Team], Player[playerid][Team]))
 			continue; // Skip this player if he's in a different team than spectator's team
-		
+
 		if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
 			continue; // Skip this player if he's got enough people spectating him
-		
+
 		if(SpectatePlayer(playerid, i) == 1)
 			return; // Stop the loop AS WELL AS the function process when the spectate process is a success
 	}
 	// This will be reached if no available players to be spectated are found
-	if(stop_spectate)	
+	if(stop_spectate)
 	{
 		StopSpectate(playerid); // Exit spectate mode
 		return;
@@ -391,29 +391,29 @@ SpectateNextTeamPlayer(playerid, bool:stop_spectate = false)
 	SpectateAnyPlayer(playerid, (Player[playerid][Team] == REFEREE) ? (false) : (true), true);
 }
 
-SpectatePreviousTeamPlayer(playerid, bool:stop_spectate = false) 
+SpectatePreviousTeamPlayer(playerid, bool:stop_spectate = false)
 {
 	// Calling Iter_Next inside loop comparison stage makes the starting index equal to the previous player before spectator
 	// Loop through all connected players (descending loop: from highest ID to lowest)
-	for(new i = Player[playerid][IsSpectatingID]; (i = Iter_Prev(Player, i)) != Iter_Begin(Player);) 
+	for(new i = Player[playerid][IsSpectatingID]; (i = Iter_Prev(Player, i)) != Iter_Begin(Player);)
 	{
 		if(Player[i][Team] == NON || GetPlayerState(i) == PLAYER_STATE_WASTED)
 			continue; // Skip this player if they're dead/wasted or not spawned yet
-		
+
 		if(!Player[i][Playing])
 			continue; // Skip this player if they're not playing
-		
-		if(Player[playerid][Team] != REFEREE && !IsTeamTheSame(Player[i][Team], Player[playerid][Team])) 
+
+		if(Player[playerid][Team] != REFEREE && !IsTeamTheSame(Player[i][Team], Player[playerid][Team]))
 			continue; // Skip this player if he's in a different team than spectator's team
-		
+
 		if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
 			continue; // Skip this player if he's got enough people spectating him
-		
+
 		if(SpectatePlayer(playerid, i) == 1)
 			return; // Stop the loop AS WELL AS the function process when the spectate process is a success
 	}
 	// This will be reached if no available players to be spectated are found
-	if(stop_spectate)	
+	if(stop_spectate)
 	{
 		StopSpectate(playerid); // Exit spectate mode
 		return;
@@ -426,21 +426,21 @@ SpectateNextPlayer(playerid, bool:stop_spectate = false)
 	// Calling Iter_Next inside loop comparison stage makes the starting index equal to the next player after spectator
 	// Loop through all connected players ignoring players with IDs lower than spectator's
 	for(new i = Player[playerid][IsSpectatingID]; (i = Iter_Next(Player, i)) != Iter_End(Player);)
-	{	
+	{
 		if(Player[i][Team] == NON || GetPlayerState(i) == PLAYER_STATE_WASTED)
 			continue; // Skip this player if they're dead/wasted or not spawned yet
-		
+
 		if(Player[i][Spectating])
 			continue; // Skip this player if they're spectating someone else
-		
+
 		if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
 			continue; // Skip this player if he's got enough people spectating him
-		
+
 		if(SpectatePlayer(playerid, i) == 1)
 			return; // Stop the loop AS WELL AS the function process when the spectate process is a success
 	}
 	// This will be reached if no available players to be spectated are found
-	if(stop_spectate)	
+	if(stop_spectate)
 	{
 		StopSpectate(playerid); // Exit spectate mode
 		return;
@@ -448,26 +448,26 @@ SpectateNextPlayer(playerid, bool:stop_spectate = false)
 	SpectateAnyPlayer(playerid, false, true);
 }
 
-SpectatePreviousPlayer(playerid, bool:stop_spectate = false) 
+SpectatePreviousPlayer(playerid, bool:stop_spectate = false)
 {
 	// Calling Iter_Next inside loop comparison stage makes the starting index equal to the previous player before spectator
 	// Loop through all connected players (descending loop: from highest ID to lowest)
-	for(new i = Player[playerid][IsSpectatingID]; (i = Iter_Prev(Player, i)) != Iter_Begin(Player);) 
+	for(new i = Player[playerid][IsSpectatingID]; (i = Iter_Prev(Player, i)) != Iter_Begin(Player);)
 	{
 		if(Player[i][Team] == NON || GetPlayerState(i) == PLAYER_STATE_WASTED)
 			continue; // Skip this player if they're dead/wasted or not spawned yet
-		
+
 		if(Player[i][Spectating])
 			continue; // Skip this player if they're spectating someone else
-		
+
 		if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
 			continue; // Skip this player if he's got enough people spectating him
-		
+
 		if(SpectatePlayer(playerid, i) == 1)
 			return; // Stop the loop AS WELL AS the function process when the spectate process is a success
 	}
 	// This will be reached if no available players to be spectated are found
-	if(stop_spectate)	
+	if(stop_spectate)
 	{
 		StopSpectate(playerid); // Exit spectate mode
 		return;
@@ -505,7 +505,7 @@ SpectateAnyPlayer(playerid, bool:teammatch, bool:ascending, exception = -1)
 					{
 						if(i == exception)
 							continue;
-						
+
 						if(!IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
 							continue;
 
@@ -519,10 +519,10 @@ SpectateAnyPlayer(playerid, bool:teammatch, bool:ascending, exception = -1)
 					{
 						if(i == exception)
 							continue;
-						
+
 						if(!IsTeamTheSame(Player[playerid][Team], Player[i][Team]))
 							continue;
-						
+
 						if(SpectatePlayer(playerid, i) == 1)
 							return; // Stop the loop AS WELL AS the function process when the spectate process is a success
 					}
@@ -546,13 +546,13 @@ SpectateAnyPlayer(playerid, bool:teammatch, bool:ascending, exception = -1)
 							{
 								if(i == exception)
 									continue;
-								
+
 								if(Player[i][Team] == NON || GetPlayerState(i) == PLAYER_STATE_WASTED)
 									continue; // Skip this player if they're dead/wasted or not spawned yet
-								
+
 								if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
 									continue; // Skip this player if he's got enough people spectating him
-								
+
 								if(SpectatePlayer(playerid, i) == 1)
 									return; // Stop the loop AS WELL AS the function process when the spectate process is a success
 							}
@@ -563,13 +563,13 @@ SpectateAnyPlayer(playerid, bool:teammatch, bool:ascending, exception = -1)
 							{
 								if(i == exception)
 									continue;
-								
+
 								if(Player[i][Team] == NON || GetPlayerState(i) == PLAYER_STATE_WASTED)
 									continue; // Skip this player if they're dead/wasted or not spawned yet
-								
+
 								if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
 									continue; // Skip this player if he's got enough people spectating him
-								
+
 								if(SpectatePlayer(playerid, i) == 1)
 									return; // Stop the loop AS WELL AS the function process when the spectate process is a success
 							}
@@ -586,13 +586,13 @@ SpectateAnyPlayer(playerid, bool:teammatch, bool:ascending, exception = -1)
 							{
 								if(i == exception)
 									continue;
-								
+
 								if(Player[i][Team] == NON || GetPlayerState(i) == PLAYER_STATE_WASTED)
 									continue; // Skip this player if they're dead/wasted or not spawned yet
-								
+
 								if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
 									continue; // Skip this player if he's got enough people spectating him
-								
+
 								if(SpectatePlayer(playerid, i) == 1)
 									return; // Stop the loop AS WELL AS the function process when the spectate process is a success
 							}
@@ -603,13 +603,13 @@ SpectateAnyPlayer(playerid, bool:teammatch, bool:ascending, exception = -1)
 							{
 								if(i == exception)
 									continue;
-								
+
 								if(Player[i][Team] == NON || GetPlayerState(i) == PLAYER_STATE_WASTED)
 									continue; // Skip this player if they're dead/wasted or not spawned yet
-								
+
 								if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
 									continue; // Skip this player if he's got enough people spectating him
-								
+
 								if(SpectatePlayer(playerid, i) == 1)
 									return; // Stop the loop AS WELL AS the function process when the spectate process is a success
 							}

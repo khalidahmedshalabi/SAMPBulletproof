@@ -4,8 +4,8 @@
 
 #define UPDATE_SPECINFO_INTERVAL	2000
 #define MAX_PLAYER_SPECTATORS		15
-#define SPECTATORS_STRING_SIZE		(17 + (30 * MAX_PLAYER_SPECTATORS)) // 30 chars is a good size for this (24 for name and others for special characters)
+#define SPECTATORS_STRING_SIZE		(14 + (27 * MAX_PLAYER_SPECTATORS))
 
-new 
+new
 	Iterator:AllSpectators<MAX_PLAYERS>, // an iterator array that holds all spectators IDs
 	Iterator:PlayerSpectators[MAX_PLAYERS]<MAX_PLAYERS>; // an iterator array that holds all player spectators IDs

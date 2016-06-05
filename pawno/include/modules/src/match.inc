@@ -2839,7 +2839,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	if(CurrentRound >= TotalRounds && CurrentRound != 0) {
 		SetTimer("WarEnded", 5000, 0);
 		SendClientMessageToAll(-1, ""COL_PRIM"Preparing End Match Results..");
-		SendClientMessageToAll(-1, ""COL_PRIM"If you missed the results screen by hiding the current textdraws, type {FFFFFF}/showagain");
+		SendClientMessageToAll(-1, ""COL_PRIM"If you missed the results, type {FFFFFF}/showagain");
 	}
 	AttList = "";
 	AttKills = "";

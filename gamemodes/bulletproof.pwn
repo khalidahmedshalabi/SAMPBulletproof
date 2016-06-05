@@ -4172,7 +4172,7 @@ YCMD:ann(playerid, params[], help)
 	TextDrawShowForAll(AnnTD);
 	AnnTimer = SetTimer("HideAnnForAll", 5000, false);
 
-	format(str, sizeof(str), "{FFFFFF}%s "COL_PRIM"made an announcement.", Player[playerid][Name]);
+	format(str, sizeof(str), "{FFFFFF}%s "COL_PRIM"showed an announcement.", Player[playerid][Name]);
 	SendClientMessageToAll(-1, str);
     LogAdminCommand("ann", playerid, INVALID_PLAYER_ID);
 	return 1;
@@ -4762,7 +4762,6 @@ YCMD:lock(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "lock the server.");
 	    return 1;
 	}
-	new iString[128];
 	if(ServerLocked == false) {
 
 	    if(isnull(params)) return SendUsageMessage(playerid,"/lock [Password]");
@@ -4774,22 +4773,17 @@ YCMD:lock(playerid, params[], help)
 		ServerLocked = true;
 		PermLocked = false;
 
+        new iString[144];
 		format(iString, sizeof(iString), "%sServer Pass: ~r~%s", MAIN_TEXT_COLOUR, params);
 		TextDrawSetString(LockServerTD, iString);
 
-		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has locked the server. Password: {FFFFFF}%s",Player[playerid][Name], params);
+		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has locked the server with password: {FFFFFF}%s",Player[playerid][Name], params);
 		SendClientMessageToAll(-1, iString);
 
-	} else {
-
-		SendRconCommand("password 0");
-		TextDrawSetString(LockServerTD, sprintf("%sServer: ~r~Unlocked", MAIN_TEXT_COLOUR));
-
-		ServerLocked = false;
-		PermLocked = false;
-
-		format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has unlocked the server.", Player[playerid][Name]);
-		SendClientMessageToAll(-1, iString);
+	}
+	else
+	{
+        CallLocalFunction("OnPlayerCommandText", "ds", playerid, "/unlock");
 	}
     LogAdminCommand("lock", playerid, INVALID_PLAYER_ID);
 	return 1;
@@ -5303,7 +5297,7 @@ YCMD:war(playerid, params[], help)
 		SetTimer("WarEnded", 5000, 0);
 		SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has set the match to end!", Player[playerid][Name]));
 		SendClientMessageToAll(-1, ""COL_PRIM"Preparing End Match Results..");
-		SendClientMessageToAll(-1, ""COL_PRIM"If you missed the results screen by hiding the current textdraws, type {FFFFFF}/showagain");
+		SendClientMessageToAll(-1, ""COL_PRIM"If you missed the results, type {FFFFFF}/showagain");
 
 		return 1;
 	} else if(isnull(TeamBName)) return SendUsageMessage(playerid,"/war ([Team A] [Team B]) (end)");
