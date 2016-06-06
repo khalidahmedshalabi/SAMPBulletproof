@@ -875,6 +875,7 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawSetOutline(playerid, RoundKillDmgTDmg[playerid], 1);
 	PlayerTextDrawSetProportional(playerid, RoundKillDmgTDmg[playerid], 1);
 
+	// Create visual damage textdraws
 	new Float:y = 372.0;
 	for(new i = 0; i < MAX_VISUAL_DAMAGES; i ++)
 	{
@@ -904,6 +905,28 @@ LoadPlayerTextDraws(playerid)
 
 		y += DAMAGE_TEXTDRAW_Y_DIFF;
 	}
+
+	// Create friendly fire textdraws
+	FriendlyDamage[playerid][0] = CreatePlayerTextDraw(playerid,170.0,y,"_");
+	PlayerTextDrawFont(playerid, FriendlyDamage[playerid][0], 1);
+	PlayerTextDrawLetterSize(playerid, FriendlyDamage[playerid][0], 0.20000, 1.000);
+	PlayerTextDrawBackgroundColor(playerid, FriendlyDamage[playerid][0],MAIN_BACKGROUND_COLOUR);
+	PlayerTextDrawColor(playerid, FriendlyDamage[playerid][0], 16727295);
+	PlayerTextDrawSetProportional(playerid, FriendlyDamage[playerid][0], 1);
+	PlayerTextDrawSetOutline(playerid, FriendlyDamage[playerid][0],1);
+	PlayerTextDrawSetShadow(playerid, FriendlyDamage[playerid][0],0);
+
+	FriendlyDamage[playerid][1] = CreatePlayerTextDraw(playerid,380.0,y,"_");
+	PlayerTextDrawFont(playerid, FriendlyDamage[playerid][1], 1);
+	PlayerTextDrawLetterSize(playerid, FriendlyDamage[playerid][1], 0.20000, 1.000);
+	PlayerTextDrawBackgroundColor(playerid, FriendlyDamage[playerid][1],MAIN_BACKGROUND_COLOUR);
+	PlayerTextDrawColor(playerid, FriendlyDamage[playerid][1], 16727295);
+	PlayerTextDrawSetProportional(playerid, FriendlyDamage[playerid][1], 1);
+	PlayerTextDrawSetOutline(playerid, FriendlyDamage[playerid][1],1);
+	PlayerTextDrawSetShadow(playerid, FriendlyDamage[playerid][1],0);
+
+	PlayerTextDrawShow(playerid, FriendlyDamage[playerid][0]);
+	PlayerTextDrawShow(playerid, FriendlyDamage[playerid][1]);
 
     WhoSpec[playerid] = CreatePlayerTextDraw(playerid, 1, 150.00000, "_");
 	PlayerTextDrawBackgroundColor(playerid, WhoSpec[playerid], MAIN_BACKGROUND_COLOUR);

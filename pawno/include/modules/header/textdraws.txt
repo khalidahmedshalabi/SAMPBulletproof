@@ -98,6 +98,7 @@ new PlayerText:FPSPingPacket[MAX_PLAYERS]; // Ping, FPS and Packetloss textdraw 
 new PlayerText:RoundKillDmgTDmg[MAX_PLAYERS]; // Shows Kills, Damage and Total Damage on the left hand side of the radar.
 new PlayerText:DoingDamage[MAX_PLAYERS][MAX_VISUAL_DAMAGES]; // Shows when player hits someone.
 new PlayerText:GettingDamaged[MAX_PLAYERS][MAX_VISUAL_DAMAGES]; // Shows when someone hits you.
+new PlayerText:FriendlyDamage[MAX_PLAYERS][2]; // Shows when your teammate hits you or you hit them
 new PlayerText:WhoSpec[MAX_PLAYERS]; // Shows who is spectating you.
 new PlayerText:SpecText[MAX_PLAYERS][4]; // Shows spectated player info.
 new PlayerText:AreaCheckTD[MAX_PLAYERS]; // Show countdown textdraw when the player is out of arena.

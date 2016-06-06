@@ -19,7 +19,7 @@ AdjustWeaponRanges()
 	{
 		if(WeaponRanges[i] == 0.0)
 			continue;
-		
+
 		WeaponRanges[i] += WEAPON_RANGES_ADD;
 	}
 }
@@ -39,12 +39,12 @@ bool:IsValidHitRange(hittedid, hitterid, weaponid, &Float:distance)
 	if(hitterid == INVALID_PLAYER_ID)
 		return true;
 
-	if(IsBulletWeapon(weaponid)) 
+	if(IsBulletWeapon(weaponid))
 	{
 		new Float:x, Float:y, Float:z;
 		GetPlayerPos(hitterid, x, y, z);
 		distance = GetPlayerDistanceFromPoint(hittedid, x, y, z);
-		if(distance > WeaponRanges[weaponid]) 
+		if(distance > WeaponRanges[weaponid])
 		{
 			return false;
 		}
@@ -55,37 +55,37 @@ bool:IsValidHitRange(hittedid, hitterid, weaponid, &Float:distance)
 bool:IsValidWeaponDamageAmount(weaponid, Float:amount)
 {
 	new Float:bullets;
-	switch (weaponid) 
+	switch (weaponid)
 	{
 		// The spas shotguns shoot 8 bullets, each inflicting 4.95 damage
-		case WEAPON_SHOTGSPA: 
+		case WEAPON_SHOTGSPA:
 		{
 			bullets = amount / 4.950000286102294921875;
-	 
-			if (8.0 - bullets < -0.05) 
+
+			if (8.0 - bullets < -0.05)
 			{
 				return false;
 			}
 		}
-	 
+
 		// Shotguns and sawed-off shotguns shoot 15 bullets, each inflicting 3.3 damage
 		case WEAPON_SHOTGUN, WEAPON_SAWEDOFF:
 		{
 			bullets = amount / 3.30000019073486328125;
-	 
-			if (15.0 - bullets < -0.05) 
+
+			if (15.0 - bullets < -0.05)
 			{
 				return false;
 			}
 		}
 	}
- 
-	if (_:bullets) 
+
+	if (_:bullets)
 	{
 		new Float:f = floatfract(bullets);
 
 		// The damage for each bullet has been tampered with
-		if (f > 0.01 && f < 0.99) 
+		if (f > 0.01 && f < 0.99)
 		{
 			return false;
 		}
@@ -95,9 +95,9 @@ bool:IsValidWeaponDamageAmount(weaponid, Float:amount)
 	}
 
 	// Check chainsaw damage
-	if (weaponid == WEAPON_CHAINSAW) 
+	if (weaponid == WEAPON_CHAINSAW)
 	{
-		switch (amount) 
+		switch (amount)
 		{
 			case 6.6000003814697265625,
 			13.5300006866455078125,
@@ -115,7 +115,7 @@ bool:IsValidWeaponDamageAmount(weaponid, Float:amount)
 	// Check gun damage
 	new Float:def_amount = 0.0;
 
-	switch (weaponid) 
+	switch (weaponid)
 	{
 		case WEAPON_COLT45,
 		WEAPON_MP5: def_amount = 8.25;
@@ -131,7 +131,7 @@ bool:IsValidWeaponDamageAmount(weaponid, Float:amount)
 		case WEAPON_VEHICLE: def_amount = 9.90000057220458984375;
 	}
 
-	if (_:def_amount && _:def_amount != _:amount) 
+	if (_:def_amount && _:def_amount != _:amount)
 	{
 		return false;
 	}
@@ -267,22 +267,11 @@ IsLegalHit(playerid, issuerid, Float:amount, weaponid)
 	    // Check whether they are in the round and in the same team or not
 		if(Player[issuerid][Playing] == true && (Player[issuerid][Team] == Player[playerid][Team]))
 		{
-			MessageBox(playerid, MSGBOX_TYPE_BOTTOM, "_", sprintf("%s%s ~w~has fired shots at you. Maybe for a reason?", TDC[Player[playerid][Team]], Player[issuerid][NameWithoutTag]), 5000);
-            // Loop through the array that contains playerid's spectators
-			foreach(new i : PlayerSpectators[playerid])
-			{
-                MessageBox(i, MSGBOX_TYPE_BOTTOM, "_", sprintf("%s%s ~w~has fired shots at %s%s", TDC[Player[playerid][Team]], Player[issuerid][NameWithoutTag], TDC[Player[playerid][Team]], Player[playerid][NameWithoutTag]), 5000);
-			}
-
-			MessageBox(issuerid, MSGBOX_TYPE_BOTTOM, "_", sprintf("~w~Watchout! You've fired shots at your team-mate %s%s", TDC[Player[playerid][Team]], Player[playerid][NameWithoutTag]), 5000);
-            // Loop through the array that contains issuerid's spectators
-			foreach(new i : PlayerSpectators[issuerid])
-			{
-                MessageBox(i, MSGBOX_TYPE_BOTTOM, "_", sprintf("~w~This player has fired shots at their team-mate %s%s", TDC[Player[playerid][Team]], Player[playerid][NameWithoutTag]), 5000);
-			}
+			HandleFriendlyVisualDamage(issuerid, playerid);
 
 			PlayerPlaySound(issuerid, 1135, 0.0, 0.0, 0.0);
         	PlayerPlaySound(playerid, 1135, 0.0, 0.0, 0.0);
+
 			SetFakeHealthArmour(playerid);
 			return 0;
 		}
@@ -311,7 +300,7 @@ SetHP(playerid, amount)
 	{
 		if(Player[playerid][AlreadyDying])
 			return 0;
-		
+
 		Player[playerid][AlreadyDying] = true;
 	    SetTimerEx("ServerOnPlayerDeath", SERVER_PlAYER_DEATH_DELAY, false, "iii", playerid, Player[playerid][HitBy], Player[playerid][HitWith]);
 	    HidePlayerProgressBar(playerid, HealthBar[playerid]);
@@ -350,7 +339,7 @@ SetHP(playerid, amount)
 	UpdatePlayerTeamBar(playerid);
 	if(WasPlaying)
 		UpdateTeamHP(Player[playerid][Team]);
-	
+
 	if(PlayerInterface[playerid][INTERFACE_HP])
 	{
 		if(FallProtection == false)
@@ -417,11 +406,11 @@ SetAP(playerid, amount)
 		UpdateTeamHP(Player[playerid][Team]);
 	if(PlayerInterface[playerid][INTERFACE_HP])
 	{
-		if(Player[playerid][pArmour] > 0) 
+		if(Player[playerid][pArmour] > 0)
 		{
 			PlayerTextDrawSetString(playerid, ArmourTextDraw[playerid], sprintf("%s~h~~h~%d", MAIN_TEXT_COLOUR, Player[playerid][pArmour]));
-		} 
-		else 
+		}
+		else
 		{
 			PlayerTextDrawSetString(playerid, ArmourTextDraw[playerid], "_");
 		}
@@ -536,7 +525,7 @@ GetActualDamage(Float:amount, playerid)
 
 // Initializes iterators arrays for taken/given damage script
 InitVisualDamage()
-{	
+{
 	Iter_Init(PlayersDamaged);
 	Iter_Init(PlayersDamagedBy);
 }
@@ -552,19 +541,20 @@ InitPlayerVisualDamage(playerid)
 	Iter_Clear(PlayersDamagedBy[playerid]);
 	Iter_Remove(PlayerHasGVisualDmg, playerid);
 	Iter_Remove(PlayerHasTVisualDmg, playerid);
-	
+	VisualDamage[playerid][FriendlyDamageTimer] = -1;
+
 }
-	
+
 // This basically checks if a damage textdraw has been shown for a specific/pre-defined time, then hide it
 // Usually placed in a frequently called timer
 CheckVisualDamageTextDraws()
 {
 	if(Iter_Count(PlayerHasGVisualDmg) != 0) // If there are players with given-damage textdraws
 	{
-		new 
+		new
 			tick = GetTickCount(), // current tick count
 			ct; 				// will be used to indicate whether a iterator slot should be removed or not
-							
+
 		foreach(new i : PlayerHasGVisualDmg) // Loop through all players that has given-damage textdraw shown for them
 		{
 			new cur = i;
@@ -590,10 +580,10 @@ CheckVisualDamageTextDraws()
 	}
 	if(Iter_Count(PlayerHasTVisualDmg) != 0) // If there are players with taken-damage textdraws
 	{
-		new 
+		new
 			tick = GetTickCount(), // current tick count
 			ct;					// will be used to indicate whether a iterator slot should be removed or not
-			
+
 		foreach(new i : PlayerHasTVisualDmg)  // Loop through all players that has taken-damage textdraw shown for them
 		{
 			new cur = i;
@@ -620,6 +610,58 @@ CheckVisualDamageTextDraws()
 	return 1;
 }
 
+forward HideFriendlyVisualDmg(playerid);
+public HideFriendlyVisualDmg(playerid)
+{
+	PlayerTextDrawSetString(playerid, FriendlyDamage[playerid][0], "_");
+	PlayerTextDrawSetString(playerid, FriendlyDamage[playerid][1], "_");
+	return 1;
+}
+
+HandleFriendlyVisualDamage(hitterid, hittedid)
+{
+	new str[39];
+	format(str, sizeof str, "~y~~h~%s [!!!]", Player[hittedid][NameWithoutTag]);
+
+	PlayerTextDrawSetString(hitterid, FriendlyDamage[hitterid][0], str);
+
+	if(VisualDamage[hitterid][FriendlyDamageTimer] != -1)
+		KillTimer(VisualDamage[hitterid][FriendlyDamageTimer]);
+
+	VisualDamage[hitterid][FriendlyDamageTimer] = SetTimerEx("HideFriendlyVisualDmg", HIDE_DAMAGE_TEXTDRAW_AFTER, false, "i", hitterid);
+
+	// Loop through the array that contains hitter's spectators
+	foreach(new i : PlayerSpectators[hitterid])
+	{
+		PlayerTextDrawSetString(i, FriendlyDamage[i][0], str);
+
+		if(VisualDamage[i][FriendlyDamageTimer] != -1)
+			KillTimer(VisualDamage[i][FriendlyDamageTimer]);
+
+		VisualDamage[i][FriendlyDamageTimer] = SetTimerEx("HideFriendlyVisualDmg", HIDE_DAMAGE_TEXTDRAW_AFTER, false, "i", i);
+	}
+
+	format(str, sizeof str, "~y~~h~%s [!!!]", Player[hitterid][NameWithoutTag]);
+
+	PlayerTextDrawSetString(hittedid, FriendlyDamage[hittedid][1], str);
+	
+	if(VisualDamage[hittedid][FriendlyDamageTimer] != -1)
+		KillTimer(VisualDamage[hittedid][FriendlyDamageTimer]);
+
+	VisualDamage[hittedid][FriendlyDamageTimer] = SetTimerEx("HideFriendlyVisualDmg", HIDE_DAMAGE_TEXTDRAW_AFTER, false, "i", hittedid);
+
+	// Loop through the array that contains hitter's spectators
+	foreach(new i : PlayerSpectators[hittedid])
+	{
+		PlayerTextDrawSetString(i, FriendlyDamage[i][1], str);
+
+		if(VisualDamage[i][FriendlyDamageTimer] != -1)
+			KillTimer(VisualDamage[i][FriendlyDamageTimer]);
+
+		VisualDamage[i][FriendlyDamageTimer] = SetTimerEx("HideFriendlyVisualDmg", HIDE_DAMAGE_TEXTDRAW_AFTER, false, "i", i);
+	}
+}
+
 // Basically this enables spectators to see given/taken damage done by whom they are spectating
 /*
 PARAMETERS:
@@ -631,11 +673,11 @@ currenttick: current count tick
 */
 ShowVisualDamageForSpectators(playerid, index, str[], damagetype, currenttick)
 {
-	// See if this player got spectators, if not then we have no one 
+	// See if this player got spectators, if not then we have no one
 	// to show textdraws for hence we return/stop the function process
 	if(!Player[playerid][BeingSpeced] || Iter_Count(PlayerSpectators[playerid]) == 0)
 		return;
-	
+
 	switch(damagetype)
 	{
 		case 0: // Given damage
@@ -672,20 +714,20 @@ SetPlayerDamageBubble(playerid)
 		// Check if there's a taken damage in this slot
 		if(VisualDamage[playerid][ShownTakenDamage][i] == false)
 			continue;
-		
+
 		if(VisualDamage[playerid][WhoDamaging][i] != NO_DAMAGER_UNIQUE_ID)
 		{
-			format(str, sizeof str, "%s%s / %s / -%.0f\n", 
-			str, 
-			Player[VisualDamage[playerid][WhoDamaging][i]][NameWithoutTag], 
-			WeaponNames[VisualDamage[playerid][TakenDamageWeapon][i]], 
+			format(str, sizeof str, "%s%s / %s / -%.0f\n",
+			str,
+			Player[VisualDamage[playerid][WhoDamaging][i]][NameWithoutTag],
+			WeaponNames[VisualDamage[playerid][TakenDamageWeapon][i]],
 			VisualDamage[playerid][TDamageTaken][i]);
 		}
 		else
 		{
-			format(str, sizeof str, "%s%s / -%.0f\n", 
+			format(str, sizeof str, "%s%s / -%.0f\n",
 			str,
-			WeaponNames[VisualDamage[playerid][TakenDamageWeapon][i]], 
+			WeaponNames[VisualDamage[playerid][TakenDamageWeapon][i]],
 			VisualDamage[playerid][TDamageTaken][i]);
 		}
 	}
@@ -696,22 +738,22 @@ SetPlayerDamageBubble(playerid)
 // Mainly used under On Player Damage callbacks
 HandleVisualDamage(playerid, issuerid, Float:amount, weaponid)
 {
-	new 
+	new
 		bool:doneOfGivenDmg = false,	// Indicate whether we're done of showing given-damage textdraws or not
 		bool:doneOfTakenDmg = false,	// Indicate whether we're done of showing taken-damage textdraws or not
 		str[128],						// A string to write the damage info in
 		col[7] = "~r~~h~",				// Color of HP remaining of the damaged player (default red)
 		tick = GetTickCount(),				// Current tick count
 		totHP = (Player[playerid][pHealth] + Player[playerid][pArmour]); // HP remaining of the damaged player
-	
+
 	if(totHP >= 100) // If HP remaining is more than 99, then color of text shouldn't be red
 		format(col, sizeof col, "%s", MAIN_TEXT_COLOUR); // Set it to server default text color
-	
+
 	for(new i = 0; i < MAX_VISUAL_DAMAGES; i ++)
 	{
 		if(doneOfGivenDmg && doneOfTakenDmg)
 			break;
-		
+
 		if(doneOfGivenDmg == false) // If we're still not done of given-damage
 		{
 			if(Iter_Contains(PlayersDamaged[issuerid], playerid)) // If player's already got a damage textdraw, just add to it
@@ -722,7 +764,7 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid)
 					VisualDamage[issuerid][TDamageGiven][i] += amount; // Add to total given damage
 					VisualDamage[issuerid][GivenDamageWeapon][i] = weaponid;
 					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%d%s]",  // Write correct damage info into our string
-						Player[playerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[issuerid][TDamageGiven][i], 
+						Player[playerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[issuerid][TDamageGiven][i],
 						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 					PlayerTextDrawSetString(issuerid, DoingDamage[issuerid][i], str); // Update the textdraw with correct info
 					VisualDamage[issuerid][GivenDamageTick][i] = tick; // When the last time this damage textdraw was shown
@@ -740,15 +782,15 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid)
 					VisualDamage[issuerid][DamagingWho][i] = playerid; // Assign the ID of the damaged player to the issuer variable
 					Iter_Add(PlayersDamaged[issuerid], playerid); // Add this player to damaged players list of the issuer/damager
 					Iter_Add(PlayerHasGVisualDmg, issuerid);
-					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%d%s]", 
-						Player[playerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[issuerid][TDamageGiven][i], 
+					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%d%s]",
+						Player[playerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[issuerid][TDamageGiven][i],
 						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 					PlayerTextDrawSetString(issuerid, DoingDamage[issuerid][i], str); // Update the textdraw with the correct info
 					VisualDamage[issuerid][GivenDamageTick][i] = tick; // When the last time this damage textdraw was shown
 					ShowVisualDamageForSpectators(issuerid, i, str, 0, tick); // Show these textdraws to anyone spectating this player
 					doneOfGivenDmg = true; // Useful, tell the loop that we're done of given damage of the damager
 				}
-			}	
+			}
 		}
 		if(doneOfTakenDmg == false)
 		{
@@ -758,8 +800,8 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid)
 				{
 					VisualDamage[playerid][TDamageTaken][i] += amount;
 					VisualDamage[playerid][TakenDamageWeapon][i] = weaponid;
-					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%d%s]", 
-						Player[issuerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i], 
+					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%d%s]",
+						Player[issuerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i],
 						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 					PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], str);
 					VisualDamage[playerid][TakenDamageTick][i] = tick;
@@ -778,8 +820,8 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid)
 					VisualDamage[playerid][WhoDamaging][i] = issuerid;
 					Iter_Add(PlayersDamagedBy[playerid], issuerid);
 					Iter_Add(PlayerHasTVisualDmg, playerid);
-					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%d%s]", 
-						Player[issuerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i], 
+					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%d%s]",
+						Player[issuerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i],
 						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 					PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], str);
 					VisualDamage[playerid][TakenDamageTick][i] = tick;
@@ -787,7 +829,7 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid)
 					SetPlayerDamageBubble(playerid);
 					doneOfTakenDmg = true;
 				}
-			}	
+			}
 		}
 	}
 }
@@ -795,16 +837,16 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid)
 // This is used when no damager is found, for example damage done by collision or explosion etc..
 ShowCollisionDamageTextDraw(playerid, Float:amount, weaponid)
 {
-	new 
-		str[128], 
+	new
+		str[128],
 		col[7] = "~r~~h~",
 		tick = GetTickCount(),
 		freeSlot = -1,
 		totHP = (Player[playerid][pHealth] + Player[playerid][pArmour]);
-	
-	if(totHP >= 100) 
+
+	if(totHP >= 100)
 		format(col, sizeof col, "%s", MAIN_TEXT_COLOUR);
-	
+
 	for(new i = 0; i < MAX_VISUAL_DAMAGES; i ++) // Loop through all damage textdraws a single player may have
 	{
 		// If there's already a collision damage textdraw shown, add to it
@@ -813,7 +855,7 @@ ShowCollisionDamageTextDraw(playerid, Float:amount, weaponid)
 			VisualDamage[playerid][TDamageTaken][i] += amount; // Add to damage
 			VisualDamage[playerid][TakenDamageWeapon][i] = weaponid;
 			format(str, sizeof(str), "%s-%.0f ~r~~h~%s %s[%s~h~%d%s]",  // Format the string with correct damage info
-				MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i], 
+				MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i],
 				WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 			PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], str); // Update damage textdraw with correct damage info
 			VisualDamage[playerid][TakenDamageTick][i] = tick; // When the last time this damage textdraw was shown
@@ -838,7 +880,7 @@ ShowCollisionDamageTextDraw(playerid, Float:amount, weaponid)
 		VisualDamage[playerid][WhoDamaging][freeSlot] = NO_DAMAGER_UNIQUE_ID; // This unique ID means a COLLISION (or generally non-damager damages)
 		Iter_Add(PlayerHasTVisualDmg, playerid); // Add this player to the array that holds the IDs of the players who has a taken-damage textdraw shown
 		format(str, sizeof(str), "%s-%.0f ~r~~h~%s %s[%s~h~%d%s]",  // Format the string with correct damage info
-			MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][freeSlot], 
+			MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][freeSlot],
 			WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 		PlayerTextDrawSetString(playerid, GettingDamaged[playerid][freeSlot], str); // Update the textdraw with the correct info
 		VisualDamage[playerid][TakenDamageTick][freeSlot] = tick; // When the last time this damage textdraw was shown

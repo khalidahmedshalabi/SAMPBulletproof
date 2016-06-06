@@ -6,13 +6,13 @@
 #define SERVER_PlAYER_DEATH_DELAY				50			// Time (in milliseconds) delay before server-sided death takes place
 
 #define MAX_VISUAL_DAMAGES				4 			// Max number of damages that can be visual to player (given/taken damage textdraws)
-#define DAMAGE_BUBBLE_STRING_LENGTH		\	
+#define DAMAGE_BUBBLE_STRING_LENGTH		\
 								MAX_VISUAL_DAMAGES * 70	// Taken damage bubble string length
 #define DAMAGE_TEXTDRAW_Y_DIFF			10.0		// A good space between each damage textdraw
 #define HIDE_DAMAGE_TEXTDRAW_AFTER		5000		// Time needed to hide visual damage textdraw (milliseconds)
 #define NO_DAMAGER_UNIQUE_ID			-2			// This is helpful in textdraw loops to indicate a textdraw that shows no damager (collision damage?)
 
-#define GRENADE_HIGH_DAMAGE			16.0						// Modified grenade damage	
+#define GRENADE_HIGH_DAMAGE			16.0						// Modified grenade damage
 #define	GRENADE_MEDIUM_DAMAGE		GRENADE_HIGH_DAMAGE / 2		// Modified grenade damage
 #define	GRENADE_LOW_DAMAGE			GRENADE_HIGH_DAMAGE / 3		// Modified grenade damage
 
@@ -23,23 +23,24 @@ enum VISUAL_DAMAGE_DATA
 	bool:ShownTakenDamage[MAX_VISUAL_DAMAGES], 	// Indicate whether the (taken) damage textdraws are shown or not
 	bool:ShownGivenDamage[MAX_VISUAL_DAMAGES],	// Indicate whether the (given) damage textdraws are shown or not
 	TakenDamageWeapon[MAX_VISUAL_DAMAGES],		// The weapon by which taken damage was done
-	GivenDamageWeapon[MAX_VISUAL_DAMAGES],		// The weapon by which given damage was done	
+	GivenDamageWeapon[MAX_VISUAL_DAMAGES],		// The weapon by which given damage was done
 	DamagingWho[MAX_VISUAL_DAMAGES],			// Who this player is damaging
 	WhoDamaging[MAX_VISUAL_DAMAGES],			// Who is damaging this player
 	TakenDamageTick[MAX_VISUAL_DAMAGES],		// Last time a taken-damage textdraw was shown
-	GivenDamageTick[MAX_VISUAL_DAMAGES]			// Last time a given-damage textdraw was shown
+	GivenDamageTick[MAX_VISUAL_DAMAGES],		// Last time a given-damage textdraw was shown
+	FriendlyDamageTimer							// Timer to handle friendly damage textdraws
 }
 
 new VisualDamage[MAX_PLAYERS][VISUAL_DAMAGE_DATA];
-new 
+new
 	Iterator:PlayersDamaged[MAX_PLAYERS]<MAX_PLAYERS>,		// This array holds the IDs of the players who this player put hits/damage on
 	Iterator:PlayersDamagedBy[MAX_PLAYERS]<MAX_PLAYERS>,	// This array holds the IDs of the players who put hits/damage on this player
 	Iterator:PlayerHasTVisualDmg<MAX_PLAYERS>,				// This array holds the IDs of the players who has a taken-damage textdraw shown for them
 	Iterator:PlayerHasGVisualDmg<MAX_PLAYERS>;				// This array holds the IDs of the players who has a given-damage textdraw shown for them
-	
-new const Float:WEAPON_RANGES_ADD = 30.0;	
-	
-// Weapon max hitting ranges from Slice's weapon-config inc 
+
+new const Float:WEAPON_RANGES_ADD = 30.0;
+
+// Weapon max hitting ranges from Slice's weapon-config inc
 // Source: https://github.com/oscar-broman/samp-weapon-config
 new Float:WeaponRanges[] = {
 	0.0, // 0 - Fist
@@ -82,4 +83,3 @@ new Float:WeaponRanges[] = {
 	0.0, // 37 - Flamethrower
 	75.0  // 38 - Minigun
 };
-	
