@@ -840,11 +840,13 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawHide(playerid, ArmourTextDraw[playerid]);
 	PlayerTextDrawHide(playerid, BaseID_VS[playerid]);
 
-    TargetInfoData[playerid][TargetInfoTD] = CreatePlayerTextDraw(playerid, 83.000000, 285.000000, "_");
+    TargetInfoData[playerid][TargetInfoTD] = CreatePlayerTextDraw(playerid, 83.000000, 300.000000, "_");
 	PlayerTextDrawBackgroundColor(playerid, TargetInfoData[playerid][TargetInfoTD], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, TargetInfoData[playerid][TargetInfoTD], 1);
 	PlayerTextDrawLetterSize(playerid, TargetInfoData[playerid][TargetInfoTD], 0.200000, 1.0);
 	PlayerTextDrawColor(playerid, TargetInfoData[playerid][TargetInfoTD], 255);
+	PlayerTextDrawUseBox(playerid, TargetInfoData[playerid][TargetInfoTD], 1);
+	PlayerTextDrawBoxColor(playerid, TargetInfoData[playerid][TargetInfoTD], 0x00000077);
 	PlayerTextDrawSetOutline(playerid, TargetInfoData[playerid][TargetInfoTD], 1);
 	PlayerTextDrawSetProportional(playerid, TargetInfoData[playerid][TargetInfoTD], 1);
 	PlayerTextDrawTextSize(playerid, TargetInfoData[playerid][TargetInfoTD], 167.000000, 0.000000);

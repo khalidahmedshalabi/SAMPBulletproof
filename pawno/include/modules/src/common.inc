@@ -660,21 +660,11 @@ ShowTargetInfo(playerid, targetid)
 	if(targetid == TargetInfoData[playerid][TargetInfoLastTarget] && GetTickCount() < TargetInfoData[playerid][TargetInfoLastTick])
 		return 1;
 
-	new str[170];
-	if(GetPlayerVehicleID(targetid) == 0)
-	{
-		format(str, sizeof str, "~n~~n~%sName: %s%s~n~%sPing: %s%d   %sFPS: %s%d~n~%sPL: %s%.1f   %sHP: %s%d",
-			MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][NameWithoutTag], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]],
-			GetPlayerPing(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][FPS], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], NetStats_PacketLossPercent(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], (Player[targetid][pHealth] + Player[targetid][pArmour]));
-	}
-	else
-	{
-	    new Float:vHP;
-	    GetVehicleHealth(GetPlayerVehicleID(targetid), vHP);
-        format(str, sizeof str, "~n~~n~%sName: %s%s~n~%sPing: %s%d   %sFPS: %s%d~n~%sPL: %s%.1f   %sHP: %s%d~n~%sVehicle HP: %s%.1f",
-			MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][NameWithoutTag], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]],
-			GetPlayerPing(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][FPS], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], NetStats_PacketLossPercent(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], (Player[targetid][pHealth] + Player[targetid][pArmour]), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], vHP / 100);
-	}
+	new str[128];
+	format(str, sizeof str, "~r~TARGET~n~%sName: %s%s~n~%sPing: %s%d %sFPS: %s%d~n~%sPL: %s%.1f %sHP: %s%d",
+		MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][NameWithoutTag], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]],
+		GetPlayerPing(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][FPS], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], NetStats_PacketLossPercent(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], (Player[targetid][pHealth] + Player[targetid][pArmour]));
+
 	PlayerTextDrawSetString(playerid, TargetInfoData[playerid][TargetInfoTD], str);
 	PlayerTextDrawShow(playerid, TargetInfoData[playerid][TargetInfoTD]);
 	TargetInfoData[playerid][TargetInfoLastTick] = GetTickCount() + 2000;
@@ -682,7 +672,7 @@ ShowTargetInfo(playerid, targetid)
 
 	if(TargetInfoData[playerid][TargetInfoTimer] == -1)
 	{
-		 TargetInfoData[playerid][TargetInfoTimer] = SetTimerEx("HideTargetInfo", 4000, false, "i", playerid);
+		 TargetInfoData[playerid][TargetInfoTimer] = SetTimerEx("HideTargetInfo", 5000, false, "i", playerid);
 	}
 	return 1;
 }
