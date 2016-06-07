@@ -20,12 +20,12 @@ CreateMessageBoxTextDraws(playerid)
 	MsgBoxData[playerid][info_TD][MSGBOX_TYPE_TOP] = CreatePlayerTextDraw(playerid, 323.000000, 126.000000, "This is supposed to be a short message otherwise it would look ugly!");
 	PlayerTextDrawAlignment(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_TOP], 2);
 	PlayerTextDrawBackgroundColor(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_TOP], 34);
-	PlayerTextDrawFont(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_TOP], 2);
+	PlayerTextDrawFont(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_TOP], 1);
 	PlayerTextDrawLetterSize(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_TOP], 0.200000, 1.200000);
 	PlayerTextDrawColor(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_TOP], -1);
 	PlayerTextDrawSetOutline(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_TOP], 1);
 	PlayerTextDrawSetProportional(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_TOP], 1);
-	
+
 	// Middle textdraws
 	MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_MIDDLE] = CreatePlayerTextDraw(playerid, 21.000000, 204.000000, "~y~~h~caption");
 	PlayerTextDrawBackgroundColor(playerid, MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_MIDDLE], 119);
@@ -47,9 +47,9 @@ CreateMessageBoxTextDraws(playerid)
 	PlayerTextDrawUseBox(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_MIDDLE], 1);
 	PlayerTextDrawBoxColor(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_MIDDLE], 68);
 	PlayerTextDrawTextSize(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_MIDDLE], 179.000000, 0.000000);
-	
+
 	// Bottom textdraws
-	MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_BOTTOM] = CreatePlayerTextDraw(playerid, 162.000000, 363.000000, "~y~~h~caption");
+	MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_BOTTOM] = CreatePlayerTextDraw(playerid, 162.000000, 364.000000, "~y~~h~caption");
 	PlayerTextDrawBackgroundColor(playerid, MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_BOTTOM], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_BOTTOM], 3);
 	PlayerTextDrawLetterSize(playerid, MsgBoxData[playerid][caption_TD][MSGBOX_TYPE_BOTTOM], 0.3, 1.6);
@@ -61,11 +61,10 @@ CreateMessageBoxTextDraws(playerid)
 	MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM] = CreatePlayerTextDraw(playerid, 161.000000, 393.000000, "This is the message. We tell the user what's going on here!");
 	PlayerTextDrawBackgroundColor(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], 1);
-	PlayerTextDrawLetterSize(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], 0.15, 1.15);
+	PlayerTextDrawLetterSize(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], 0.17, 1.17);
 	PlayerTextDrawColor(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], -1);
-	PlayerTextDrawSetOutline(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], 0);
+	PlayerTextDrawSetOutline(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], 1);
 	PlayerTextDrawSetProportional(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], 1);
-	PlayerTextDrawSetShadow(playerid, MsgBoxData[playerid][info_TD][MSGBOX_TYPE_BOTTOM], 1);
 	return 1;
 }
 
@@ -113,7 +112,7 @@ MessageBox(playerid, type, caption[], info[], interval = 6000, bool:sound = true
 
 	if(type < 0 || type == MAX_MSGBOX_TYPES)
 		return 0;
-	
+
 	if(strlen(caption) < 1)
 		return 0;
 
@@ -122,10 +121,10 @@ MessageBox(playerid, type, caption[], info[], interval = 6000, bool:sound = true
 
 	if(interval < 500)
 		return 0;
-	
+
 	if(sound)
 		PlayerPlaySound(playerid, 1053, 0.0, 0.0, 0.0);
-	
+
 	switch(type)
 	{
 		case MSGBOX_TYPE_TOP:

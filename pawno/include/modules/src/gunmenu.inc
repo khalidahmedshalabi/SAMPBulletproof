@@ -16,29 +16,29 @@ hook OnPlayerDisconnect(playerid, reason)
 
 LoadGunmenuData()
 {
-	new 
+	new
 		str[64],
 		DBResult:res = db_query(sqliteconnection, "SELECT * FROM 'Gunmenu' ORDER BY Weapon ASC"),
 		weaponID,
 		idx = 0;
-			
+
 	do {
 		db_get_field_assoc(res, "Weapon", str, sizeof(str));
 		weaponID = strval(str);
-		
+
 		GunmenuData[idx][GunID] = weaponID;
 		GunmenuData[idx][GunModel] = GetWeaponModelFromID(weaponID);
-		
+
 		db_get_field_assoc(res, "Limit", str, sizeof(str));
 		GunmenuData[idx][GunLimit] = strval(str);
-		
+
 		db_get_field_assoc(res, "Ammo", str, sizeof(str));
 		GunmenuData[idx][GunAmmo] = strval(str);
-	    
+
 		idx ++;
 
 	} while(db_next_row(res) && idx < MAX_GUNMENU_GUNS);
-	
+
 	db_free_result(res);
 }
 
@@ -52,7 +52,7 @@ ResetGunmenuSelections(team = -1)
 			{
 				for(new j = 0; j < MAX_GUNMENU_GUNS; j ++)
 					GunmenuData[j][TimesSelected][i] = 0;
-				
+
 				foreach(new j : Player)
 					for(new k = 0; k < MAX_GUNMENU_GUNS; k ++)
 						if(GunmenuData[k][HasGun][j])
@@ -63,7 +63,7 @@ ResetGunmenuSelections(team = -1)
 		{
 			for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
 				GunmenuData[i][TimesSelected][team] = 0;
-			
+
 			foreach(new j : Player)
 					for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
 						if(GunmenuData[i][HasGun][j])
@@ -130,7 +130,7 @@ DestroyPlayerGunObjects(playerid)
 {
 	if(Iter_Count(PlayerGunObjects[playerid]) == 0 || Player[playerid][GunmenuStyle] != GUNMENU_STYLE_OBJECT)
 		return;
-	
+
 	foreach(new i : PlayerGunObjects[playerid])
 	{
 		DestroyPlayerObject(playerid, i);
@@ -166,12 +166,12 @@ HidePlayerGunmenu(playerid)
 {
 	if(!Player[playerid][OnGunmenu])
 		return;
-	
+
 	switch(Player[playerid][GunmenuStyle])
 	{
 		case GUNMENU_STYLE_OBJECT:
 		{
-			if((Player[playerid][Playing] == true || Player[playerid][Spectating]) && Current != -1) 
+			if((Player[playerid][Playing] == true || Player[playerid][Spectating]) && Current != -1)
 			{
 				SetCPForPlayer(playerid);
 			}
@@ -249,7 +249,7 @@ public FreezePlayerPlane(playerid, planeid)
 	if(GetPlayerVehicleID(playerid) != planeid)
 		KillTimer(GunmenuData[playerid][GunFreezePlane]);
 	else
-		SetVehiclePos(planeid, TempAirVehicles_Pos[planeid][0], TempAirVehicles_Pos[planeid][1], TempAirVehicles_Pos[planeid][2]);	
+		SetVehiclePos(planeid, TempAirVehicles_Pos[planeid][0], TempAirVehicles_Pos[planeid][1], TempAirVehicles_Pos[planeid][2]);
 	return 1;
 }
 
@@ -258,7 +258,7 @@ public ShowPlayerGunmenu(playerid, delay)
 {
 	if(Player[playerid][OnGunmenu])
 		HidePlayerGunmenu(playerid);
-	
+
 	if(delay > 0)
 	{
 		SetTimerEx("ShowPlayerGunmenu", delay, false, "ii", playerid, 0);
@@ -274,7 +274,7 @@ public ShowPlayerGunmenu(playerid, delay)
 		}
 		case GUNMENU_STYLE_OBJECT:
 		{
-			new 
+			new
 				veh = GetPlayerVehicleID(playerid),
 				bool:InAirVehicle = false;
 			if(IsAirVehicle(veh))
@@ -292,8 +292,8 @@ public ShowPlayerGunmenu(playerid, delay)
 			// Basically we will be going from 0 to 360 since it's a circle
 			// Let's start from 0
 			new Float:angle = 0.0;
-			
-			new 
+
+			new
 				i = 0, // index
 				objectID, // player object ID
 				bool:MoveObjectUp = true, // whether this object should start moving to up or to down
@@ -301,7 +301,7 @@ public ShowPlayerGunmenu(playerid, delay)
 				Float:y,  // object Y
 				Float:z,  // object Z
 				Float:angle_change = 360.0 / float(MAX_GUNMENU_GUNS);
-			
+
 			new Float:centerX, Float:centerY, Float:radius = GUNMENU_OBJECTS_CIRCLE_RADIUS, Float:camHeight = 3.65;
 			GetPlayerPos(playerid, centerX, centerY, z); // we need the z value only from player
 			new Float:originZ = z;
@@ -532,7 +532,7 @@ OnGunmenuDialogResponse(playerid, response, listitem)
 		case 0: // Clicked  "Reset"
 		{
 			ResetPlayerGunmenu(playerid, true);
-			MessageBox(playerid, MSGBOX_TYPE_TOP, "~g~~h~~h~emptied inventory", " ", 3000);
+			MessageBox(playerid, MSGBOX_TYPE_TOP, "~g~~h~Inventory", "Your weapon inventory is empty now", 3000);
 		}
 		case 1: // Clicked "Pick"
 		{
@@ -565,10 +565,10 @@ OnGunObjectMovedToPlayer(playerid, objectid, index)
 		}
 		else
 			GetPlayerWeaponData(playerid, i, tmpWeapID, tmpAmmo);
-		
+
 		if(tmpWeapID == 0)
 			continue;
-		
+
 		if(tmpWeapID == GunmenuData[index][GunID])
 		{
 			format(str, sizeof str, "%s~g~~h~~h~%s ~h~(newly added)~w~~n~", str, WeaponNames[tmpWeapID]);
@@ -590,12 +590,12 @@ OnGunObjectMovedToPlayer(playerid, objectid, index)
 
 GivePlayerGunmenuWeapon(playerid, index)
 {
-	new 
+	new
 		weaponid = GunmenuData[index][GunID],
 		team = Player[playerid][Team];
 	if(DoesPlayerHaveWeapon(playerid, weaponid))
 		RemovePlayerWeapon(playerid, weaponid);
-	
+
 	GunmenuData[index][HasGun][playerid] = true; // Indicate that they have this weapon now from gunmenu
 	GunmenuData[index][TimesSelected][team] ++; // Indicate how many times this weapon is selected in this team (by increasing 1 everytime a player selects)
 	GivePlayerWeapon(playerid, weaponid, GunmenuData[index][GunAmmo]);
@@ -629,11 +629,11 @@ OnPlayerSelectGunmenuObject(playerid, objectid, modelid)
 		if(GunmenuData[i][GunModel] == modelid)
 		{
 			// Alright, we've found the slot that has the same modelid
-			// Let's store it in our variable because we're gonna need 
+			// Let's store it in our variable because we're gonna need
 			// it outside of this loop
 			gunmenuIndex = i;
 			// we aren't searching for the slot anymore so let's break outta loop
-			break; 
+			break;
 		}
 	}
 	if(gunmenuIndex == -1)
@@ -649,7 +649,7 @@ OnPlayerSelectGunmenuObject(playerid, objectid, modelid)
 		// Movement
 		if(IsPlayerObjectMoving(playerid, objectid))
 			StopPlayerObject(playerid, objectid);
-		new 
+		new
 			Float:x[2], Float:y[2], Float:z[2],
 			Float:rotX, Float:rotY, Float:rotZ;
 		GetPlayerPos(playerid, x[0], y[0], z[0]);
@@ -661,19 +661,19 @@ OnPlayerSelectGunmenuObject(playerid, objectid, modelid)
 		//for(new i = 0; i != 10; i ++)
 		//	SetPlayerObjectMaterial(playerid, objectid, i, 3858, "ottos_glass", "carshowroom1", 0xFF000000);
 		MovePlayerObject(
-			playerid, 
-			GunmenuData[gunmenuIndex][GunFlamePlayerObject][playerid], 
-			x[0], 
-			y[0], 
-			z[1] - 1.3, 
+			playerid,
+			GunmenuData[gunmenuIndex][GunFlamePlayerObject][playerid],
+			x[0],
+			y[0],
+			z[1] - 1.3,
 			GetPlayerDistanceFromPoint(playerid, x[1], y[1], z[1])
 			);
 		MovePlayerObject(
-			playerid, 
-			objectid, 
-			x[0], 
-			y[0], 
-			z[1], 
+			playerid,
+			objectid,
+			x[0],
+			y[0],
+			z[1],
 			GetPlayerDistanceFromPoint(playerid, x[1], y[1], z[1]),
 			rotX,
 			rotY,

@@ -437,6 +437,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 			new str[64];
 			format(str, sizeof(str), "%s%s {FFFFFF}has died by: {FFFFFF}%s", TextColor[Player[playerid][Team]], Player[playerid][Name], WeaponNames[reason]);
 	        SendClientMessageToAll(-1, str);
+			MessageBox(playerid, MSGBOX_TYPE_TOP, "wasted", "_", 3000, false);
 
             OnPlayerAmmoUpdate(playerid);
 	    }

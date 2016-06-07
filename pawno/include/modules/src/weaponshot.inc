@@ -452,7 +452,7 @@ HandleHeadshot(playerid, issuerid, weaponid)
 					AddPlayerLeaguePoints(issuerid, 50, "hitting a big head");
 				}
 				#endif
-				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot~n~~g~~h~~h~Sniper", " ", 2000);
+				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "You've just landed a headshot with Sniper", 2000);
 				SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Sniper"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]));
 			}
 			case WEAPON_RIFLE:
@@ -463,7 +463,7 @@ HandleHeadshot(playerid, issuerid, weaponid)
 					AddPlayerLeaguePoints(issuerid, 50, "hitting a big head");
 				}
 				#endif
-				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot~n~~g~~h~~h~Rifle", " ", 2000);
+				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "You've just landed a headshot with Rifle", 2000);
 				SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Rifle"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]));
 			}
 			case WEAPON_DEAGLE:
@@ -474,7 +474,7 @@ HandleHeadshot(playerid, issuerid, weaponid)
 					AddPlayerLeaguePoints(issuerid, 50, "hitting a big head");
 				}
 				#endif
-				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot~n~~g~~h~~h~Deagle", " ", 2000);
+				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot~", "You've just landed a headshot with Deagle", 2000);
 				SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Deagle"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]));
 			}
 		}
