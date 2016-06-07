@@ -678,7 +678,7 @@ RoundTextdrawsCreate()
     TextDrawSetProportional(centerBG, 1);
 
 	timerCenterTD = TextDrawCreate	(	324.140991, 		434.872528, "~w~0:00 / ~r~~h~00");
-	TextDrawLetterSize				(	timerCenterTD, 		0.200410, 	1.300164	);
+	TextDrawLetterSize				(	timerCenterTD, 		0.24, 1.34);
 	TextDrawTextSize				(	timerCenterTD, 		299.293579, 98.583343	);
 	TextDrawAlignment				(	timerCenterTD, 		2						);
 	TextDrawColor					(	timerCenterTD, 		-1						);
