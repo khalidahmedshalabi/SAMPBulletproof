@@ -1167,29 +1167,32 @@ sscanf(string[], format[], {Float,_}:...)
 	return 0;
 }
 
-OnPlayerAmmoUpdate(playerid) {
-
+OnPlayerAmmoUpdate(playerid)
+{
 	if(Player[playerid][Playing] == true)
 	{
 	    new weapons;
 		new Ammo, TotalShots, Float:accuracy;
 
-		for(new k=2; k < 8; ++k) {
+		for(new k=2; k < 8; ++k)
+		{
 			GetPlayerWeaponData(playerid, k, weapons, Ammo);
-			if(Ammo > 10) {
-				TotalShots = TotalShots + (9999 - Ammo);
+			if(Ammo > 10)
+			{
+				TotalShots += (9999 - Ammo);
 			}
 		}
 
-		if(TotalShots == 0) accuracy = 0.0;
-		else accuracy = floatmul(100.0, floatdiv(Player[playerid][shotsHit], TotalShots));
+		if(TotalShots == 0)
+			accuracy = 0.0;
+		else
+			accuracy = floatmul(100.0, floatdiv((float)Player[playerid][shotsHit], (float)TotalShots));
 
-		Player[playerid][TotalBulletsFired] = Player[playerid][TotalBulletsFired] + TotalShots;
-  		Player[playerid][TotalshotsHit] = Player[playerid][TotalshotsHit] + Player[playerid][shotsHit];
+		Player[playerid][TotalBulletsFired] += TotalShots;
+  		Player[playerid][TotalshotsHit] += Player[playerid][shotsHit];
 		Player[playerid][Accuracy] = accuracy;
 		Player[playerid][TotalAccuracy] += accuracy;
 	}
-	return 1;
 }
 
 GetWeaponSlot(weaponid)
