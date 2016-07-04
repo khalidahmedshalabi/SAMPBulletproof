@@ -1266,25 +1266,14 @@ public OnPlayerStreamOut(playerid, forplayerid)
 	return 1;
 }
 
-public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
+HandleDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 {
-    // Show target player info for the shooter (HP, PL, Ping and many other things)
- 	ShowTargetInfo(playerid, damagedid);
-    if(amount == 1833.33154296875)
-        return 1;
-
-    //OnPlayerTakeDamage(damagedid, playerid, amount, weaponid, bodypart);
-	return 1;
-}
-
-public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
-{
-	// Fall protection, gunmenu protection..etc
+    // Fall protection, gunmenu protection..etc
 	if(!IsLegalHit(playerid, issuerid, amount, weaponid))
 	{
 	    return 1;
 	}
-	
+
 	// Detect explosion damage, cancel it and set grenade damage
 	if(weaponid == 51)
     {
@@ -1299,7 +1288,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
    		    weaponid = WEAPON_GRENADE;
    		}
     }
-    
+
     // Handling Grenades
     if(weaponid == WEAPON_GRENADE)
     {
@@ -1316,16 +1305,16 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
        	    amount = GRENADE_LOW_DAMAGE;
        	}
     }
-    
+
     // Detect headshots
     if(bodypart == 9)
 	{
 	    HandleHeadshot(playerid, issuerid, weaponid);
 	}
-	
+
 	// Show target player info for the shooter (HP, PL, Ping and many other things)
  	ShowTargetInfo(issuerid, playerid);
- 	
+
  	// <start> Health and armour handling
  	if(weaponid == -1)
 		weaponid = Player[playerid][HitWith];
@@ -1428,6 +1417,20 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		}
  	}
  	CreateGunObjectOnHead(playerid, weaponid);
+ 	return 1;
+}
+
+public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
+{
+	if(lagcompmode != 0)
+    	HandleDamage(damagedid, playerid, amount, weaponid, bodypart);
+	return 1;
+}
+
+public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
+{
+	if(lagcompmode == 0)
+	    HandleDamage(playerid, issuerid, amount, weaponid, bodypart);
 	return 1;
 }
 
@@ -3853,6 +3856,32 @@ YCMD:xmas(playerid, params[], help)
 	}
 	else
 	    return SendUsageMessage(playerid, "/xmas [on / off]");
+	return 1;
+}
+
+YCMD:anticbug(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "toggle anti-cbug system (if filterscript is available)");
+	    return 1;
+	}
+	if(isnull(params))
+	{
+	    return SendUsageMessage(playerid, "/anticbug [on / off]");
+	}
+	if(!strcmp(params, "on", true))
+	{
+	    SendRconCommand("loadfs anticbug");
+	    SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has attempted to load Anti-Cbug filterscript!", Player[playerid][Name]));
+	}
+	else if(!strcmp(params, "off", true))
+	{
+	    SendRconCommand("unloadfs anticbug");
+	    SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has attempted to unload Anti-Cbug filterscript!", Player[playerid][Name]));
+	}
+	else
+	    return SendUsageMessage(playerid, "/anticbug [on / off]");
 	return 1;
 }
 
@@ -7541,7 +7570,7 @@ YCMD:rem(playerid, params[], help)
     GetHP(playerid, HP[0]);
     GetAP(playerid, HP[1]);
 
-    format(iString, sizeof(iString), "{FFFFFF}%s (%d) "COL_PRIM"removed himself from round. {757575}HP %d | Armour %d", Player[playerid][Name], playerid, HP[0], HP[1]);
+    format(iString, sizeof(iString), "{FFFFFF}%s (%d) "COL_PRIM"removed himself from round. {FFFFFF}(HP %d | AP %d)", Player[playerid][Name], playerid, HP[0], HP[1]);
     SendClientMessageToAll(-1, iString);
 
 	RemovePlayerFromRound(playerid);
@@ -7568,7 +7597,7 @@ YCMD:remove(playerid, params[], help)
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isn't connected.");
 	if(Player[pID][Playing] == false) return SendErrorMessage(playerid,"That player is not playing.");
 
-    format(iString, sizeof(iString), "{FFFFFF}%s (%d) "COL_PRIM"removed {FFFFFF}%s (%d) "COL_PRIM"from round. {757575}HP %d | Armour %d", Player[playerid][Name], playerid, Player[pID][Name], pID, HP[0], HP[1]);
+    format(iString, sizeof(iString), "{FFFFFF}%s (%d) "COL_PRIM"removed {FFFFFF}%s (%d) "COL_PRIM"from round. {FFFFFF}(HP %d | AP %d)", Player[playerid][Name], playerid, Player[pID][Name], pID, HP[0], HP[1]);
     SendClientMessageToAll(-1, iString);
 
 	RemovePlayerFromRound(pID);

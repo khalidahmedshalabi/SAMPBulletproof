@@ -1417,7 +1417,7 @@ public OnPlayerInGameReplace(ToAddID, i, playerid) {
 
     SaveVariables[i][ToBeAdded] = false;
 
-	new iString[180];
+	new iString[160];
 
 	if(RoundPaused == true) {
 		TogglePlayerControllable(ToAddID, 0);
@@ -1482,6 +1482,29 @@ RemovePlayerFromRound(playerid, bool:remove_iterator = true)
 
 	SpawnPlayer(playerid);
 	return 1;
+}
+
+ResetPlayerRoundVariables(playerid, bool:total = false)
+{
+	switch(total)
+	{
+		case false:
+		{
+			Player[playerid][RoundKills] = 0;
+			Player[playerid][RoundDeaths] = 0;
+			Player[playerid][RoundDamage] = 0;
+			Player[playerid][shotsHit] = 0;
+		}
+		case true:
+		{
+			Player[playerid][TotalKills] = 0;
+			Player[playerid][TotalDeaths] = 0;
+			Player[playerid][TotalDamage] = 0;
+			Player[playerid][RoundPlayed] = 0;
+		    Player[playerid][TotalBulletsFired] = 0;
+		    Player[playerid][TotalshotsHit] = 0;
+		}
+	}
 }
 
 forward ShowPlayingPlayersGunmenu();
@@ -1652,10 +1675,7 @@ SpawnPlayersInRC()
 			Player[i][WasInTeam] = Player[i][Team];
 			Iter_Add(PlayersInRound, i);
 
-			Player[i][RoundKills] = 0;
-			Player[i][RoundDeaths] = 0;
-			Player[i][RoundDamage] = 0;
-			Player[i][shotsHit] = 0;
+			ResetPlayerRoundVariables(i);
 
 			PlayerPlaySound(i, 1057, 0, 0, 0);
 	        SetPlayerVirtualWorld(i, 2);
@@ -1885,10 +1905,7 @@ SpawnPlayersInArena()
 			Player[i][WasInTeam] = Player[i][Team];
 			Iter_Add(PlayersInRound, i);
 
-			Player[i][RoundKills] = 0;
-			Player[i][RoundDeaths] = 0;
-			Player[i][RoundDamage] = 0;
-			Player[i][shotsHit] = 0;
+			ResetPlayerRoundVariables(i);
 
 			PlayerPlaySound(i, 1057, 0, 0, 0);
 	        SetPlayerVirtualWorld(i, 2);
@@ -1993,10 +2010,7 @@ public AddPlayerToArena(playerid)
 	Iter_Add(PlayersInRound, playerid);
 	UpdateTeamPlayerCount(Player[playerid][Team], false);
     Player[playerid][ToAddInRound] = false;
-	Player[playerid][RoundKills] = 0;
-	Player[playerid][RoundDeaths] = 0;
-	Player[playerid][RoundDamage] = 0;
-	Player[playerid][shotsHit] = 0;
+	ResetPlayerRoundVariables(playerid);
 
 	PlayerPlaySound(playerid, 1057, 0, 0, 0);
 	SetCameraBehindPlayer(playerid);
@@ -2291,10 +2305,7 @@ SpawnPlayersInBase()
 	        Player[i][WasInBase] = true;
 			Player[i][WasInTeam] = Player[i][Team];
 			Iter_Add(PlayersInRound, i);
-			Player[i][RoundKills] = 0;
-			Player[i][RoundDeaths] = 0;
-			Player[i][RoundDamage] = 0;
-			Player[i][shotsHit] = 0;
+			ResetPlayerRoundVariables(i);
 
 			PlayerPlaySound(i, 1057, 0, 0, 0);
 			SetCameraBehindPlayer(i);
@@ -2392,10 +2403,7 @@ public AddPlayerToBase(playerid)
 	}
 
 	if(Player[playerid][WasInBase] == false) {
-		Player[playerid][RoundKills] = 0;
-		Player[playerid][RoundDeaths] = 0;
-		Player[playerid][RoundDamage] = 0;
-	    Player[playerid][shotsHit] = 0;
+		ResetPlayerRoundVariables(playerid);
 	}
 
 	if(!Player[playerid][FakePacketRenovation] && Player[playerid][NetCheck] && NetStats_GetConnectedTime(playerid) < 300000)
@@ -3096,12 +3104,7 @@ public WarEnded()
 
 	foreach(new i : Player)
 	{
-		Player[i][TotalKills] = 0;
-		Player[i][TotalDeaths] = 0;
-		Player[i][TotalDamage] = 0;
-		Player[i][RoundPlayed] = 0;
-	    Player[i][TotalBulletsFired] = 0;
-	    Player[i][TotalshotsHit] = 0;
+		ResetPlayerRoundVariables(i, true);
 	}
 
 	ClearPlayerVariables();

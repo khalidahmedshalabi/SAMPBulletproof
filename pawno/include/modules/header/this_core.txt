@@ -15,3 +15,4 @@ new 			GM_WEBSITE[50]	=	"www.bulletproof.ml";
 
 new DB:sqliteconnection; // SQLite Databases
 new teamskinlist = mS_INVALID_LISTID, playerskinlist = mS_INVALID_LISTID;
+new lagcompmode = 0;

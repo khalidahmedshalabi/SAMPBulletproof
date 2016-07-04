@@ -72,10 +72,11 @@ InitScriptSecondarySettings()
     ServerLastPlayed = -1;
     ServerLastPlayedType = -1;
     Current = -1;
-	
+
 	// Settings
 	FixGamemodeText(); // Text that appears on 'Mode' column when you click on a server in samp.exe
     SendRconCommand("mapname Lobby");
+	lagcompmode = GetServerVarAsInt("lagcompmode");
 	CheckServerHostname();
 	#if defined _league_included
 	InitOnlineMatchesList();
@@ -91,7 +92,9 @@ InitScriptSecondarySettings()
 	InitGunmenu();
 	InitVoting();
 	AdjustWeaponRanges();
+
 	CreateObject(3095, 268.74, 1884.21, 16.07,   0.00, 0.00, 0.00); // block area 51
+
 	// Match recording (rounds)
 	MatchRoundsStarted = 0;
 	for( new i = 0; i < 101; i++ )
@@ -113,10 +116,10 @@ AddToServersDatabase()
 	#if defined HTTP_DEST_SERVERLIST
 	if(!strcmp(hostname, "Bulletproof Home Test Server", true) || !strcmp(hostname, "Bulletproof Home Test Server [ACv2 ENABLED]", true))
 		return;
-	
+
 	new ServerIP[30];
     GetServerVarAsString("bind", ServerIP, sizeof(ServerIP));
-	
+
     new port = GetServerVarAsInt("port");
 
     if(!strlen(ServerIP)) ServerIP = "noip";

@@ -1186,7 +1186,7 @@ OnPlayerAmmoUpdate(playerid)
 		if(TotalShots == 0)
 			accuracy = 0.0;
 		else
-			accuracy = floatmul(100.0, floatdiv((float)Player[playerid][shotsHit], (float)TotalShots));
+			accuracy = floatmul(100.0, floatdiv(Player[playerid][shotsHit], TotalShots));
 
 		Player[playerid][TotalBulletsFired] += TotalShots;
   		Player[playerid][TotalshotsHit] += Player[playerid][shotsHit];
