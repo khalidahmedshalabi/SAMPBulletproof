@@ -660,8 +660,8 @@ ShowTargetInfo(playerid, targetid)
 	if(targetid == TargetInfoData[playerid][TargetInfoLastTarget] && GetTickCount() < TargetInfoData[playerid][TargetInfoLastTick])
 		return 1;
 
-	new str[128];
-	format(str, sizeof str, "~r~TARGET~n~%sName: %s%s~n~%sPing: %s%d %sFPS: %s%d~n~%sPL: %s%.1f %sHP: %s%d",
+	new str[138];
+	format(str, sizeof str, "~r~TARGET INFO~n~%sName: %s%s~n~%sPing: %s%d   %sFPS: %s%d~n~%sPL: %s%.1f   %sHP: %s%d",
 		MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][NameWithoutTag], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]],
 		GetPlayerPing(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], Player[targetid][FPS], MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], NetStats_PacketLossPercent(targetid), MAIN_TEXT_COLOUR, TDC[Player[targetid][Team]], (Player[targetid][pHealth] + Player[targetid][pArmour]));
 

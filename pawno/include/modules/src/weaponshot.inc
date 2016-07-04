@@ -452,7 +452,7 @@ HandleHeadshot(playerid, issuerid, weaponid)
 					AddPlayerLeaguePoints(issuerid, 50, "hitting a big head");
 				}
 				#endif
-				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "You've just landed a headshot with Sniper", 2000);
+				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "You've just landed a headshot with Sniper", 3000);
 				SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Sniper"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]));
 			}
 			case WEAPON_RIFLE:
@@ -463,7 +463,7 @@ HandleHeadshot(playerid, issuerid, weaponid)
 					AddPlayerLeaguePoints(issuerid, 50, "hitting a big head");
 				}
 				#endif
-				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "You've just landed a headshot with Rifle", 2000);
+				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "You've just landed a headshot with Rifle", 3000);
 				SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Rifle"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]));
 			}
 			case WEAPON_DEAGLE:
@@ -474,7 +474,7 @@ HandleHeadshot(playerid, issuerid, weaponid)
 					AddPlayerLeaguePoints(issuerid, 50, "hitting a big head");
 				}
 				#endif
-				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot~", "You've just landed a headshot with Deagle", 2000);
+				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "You've just landed a headshot with Deagle", 3000);
 				SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Deagle"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]));
 			}
 		}
@@ -622,7 +622,7 @@ public HideFriendlyVisualDmg(playerid)
 HandleFriendlyVisualDamage(hitterid, hittedid)
 {
 	new str[39];
-	format(str, sizeof str, "~y~~h~%s [!!!]", Player[hittedid][NameWithoutTag]);
+	format(str, sizeof str, "~y~~h~%s", Player[hittedid][NameWithoutTag]);
 
 	PlayerTextDrawSetString(hitterid, FriendlyDamage[hitterid][0], str);
 
@@ -642,7 +642,7 @@ HandleFriendlyVisualDamage(hitterid, hittedid)
 		VisualDamage[i][FriendlyDamageTimer] = SetTimerEx("HideFriendlyVisualDmg", HIDE_DAMAGE_TEXTDRAW_AFTER, false, "i", i);
 	}
 
-	format(str, sizeof str, "~y~~h~%s [!!!]", Player[hitterid][NameWithoutTag]);
+	format(str, sizeof str, "~y~~h~%s", Player[hitterid][NameWithoutTag]);
 
 	PlayerTextDrawSetString(hittedid, FriendlyDamage[hittedid][1], str);
 
