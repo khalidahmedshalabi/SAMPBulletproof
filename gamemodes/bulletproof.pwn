@@ -68,7 +68,6 @@ native IsValidVehicle(vehicleid);
 #include "modules\src\weaponbinds.inc"
 #include "modules\src\ac_addons.inc"
 #include "modules\src\vote.inc"
-#include "modules\src\gunonhead.inc"
 #include "modules\src\teamhpbars.inc"
 
 main()
@@ -1416,7 +1415,6 @@ HandleDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		    }
 		}
  	}
- 	CreateGunObjectOnHead(playerid, weaponid);
  	return 1;
 }
 
