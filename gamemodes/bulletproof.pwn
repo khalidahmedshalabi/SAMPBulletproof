@@ -4384,7 +4384,7 @@ YCMD:duel(playerid, params[], help)
 	if(Player[playerid][Playing] == true) return SendErrorMessage(playerid,"You can't duel while being in a round.");
 	if(Player[invitedid][InDuel] == true) return SendErrorMessage(playerid,"That player is already dueling someone.");
 	if(Player[invitedid][challengerid] == playerid) return SendErrorMessage(playerid,"You have already invited that player for duel. Let him accept or deny your previous invite.");    //duelspamfix
-	//if(invitedid == playerid) return SendErrorMessage(playerid,"Can't duel with yourself.");
+	if(invitedid == playerid) return SendErrorMessage(playerid,"Can't duel with yourself.");
 
     new WeaponID1 = GetWeaponID(Weapon1);
 	if(WeaponID1 < 1 || WeaponID1 > 46 || WeaponID1 == 19 || WeaponID1 == 20 || WeaponID1 == 21) return SendErrorMessage(playerid,"Invalid Weapon Name.");
@@ -9063,13 +9063,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			}
 		}
 	}
-	if(Current == -1 && Player[playerid][Playing] == false && LobbyGuns == false && PRESSED(4))
-	{
-	    SendErrorMessage(playerid,"DM is disabled in the lobby");
-	    TogglePlayerControllable(playerid, 0);
-	    TogglePlayerControllable(playerid, 1);
-		return 0;
- 	}
  	
 	// - Low priority key functions
 
