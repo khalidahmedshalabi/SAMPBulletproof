@@ -321,7 +321,7 @@ ResultTextdrawsCreate()
 	TextDrawAlignment			(	leftBG, 		1							);
 	TextDrawColor				(	leftBG, 		0							);
 	TextDrawUseBox				(	leftBG, 		true						);
-	TextDrawBoxColor			(	leftBG, 		0xFF736F22					);
+	TextDrawBoxColor			(	leftBG, 		0xDB535399					);
 	TextDrawSetShadow			(	leftBG, 		0);
 	TextDrawSetOutline			(	leftBG, 		0);
 	TextDrawFont				(	leftBG, 		0);
@@ -332,7 +332,7 @@ ResultTextdrawsCreate()
 	TextDrawAlignment			(	rightBG, 		1							);
 	TextDrawColor				(	rightBG, 		0							);
 	TextDrawUseBox				(	rightBG, 		true						);
-	TextDrawBoxColor			(	rightBG,		0x7391FF22					);
+	TextDrawBoxColor			(	rightBG,		0x6492D199					);
 	TextDrawSetShadow			(	rightBG,		0							);
 	TextDrawSetOutline			(	rightBG, 		0							);
 	TextDrawFont				(	rightBG, 		0							);
@@ -343,7 +343,7 @@ ResultTextdrawsCreate()
 	TextDrawAlignment          	(	leftUpBG, 		1							);
 	TextDrawColor            	(	leftUpBG, 		0							);
 	TextDrawUseBox            	(	leftUpBG, 		true						);
-	TextDrawBoxColor            (	leftUpBG, 		0x00000044					);
+	TextDrawBoxColor            (	leftUpBG, 		0x000000EE					);
 	TextDrawSetShadow          	(	leftUpBG, 		0							);
 	TextDrawSetOutline         	(	leftUpBG, 		0							);
 	TextDrawFont            	(	leftUpBG, 		0							);
@@ -354,7 +354,7 @@ ResultTextdrawsCreate()
 	TextDrawAlignment           (	rightUpBG, 		1							);
 	TextDrawColor            	(	rightUpBG, 		0							);
 	TextDrawUseBox            	(	rightUpBG, 		true						);
-	TextDrawBoxColor            (	rightUpBG, 		0x00000044					);
+	TextDrawBoxColor            (	rightUpBG, 		0x000000EE					);
 	TextDrawSetShadow          	(	rightUpBG, 		0							);
 	TextDrawSetOutline     	  	(	rightUpBG, 		0							);
 	TextDrawFont            	(	rightUpBG, 		1							);
@@ -407,7 +407,7 @@ ResultTextdrawsCreate()
 	TextDrawAlignment          	(	lowerBG,		1							);
 	TextDrawColor            	(	lowerBG,		0							);
 	TextDrawUseBox            	(	lowerBG,		true						);
-	TextDrawBoxColor            (	lowerBG,		0x00000011					);
+	TextDrawBoxColor            (	lowerBG,		0x00000099					);
 	TextDrawSetShadow          	(	lowerBG,		0							);
 	TextDrawSetOutline         	(	lowerBG,		0							);
 	TextDrawFont            	(	lowerBG,		0							);
