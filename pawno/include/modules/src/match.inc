@@ -2630,6 +2630,8 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 				playerScores[index][player_HP] = Player[i][pHealth] + Player[i][pArmour];
 				playerScores[index][player_Acc] = floatround(Player[i][Accuracy], floatround_round);
 
+				playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] + playerScores[index][player_HP] + playerScores[index][player_Acc] - playerScores[index][player_Deaths];
+
 				format(names[index], MAX_PLAYER_NAME, Player[i][NameWithoutTag]);
 
 				playerScores[index++][player_ID] = i;
@@ -2701,6 +2703,8 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 			playerScores[index][player_HP] = SaveVariables[i][gHealth] + SaveVariables[i][gArmour];
 			playerScores[index][player_Acc] = SaveVariables[i][iAccuracy];
 
+			playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] + playerScores[index][player_HP] + playerScores[index][player_Acc] - playerScores[index][player_Deaths];
+
 			format(names[index], MAX_PLAYER_NAME, SaveVariables[i][pNameWithoutTag]);
 
 	   	    SaveVariables[i][RKills]   	=  	0;
@@ -2722,7 +2726,8 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 
 	new topkill, topkillID = -1,
 		Float: topDmg, topDmgID = -1,
-		topAcc, topAccID = -1
+		topAcc, topAccID = -1,
+		topOverall, topOverallID = -1
 	;
 
 	for(new i = 0; i != p; ++i) {
@@ -2741,6 +2746,11 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	    {
             topAcc = playerScores[i][player_Acc];
             topAccID = i;
+	    }
+		if( playerScores[i][player_Overall] > topOverall)
+	    {
+            topOverall = playerScores[i][player_Overall];
+            topOverallID = i;
 	    }
 
 	    if(playerScores[i][player_Team] == ATTACKER || playerScores[i][player_Team] == ATTACKER_SUB) {
@@ -2820,6 +2830,8 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	SendClientMessageToAll(-1, TopString[1]);
 	SendClientMessageToAll(-1, TopString[2]);
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
+	SendClientMessageToAll(-1, " ");
+	SendClientMessageToAll(-1, sprintf("{FFFFFF}Man of the round is: %s%s", TextColor[Player[topOverallID][Team]], Player[topOverallID][Name]));
 
 	#if defined _league_included
 	UpdateOnlineMatchesList(WarMode);
@@ -2947,6 +2959,8 @@ public WarEnded()
 			else nTotalAccuracy = floatmul(100.0, floatdiv(Player[i][TotalshotsHit], Player[i][TotalBulletsFired]));
 			playerScores[index][player_Acc] = floatround(nTotalAccuracy, floatround_round);
 
+			playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] - playerScores[index][player_Deaths] + playerScores[index][player_TPlayed] + playerScores[index][player_Acc];
+
 			format(names[index], MAX_PLAYER_NAME, Player[i][NameWithoutTag]);
 
 		    playerScores[index++][player_ID] = i;
@@ -2971,6 +2985,8 @@ public WarEnded()
 			else nTotalAccuracy = floatmul(100.0, floatdiv(SaveVariables[i][tshotsHit], SaveVariables[i][tBulletsShot]));
 			playerScores[index][player_Acc] = floatround(nTotalAccuracy, floatround_round);
 
+			playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] - playerScores[index][player_Deaths] + playerScores[index][player_TPlayed] + playerScores[index][player_Acc];
+
 	    	format(names[index], MAX_PLAYER_NAME, SaveVariables[i][pNameWithoutTag]);
 
 	   	    SaveVariables[i][RKills]   	=  	0;
@@ -2987,7 +3003,8 @@ public WarEnded()
 
 	new topkill, topkillID = -1,
 		Float: topDmg, topDmgID = -1,
-		topAcc, topAccID = -1
+		topAcc, topAccID = -1,
+		topOverall, topOverallID = -1
 	;
 
 	for(new i = 0; i != p; ++i) {
@@ -3006,6 +3023,11 @@ public WarEnded()
 	    {
             topAcc = playerScores[i][player_Acc];
             topAccID = i;
+	    }
+		if( playerScores[i][player_Overall] > topOverall)
+	    {
+            topOverall = playerScores[i][player_Overall];
+            topOverallID = i;
 	    }
 
 	    if(playerScores[i][player_Team] == ATTACKER || playerScores[i][player_Team] == ATTACKER_SUB) {
@@ -3073,6 +3095,8 @@ public WarEnded()
 	SendClientMessageToAll(-1, TopString[1]);
 	SendClientMessageToAll(-1, TopString[2]);
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
+	SendClientMessageToAll(-1, " ");
+	SendClientMessageToAll(-1, sprintf("{FFFFFF}Man of the match is: %s%s", TextColor[Player[topOverallID][Team]], Player[topOverallID][Name]));
 
 	#if defined _league_included
 	UpdateOnlineMatchesList(false);

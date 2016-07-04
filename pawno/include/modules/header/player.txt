@@ -155,6 +155,7 @@ new SaveVariables[SAVE_SLOTS][save_vars];
 // Used for ranking players
 enum rankingEnum {
     player_Score,
+	player_Overall,
     player_Team,
     player_Kills,
     player_Deaths,
