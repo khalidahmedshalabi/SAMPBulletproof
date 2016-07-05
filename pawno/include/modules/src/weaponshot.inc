@@ -301,7 +301,7 @@ SetHP(playerid, amount)
 			return 0;
 
 		Player[playerid][AlreadyDying] = true;
-	    ServerOnPlayerDeath(playerid, Player[playerid][HitBy], Player[playerid][HitWith]);
+	    SetTimerEx("ServerOnPlayerDeath", SERVER_PlAYER_DEATH_DELAY, false, "iii", playerid, Player[playerid][HitBy], Player[playerid][HitWith]);
 		HidePlayerProgressBar(playerid, HealthBar[playerid]);
 		Player[playerid][pHealth] = 0;
 		SetPlayerScore(playerid, 0);
