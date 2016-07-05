@@ -1265,7 +1265,7 @@ public OnPlayerStreamOut(playerid, forplayerid)
 	return 1;
 }
 
-HandleDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
+HandlePlayerDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 {
     // Fall protection, gunmenu protection..etc
 	if(!IsLegalHit(playerid, issuerid, amount, weaponid))
@@ -1322,21 +1322,27 @@ HandleDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
  	Player[playerid][HitWith] = weaponid; // This is used in custom OnPlayerDeath to get the last weapon a player got hit with before death
 
     new rounded_amount = GetActualDamage(amount, playerid); // Fix damage if it's unreal (in other words, if damage is greater than player's health)
-	if(weaponid == 54) // If it's a collision (fell or something)
+
+	// If it's a collision (fell or something)
+	if(weaponid == 54)
 	{
 	    // We deal with health only leaving armour as it is.
 	    SetHP(playerid, Player[playerid][pHealth] - rounded_amount);
 	}
-	else if(Player[playerid][pArmour] > 0) // Still got armour and it's not a collision damager
+	else if(Player[playerid][pArmour] > 0)
 	{
+	    // Still got armour and it's not a collision damager
+	    
 	    new diff = (Player[playerid][pArmour] - rounded_amount);
 		if(diff < 0)
 		{
 		    SetAP(playerid, 0);
 		    SetHP(playerid, Player[playerid][pHealth] + diff);
 		}
+		else if(diff == 0)
+		    SetAP(playerid, 0);
 		else
-		    SetAP(playerid, diff);
+		    UpdatePlayerArmourVariables(playerid, diff);
 	}
 	else // It's not a collision and the player got no armour
 	    SetHP(playerid, Player[playerid][pHealth] - rounded_amount);
@@ -1421,14 +1427,14 @@ HandleDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 {
 	if(lagcompmode != 0)
-    	HandleDamage(damagedid, playerid, amount, weaponid, bodypart);
+    	HandlePlayerDamage(damagedid, playerid, amount, weaponid, bodypart);
 	return 1;
 }
 
 public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 {
 	if(lagcompmode == 0)
-	    HandleDamage(playerid, issuerid, amount, weaponid, bodypart);
+	    HandlePlayerDamage(playerid, issuerid, amount, weaponid, bodypart);
 	return 1;
 }
 
@@ -4233,7 +4239,6 @@ YCMD:freecam(playerid, params[], help)
 		PlayerTextDrawHide(playerid, HPTextDraw_TD[playerid]);
 		PlayerTextDrawHide(playerid, ArmourTextDraw[playerid]);
 		HidePlayerProgressBar(playerid, HealthBar[playerid]);
-		HidePlayerProgressBar(playerid, ArmourBar[playerid]);
 	}
 	return 1;
 }

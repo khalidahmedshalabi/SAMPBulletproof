@@ -196,7 +196,6 @@ SpectatePlayer(playerid, specid)
 		PlayerTextDrawHide(playerid, ArmourTextDraw[playerid]);
 		PlayerTextDrawHide(playerid, HPTextDraw_TD[playerid]);
 		HidePlayerProgressBar(playerid, HealthBar[playerid]);
-		HidePlayerProgressBar(playerid, ArmourBar[playerid]);
 		#if defined _league_included
 		PlayerTextDrawHide(playerid, PlayerLeagueStatsTD[playerid]);
 		#endif
@@ -330,7 +329,6 @@ StopSpectate(playerid, bool:remove_iterator = true)
 		PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
 	PlayerTextDrawShow(playerid, BaseID_VS[playerid]);
 	ShowPlayerProgressBar(playerid, HealthBar[playerid]);
-	ShowPlayerProgressBar(playerid, ArmourBar[playerid]);
 
 	// Cancel spectating mode
 	if(Player[playerid][IgnoreSpawn] == false)

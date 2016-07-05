@@ -159,7 +159,6 @@ This fixes Health/Armour bars* from going out of sync
 */
 SetFakeHealthArmour(playerid)
 {
-	// Set fake hp (will cause hp/armour flicker unless a good syncing plugin is used)
 	SetHP(playerid, Player[playerid][pHealth]);
 	SetAP(playerid, Player[playerid][pArmour]);
 }
@@ -302,8 +301,8 @@ SetHP(playerid, amount)
 			return 0;
 
 		Player[playerid][AlreadyDying] = true;
-	    SetTimerEx("ServerOnPlayerDeath", SERVER_PlAYER_DEATH_DELAY, false, "iii", playerid, Player[playerid][HitBy], Player[playerid][HitWith]);
-	    HidePlayerProgressBar(playerid, HealthBar[playerid]);
+	    ServerOnPlayerDeath(playerid, Player[playerid][HitBy], Player[playerid][HitWith]);
+		HidePlayerProgressBar(playerid, HealthBar[playerid]);
 		Player[playerid][pHealth] = 0;
 		SetPlayerScore(playerid, 0);
 		SetPlayerHealth(playerid, 65536);
@@ -361,45 +360,22 @@ SetHP(playerid, amount)
 
 SetAP(playerid, amount)
 {
-	if(amount <= 0)
+	SetPlayerArmour(playerid, amount);
+	UpdatePlayerArmourVariables(playerid, amount);
+	return 1;
+}
+
+UpdatePlayerArmourVariables(playerid, amount)
+{
+	Player[playerid][pArmour] = amount;
+	if(Player[playerid][Playing])
 	{
-	    SetPlayerArmour(playerid, 0.0);
-	    HidePlayerProgressBar(playerid, ArmourBar[playerid]);
-		Player[playerid][pArmour] = 0;
-		if(Player[playerid][Playing])
-		{
-			SetPlayerScore(playerid, Player[playerid][pHealth] + Player[playerid][pArmour]);
-		}
-		else
-		{
-			if(GetPlayerScore(playerid) != 0)
-				SetPlayerScore(playerid, 0);
-		}
+		SetPlayerScore(playerid, Player[playerid][pHealth] + Player[playerid][pArmour]);
 	}
 	else
 	{
-		SetPlayerProgressBarValue(playerid, ArmourBar[playerid], amount);
-		Player[playerid][pArmour] = amount;
-		SetPlayerArmour(playerid, 65536 + amount);
-		if(Player[playerid][Playing])
-		{
-			SetPlayerScore(playerid, Player[playerid][pHealth] + Player[playerid][pArmour]);
-		}
-		else
-		{
-			if(GetPlayerScore(playerid) != 0)
-				SetPlayerScore(playerid, 0);
-		}
-		if(Player[playerid][Spawned])
-		{
-			if(IsPlayerProgressBarShown(playerid, ArmourBar[playerid]) == false)
-				ShowPlayerProgressBar(playerid, ArmourBar[playerid]);
-		}
-		else
-		{
-			if(IsPlayerProgressBarShown(playerid, ArmourBar[playerid]) == true)
-				HidePlayerProgressBar(playerid, ArmourBar[playerid]);
-		}
+		if(GetPlayerScore(playerid) != 0)
+			SetPlayerScore(playerid, 0);
 	}
 	UpdatePlayerTeamBar(playerid);
 	if(Player[playerid][Playing])
@@ -415,7 +391,6 @@ SetAP(playerid, amount)
 			PlayerTextDrawSetString(playerid, ArmourTextDraw[playerid], "_");
 		}
 	}
-	return 1;
 }
 
 GetHP(playerid, &health)

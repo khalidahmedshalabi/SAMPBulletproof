@@ -803,7 +803,6 @@ RoundTextdrawsCreate()
 LoadPlayerTextDraws(playerid)
 {
 	HealthBar[playerid] = CreatePlayerProgressBar(playerid, 547.000000, 67.000000, 64.000000, 6.000000, 0xB4191DFF, 100.000000, BAR_DIRECTION_RIGHT);
-	ArmourBar[playerid] = CreatePlayerProgressBar(playerid, 547.000000, 46.000000, 64.000000, 6.000000, 0xE1E1E1FF, 100.000000, BAR_DIRECTION_RIGHT);
 
 	HPTextDraw_TD[playerid] = CreatePlayerTextDraw(playerid,577, 67.1, "_");
 	PlayerTextDrawBackgroundColor(playerid, HPTextDraw_TD[playerid], MAIN_BACKGROUND_COLOUR);
@@ -835,7 +834,6 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawSetShadow(playerid, BaseID_VS[playerid],0);
 
 	HidePlayerProgressBar(playerid, HealthBar[playerid]);
-	HidePlayerProgressBar(playerid, ArmourBar[playerid]);
 	PlayerTextDrawHide(playerid, HPTextDraw_TD[playerid]);
 	PlayerTextDrawHide(playerid, ArmourTextDraw[playerid]);
 	PlayerTextDrawHide(playerid, BaseID_VS[playerid]);

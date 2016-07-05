@@ -112,4 +112,4 @@ new PlayerText:BaseID_VS[MAX_PLAYERS];
 new PlayerText:PlayerLeagueStatsTD[MAX_PLAYERS];
 #endif
 new DeathMessageStr[MAX_PLAYERS][32];
-new PlayerBar:HealthBar[MAX_PLAYERS], PlayerBar:ArmourBar[MAX_PLAYERS]; // Server-sided health/armour
+new PlayerBar:HealthBar[MAX_PLAYERS]; // Server-sided health

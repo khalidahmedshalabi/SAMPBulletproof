@@ -30,7 +30,6 @@ public OnPlayerDeathCameraEnd(playerid)
 		PlayerTextDrawShow(playerid, FPSPingPacket[playerid]);
 	PlayerTextDrawShow(playerid, BaseID_VS[playerid]);
 	ShowPlayerProgressBar(playerid, HealthBar[playerid]);
-	ShowPlayerProgressBar(playerid, ArmourBar[playerid]);
 	#if defined _league_included
 	if(LeagueMode)
 	{
@@ -59,7 +58,6 @@ PlayDeathCamera(playerid, Float:deathX, Float:deathY, Float:deathZ, bool:deathqu
 	PlayerTextDrawHide(playerid, RoundKillDmgTDmg[playerid]);
 	PlayerTextDrawHide(playerid, HPTextDraw_TD[playerid]);
 	HidePlayerProgressBar(playerid, HealthBar[playerid]);
-	HidePlayerProgressBar(playerid, ArmourBar[playerid]);
 	#if defined _league_included
 	PlayerTextDrawHide(playerid, PlayerLeagueStatsTD[playerid]);
 	#endif

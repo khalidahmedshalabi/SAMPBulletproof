@@ -441,7 +441,6 @@ public SpawnConnectedPlayer(playerid, team)
 	SetPlayerTime(playerid, Player[playerid][Time], 0);
 
 	ShowPlayerProgressBar(playerid, HealthBar[playerid]);
-	ShowPlayerProgressBar(playerid, ArmourBar[playerid]);
 	switch(PlayerInterface[playerid][INTERFACE_HP])
 	{
 		case true:
@@ -1867,10 +1866,12 @@ SyncPlayer(playerid)
 	new Weapons[13][2];
 	for(new i = 0; i < 13; i++)
 		GetPlayerWeaponData(playerid, i, Weapons[i][0], Weapons[i][1]);
+
 	// Set spawn info and spawn player
 	SetSpawnInfo(playerid, GetPlayerTeam(playerid), GetPlayerSkin(playerid), Pos[0], Pos[1], Pos[2]-0.4, Pos[3], 0, 0, 0, 0, 0, 0);
 	Player[playerid][IgnoreSpawn] = true;
 	SpawnPlayer(playerid);
+
 	// Set info back after re-spawn
 	SetHP(playerid, Player[playerid][pHealth]);
 	SetAP(playerid, Player[playerid][pArmour]);
@@ -1879,6 +1880,7 @@ SyncPlayer(playerid)
 	for(new i = 0; i < 13; i ++)
 	    GivePlayerWeapon(playerid, Weapons[i][0], Weapons[i][1]);
 	SetPlayerArmedWeapon(playerid, CurrWep);
+
 	// Update tick count
 	Player[playerid][LastTimeSynced] = GetTickCount();
 	return 1;
