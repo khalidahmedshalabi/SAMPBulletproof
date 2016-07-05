@@ -427,7 +427,7 @@ HandleHeadshot(playerid, issuerid, weaponid)
 					AddPlayerLeaguePoints(issuerid, 50, "hitting a big head");
 				}
 				#endif
-				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "You've just landed a headshot with Sniper", 3000);
+				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "_", 2000);
 				SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Sniper"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]));
 			}
 			case WEAPON_RIFLE:
@@ -438,7 +438,7 @@ HandleHeadshot(playerid, issuerid, weaponid)
 					AddPlayerLeaguePoints(issuerid, 50, "hitting a big head");
 				}
 				#endif
-				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "You've just landed a headshot with Rifle", 3000);
+				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "_", 2000);
 				SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Rifle"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]));
 			}
 			case WEAPON_DEAGLE:
@@ -449,7 +449,7 @@ HandleHeadshot(playerid, issuerid, weaponid)
 					AddPlayerLeaguePoints(issuerid, 50, "hitting a big head");
 				}
 				#endif
-				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "You've just landed a headshot with Deagle", 3000);
+				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "_", 2000);
 				SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Deagle"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]));
 			}
 		}
@@ -739,7 +739,7 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid)
 				{
 					VisualDamage[issuerid][TDamageGiven][i] += amount; // Add to total given damage
 					VisualDamage[issuerid][GivenDamageWeapon][i] = weaponid;
-					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%d%s]",  // Write correct damage info into our string
+					format(str, sizeof(str), "~b~%s	%s/ -%.0f ~b~%s %s(%s~h~%d%s)",  // Write correct damage info into our string
 						Player[playerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[issuerid][TDamageGiven][i],
 						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 					PlayerTextDrawSetString(issuerid, DoingDamage[issuerid][i], str); // Update the textdraw with correct info
@@ -758,7 +758,7 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid)
 					VisualDamage[issuerid][DamagingWho][i] = playerid; // Assign the ID of the damaged player to the issuer variable
 					Iter_Add(PlayersDamaged[issuerid], playerid); // Add this player to damaged players list of the issuer/damager
 					Iter_Add(PlayerHasGVisualDmg, issuerid);
-					format(str, sizeof(str), "~g~~h~%s	%s/ -%.0f ~g~~h~%s %s[%s~h~%d%s]",
+					format(str, sizeof(str), "~b~%s	%s/ -%.0f ~b~%s %s(%s~h~%d%s)",
 						Player[playerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[issuerid][TDamageGiven][i],
 						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 					PlayerTextDrawSetString(issuerid, DoingDamage[issuerid][i], str); // Update the textdraw with the correct info
@@ -776,7 +776,7 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid)
 				{
 					VisualDamage[playerid][TDamageTaken][i] += amount;
 					VisualDamage[playerid][TakenDamageWeapon][i] = weaponid;
-					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%d%s]",
+					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s(%s~h~%d%s)",
 						Player[issuerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i],
 						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 					PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], str);
@@ -796,7 +796,7 @@ HandleVisualDamage(playerid, issuerid, Float:amount, weaponid)
 					VisualDamage[playerid][WhoDamaging][i] = issuerid;
 					Iter_Add(PlayersDamagedBy[playerid], issuerid);
 					Iter_Add(PlayerHasTVisualDmg, playerid);
-					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s[%s~h~%d%s]",
+					format(str, sizeof(str), "~r~~h~%s	%s/ -%.0f ~r~~h~%s %s(%s~h~%d%s)",
 						Player[issuerid][NameWithoutTag], MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i],
 						WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 					PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], str);
@@ -830,7 +830,7 @@ ShowCollisionDamageTextDraw(playerid, Float:amount, weaponid)
 		{
 			VisualDamage[playerid][TDamageTaken][i] += amount; // Add to damage
 			VisualDamage[playerid][TakenDamageWeapon][i] = weaponid;
-			format(str, sizeof(str), "%s-%.0f ~r~~h~%s %s[%s~h~%d%s]",  // Format the string with correct damage info
+			format(str, sizeof(str), "%s-%.0f ~r~~h~%s %s(%s~h~%d%s)",  // Format the string with correct damage info
 				MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][i],
 				WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 			PlayerTextDrawSetString(playerid, GettingDamaged[playerid][i], str); // Update damage textdraw with correct damage info
@@ -855,7 +855,7 @@ ShowCollisionDamageTextDraw(playerid, Float:amount, weaponid)
 		VisualDamage[playerid][TakenDamageWeapon][freeSlot] = weaponid;
 		VisualDamage[playerid][WhoDamaging][freeSlot] = NO_DAMAGER_UNIQUE_ID; // This unique ID means a COLLISION (or generally non-damager damages)
 		Iter_Add(PlayerHasTVisualDmg, playerid); // Add this player to the array that holds the IDs of the players who has a taken-damage textdraw shown
-		format(str, sizeof(str), "%s-%.0f ~r~~h~%s %s[%s~h~%d%s]",  // Format the string with correct damage info
+		format(str, sizeof(str), "%s-%.0f ~r~~h~%s %s(%s~h~%d%s)",  // Format the string with correct damage info
 			MAIN_TEXT_COLOUR, VisualDamage[playerid][TDamageTaken][freeSlot],
 			WeaponNames[weaponid], MAIN_TEXT_COLOUR, col, totHP, MAIN_TEXT_COLOUR);
 		PlayerTextDrawSetString(playerid, GettingDamaged[playerid][freeSlot], str); // Update the textdraw with the correct info
