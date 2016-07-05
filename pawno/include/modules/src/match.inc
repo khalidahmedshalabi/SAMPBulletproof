@@ -222,22 +222,29 @@ UpdateTeamPlayerCount(teamid, bool:elimination_check, exception = -1)
 
 		PlayersAlive[teamid] ++; // Increase team player count by 1
 	}
+
 	// Update round textdraws
+	new str[150];
 	switch(teamid)
 	{
 		case ATTACKER:
 		{
-			new str[20];
 			format(str, sizeof str, "~w~%d__(%d)", PlayersAlive[ATTACKER], TeamHP[ATTACKER]);
 			TextDrawSetString(leftTeamData, str);
 		}
 		case DEFENDER:
 		{
-			new str[20];
 			format(str, sizeof str, "~w~(%d)__%d", TeamHP[DEFENDER], PlayersAlive[DEFENDER]);
 			TextDrawSetString(rightTeamData, str);
 		}
 	}
+
+	// Update attdef style round textdraws
+	format(str, sizeof(str),
+	"~r~~h~%s  ~r~~h~~h~%d   ~w~(~r~~h~~h~%.0f~w~)			   	                    			   	            ~b~~h~%s  ~b~~h~~h~%d   ~w~(~b~~h~~h~%.0f~w~)~n~",
+	TeamName[ATTACKER], PlayersAlive[ATTACKER], TeamHP[ATTACKER], TeamName[DEFENDER], PlayersAlive[DEFENDER], TeamHP[DEFENDER]);
+	TextDrawSetString(AttDef_RoundStats, str);
+
 	// If we're asked to check team/round elimination
 	if(elimination_check)
 	{
@@ -278,21 +285,26 @@ UpdateTeamHP(teamid, exception = -1)
 		TeamHP[teamid] += Player[i][pHealth] + Player[i][pArmour];
 	}
 	// Update round textdraws with correct info
+	new str[150];
 	switch(teamid)
 	{
 		case ATTACKER:
 		{
-			new str[20];
 			format(str, sizeof str, "~w~%d__(%d)", PlayersAlive[ATTACKER], TeamHP[ATTACKER]);
 			TextDrawSetString(leftTeamData, str);
 		}
 		case DEFENDER:
 		{
-			new str[20];
 			format(str, sizeof str, "~w~(%d)__%d", TeamHP[DEFENDER], PlayersAlive[DEFENDER]);
 			TextDrawSetString(rightTeamData, str);
 		}
 	}
+
+	// Update attdef style round textdraws
+	format(str, sizeof(str),
+	"~r~~h~%s  ~r~~h~~h~%d   ~w~(~r~~h~~h~%.0f~w~)			   	                    			   	            ~b~~h~%s  ~b~~h~~h~%d   ~w~(~b~~h~~h~%.0f~w~)~n~",
+	TeamName[ATTACKER], PlayersAlive[ATTACKER], TeamHP[ATTACKER], TeamName[DEFENDER], PlayersAlive[DEFENDER], TeamHP[DEFENDER]);
+	TextDrawSetString(AttDef_RoundStats, str);
 }
 
 // This is a handler for any game running (base, arena, etc...)
@@ -341,6 +353,7 @@ public GameLoopCallback()
 							new str[16];
 							format(str, sizeof(str),"~w~%d:%02d", RoundMints,	RoundSeconds);
 							TextDrawSetString(timerCenterTD , str);
+							TextDrawSetString(AttDef_RoundTimer , str);
 						}
 						default:
 						{
@@ -348,6 +361,7 @@ public GameLoopCallback()
 							CurrentCPTime --;
 							format(str, sizeof(str), "~w~%d:%02d / ~r~~h~%d", RoundMints,	RoundSeconds, CurrentCPTime );
 							TextDrawSetString(timerCenterTD , str);
+							TextDrawSetString(AttDef_RoundTimer , str);
 
 							if(CurrentCPTime == 0)
 								return EndRound(0); // Attackers Win
@@ -433,6 +447,7 @@ public GameLoopCallback()
 								new str[16];
 								format(str, sizeof(str),"~w~%d:%02d", RoundMints,	RoundSeconds);
 								TextDrawSetString(timerCenterTD , str);
+								TextDrawSetString(AttDef_RoundTimer , str);
 							}
 							default:
 							{
@@ -440,6 +455,8 @@ public GameLoopCallback()
 								new str[32];
 								format(str, sizeof(str), "~w~%d:%02d / %s%d", RoundMints,	RoundSeconds, TDC[TeamCapturingCP], CurrentCPTime );
 								TextDrawSetString(timerCenterTD , str);
+								TextDrawSetString(AttDef_RoundTimer , str);
+
 								if(CurrentCPTime == 0)
 								{
 									switch(TeamCapturingCP)
@@ -1542,10 +1559,14 @@ public OnRCStart()
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
 	TextDrawColor(timerCircleTD, 0x00000033);
+	TextDrawSetString(AttDef_RoundTimer, "_");
 	foreach(new i : Player)
 	{
 		if(!Player[i][Spawned])
 			continue;
+
+		if(Player[i][RoundTDStyle] != 1)
+	        continue;
 
 		TextDrawShowForPlayer(i, timerCircleTD);
 	}
@@ -1770,10 +1791,14 @@ public OnArenaStart(ArenaID)
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
 	TextDrawColor(timerCircleTD, 0x00000033);
+	TextDrawSetString(AttDef_RoundTimer, "_");
 	foreach(new i : Player)
 	{
 		if(!Player[i][Spawned])
 			continue;
+
+		if(Player[i][RoundTDStyle] != 1)
+	        continue;
 
 		TextDrawShowForPlayer(i, timerCircleTD);
 	}
@@ -2105,9 +2130,13 @@ public OnBaseStart(BaseID)
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
 	TextDrawColor(timerCircleTD, 0x00000033);
+	TextDrawSetString(AttDef_RoundTimer, "_");
 	foreach(new i : Player)
 	{
 		if(!Player[i][Spawned])
+			continue;
+
+		if(Player[i][RoundTDStyle] != 1)
 			continue;
 
 		TextDrawShowForPlayer(i, timerCircleTD);

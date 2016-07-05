@@ -664,19 +664,6 @@ RoundTextdrawsCreate()
 	TextDrawFont					(	rightBlueBG, 	1							);
 	TextDrawSetProportional			(	rightBlueBG, 	1							);
 
-	centerBG = TextDrawCreate(318.0,431.5,"_");
-	TextDrawUseBox(centerBG,1);
-	TextDrawBoxColor(centerBG,0x0000022);
-	TextDrawFont(centerBG, 1);
-	TextDrawTextSize(centerBG,14.0,640.0);
-	TextDrawLetterSize(centerBG, 0.31, 1.55);
-	TextDrawBackgroundColor(centerBG,MAIN_BACKGROUND_COLOUR);
-	TextDrawColor(centerBG,-65281);
-	TextDrawSetOutline(centerBG,1);
-	TextDrawSetShadow(centerBG,0);
-    TextDrawAlignment(centerBG,2);
-    TextDrawSetProportional(centerBG, 1);
-
 	timerCenterTD = TextDrawCreate	(	324.140991, 		434.872528, "~w~0:00 / ~r~~h~00");
 	TextDrawLetterSize				(	timerCenterTD, 		0.24, 1.34);
 	TextDrawTextSize				(	timerCenterTD, 		299.293579, 98.583343	);
@@ -798,6 +785,28 @@ RoundTextdrawsCreate()
 	TextDrawSetOutline(TeamHpLose[1], 1);
 	TextDrawSetProportional(TeamHpLose[1], 1);
 	TextDrawSetShadow(TeamHpLose[1], 0);
+
+	AttDef_RoundStats = TextDrawCreate(318.0,431.5,"_");
+	TextDrawUseBox(AttDef_RoundStats,1);
+	TextDrawBoxColor(AttDef_RoundStats,0x0000022);
+	TextDrawFont(AttDef_RoundStats, 1);
+	TextDrawTextSize(AttDef_RoundStats,14.0,640.0);
+	TextDrawLetterSize(AttDef_RoundStats, 0.31, 1.55);
+	TextDrawBackgroundColor(AttDef_RoundStats, MAIN_BACKGROUND_COLOUR);
+	TextDrawColor(AttDef_RoundStats,-65281);
+	TextDrawSetOutline(AttDef_RoundStats,1);
+	TextDrawSetShadow(AttDef_RoundStats,0);
+    TextDrawAlignment(AttDef_RoundStats,2);
+    TextDrawSetProportional(AttDef_RoundStats, 1);
+
+	AttDef_RoundTimer = TextDrawCreate(327.000000, 430.000000, "_");
+	TextDrawAlignment(AttDef_RoundTimer, 2);
+	TextDrawBackgroundColor(AttDef_RoundTimer, MAIN_BACKGROUND_COLOUR);
+	TextDrawFont(AttDef_RoundTimer, 1);
+	TextDrawLetterSize(AttDef_RoundTimer, 0.31, 1.55);
+	TextDrawColor(AttDef_RoundTimer, -1);
+	TextDrawSetOutline(AttDef_RoundTimer, 1);
+	TextDrawSetProportional(AttDef_RoundTimer, 1);
 }
 
 LoadPlayerTextDraws(playerid)
@@ -1039,37 +1048,44 @@ ShowRoundStats(playerid)
 	}
 
 	if(Player[playerid][RoundTDStyle] == 0)
-		TextDrawShowForPlayer(playerid,centerBG);
+	{
+		TextDrawShowForPlayer(playerid, AttDef_RoundStats);
+		TextDrawShowForPlayer(playerid, AttDef_RoundTimer);
+	}
 	else
 	{
 		TextDrawShowForPlayer(playerid,leftRedBG);
 		TextDrawShowForPlayer(playerid,rightBlueBG);
+		TextDrawShowForPlayer(playerid,timerCenterTD);
+		TextDrawShowForPlayer(playerid,timerCircleTD);
+		TextDrawShowForPlayer(playerid,leftTeamData);
+		TextDrawShowForPlayer(playerid,rightTeamData);
+		TextDrawShowForPlayer(playerid,centerTeamNames);
+		TextDrawShowForPlayer(playerid,attackerNameTD);
+		TextDrawShowForPlayer(playerid,defenderNameTD);
 	}
-	TextDrawShowForPlayer(playerid,timerCenterTD);
-	TextDrawShowForPlayer(playerid,timerCircleTD);
-	TextDrawShowForPlayer(playerid,leftTeamData);
-	TextDrawShowForPlayer(playerid,rightTeamData);
-	TextDrawShowForPlayer(playerid,centerTeamNames);
-	TextDrawShowForPlayer(playerid,attackerNameTD);
-	TextDrawShowForPlayer(playerid,defenderNameTD);
 }
 
 HideRoundStats(playerid)
 {
 	if(Player[playerid][RoundTDStyle] == 0)
-		TextDrawHideForPlayer(playerid,centerBG);
+	{
+		TextDrawHideForPlayer(playerid, AttDef_RoundStats);
+		TextDrawHideForPlayer(playerid, AttDef_RoundTimer);
+	}
 	else
 	{
 		TextDrawHideForPlayer(playerid,leftRedBG);
 		TextDrawHideForPlayer(playerid,rightBlueBG);
+		TextDrawHideForPlayer(playerid,timerCenterTD);
+		TextDrawHideForPlayer(playerid,timerCircleTD);
+		TextDrawHideForPlayer(playerid,leftTeamData);
+		TextDrawHideForPlayer(playerid,rightTeamData);
+		TextDrawHideForPlayer(playerid,centerTeamNames);
+		TextDrawHideForPlayer(playerid,attackerNameTD);
+		TextDrawHideForPlayer(playerid,defenderNameTD);
 	}
-	TextDrawHideForPlayer(playerid,timerCenterTD);
-	TextDrawHideForPlayer(playerid,timerCircleTD);
-	TextDrawHideForPlayer(playerid,leftTeamData);
-	TextDrawHideForPlayer(playerid,rightTeamData);
-	TextDrawHideForPlayer(playerid,centerTeamNames);
-	TextDrawHideForPlayer(playerid,attackerNameTD);
-	TextDrawHideForPlayer(playerid,defenderNameTD);
+
 	if(!RoundPaused)
 		TextDrawHideForPlayer(playerid, PauseTD);
 }

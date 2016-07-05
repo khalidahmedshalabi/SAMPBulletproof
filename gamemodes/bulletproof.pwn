@@ -892,6 +892,10 @@ public OnPlayerEnterCheckpoint(playerid)
 						        continue;
 						        
                             TextDrawShowForPlayer(i, EN_CheckPoint);
+                            
+                            if(Player[i][RoundTDStyle] != 1)
+                                continue;
+                                
                             TextDrawShowForPlayer(i, timerCircleTD);
 						}
 
@@ -969,6 +973,10 @@ public OnPlayerEnterCheckpoint(playerid)
 						        continue;
 
                             TextDrawShowForPlayer(i, EN_CheckPoint);
+                            
+                            if(Player[i][RoundTDStyle] != 1)
+                                continue;
+                                
                             TextDrawShowForPlayer(i, timerCircleTD);
 						}
 			        }
@@ -1061,6 +1069,9 @@ public OnPlayerLeaveCheckpoint(playerid)
 					    if(!Player[i][Spawned])
 					        continue;
 					        
+                        if(Player[i][RoundTDStyle] != 1)
+                        	continue;
+                                
                         TextDrawShowForPlayer(i, timerCircleTD);
 					}
 				}
@@ -1105,6 +1116,9 @@ public OnPlayerLeaveCheckpoint(playerid)
 					{
 					    if(!Player[i][Spawned])
 					        continue;
+					        
+                        if(Player[i][RoundTDStyle] != 1)
+                        	continue;
 					        
                         TextDrawShowForPlayer(i, timerCircleTD);
 					}

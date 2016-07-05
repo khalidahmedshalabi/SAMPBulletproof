@@ -62,12 +62,12 @@ new Text: Intro_News;
 
 new Text:leftRedBG;
 new Text:rightBlueBG;
-new Text:centerBG;
 new Text:timerCenterTD, Text:timerCircleTD;
 new Text:leftTeamData;
 new Text:rightTeamData;
 new Text:centerTeamNames;
 new Text:attackerNameTD, Text:defenderNameTD;
+new Text:AttDef_RoundStats, Text:AttDef_RoundTimer;
 
 // - Result Textdraws - added by Niko_boy // -
 
