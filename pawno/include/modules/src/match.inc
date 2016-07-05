@@ -2747,7 +2747,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
             topAcc = playerScores[i][player_Acc];
             topAccID = i;
 	    }
-		if( playerScores[i][player_Overall] > topOverall)
+		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Score] > 0 && playerScores[i][player_Team] != REFEREE)
 	    {
             topOverall = playerScores[i][player_Overall];
             topOverallID = i;
@@ -2831,7 +2831,8 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	SendClientMessageToAll(-1, TopString[2]);
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
 	SendClientMessageToAll(-1, " ");
-	SendClientMessageToAll(-1, sprintf("{FFFFFF}Man of the round is: %s%s", TextColor[Player[topOverallID][Team]], Player[topOverallID][Name]));
+	if(topOverallID != -1)
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}Man of the round is: %s%s", TextColor[Player[topOverallID][Team]], Player[topOverallID][Name]));
 
 	#if defined _league_included
 	UpdateOnlineMatchesList(WarMode);
@@ -2959,7 +2960,7 @@ public WarEnded()
 			else nTotalAccuracy = floatmul(100.0, floatdiv(Player[i][TotalshotsHit], Player[i][TotalBulletsFired]));
 			playerScores[index][player_Acc] = floatround(nTotalAccuracy, floatround_round);
 
-			playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] - playerScores[index][player_Deaths] + playerScores[index][player_TPlayed] + playerScores[index][player_Acc];
+			playerScores[index][player_Overall] = ((playerScores[index][player_Score] / playerScores[index][player_TPlayed]) + playerScores[index][player_Kills] + playerScores[index][player_TPlayed] + playerScores[index][player_Acc]) / playerScores[index][player_Deaths];
 
 			format(names[index], MAX_PLAYER_NAME, Player[i][NameWithoutTag]);
 
@@ -2985,7 +2986,7 @@ public WarEnded()
 			else nTotalAccuracy = floatmul(100.0, floatdiv(SaveVariables[i][tshotsHit], SaveVariables[i][tBulletsShot]));
 			playerScores[index][player_Acc] = floatround(nTotalAccuracy, floatround_round);
 
-			playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] - playerScores[index][player_Deaths] + playerScores[index][player_TPlayed] + playerScores[index][player_Acc];
+			playerScores[index][player_Overall] = ((playerScores[index][player_Score] / playerScores[index][player_TPlayed]) + playerScores[index][player_Kills] + playerScores[index][player_TPlayed] + playerScores[index][player_Acc]) / playerScores[index][player_Deaths];
 
 	    	format(names[index], MAX_PLAYER_NAME, SaveVariables[i][pNameWithoutTag]);
 
@@ -3024,7 +3025,7 @@ public WarEnded()
             topAcc = playerScores[i][player_Acc];
             topAccID = i;
 	    }
-		if( playerScores[i][player_Overall] > topOverall)
+		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Score] > 0 && playerScores[i][player_TPlayed] > 0  && playerScores[i][player_Team] != REFEREE)
 	    {
             topOverall = playerScores[i][player_Overall];
             topOverallID = i;
@@ -3096,7 +3097,8 @@ public WarEnded()
 	SendClientMessageToAll(-1, TopString[2]);
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
 	SendClientMessageToAll(-1, " ");
-	SendClientMessageToAll(-1, sprintf("{FFFFFF}Man of the match is: %s%s", TextColor[Player[topOverallID][Team]], Player[topOverallID][Name]));
+	if(topOverallID != -1)
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}Man of the match is: %s%s", TextColor[Player[topOverallID][Team]], Player[topOverallID][Name]));
 
 	#if defined _league_included
 	UpdateOnlineMatchesList(false);
