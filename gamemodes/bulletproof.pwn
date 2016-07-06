@@ -4257,6 +4257,33 @@ YCMD:freecam(playerid, params[], help)
 	return 1;
 }
 
+YCMD:movecam(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "move your camera when you're in /freecam mode");
+	    return 1;
+	}
+	if(Player[playerid][Playing] == true) return SendErrorMessage(playerid,"Can't use this command while playing.");
+	if(Player[playerid][InDuel] == true) return SendErrorMessage(playerid,"Can't use this command during duel.");
+	if(noclipdata[playerid][FlyMode] != true) return SendErrorMessage(playerid, "You have to be in freecam mode, type /freecam");
+	if(Player[playerid][Team] != REFEREE) return SendErrorMessage(playerid, "You must be in referee team to use this command");
+	if(isnull(params)) return SendUsageMessage(playerid, "/movecam [to playerid]");
+
+	new toplayerid = strval(params);
+	if(!IsPlayerConnected(toplayerid) || IsPlayerNPC(toplayerid))
+	    return SendErrorMessage(playerid, "Invalid player ID");
+	    
+	SetPlayerInterior(playerid, GetPlayerInterior(toplayerid));
+	SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(toplayerid));
+	
+	new Float:x, Float:y, Float:z;
+	GetPlayerPos(toplayerid, x, y, z);
+	SetPlayerCameraLookAt(playerid, x, y, z);
+	MoveCam(playerid, x, y, z);
+	return 1;
+}
+
 YCMD:antispam(playerid, params[], help)
 {
 	//if(Player[playerid][Level] < 1 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be a higher admin level.");
@@ -6893,6 +6920,7 @@ YCMD:setteam(playerid, params[], help)
 	if(Params[1] < 0 || Params[1] > 4) return SendErrorMessage(playerid,"Invalid team ID.");
 	if(!IsPlayerConnected(Params[0])) return SendErrorMessage(playerid,"That player isn't connected.");
 	if(Player[Params[0]][Playing] == true) return SendErrorMessage(playerid,"That player is playing.");
+    if(Player[Params[0]][Spectating] == true) StopSpectate(Params[0]);
 
 	new MyVehicle = -1;
 	new Seat;
