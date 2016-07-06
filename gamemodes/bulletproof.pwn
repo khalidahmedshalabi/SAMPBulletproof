@@ -6170,7 +6170,7 @@ YCMD:pm(playerid,params[], help)
 	
 	if(Player[recieverid][blockedid] == playerid) return SendErrorMessage(playerid,"That player has blocked PMs from you.");
 	if(Player[recieverid][blockedall] == true) return SendErrorMessage(playerid,"That player has blocked PMs from everyone.");
-	if(Player[recieverid][Mute] == true) return SendErrorMessage(playerid, "That player is currently muted and can not reply!");
+	if(Player[recieverid][Mute] == true && Player[playerid][Team] != Player[recieverid][Team]) return SendErrorMessage(playerid, "That player is currently muted and can not reply!");
 	if(strlen(message) > 103) return SendErrorMessage(playerid, "This message is quite long (max: 103 characters).");
 	
 	new str[144];
@@ -6194,11 +6194,10 @@ YCMD:r(playerid,params[], help)
 	    SendCommandHelpMessage(playerid, "reply to someone's private message to you.");
 	    return 1;
 	}
-	
-    if(Player[playerid][Mute] == true) return SendErrorMessage(playerid,"You are muted.");
-    if(Player[playerid][LastMsgr] == -1) return SendErrorMessage(playerid,"You have not received any private messages since last login.");
 
-	new replytoid = Player[playerid][LastMsgr];
+    new replytoid = Player[playerid][LastMsgr];
+    if(replytoid == -1) return SendErrorMessage(playerid,"You have not received any private messages since last login.");
+    if(Player[playerid][Mute] == true && Player[playerid][Team] != Player[replytoid][Team]) return SendErrorMessage(playerid,"You are muted.");
 	if(!IsPlayerConnected(replytoid)) return SendErrorMessage(playerid,"That player is not connected.");
 	if(Player[replytoid][blockedid] == playerid) return SendErrorMessage(playerid,"That player has blocked PMs from you.");
 	if(Player[replytoid][blockedall] == true) return SendErrorMessage(playerid,"That player has blocked PMs from everyone.");
