@@ -561,6 +561,9 @@ RecountPlayersOnCP()
 			if(!Player[i][Spawned])
 				continue;
 
+			if(Player[i][RoundTDStyle] != 1)
+	            continue;
+
 			TextDrawShowForPlayer(i, timerCircleTD);
 		}
 	}

@@ -241,7 +241,7 @@ UpdateTeamPlayerCount(teamid, bool:elimination_check, exception = -1)
 
 	// Update attdef style round textdraws
 	format(str, sizeof(str),
-	"~r~~h~%s  ~r~~h~~h~%d   ~w~(~r~~h~~h~%.0f~w~)			   	                    			   	            ~b~~h~%s  ~b~~h~~h~%d   ~w~(~b~~h~~h~%.0f~w~)~n~",
+	"~r~~h~%s  ~r~~h~~h~%d   ~w~(~r~~h~~h~%d~w~)			   	                    			   	            ~b~~h~%s  ~b~~h~~h~%d   ~w~(~b~~h~~h~%d~w~)~n~",
 	TeamName[ATTACKER], PlayersAlive[ATTACKER], TeamHP[ATTACKER], TeamName[DEFENDER], PlayersAlive[DEFENDER], TeamHP[DEFENDER]);
 	TextDrawSetString(AttDef_RoundStats, str);
 
@@ -302,7 +302,7 @@ UpdateTeamHP(teamid, exception = -1)
 
 	// Update attdef style round textdraws
 	format(str, sizeof(str),
-	"~r~~h~%s  ~r~~h~~h~%d   ~w~(~r~~h~~h~%.0f~w~)			   	                    			   	            ~b~~h~%s  ~b~~h~~h~%d   ~w~(~b~~h~~h~%.0f~w~)~n~",
+	"~r~~h~%s  ~r~~h~~h~%d   ~w~(~r~~h~~h~%d~w~)			   	                    			   	            ~b~~h~%s  ~b~~h~~h~%d   ~w~(~b~~h~~h~%d~w~)~n~",
 	TeamName[ATTACKER], PlayersAlive[ATTACKER], TeamHP[ATTACKER], TeamName[DEFENDER], PlayersAlive[DEFENDER], TeamHP[DEFENDER]);
 	TextDrawSetString(AttDef_RoundStats, str);
 }
@@ -490,7 +490,7 @@ StartGameLoop()
 	if(GameLoop != -1)
 		return 0;
 
-	GameLoop = SetTimer("GameLoopCallback", 1000, true);
+	GameLoop = SetTimer("GameLoopCallback", GAME_SPEED, true);
 	return 1;
 }
 
@@ -502,6 +502,16 @@ KillGameLoop()
 	KillTimer(GameLoop);
 	GameLoop = -1;
 }
+
+RestartGameLoop()
+{
+	if(GameLoop == -1)
+		return;
+
+	KillGameLoop();
+	StartGameLoop();
+}
+
 // Delete arenas that are already played from memory (so they can be started again from random arena command)
 ForgetPlayedArenas()
 {
@@ -1567,6 +1577,9 @@ public OnRCStart()
 
 		if(Player[i][RoundTDStyle] != 1)
 	        continue;
+
+		if(Player[i][RoundTDStyle] != 1)
+			continue;
 
 		TextDrawShowForPlayer(i, timerCircleTD);
 	}
