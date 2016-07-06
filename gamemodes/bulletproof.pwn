@@ -4364,6 +4364,48 @@ YCMD:banip(playerid,params[], help)
 	return 1;
 }
 
+YCMD:gamespeed(playerid, params[], help)
+{
+	if(help)
+	{
+	    SendCommandHelpMessage(playerid, "change game speed (round timer and cp timer)");
+	    return 1;
+	}
+	if(isnull(params))
+	{
+		SendUsageMessage(playerid,"/gamespeed [Time in miliseconds]");
+		SendClientMessage(playerid, -1, "Note: this changes the speed (time per lap) of round timer and CP timer.");
+		SendClientMessage(playerid, -1, "Note: default value is always 1000 which equals one second.");
+		return 1;
+	}
+	
+	new speed = strval(params);
+	if(speed < 500)
+	{
+	    return SendErrorMessage(playerid, "Speed can not be less than 500 miliseconds");
+	}
+	
+	new speedStr[12];
+	speedStr[0] = EOS;
+	if(speed >= 500 && speed < 750)
+	    strcat(speedStr, "Very fast");
+    else if(speed >= 750 && speed < 900)
+	    strcat(speedStr, "Fast enough");
+    else if(speed >= 900 && speed < 1100)
+	    strcat(speedStr, "Average");
+	else
+	    strcat(speedStr, "Slow");
+	    
+	SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has changed game speed to %d {FFFFFF}(%s)", Player[playerid][Name], speed, speedStr));
+	
+	db_free_result(db_query(sqliteconnection, sprintf("UPDATE Configs SET Value = %d WHERE Option = 'GameSpeed'", speed)));
+	
+	GAME_SPEED = speed;
+	if(Current != -1)
+		RestartGameLoop();
+	return 1;
+}
+
 YCMD:lobby(playerid, params[], help)
 {
     if(help)

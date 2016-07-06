@@ -10,6 +10,7 @@ new Float:MainSpawn[4]; // Main spawn position and facing angle
 new MainInterior; // Main spawn interior
 new WeatherLimit = 50;
 new TimeLimit = 50;
+new GAME_SPEED = 1000;
 
 new Float:Max_Packetloss;
 new Max_Ping;
