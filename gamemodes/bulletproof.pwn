@@ -4402,7 +4402,7 @@ YCMD:gamespeed(playerid, params[], help)
 	db_free_result(db_query(sqliteconnection, sprintf("UPDATE Configs SET Value = %d WHERE Option = 'GameSpeed'", speed)));
 	
 	GAME_SPEED = speed;
-	if(Current != -1)
+	if(Current != -1 && RoundPaused != true)
 		RestartGameLoop();
 	return 1;
 }
