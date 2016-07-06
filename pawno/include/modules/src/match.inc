@@ -2575,23 +2575,17 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 
 	TextDrawHideForAll(EN_CheckPoint);
 
-	#if defined _league_included
 	new winnerid = -1;
-	#endif
 	if(WinID == 0 || WinID == 3 ||  WinID == 5)
 	{
 		format(iString, sizeof(iString), "~n~~r~~h~%s ~w~Won The Round", TeamName[ATTACKER]);
-		#if defined _league_included
 		winnerid = ATTACKER;
-		#endif
 		if(WarMode == true) TeamScore[ATTACKER]++;
 	}
 	else if(WinID == 1 || WinID == 2 || WinID == 6)
 	{
 		format(iString, sizeof(iString), "~n~~b~~h~%s ~w~Won The Round", TeamName[DEFENDER]);
-		#if defined _league_included
 		winnerid = DEFENDER;
-		#endif
 		if(WarMode == true) TeamScore[DEFENDER]++;
  	}
 	else if(WinID == 4)
@@ -2672,7 +2666,10 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 				playerScores[index][player_HP] = Player[i][pHealth] + Player[i][pArmour];
 				playerScores[index][player_Acc] = floatround(Player[i][Accuracy], floatround_round);
 
-				playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] + playerScores[index][player_HP] + playerScores[index][player_Acc] - playerScores[index][player_Deaths];
+				if(playerScores[index][player_Deaths] > 0)
+					playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] + playerScores[index][player_Acc] - playerScores[index][player_Deaths];
+				else
+					playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] + playerScores[index][player_HP] + playerScores[index][player_Acc];
 
 				format(names[index], MAX_PLAYER_NAME, Player[i][NameWithoutTag]);
 
@@ -2745,7 +2742,10 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 			playerScores[index][player_HP] = SaveVariables[i][gHealth] + SaveVariables[i][gArmour];
 			playerScores[index][player_Acc] = SaveVariables[i][iAccuracy];
 
-			playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] + playerScores[index][player_HP] + playerScores[index][player_Acc] - playerScores[index][player_Deaths];
+			if(playerScores[index][player_Deaths] > 0)
+				playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] + playerScores[index][player_Acc] - playerScores[index][player_Deaths];
+			else
+				playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] + playerScores[index][player_HP] + playerScores[index][player_Acc];
 
 			format(names[index], MAX_PLAYER_NAME, SaveVariables[i][pNameWithoutTag]);
 
@@ -2789,7 +2789,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
             topAcc = playerScores[i][player_Acc];
             topAccID = i;
 	    }
-		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Score] > 0 && playerScores[i][player_Team] != REFEREE)
+		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Score] > 0 && playerScores[i][player_Team] == winnerid)
 	    {
             topOverall = playerScores[i][player_Overall];
             topOverallID = i;
@@ -2873,7 +2873,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	SendClientMessageToAll(-1, TopString[2]);
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
 	SendClientMessageToAll(-1, " ");
-	if(topOverallID != -1)
+	if(topOverallID != -1 && winnerid != -1)
 		SendClientMessageToAll(-1, sprintf("{FFFFFF}Man of the round is: %s%s", TextColor[Player[topOverallID][Team]], Player[topOverallID][Name]));
 
 	#if defined _league_included
@@ -2940,12 +2940,16 @@ public WarEnded()
 
 	new iString[256], TopString[3][128];
 
+	new winnerid = -1;
+
     if(TeamScore[ATTACKER] > TeamScore[DEFENDER])
 	{
+		winnerid = ATTACKER;
  		format(iString, sizeof(iString),"~r~%s ~w~Won The Match~n~~r~%s ~h~%d		~b~~h~%s ~h~%d", TeamName[ATTACKER], TeamName[ATTACKER], TeamScore[ATTACKER], TeamName[DEFENDER], TeamScore[DEFENDER]);
 	}
 	else if(TeamScore[DEFENDER] > TeamScore[ATTACKER])
 	{
+		winnerid = DEFENDER;
 	    format(iString,sizeof(iString),"~b~~h~%s ~w~Won The Match~n~~b~~h~%s ~h~%d		~r~%s ~h~%d", TeamName[DEFENDER], TeamName[DEFENDER], TeamScore[DEFENDER], TeamName[ATTACKER], TeamScore[ATTACKER]);
 	}
 	else
@@ -3067,7 +3071,7 @@ public WarEnded()
             topAcc = playerScores[i][player_Acc];
             topAccID = i;
 	    }
-		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Score] > 0 && playerScores[i][player_TPlayed] > 0  && playerScores[i][player_Team] != REFEREE)
+		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Score] > 0 && playerScores[i][player_TPlayed] > 0  && playerScores[i][player_Team] == winnerid)
 	    {
             topOverall = playerScores[i][player_Overall];
             topOverallID = i;
@@ -3139,7 +3143,7 @@ public WarEnded()
 	SendClientMessageToAll(-1, TopString[2]);
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
 	SendClientMessageToAll(-1, " ");
-	if(topOverallID != -1)
+	if(topOverallID != -1 && winnerid != -1)
 		SendClientMessageToAll(-1, sprintf("{FFFFFF}Man of the match is: %s%s", TextColor[Player[topOverallID][Team]], Player[topOverallID][Name]));
 
 	#if defined _league_included
