@@ -4373,16 +4373,17 @@ YCMD:gamespeed(playerid, params[], help)
 	}
 	if(isnull(params))
 	{
-		SendUsageMessage(playerid,"/gamespeed [Time in miliseconds]");
+		SendUsageMessage(playerid,"/gamespeed [Time in milliseconds]");
+		SendClientMessage(playerid, -1, sprintf(""COL_PRIM"Current game speed: {FFFFFF}%d", GAME_SPEED));
 		SendClientMessage(playerid, -1, "Note: this changes the speed (time per lap) of round timer and CP timer.");
-		SendClientMessage(playerid, -1, "Note: default value is always 1000 which equals one second.");
+		SendClientMessage(playerid, -1, "Note: default value is 880 milliseconds.");
 		return 1;
 	}
 	
 	new speed = strval(params);
 	if(speed < 500)
 	{
-	    return SendErrorMessage(playerid, "Speed can not be less than 500 miliseconds");
+	    return SendErrorMessage(playerid, "Speed can not be less than 500 milliseconds");
 	}
 	
 	new speedStr[12];
