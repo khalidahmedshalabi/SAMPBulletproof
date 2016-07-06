@@ -224,7 +224,7 @@ LoadTextDraws()
 	TextDrawAlignment(EN_CheckPoint, 1);
 	TextDrawBackgroundColor(EN_CheckPoint, MAIN_BACKGROUND_COLOUR);
 	TextDrawFont(EN_CheckPoint, 1);
-	TextDrawLetterSize(EN_CheckPoint, 0.230000, 1.000000);
+	TextDrawLetterSize(EN_CheckPoint, 0.18000, 0.9);
 	TextDrawColor(EN_CheckPoint, -1);
 	TextDrawSetOutline(EN_CheckPoint, 1);
 	TextDrawSetProportional(EN_CheckPoint, 1);
