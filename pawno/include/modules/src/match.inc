@@ -2874,7 +2874,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
 	SendClientMessageToAll(-1, " ");
 	if(topOverallID != -1 && winnerid != -1)
-		SendClientMessageToAll(-1, sprintf("{FFFFFF}Man of the round is: %s%s", TextColor[Player[topOverallID][Team]], Player[topOverallID][Name]));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}Man of the round is: %s%s", TextColor[playerScores[topOverallID][player_Team]], names[topOverallID]));
 
 	#if defined _league_included
 	UpdateOnlineMatchesList(WarMode);
@@ -3144,7 +3144,7 @@ public WarEnded()
 	SendClientMessageToAll(-1, "{FFFFFF}---------------------------------------------------------------");
 	SendClientMessageToAll(-1, " ");
 	if(topOverallID != -1 && winnerid != -1)
-		SendClientMessageToAll(-1, sprintf("{FFFFFF}Man of the match is: %s%s", TextColor[Player[topOverallID][Team]], Player[topOverallID][Name]));
+		SendClientMessageToAll(-1, sprintf("{FFFFFF}Man of the match is: %s%s",  TextColor[playerScores[topOverallID][player_Team]], names[topOverallID]));
 
 	#if defined _league_included
 	UpdateOnlineMatchesList(false);
