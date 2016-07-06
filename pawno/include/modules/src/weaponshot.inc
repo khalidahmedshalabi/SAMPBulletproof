@@ -597,7 +597,7 @@ public HideFriendlyVisualDmg(playerid)
 HandleFriendlyVisualDamage(hitterid, hittedid)
 {
 	new str[39];
-	format(str, sizeof str, "~y~~h~%s", Player[hittedid][NameWithoutTag]);
+	format(str, sizeof str, "~y~~h~%s (team-fire)", Player[hittedid][NameWithoutTag]);
 
 	PlayerTextDrawSetString(hitterid, FriendlyDamage[hitterid][0], str);
 
@@ -617,7 +617,7 @@ HandleFriendlyVisualDamage(hitterid, hittedid)
 		VisualDamage[i][FriendlyDamageTimer] = SetTimerEx("HideFriendlyVisualDmg", HIDE_DAMAGE_TEXTDRAW_AFTER, false, "i", i);
 	}
 
-	format(str, sizeof str, "~y~~h~%s", Player[hitterid][NameWithoutTag]);
+	format(str, sizeof str, "~y~~h~%s (team-fire)", Player[hitterid][NameWithoutTag]);
 
 	PlayerTextDrawSetString(hittedid, FriendlyDamage[hittedid][1], str);
 

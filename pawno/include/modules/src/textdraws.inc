@@ -885,7 +885,7 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawSetProportional(playerid, RoundKillDmgTDmg[playerid], 1);
 
 	// Create visual damage textdraws
-	new Float:y = 342.0;
+	new Float:y = 340.0;
 
 	// Friendly fire textdraws
 	FriendlyDamage[playerid][0] = CreatePlayerTextDraw(playerid,170.0,y,"_");
@@ -908,6 +908,8 @@ LoadPlayerTextDraws(playerid)
 
 	PlayerTextDrawShow(playerid, FriendlyDamage[playerid][0]);
 	PlayerTextDrawShow(playerid, FriendlyDamage[playerid][1]);
+
+	y += DAMAGE_TEXTDRAW_Y_DIFF;
 
 	// Other visual damage textdraws
 	for(new i = 0; i < MAX_VISUAL_DAMAGES; i ++)
