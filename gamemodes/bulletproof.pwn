@@ -3646,6 +3646,51 @@ YCMD:clearallaka(playerid, params[], help)
     return 1;
 }
 
+YCMD:acgetinfo(playerid, params[], help)
+{
+    if(IsACPluginLoaded())
+	{
+		new targetid = strval(params);
+
+		// Also checks if the player is connected.
+		if(IsPlayerUsingSampAC(targetid))
+		{
+			new str[128];
+			new version[50];
+			GetPlayerVersion(targetid, version, sizeof(version));
+			new name[MAX_PLAYER_NAME];
+			GetPlayerName(targetid, name, sizeof(name));
+			format(str, sizeof(str), "Target ID: %s (%d), SA-MP version: %s", name, targetid, version);
+			SendClientMessage(playerid, -1, str);
+			format(str, sizeof(str), "IsPlayerUsingSampAC: %d", IsPlayerUsingSampAC(targetid));
+			SendClientMessage(playerid, -1, str);
+
+
+			new hwid[128];
+			GetPlayerHardwareID(targetid, hwid, sizeof(hwid));
+			format(str, sizeof(str), "HardwareID: %s", hwid);
+			SendClientMessage(playerid, -1, str);
+
+			format(str, sizeof(str), "GetPlayerCBug: %d, GetPlayerLiteFoot: %d, GetPlayerSwitchReload: %d", GetPlayerCrouchBug(targetid), GetPlayerLiteFoot(targetid), GetPlayerSwitchReload(targetid));
+			SendClientMessage(playerid, -1, str);
+
+			format(str, sizeof(str), "GetPlayerFPSLimit: %d", GetPlayerFPSLimit(targetid));
+			SendClientMessage(playerid, -1, str);
+		}
+		else
+		{
+			SendErrorMessage(playerid, "This player is not running AC v2.");
+			return 1;
+  		}
+	}
+	else
+	{
+        SendErrorMessage(playerid, "AC v2 plugin is not loaded.");
+		return 1;
+	}
+	return 1;
+}
+
 YCMD:style(playerid, params[], help)
 {
     if(help)
