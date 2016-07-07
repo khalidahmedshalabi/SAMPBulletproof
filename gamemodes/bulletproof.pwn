@@ -139,6 +139,13 @@ public OnPlayerConnect(playerid)
     GetPlayerCountry(playerid, str, sizeof(str));
 	format(str, sizeof(str), "{FFFFFF}%s {757575}(ID: %d) has connected [{FFFFFF}%s{757575}]", Player[playerid][Name], playerid, str);
     SendClientMessageToAll(-1, str);
+    
+    // Print their hardware ID in the server logs if AC is loaded
+    if(IsACPluginLoaded() && IsPlayerUsingSampAC(playerid))
+	{
+		GetPlayerHardwareID(playerid, str, sizeof str);
+		printf("%s hardware ID: %s", Player[playerid][Name], str);
+	}
 
     if(AllMuted) // If everyone is muted (global mute, /muteall?), this player should be muted too
     	Player[playerid][Mute] = true;
