@@ -737,7 +737,7 @@ RoundTextdrawsCreate()
 	TextDrawFont					(	defenderNameTD,	1						);
 	TextDrawSetProportional			(	defenderNameTD, 	1						);
 
-	PauseTD = TextDrawCreate(324.000000, 413.000000, "~r~~h~~h~Round paused");
+	PauseTD = TextDrawCreate(324.000000, 390.000000, "~r~~h~~h~Round paused");
 	TextDrawBackgroundColor(PauseTD, MAIN_BACKGROUND_COLOUR);
 	TextDrawFont(PauseTD, 1);
 	TextDrawLetterSize(PauseTD, 0.200000, 1.500000);

@@ -950,6 +950,12 @@ DetermineRandomRound(mode = 0, bool:ignore = false, type = ARENA)
 forward UnpauseRound();
 public UnpauseRound()
 {
+	if(PauseStopWatchTimer != -1)
+	{
+		KillTimer(PauseStopWatchTimer);
+		PauseStopWatchTimer = -1;
+	}
+
 	RoundUnpausing = true;
 	PauseCountdown --;
 
@@ -959,7 +965,7 @@ public UnpauseRound()
 			PlayerPlaySound(i, 1056, 0.0, 0.0, 0.0);
 
 		new iString[40];
-		format(iString, sizeof(iString), "~g~~h~Round resuming in ~r~~h~%d", PauseCountdown);
+		format(iString, sizeof(iString), "~g~~h~Round resuming in ~h~%d", PauseCountdown);
 		TextDrawSetString(PauseTD, iString);
 		TextDrawShowForAll(PauseTD);
 		UnpauseTimer = SetTimer("UnpauseRound", 1000, 0);
@@ -1017,6 +1023,29 @@ public PauseAirVehicles_Handler()
 	return 1;
 }
 
+forward PauseStopWatch();
+public PauseStopWatch()
+{
+	if(PauseTimeElapsed[0] == 59)
+	{
+		PauseTimeElapsed[0] = 0;
+		PauseTimeElapsed[1] ++;
+	}
+	else
+		PauseTimeElapsed[0] ++;
+
+	new str[81];
+	if(PauseTimeElapsed[1] < 1)
+		format(str, sizeof str, "~b~~h~Round has been paused for: %02d:%02d~n~~b~~h~~h~Pauses count so far: %d", PauseTimeElapsed[1], PauseTimeElapsed[0], TotalPausesInRound);
+	else if(PauseTimeElapsed[1] == 1)
+		format(str, sizeof str, "~y~~h~Round has been paused for: %02d:%02d~n~~y~~h~~h~Pauses count so far: %d", PauseTimeElapsed[1], PauseTimeElapsed[0], TotalPausesInRound);
+	else
+		format(str, sizeof str, "~r~~h~Round has been paused for: %02d:%02d~n~~r~~h~~h~Pauses count so far: %d", PauseTimeElapsed[1], PauseTimeElapsed[0], TotalPausesInRound);
+
+	TextDrawSetString(PauseTD, str);
+	return 1;
+}
+
 PauseRound()
 {
 	new airVehiclesFound = 0;
@@ -1038,6 +1067,12 @@ PauseRound()
 		KillTimer(TipTimerDuringPause);
 
 	TipTimerDuringPause = SetTimer("SendTipMessageToAll", 15000, false);
+
+	TotalPausesInRound ++;
+
+	PauseTimeElapsed[0] = 0;
+	PauseTimeElapsed[1] = 0;
+	PauseStopWatchTimer = SetTimer("PauseStopWatch", 1000, true);
 
 	foreach(new i : PlayersInRound)
 	{
@@ -1561,6 +1596,7 @@ public OnRCStart()
     ClearKillList(); // Clears the kill-list.
     ServerLastPlayed = Current;
     ServerLastPlayedType = 0;
+	TotalPausesInRound = 0;
 
 	ElapsedTime = 0;
 
@@ -1796,6 +1832,7 @@ public OnArenaStart(ArenaID)
     ClearKillList(); // Clears the kill-list.
     ServerLastPlayed = Current;
     ServerLastPlayedType = 0;
+	TotalPausesInRound = 0;
 
 	ElapsedTime = 0;
 
@@ -2137,6 +2174,7 @@ public OnBaseStart(BaseID)
    	ClearKillList(); // Clears the kill-list.
     ServerLastPlayed = Current;
     ServerLastPlayedType = 1;
+	TotalPausesInRound = 0;
 
 	TeamCapturingCP = NON;
 	PlayersInCP = 0;

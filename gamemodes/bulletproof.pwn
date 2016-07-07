@@ -29,7 +29,6 @@
 #include <YSI_inc\YSI\y_master>
 
 // Some SA-MP natives which are not defined by default
-native gpci (playerid, serial [], len);
 native IsValidVehicle(vehicleid);
 
 // Server modules (find them in "/pawno/include/modules") (note: modules that consists of hooking have to be first)
@@ -7959,6 +7958,21 @@ YCMD:setarmour(playerid, params[], help)
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has set {FFFFFF}%s's "COL_PRIM"Armour to: {FFFFFF}%d", Player[playerid][Name], Player[pID][Name], Amount);
 	SendClientMessageToAll(-1, iString);
     LogAdminCommand("setarmour", playerid, pID);
+	return 1;
+}
+
+YCMD:pauselimit(playerid, params[], help)
+{
+	if(help)
+	{
+	    SendCommandHelpMessage(playerid, "change pause limit and toggle auto unpause.");
+	    return 1;
+	}
+	new maxpauses, pauseduration;
+    if(sscanf(params, "ii", maxpauses, pauseduration))
+	{
+		return SendUsageMessage(playerid, "/pauselimit [max pauses per round] [pause duration in minutes] []");
+	}
 	return 1;
 }
 
