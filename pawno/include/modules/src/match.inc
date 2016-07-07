@@ -21,7 +21,7 @@ hook OnPlayerDisconnect(playerid, reason)
 	    StorePlayerVariables(playerid);
 
         // If configured to pause the round automatically
-		if(AutoPause == true)
+		if(AutoPause == true && RoundPaused != true && RoundUnpausing != true)
         {
     		KillTimer(UnpauseTimer);
     		RoundUnpausing = false;
@@ -1068,11 +1068,13 @@ PauseRound()
 
 	TipTimerDuringPause = SetTimer("SendTipMessageToAll", 15000, false);
 
-	TotalPausesInRound ++;
-
-	PauseTimeElapsed[0] = 0;
-	PauseTimeElapsed[1] = 0;
-	PauseStopWatchTimer = SetTimer("PauseStopWatch", 1000, true);
+	if(PauseStopWatchTimer == -1)
+	{
+		TotalPausesInRound ++;
+		PauseTimeElapsed[0] = 0;
+		PauseTimeElapsed[1] = 0;
+		PauseStopWatchTimer = SetTimer("PauseStopWatch", 1000, true);
+	}
 
 	foreach(new i : PlayersInRound)
 	{
