@@ -2707,9 +2707,9 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 				playerScores[index][player_Acc] = floatround(Player[i][Accuracy], floatround_round);
 
 				if(playerScores[index][player_Deaths] > 0)
-					playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] + playerScores[index][player_Acc] - playerScores[index][player_Deaths];
+					playerScores[index][player_Overall] = (playerScores[index][player_Score] - 200) + playerScores[index][player_Kills] + playerScores[index][player_Acc];
 				else
-					playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] + playerScores[index][player_HP] + playerScores[index][player_Acc];
+					playerScores[index][player_Overall] = (playerScores[index][player_Score] - playerScores[index][player_HP]) + playerScores[index][player_Kills] + playerScores[index][player_Acc];
 
 				format(names[index], MAX_PLAYER_NAME, Player[i][NameWithoutTag]);
 
@@ -2783,9 +2783,9 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 			playerScores[index][player_Acc] = SaveVariables[i][iAccuracy];
 
 			if(playerScores[index][player_Deaths] > 0)
-				playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] + playerScores[index][player_Acc] - playerScores[index][player_Deaths];
+				playerScores[index][player_Overall] = (playerScores[index][player_Score] - 200) + playerScores[index][player_Kills] + playerScores[index][player_Acc];
 			else
-				playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] + playerScores[index][player_HP] + playerScores[index][player_Acc];
+				playerScores[index][player_Overall] = (playerScores[index][player_Score] - playerScores[index][player_HP]) + playerScores[index][player_Kills] + playerScores[index][player_Acc];
 
 			format(names[index], MAX_PLAYER_NAME, SaveVariables[i][pNameWithoutTag]);
 
