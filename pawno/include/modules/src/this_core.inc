@@ -62,7 +62,6 @@ InitScriptCoreSettings()
 CheckServerHostname()
 {
 	GetServerVarAsString("hostname", hostname, sizeof(hostname));
-	AC_FixServerHostname();
 }
 
 InitScriptSecondarySettings()

@@ -46,7 +46,7 @@ public AC_OnFileCalculated(playerid, filename[], md5[], bool:isCheat)
 public AC_OnScreenshotTaken(playerid)
 {
 	new tick = GetTickCount();
-	
+
 	if((tick - PlayerACData[playerid][LastTakenScreenshot]) < SCREENSHOT_TAKE_INTERVAL_LIMIT)
 	{
 		PlayerACData[playerid][ScreenshotWarnings] ++;
@@ -63,7 +63,7 @@ public AC_OnScreenshotTaken(playerid)
 	{
 		PlayerACData[playerid][ScreenshotWarnings] = 0;
 	}
-	
+
 	PlayerACData[playerid][LastTakenScreenshot] = tick;
 	return 1;
 }
@@ -81,17 +81,4 @@ public AC_OnPlayerPause(playerid, type, bool:pause)
 		}
 	}
 	return 1;
-}
-
-AC_FixServerHostname()
-{
-	if(strlen(hostname) == 0)
-	{
-		GetServerVarAsString("hostname", hostname, sizeof(hostname));
-	}
-	if(IsACPluginLoaded() && IsACEnabled())
-	{
-		format(hostname, sizeof hostname, "%s [AC]", hostname);
-		SendRconCommand(sprintf("hostname %s", hostname));
-	}
 }
