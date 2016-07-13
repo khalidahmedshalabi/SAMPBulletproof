@@ -3046,7 +3046,10 @@ public WarEnded()
 			else nTotalAccuracy = floatmul(100.0, floatdiv(Player[i][TotalshotsHit], Player[i][TotalBulletsFired]));
 			playerScores[index][player_Acc] = floatround(nTotalAccuracy, floatround_round);
 
-			playerScores[index][player_Overall] = ((playerScores[index][player_Score] / playerScores[index][player_TPlayed]) + playerScores[index][player_Kills] + playerScores[index][player_TPlayed] + playerScores[index][player_Acc]) / playerScores[index][player_Deaths];
+			if(playerScores[index][player_TPlayed] > 0)
+				playerScores[index][player_Overall] = ((playerScores[index][player_Score] / playerScores[index][player_TPlayed]) + playerScores[index][player_Kills] + playerScores[index][player_TPlayed] + playerScores[index][player_Acc]) / ((playerScores[index][player_Deaths] > 0) ? playerScores[index][player_Deaths] : 1);
+			else
+				playerScores[index][player_Overall] = 0;
 
 			format(names[index], MAX_PLAYER_NAME, Player[i][NameWithoutTag]);
 
@@ -3072,7 +3075,10 @@ public WarEnded()
 			else nTotalAccuracy = floatmul(100.0, floatdiv(SaveVariables[i][tshotsHit], SaveVariables[i][tBulletsShot]));
 			playerScores[index][player_Acc] = floatround(nTotalAccuracy, floatround_round);
 
-			playerScores[index][player_Overall] = ((playerScores[index][player_Score] / playerScores[index][player_TPlayed]) + playerScores[index][player_Kills] + playerScores[index][player_TPlayed] + playerScores[index][player_Acc]) / playerScores[index][player_Deaths];
+			if(playerScores[index][player_TPlayed] > 0)
+				playerScores[index][player_Overall] = ((playerScores[index][player_Score] / playerScores[index][player_TPlayed]) + playerScores[index][player_Kills] + playerScores[index][player_TPlayed] + playerScores[index][player_Acc]) / ((playerScores[index][player_Deaths] > 0) ? playerScores[index][player_Deaths] : 1);
+			else
+				playerScores[index][player_Overall] = 0;
 
 	    	format(names[index], MAX_PLAYER_NAME, SaveVariables[i][pNameWithoutTag]);
 
@@ -3111,7 +3117,7 @@ public WarEnded()
             topAcc = playerScores[i][player_Acc];
             topAccID = i;
 	    }
-		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Score] > 0 && playerScores[i][player_TPlayed] > 0  && playerScores[i][player_Team] == winnerid)
+		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Overall] != 0 && playerScores[i][player_Score] > 0 && playerScores[i][player_TPlayed] > 0  && playerScores[i][player_Team] == winnerid)
 	    {
             topOverall = playerScores[i][player_Overall];
             topOverallID = i;
