@@ -146,9 +146,6 @@ public OnPlayerConnect(playerid)
 		GetPlayerHardwareID(playerid, str, sizeof str);
 		printf("%s hardware ID: %s", Player[playerid][Name], str);
 	}
-
-    if(AllMuted) // If everyone is muted (global mute, /muteall?), this player should be muted too
-    	Player[playerid][Mute] = true;
 	return 1;
 }
 
@@ -671,11 +668,7 @@ public OnPlayerText(playerid, text[])
 		}
 	    return 0;
 	}
-	else
-	{
-	    if(Player[playerid][Mute] == true)
-		{ SendErrorMessage(playerid,"You are muted, STFU."); return 0; }
-	}
+	
 	// Admin chat
 	if(text[0] == '@' && Player[playerid][Level] > 0)
 	{
@@ -689,24 +682,8 @@ public OnPlayerText(playerid, text[])
 		}
 		return 0;
 	}
+	
 	#if defined _league_included
-	/*
-	// League admins chat
-	if(text[0] == '~' && IsLeagueMod(playerid))
-	{
-	    new ChatString[128];
-        format(ChatString, sizeof(ChatString), "@ League ADM Chat | %s (%d) | %s", Player[playerid][Name], playerid, text[1]);
-        foreach(new i : Player)
-		{
-            if(IsLeagueMod(i))
-			{
-                SendClientMessage(i, 0xA8FFE5FF, ChatString);
-                PlayerPlaySound(i,1137,0.0,0.0,0.0);
-			}
-		}
-		return 0;
-	}
-	*/
 	// League clans chat
 	if(text[0] == '#')
 	{
@@ -719,6 +696,7 @@ public OnPlayerText(playerid, text[])
 		return 0;
 	}
 	#endif
+	
 	// Channel chat
 	if(text[0] == '^' && Player[playerid][ChatChannel] != -1)
 	{
@@ -738,7 +716,19 @@ public OnPlayerText(playerid, text[])
 	    return 0;
 	}
 	
-	// Normal chat
+	if(ChatDisabled)
+	{
+	    SendErrorMessage(playerid, "Main chat is currently disabled.");
+	    return 0;
+	}
+	if(Player[playerid][Mute] == true)
+	{
+		SendErrorMessage(playerid, "You are muted.");
+		return 0;
+	}
+
+	
+	// Main chat
     new ChatString[144];
 	format(ChatString, sizeof(ChatString),"%s%s: {FFFFFF}(%d) %s", GetColor(GetPlayerColor(playerid)), Player[playerid][Name], playerid, text);
 	SendClientMessageToAll(-1, ChatString);
@@ -6056,9 +6046,30 @@ YCMD:cchannel(playerid, params[], help)
 	return 1;
 }
 
+YCMD:togglechat(playerid, params[], help)
+{
+    if(help)
+	{
+	    SendCommandHelpMessage(playerid, "enable or disable main chat.");
+	    return 1;
+	}
+	
+	if(ChatDisabled)
+	{
+	    ChatDisabled = false;
+	    SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has enabled main chat!", Player[playerid][Name]));
+	}
+	else
+	{
+	    ChatDisabled = true;
+	    SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has disabled main chat! (Press {FFFFFF}Y "COL_PRIM"to ask for round pause)", Player[playerid][Name]));
+	}
+    LogAdminCommand("togglechat", playerid, INVALID_PLAYER_ID);
+	return 1;
+}
+
 YCMD:muteall(playerid, params[], help)
 {
-    //if(Player[playerid][Level] < 3 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be a higher admin level to do that.");
     if(help)
 	{
 	    SendCommandHelpMessage(playerid, "mute everyone.");
@@ -6066,7 +6077,7 @@ YCMD:muteall(playerid, params[], help)
 	}
 	foreach(new i : Player)
 		Player[i][Mute] = true;
-	AllMuted = true;
+		
 	new admName[MAX_PLAYER_NAME];
 	GetPlayerName(playerid, admName, sizeof(admName));
 	SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has muted everyone! (Press {FFFFFF}Y "COL_PRIM"to ask for round pause)", admName));
@@ -6076,7 +6087,6 @@ YCMD:muteall(playerid, params[], help)
 
 YCMD:unmuteall(playerid, params[], help)
 {
-    //if(Player[playerid][Level] < 3 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be a higher admin level to do that.");
     if(help)
 	{
 	    SendCommandHelpMessage(playerid, "unmute everyone.");
@@ -6084,7 +6094,7 @@ YCMD:unmuteall(playerid, params[], help)
 	}
 	foreach(new i : Player)
 		Player[i][Mute] = false;
-	AllMuted = false;
+		
 	new admName[MAX_PLAYER_NAME];
 	GetPlayerName(playerid, admName, sizeof(admName));
 	SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has unmuted everyone!", admName));
@@ -6094,8 +6104,7 @@ YCMD:unmuteall(playerid, params[], help)
 
 YCMD:mute(playerid,params[], help)
 {
-	//if(Player[playerid][Level] < 2 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be a higher admin level to do that.");
-    if(help)
+	if(help)
 	{
 	    SendCommandHelpMessage(playerid, "mute a specific player.");
 	    return 1;
@@ -6119,7 +6128,6 @@ YCMD:mute(playerid,params[], help)
 
 YCMD:unmute(playerid, params[], help)
 {
-	//if(Player[playerid][Level] < 2 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be a higher admin level to do that.");
 	if(help)
 	{
 	    SendCommandHelpMessage(playerid, "unmute a specific player.");
