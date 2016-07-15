@@ -8,9 +8,9 @@
 #include "modules\header\spectate.txt"
 
 
-MoveCam(playerid, Float:toX, Float:toY, Float:toZ)
+SetFreeCamPos(playerid, Float:toX, Float:toY, Float:toZ)
 {
-	MovePlayerObject(playerid, noclipdata[playerid][flyobject], toX - 5.0, toY - 5.0, toZ + 7.0, (GetPlayerDistanceFromPoint(playerid, toX, toY, toZ) > 100.0) ? 1000.0 : 3000.0);
+	SetPlayerObjectPos(playerid, noclipdata[playerid][flyobject], toX - 5.0, toY - 5.0, toZ + 7.0);
 }
 
 PlayerFlyMode(playerid, bool:frozencamera)

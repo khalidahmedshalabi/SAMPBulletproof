@@ -4302,7 +4302,7 @@ YCMD:movecam(playerid, params[], help)
 {
     if(help)
 	{
-	    SendCommandHelpMessage(playerid, "move your camera when you're in /freecam mode");
+	    SendCommandHelpMessage(playerid, "move your camera to a player when you're in /freecam mode");
 	    return 1;
 	}
 	if(Player[playerid][Playing] == true) return SendErrorMessage(playerid,"Can't use this command while playing.");
@@ -4321,7 +4321,7 @@ YCMD:movecam(playerid, params[], help)
 	new Float:x, Float:y, Float:z;
 	GetPlayerPos(toplayerid, x, y, z);
 	SetPlayerCameraLookAt(playerid, x, y, z);
-	MoveCam(playerid, x, y, z);
+	SetFreeCamPos(playerid, x, y, z);
 	return 1;
 }
 
