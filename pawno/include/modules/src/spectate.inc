@@ -13,6 +13,24 @@ hook OnPlayerDisconnect(playerid, reason)
 	return 1;
 }
 
+UpdateSpectateInfoForPlayer(spectatorid)
+{
+	if(Player[spectatorid][IsSpectatingID] == -1)
+		return;
+
+	specid = Player[spectatorid][IsSpectatingID];
+	format(specStr, sizeof(specStr),"%s%s ~r~~h~%d~n~~n~%s(%d) (~r~~h~%d%s)~n~FPS: ~r~~h~%d %sPing: ~r~~h~%d~n~%sPacket-Loss: ~r~~h~%.1f~n~%sKills: ~r~~h~%d~n~%sDamage: ~r~~h~%d~n~%sTotal Dmg: ~r~~h~%d",
+		MAIN_TEXT_COLOUR, Player[specid][Name], specid, MAIN_TEXT_COLOUR, Player[specid][pArmour], Player[specid][pHealth], MAIN_TEXT_COLOUR, GetPlayerFPS(specid), MAIN_TEXT_COLOUR, GetPlayerPing(specid),
+		MAIN_TEXT_COLOUR, NetStats_PacketLossPercent(specid), MAIN_TEXT_COLOUR, Player[specid][RoundKills], MAIN_TEXT_COLOUR, Player[specid][RoundDamage], MAIN_TEXT_COLOUR, Player[specid][TotalDamage]);
+
+	#if defined _league_included
+	format(specStr, sizeof specStr, "%s~n~%sPoints: ~r~~h~%d/%d", specStr, MAIN_TEXT_COLOUR, GetPlayerLeagueRoundPoints(specid), GetPlayerLeagueTotalPoints(specid));
+	#endif
+
+	PlayerTextDrawSetString(i, SpecText[spectatorid][1], specStr);
+	PlayerTextDrawSetString(i, SpecText[spectatorid][3], ListWeapsSpec(specid));
+}
+
 // This timer is called frequently to update textdraws for spectators so they can see correct info about who they're spectating
 TIMER(UpdateInfoForSpectators)
 {
@@ -22,19 +40,7 @@ TIMER(UpdateInfoForSpectators)
 	new specStr[235], specid;
 	foreach(new i : AllSpectators)
 	{
-		if(Player[i][IsSpectatingID] == -1)
-			break;
-
-		specid = Player[i][IsSpectatingID];
-		format(specStr, sizeof(specStr),"%s%s ~r~~h~%d~n~~n~%s(%d) (~r~~h~%d%s)~n~FPS: ~r~~h~%d %sPing: ~r~~h~%d~n~%sPacket-Loss: ~r~~h~%.1f~n~%sKills: ~r~~h~%d~n~%sDamage: ~r~~h~%d~n~%sTotal Dmg: ~r~~h~%d",
-			MAIN_TEXT_COLOUR, Player[specid][Name], specid, MAIN_TEXT_COLOUR, Player[specid][pArmour], Player[specid][pHealth], MAIN_TEXT_COLOUR, GetPlayerFPS(specid), MAIN_TEXT_COLOUR, GetPlayerPing(specid),
-			MAIN_TEXT_COLOUR, NetStats_PacketLossPercent(specid), MAIN_TEXT_COLOUR, Player[specid][RoundKills], MAIN_TEXT_COLOUR, Player[specid][RoundDamage], MAIN_TEXT_COLOUR, Player[specid][TotalDamage]);
-
-		#if defined _league_included
-		format(specStr, sizeof specStr, "%s~n~%sPoints: ~r~~h~%d/%d", specStr, MAIN_TEXT_COLOUR, GetPlayerLeagueRoundPoints(specid), GetPlayerLeagueTotalPoints(specid));
-		#endif
-		PlayerTextDrawSetString(i, SpecText[i][1], specStr);
-		PlayerTextDrawSetString(i, SpecText[i][3], ListWeapsSpec(specid));
+		UpdateSpectateInfoForPlayer(i);
 	}
 	return 1;
 }
@@ -237,6 +243,9 @@ SpectatePlayer(playerid, specid)
 	}
 	Iter_Add(PlayerSpectators[specid], playerid); // State that this player is one of the spectators of 'specid'
 	UpdatePlayerSpectators(specid); // Update who-specing
+
+	// Update textdraws that show spectated player's info
+	UpdateSpectateInfoForPlayer(playerid);
 
  	if(Player[specid][Playing] == true && Current != -1) // Show them the checkpoint of the current base
 	    SetCPForPlayer(playerid);
