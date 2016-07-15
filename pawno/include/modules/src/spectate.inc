@@ -22,6 +22,9 @@ TIMER(UpdateInfoForSpectators)
 	new specStr[235], specid;
 	foreach(new i : AllSpectators)
 	{
+		if(Player[i][IsSpectatingID] == -1)
+			break;
+
 		specid = Player[i][IsSpectatingID];
 		format(specStr, sizeof(specStr),"%s%s ~r~~h~%d~n~~n~%s(%d) (~r~~h~%d%s)~n~FPS: ~r~~h~%d %sPing: ~r~~h~%d~n~%sPacket-Loss: ~r~~h~%.1f~n~%sKills: ~r~~h~%d~n~%sDamage: ~r~~h~%d~n~%sTotal Dmg: ~r~~h~%d",
 			MAIN_TEXT_COLOUR, Player[specid][Name], specid, MAIN_TEXT_COLOUR, Player[specid][pArmour], Player[specid][pHealth], MAIN_TEXT_COLOUR, GetPlayerFPS(specid), MAIN_TEXT_COLOUR, GetPlayerPing(specid),
