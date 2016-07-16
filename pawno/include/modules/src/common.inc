@@ -334,6 +334,9 @@ bool:IsValidWeapon(weaponid)
     return false;
 }
 
+IsValidSkin(skinid)
+	return (!(skinid < 0 || skinid > 299 || skinid == 74 || skinid >= 265 && skinid <= 272));
+
 stock GetPlayerSpeed(playerid)
 {
     new Float:velocity[4];
