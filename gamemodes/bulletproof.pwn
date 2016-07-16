@@ -4287,7 +4287,7 @@ YCMD:freecam(playerid, params[], help)
 	else
 	{
 		PlayerFlyMode(playerid, false);
-		SendClientMessage(playerid, -1, "Use /specoff to exit FreeCam!");
+		SendClientMessage(playerid, -1, "Use /specoff to exit FreeCam! Try /movecam for camera movement");
 		PlayerTextDrawHide(playerid, RoundKillDmgTDmg[playerid]);
 		PlayerTextDrawHide(playerid, FPSPingPacket[playerid]);
 		PlayerTextDrawHide(playerid, BaseID_VS[playerid]);
@@ -4320,7 +4320,6 @@ YCMD:movecam(playerid, params[], help)
 	
 	new Float:x, Float:y, Float:z;
 	GetPlayerPos(toplayerid, x, y, z);
-	SetPlayerCameraLookAt(playerid, x, y, z);
 	SetFreeCamPos(playerid, x, y, z);
 	return 1;
 }
