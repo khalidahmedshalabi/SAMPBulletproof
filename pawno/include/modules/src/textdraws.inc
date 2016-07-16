@@ -1002,7 +1002,7 @@ LoadPlayerTextDraws(playerid)
     PlayerTextDrawBoxColor(playerid, AreaCheckBG[playerid], 0x00000044);
 	PlayerTextDrawSetOutline(playerid, AreaCheckBG[playerid],0);
 
-	DeathText[playerid][0] = CreatePlayerTextDraw(playerid,322.000000, 346.000000, "_");
+	DeathText[playerid][0] = CreatePlayerTextDraw(playerid,322.000000, 321.000000, "_");
 	PlayerTextDrawBackgroundColor(playerid, DeathText[playerid][0], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, DeathText[playerid][0], 1);
 	PlayerTextDrawLetterSize(playerid, DeathText[playerid][0], 0.250000, 1.2000);
@@ -1012,7 +1012,7 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawSetShadow(playerid, DeathText[playerid][0], 0);
 	PlayerTextDrawAlignment(playerid, DeathText[playerid][0], 2);
 
-	DeathText[playerid][1] = CreatePlayerTextDraw(playerid,322, 360.000000, "_");
+	DeathText[playerid][1] = CreatePlayerTextDraw(playerid,322, 335.000000, "_");
 	PlayerTextDrawBackgroundColor(playerid, DeathText[playerid][1], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, DeathText[playerid][1], 1);
 	PlayerTextDrawLetterSize(playerid, DeathText[playerid][1], 0.250000, 1.2000);
