@@ -6941,7 +6941,7 @@ YCMD:teamskin(playerid, params[], help)
 	if(ChangingSkinOfTeam[playerid] != -1) return SendErrorMessage(playerid,"You're already changing team skins.");
 	//if(isnull(params)) return SendUsageMessage(playerid,"/teamskin [Team ID: 0 Attacker | 1 Defender | 2 Referee] [optional: skin id]");
 	new teamid, skin[8];
-	if(sscanf(params, "iz", teamid, skinid)) return SendUsageMessage(playerid,"/teamskin [Team ID: 0 Attacker | 1 Defender | 2 Referee] [optional: skin id]");
+	if(sscanf(params, "iz", teamid, skin)) return SendUsageMessage(playerid,"/teamskin [Team ID: 0 Attacker | 1 Defender | 2 Referee] [optional: skin id]");
 	if(teamid < 0 || teamid > 2) return SendErrorMessage(playerid,"Invalid team ID.");
 
     ChangingSkinOfTeam[playerid] = teamid + 1;
