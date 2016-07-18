@@ -428,7 +428,12 @@ HandleHeadshot(playerid, issuerid, weaponid)
 				}
 				#endif
 				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "_", 2000);
-				SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Sniper"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]));
+				if(Player[playerid][Playing] && Player[issuerid][Playing])
+				{
+					new str[144];
+					format(str, sizeof str, "{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Sniper"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]);
+					SendClientMessageToAll(-1, str);
+				}
 			}
 			case WEAPON_RIFLE:
 			{
@@ -439,7 +444,12 @@ HandleHeadshot(playerid, issuerid, weaponid)
 				}
 				#endif
 				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "_", 2000);
-				SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Rifle"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]));
+				if(Player[playerid][Playing] && Player[issuerid][Playing])
+				{
+					new str[144];
+					format(str, sizeof str, "{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Rifle"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]);
+					SendClientMessageToAll(-1, str);
+				}
 			}
 			case WEAPON_DEAGLE:
 			{
@@ -450,7 +460,12 @@ HandleHeadshot(playerid, issuerid, weaponid)
 				}
 				#endif
 				MessageBox(issuerid, MSGBOX_TYPE_TOP, "~g~~h~Headshot", "_", 2000);
-				SendClientMessageToAll(-1, sprintf("{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Deagle"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]));
+				if(Player[playerid][Playing] && Player[issuerid][Playing])
+				{
+					new str[144];
+					format(str, sizeof str, "{FFFFFF}%s "COL_PRIM"has landed a hit on {FFFFFF}%s's "COL_PRIM"head "COL_PRIM"({FFFFFF}Deagle"COL_PRIM")", Player[issuerid][Name], Player[playerid][Name]);
+					SendClientMessageToAll(-1, str);
+				}
 			}
 		}
 	}
