@@ -7786,12 +7786,13 @@ YCMD:remove(playerid, params[], help)
 
 	new pID = strval(params);
 
+    if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isn't connected.");
+	if(Player[pID][Playing] == false) return SendErrorMessage(playerid,"That player is not playing.");
+
     new iString[128], HP[2];
     GetHP(pID, HP[0]);
     GetAP(pID, HP[1]);
 
-	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isn't connected.");
-	if(Player[pID][Playing] == false) return SendErrorMessage(playerid,"That player is not playing.");
 
     format(iString, sizeof(iString), "{FFFFFF}%s (%d) "COL_PRIM"removed {FFFFFF}%s (%d) "COL_PRIM"from round. {FFFFFF}(HP %d | AP %d)", Player[playerid][Name], playerid, Player[pID][Name], pID, HP[0], HP[1]);
     SendClientMessageToAll(-1, iString);
