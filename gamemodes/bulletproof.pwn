@@ -7388,7 +7388,6 @@ YCMD:givemenu(playerid, params[], help)
 	new pID = strval(params);
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid,"That player isn't connected.");
 	if(Player[pID][Playing] == false) return SendErrorMessage(playerid,"That player isn't playing.");
-	if(Player[pID][OnGunmenu] == true) return SendErrorMessage(playerid,"That player is already selecting weapons.");
 
     new iString[128];
     format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has showed {FFFFFF}%s "COL_PRIM"weapon menu.", Player[playerid][Name], Player[pID][Name]);
