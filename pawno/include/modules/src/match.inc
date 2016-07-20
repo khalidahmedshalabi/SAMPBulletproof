@@ -2707,9 +2707,9 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 				playerScores[index][player_Acc] = floatround(Player[i][Accuracy], floatround_round);
 
 				if(playerScores[index][player_Deaths] > 0)
-					playerScores[index][player_Overall] = (-playerScores[index][player_Score]) + playerScores[index][player_Kills] + playerScores[index][player_Acc];
+					playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] + playerScores[index][player_Acc];
 				else
-					playerScores[index][player_Overall] = (playerScores[index][player_Score] - (200 - playerScores[index][player_HP])) + playerScores[index][player_Kills] + playerScores[index][player_Acc];
+					playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_HP] + playerScores[index][player_Kills] + playerScores[index][player_Acc];
 
 				format(names[index], MAX_PLAYER_NAME, Player[i][NameWithoutTag]);
 
@@ -2783,9 +2783,9 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 			playerScores[index][player_Acc] = SaveVariables[i][iAccuracy];
 
 			if(playerScores[index][player_Deaths] > 0)
-				playerScores[index][player_Overall] = (-playerScores[index][player_Score]) + playerScores[index][player_Kills] + playerScores[index][player_Acc];
+				playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_Kills] + playerScores[index][player_Acc];
 			else
-				playerScores[index][player_Overall] = (playerScores[index][player_Score] - (200 - playerScores[index][player_HP])) + playerScores[index][player_Kills] + playerScores[index][player_Acc];
+				playerScores[index][player_Overall] = playerScores[index][player_Score] + playerScores[index][player_HP] + playerScores[index][player_Kills] + playerScores[index][player_Acc];
 
 			format(names[index], MAX_PLAYER_NAME, SaveVariables[i][pNameWithoutTag]);
 
@@ -2803,13 +2803,24 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 
 	Current = -1;
 
+	// This must be done before GetPlayerHighestScores2 is called or we will get incorrect values
+	new topOverall, topOverallID = -1;
+	for(new i = 0; i != p; ++i)
+	{
+		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Score] > 0 && playerScores[i][player_Team] == winnerid)
+	    {
+            topOverall = playerScores[i][player_Overall];
+            topOverallID = i;
+	    }
+	}
+
+	// Sort players
 	GetPlayerHighestScores2(playerScores, names, 0, index-1);
 
 
 	new topkill, topkillID = -1,
 		Float: topDmg, topDmgID = -1,
-		topAcc, topAccID = -1,
-		topOverall, topOverallID = -1
+		topAcc, topAccID = -1
 	;
 
 	for(new i = 0; i != p; ++i) {
@@ -2828,11 +2839,6 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	    {
             topAcc = playerScores[i][player_Acc];
             topAccID = i;
-	    }
-		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Score] > 0 && playerScores[i][player_Team] == winnerid)
-	    {
-            topOverall = playerScores[i][player_Overall];
-            topOverallID = i;
 	    }
 
 	    if(playerScores[i][player_Team] == ATTACKER || playerScores[i][player_Team] == ATTACKER_SUB) {
@@ -3053,6 +3059,8 @@ public WarEnded()
 
 			format(names[index], MAX_PLAYER_NAME, Player[i][NameWithoutTag]);
 
+			printf("overall of %s[%d]: %d", names[index], index, playerScores[index][player_Overall]);
+
 		    playerScores[index++][player_ID] = i;
 		    p++;
 		}
@@ -3082,6 +3090,8 @@ public WarEnded()
 
 	    	format(names[index], MAX_PLAYER_NAME, SaveVariables[i][pNameWithoutTag]);
 
+			printf("overall of %s[%d]: %d", names[index], index, playerScores[index][player_Overall]);
+
 	   	    SaveVariables[i][RKills]   	=  	0;
 			SaveVariables[i][RDeaths]  	= 	0;
 			SaveVariables[i][RDamage] 	= 	0;
@@ -3092,12 +3102,26 @@ public WarEnded()
 		}
 	}
 
+	// This must be done before GetPlayerHighestScores2 is called or we will get incorrect values
+	new topOverall, topOverallID = -1;
+	for(new i = 0; i != p; ++i)
+	{
+		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Overall] != 0 && playerScores[i][player_Score] > 0 && playerScores[i][player_TPlayed] > 0  && playerScores[i][player_Team] == winnerid)
+		{
+			printf("counted MANOFTHEMATCH: i=%d, names=%s, player_Overall=%d, current overall=%d, score=%d, played=%d, acc=%d, team=%d, winner=%d", i, names[i],  playerScores[i][player_Overall], topOverall, playerScores[i][player_Score], playerScores[i][player_TPlayed], playerScores[i][player_Acc], playerScores[i][player_Team], winnerid);
+			topOverall = playerScores[i][player_Overall];
+			topOverallID = i;
+		}
+		else
+			printf("skipped MANOFTHEMATCH: i=%d, names=%s, player_Overall=%d, current overall=%d, score=%d, played=%d, acc=%d, team=%d, winner=%d", i, names[i],  playerScores[i][player_Overall], topOverall, playerScores[i][player_Score], playerScores[i][player_TPlayed], playerScores[i][player_Acc], playerScores[i][player_Team], winnerid);
+	}
+
+	// Sort players
 	GetPlayerHighestScores2(playerScores, names, 0, index-1);
 
 	new topkill, topkillID = -1,
 		Float: topDmg, topDmgID = -1,
-		topAcc, topAccID = -1,
-		topOverall, topOverallID = -1
+		topAcc, topAccID = -1
 	;
 
 	for(new i = 0; i != p; ++i) {
@@ -3116,11 +3140,6 @@ public WarEnded()
 	    {
             topAcc = playerScores[i][player_Acc];
             topAccID = i;
-	    }
-		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Overall] != 0 && playerScores[i][player_Score] > 0 && playerScores[i][player_TPlayed] > 0  && playerScores[i][player_Team] == winnerid)
-	    {
-            topOverall = playerScores[i][player_Overall];
-            topOverallID = i;
 	    }
 
 	    if(playerScores[i][player_Team] == ATTACKER || playerScores[i][player_Team] == ATTACKER_SUB) {
@@ -3146,9 +3165,6 @@ public WarEnded()
 		if(i == 0) format(TopString[0], 128, "%s1st         -         %s   	({FFFFFF}%d%s)", TextColor[playerScores[i][player_Team]], names[i], playerScores[i][player_Score], TextColor[playerScores[i][player_Team]]);
 		else if(i == 1) format(TopString[1], 128, "%s2nd         -         %s   	({FFFFFF}%d%s)", TextColor[playerScores[i][player_Team]], names[i], playerScores[i][player_Score], TextColor[playerScores[i][player_Team]]);
 		else if(i == 2) format(TopString[2], 128, "%s3rd         -         %s   	({FFFFFF}%d%s)", TextColor[playerScores[i][player_Team]], names[i], playerScores[i][player_Score], TextColor[playerScores[i][player_Team]]);
-
-
-
 	}
 
 
