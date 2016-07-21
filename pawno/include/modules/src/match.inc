@@ -2803,24 +2803,13 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 
 	Current = -1;
 
-	// This must be done before GetPlayerHighestScores2 is called or we will get incorrect values
-	new topOverall, topOverallID = -1;
-	for(new i = 0; i != p; ++i)
-	{
-		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Score] > 0 && playerScores[i][player_Team] == winnerid)
-	    {
-            topOverall = playerScores[i][player_Overall];
-            topOverallID = i;
-	    }
-	}
-
-	// Sort players
 	GetPlayerHighestScores2(playerScores, names, 0, index-1);
 
 
 	new topkill, topkillID = -1,
 		Float: topDmg, topDmgID = -1,
-		topAcc, topAccID = -1
+		topAcc, topAccID = -1,
+		topOverall, topOverallID = -1
 	;
 
 	for(new i = 0; i != p; ++i) {
@@ -2839,6 +2828,11 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	    {
             topAcc = playerScores[i][player_Acc];
             topAccID = i;
+	    }
+		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Score] > 0 && playerScores[i][player_Team] == winnerid)
+	    {
+            topOverall = playerScores[i][player_Overall];
+            topOverallID = i;
 	    }
 
 	    if(playerScores[i][player_Team] == ATTACKER || playerScores[i][player_Team] == ATTACKER_SUB) {
@@ -3090,8 +3084,6 @@ public WarEnded()
 
 	    	format(names[index], MAX_PLAYER_NAME, SaveVariables[i][pNameWithoutTag]);
 
-			printf("overall of %s[%d]: %d", names[index], index, playerScores[index][player_Overall]);
-
 	   	    SaveVariables[i][RKills]   	=  	0;
 			SaveVariables[i][RDeaths]  	= 	0;
 			SaveVariables[i][RDamage] 	= 	0;
@@ -3102,26 +3094,12 @@ public WarEnded()
 		}
 	}
 
-	// This must be done before GetPlayerHighestScores2 is called or we will get incorrect values
-	new topOverall, topOverallID = -1;
-	for(new i = 0; i != p; ++i)
-	{
-		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Overall] != 0 && playerScores[i][player_Score] > 0 && playerScores[i][player_TPlayed] > 0  && playerScores[i][player_Team] == winnerid)
-		{
-			printf("counted MANOFTHEMATCH: i=%d, names=%s, player_Overall=%d, current overall=%d, score=%d, played=%d, acc=%d, team=%d, winner=%d", i, names[i],  playerScores[i][player_Overall], topOverall, playerScores[i][player_Score], playerScores[i][player_TPlayed], playerScores[i][player_Acc], playerScores[i][player_Team], winnerid);
-			topOverall = playerScores[i][player_Overall];
-			topOverallID = i;
-		}
-		else
-			printf("skipped MANOFTHEMATCH: i=%d, names=%s, player_Overall=%d, current overall=%d, score=%d, played=%d, acc=%d, team=%d, winner=%d", i, names[i],  playerScores[i][player_Overall], topOverall, playerScores[i][player_Score], playerScores[i][player_TPlayed], playerScores[i][player_Acc], playerScores[i][player_Team], winnerid);
-	}
-
-	// Sort players
 	GetPlayerHighestScores2(playerScores, names, 0, index-1);
 
 	new topkill, topkillID = -1,
 		Float: topDmg, topDmgID = -1,
-		topAcc, topAccID = -1
+		topAcc, topAccID = -1,
+		topOverall, topOverallID = -1
 	;
 
 	for(new i = 0; i != p; ++i) {
@@ -3141,6 +3119,11 @@ public WarEnded()
             topAcc = playerScores[i][player_Acc];
             topAccID = i;
 	    }
+		if( playerScores[i][player_Overall] > topOverall && playerScores[i][player_Overall] != 0 && playerScores[i][player_Score] > 0 && playerScores[i][player_TPlayed] > 0  && playerScores[i][player_Team] == winnerid)
+		{
+			topOverall = playerScores[i][player_Overall];
+			topOverallID = i;
+		}
 
 	    if(playerScores[i][player_Team] == ATTACKER || playerScores[i][player_Team] == ATTACKER_SUB) {
 	        format(AttList, sizeof(AttList), "%s~w~%s~n~", AttList, names[i]);

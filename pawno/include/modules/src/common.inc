@@ -1605,6 +1605,7 @@ GetPlayerHighestScores2(array[][rankingEnum], names[][MAX_PLAYER_NAME], left, ri
             tempVar = array[tempLeft][player_TPlayed], array[tempLeft][player_TPlayed] = array[tempRight][player_TPlayed], array[tempRight][player_TPlayed] = tempVar;
             tempVar = array[tempLeft][player_HP], array[tempLeft][player_HP] = array[tempRight][player_HP], array[tempRight][player_HP] = tempVar;
             tempVar = array[tempLeft][player_Acc], array[tempLeft][player_Acc] = array[tempRight][player_Acc], array[tempRight][player_Acc] = tempVar;
+			tempVar = array[tempLeft][player_Overall], array[tempLeft][player_Overall] = array[tempRight][player_Overall], array[tempRight][player_Overall] = tempVar;
             tempLeft++, tempRight--;
         }
     }
