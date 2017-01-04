@@ -321,7 +321,8 @@ ResultTextdrawsCreate()
 	TextDrawAlignment			(	leftBG, 		1							);
 	TextDrawColor				(	leftBG, 		0							);
 	TextDrawUseBox				(	leftBG, 		true						);
-	TextDrawBoxColor			(	leftBG, 		0xDB535399					);
+	//TextDrawBoxColor			(	leftBG, 		0xDB535399					);
+	TextDrawBoxColor			(	leftBG, 		0x00000099					);
 	TextDrawSetShadow			(	leftBG, 		0);
 	TextDrawSetOutline			(	leftBG, 		0);
 	TextDrawFont				(	leftBG, 		0);
@@ -332,7 +333,8 @@ ResultTextdrawsCreate()
 	TextDrawAlignment			(	rightBG, 		1							);
 	TextDrawColor				(	rightBG, 		0							);
 	TextDrawUseBox				(	rightBG, 		true						);
-	TextDrawBoxColor			(	rightBG,		0x6492D199					);
+	//TextDrawBoxColor			(	rightBG,		0x6492D199					);
+	TextDrawBoxColor			(	rightBG, 		0x00000099					);
 	TextDrawSetShadow			(	rightBG,		0							);
 	TextDrawSetOutline			(	rightBG, 		0							);
 	TextDrawFont				(	rightBG, 		0							);
@@ -343,7 +345,7 @@ ResultTextdrawsCreate()
 	TextDrawAlignment          	(	leftUpBG, 		1							);
 	TextDrawColor            	(	leftUpBG, 		0							);
 	TextDrawUseBox            	(	leftUpBG, 		true						);
-	TextDrawBoxColor            (	leftUpBG, 		0x000000EE					);
+	TextDrawBoxColor            (	leftUpBG, 		0x00000050					);
 	TextDrawSetShadow          	(	leftUpBG, 		0							);
 	TextDrawSetOutline         	(	leftUpBG, 		0							);
 	TextDrawFont            	(	leftUpBG, 		0							);
@@ -354,7 +356,7 @@ ResultTextdrawsCreate()
 	TextDrawAlignment           (	rightUpBG, 		1							);
 	TextDrawColor            	(	rightUpBG, 		0							);
 	TextDrawUseBox            	(	rightUpBG, 		true						);
-	TextDrawBoxColor            (	rightUpBG, 		0x000000EE					);
+	TextDrawBoxColor            (	rightUpBG, 		0x00000050					);
 	TextDrawSetShadow          	(	rightUpBG, 		0							);
 	TextDrawSetOutline     	  	(	rightUpBG, 		0							);
 	TextDrawFont            	(	rightUpBG, 		1							);
@@ -365,7 +367,7 @@ ResultTextdrawsCreate()
 	TextDrawAlignment          	(	leftHeader,		1							);
 	TextDrawColor            	(	leftHeader,		0							);
 	TextDrawUseBox            	(	leftHeader,		true						);
-	TextDrawBoxColor            (	leftHeader,		0xFF736F11					);
+	TextDrawBoxColor            (	leftHeader,		0xFF222280					);
 	TextDrawSetShadow          	(	leftHeader,		0							);
 	TextDrawSetOutline         	(	leftHeader,		0							);
 	TextDrawFont            	(	leftHeader,		0							);
@@ -376,28 +378,30 @@ ResultTextdrawsCreate()
 	TextDrawAlignment          	(	rightHeader,	1							);
 	TextDrawColor            	(	rightHeader,	860159863					);
 	TextDrawUseBox            	(	rightHeader,	true						);
-	TextDrawBoxColor            (	rightHeader,	0x7391FF11					);
+	TextDrawBoxColor            (	rightHeader,	0x4444FF80					);
 	TextDrawSetShadow          	(	rightHeader,	0							);
 	TextDrawSetOutline         	(	rightHeader,	0							);
 	TextDrawFont            	(	rightHeader,	0							);
 
 	leftULine = TextDrawCreate 	(	116.105949,		169.166824,		"-"			);
+	//leftULine = TextDrawCreate 	(	-100.0,		-100.0,		"-"			);
 	TextDrawLetterSize         	(	leftULine,		13.658081,		0.270249	);
 	TextDrawAlignment          	(	leftULine,		1							);
-	TextDrawColor            	(	leftULine,		0xFF0000FF							);
+	TextDrawColor            	(	leftULine,		0x00000050							);
 	TextDrawSetShadow          	(	leftULine,		0							);
 	TextDrawSetOutline         	(	leftULine,		10							);
-	TextDrawBackgroundColor    	(	leftULine,		0xFF0000FF							);
+	TextDrawBackgroundColor    	(	leftULine,		0x00000050							);
 	TextDrawFont            	(	leftULine,		1							);
 	TextDrawSetProportional    	(	leftULine,		1							);
 
 	rightULine = TextDrawCreate	(	290.376525,		169.816665,		"-"			);
+	//rightULine = TextDrawCreate 	(	-100.0,		-100.0,		"-"			);
 	TextDrawLetterSize         	(	rightULine,		13.662071,		0.257999	);
 	TextDrawAlignment          	(	rightULine,		1							);
-	TextDrawColor            	(	rightULine,		0x0000FFFF							);
+	TextDrawColor            	(	rightULine,		0x00000050						);
 	TextDrawSetShadow          	(	rightULine,		0							);
 	TextDrawSetOutline         	(	rightULine,		10							);
-	TextDrawBackgroundColor    	(	rightULine,		0x0000FFFF							);
+	TextDrawBackgroundColor    	(	rightULine,		0x00000050							);
 	TextDrawFont            	(	rightULine,		1							);
 	TextDrawSetProportional    	(	rightULine,		1							);
 
@@ -448,7 +452,8 @@ ResultTextdrawsCreate()
 	TextDrawColor          		(	leftText,		-1							);
 	TextDrawSetShadow          	(	leftText,		0							);
 	TextDrawSetOutline         	(	leftText,		1							);
-	TextDrawBackgroundColor     (	leftText,		0xFF003333					);
+	//TextDrawBackgroundColor     (	leftText,		0xFF003333					);
+	TextDrawBackgroundColor     (	leftText,		0xFF222233					);
 	TextDrawFont            	(	leftText,		1							);
 	TextDrawSetProportional    	(	leftText,		1							);
 
@@ -458,7 +463,8 @@ ResultTextdrawsCreate()
 	TextDrawColor            	(	rightText,		-1							);
 	TextDrawSetShadow           (	rightText,		0							);
 	TextDrawSetOutline          (	rightText,		1							);
-	TextDrawBackgroundColor    	(	rightText,		0x3344FF33					);
+	//TextDrawBackgroundColor    	(	rightText,		0x3344FF33					);
+	TextDrawBackgroundColor    	(	rightText,		0x4444FF33					);
 	TextDrawFont            	(	rightText,		1							);
 	TextDrawSetProportional     (	rightText,		1							);
 
@@ -740,7 +746,7 @@ RoundTextdrawsCreate()
 	PauseTD = TextDrawCreate(324.000000, 390.000000, "~r~~h~~h~Round paused");
 	TextDrawBackgroundColor(PauseTD, MAIN_BACKGROUND_COLOUR);
 	TextDrawFont(PauseTD, 1);
-	TextDrawLetterSize(PauseTD, 0.200000, 1.500000);
+	TextDrawLetterSize(PauseTD, 0.280000, 1.500000);
 	TextDrawColor(PauseTD, 255);
 	TextDrawSetOutline(PauseTD, 1);
 	TextDrawSetProportional(PauseTD, 1);
@@ -799,7 +805,7 @@ RoundTextdrawsCreate()
     TextDrawAlignment(AttDef_RoundStats,2);
     TextDrawSetProportional(AttDef_RoundStats, 1);
 
-	AttDef_RoundTimer = TextDrawCreate(327.000000, 430.000000, "_");
+	AttDef_RoundTimer = TextDrawCreate(327.000000, 431.500000, "_");
 	TextDrawAlignment(AttDef_RoundTimer, 2);
 	TextDrawBackgroundColor(AttDef_RoundTimer, MAIN_BACKGROUND_COLOUR);
 	TextDrawFont(AttDef_RoundTimer, 1);
@@ -815,20 +821,20 @@ LoadPlayerTextDraws(playerid)
 
 	HPTextDraw_TD[playerid] = CreatePlayerTextDraw(playerid,577, 67.1, "_");
 	PlayerTextDrawBackgroundColor(playerid, HPTextDraw_TD[playerid], MAIN_BACKGROUND_COLOUR);
-	PlayerTextDrawFont(playerid, HPTextDraw_TD[playerid], 1);
-	PlayerTextDrawLetterSize(playerid, HPTextDraw_TD[playerid], 0.2600, 0.8000);
+	PlayerTextDrawFont(playerid, HPTextDraw_TD[playerid], 2);
+	PlayerTextDrawLetterSize(playerid, HPTextDraw_TD[playerid], 0.2300, 0.7000);
 	PlayerTextDrawColor(playerid, HPTextDraw_TD[playerid], 16711935);
-	PlayerTextDrawSetOutline(playerid, HPTextDraw_TD[playerid], 1);
+	PlayerTextDrawSetOutline(playerid, HPTextDraw_TD[playerid], 0);
 	PlayerTextDrawSetProportional(playerid, HPTextDraw_TD[playerid], 1);
 	PlayerTextDrawSetShadow(playerid, HPTextDraw_TD[playerid],0);
 	PlayerTextDrawAlignment(playerid, HPTextDraw_TD[playerid], 2);
 
-	ArmourTextDraw[playerid] = CreatePlayerTextDraw(playerid,577, 45.1, "_");
+	ArmourTextDraw[playerid] = CreatePlayerTextDraw(playerid,577, 46.0, "_");
 	PlayerTextDrawBackgroundColor(playerid, ArmourTextDraw[playerid], MAIN_BACKGROUND_COLOUR);
-	PlayerTextDrawFont(playerid, ArmourTextDraw[playerid], 1);
-	PlayerTextDrawLetterSize(playerid, ArmourTextDraw[playerid], 0.2600, 0.8000);
+	PlayerTextDrawFont(playerid, ArmourTextDraw[playerid], 2);
+	PlayerTextDrawLetterSize(playerid, ArmourTextDraw[playerid], 0.2300, 0.7000);
 	PlayerTextDrawColor(playerid, ArmourTextDraw[playerid], 16711935);
-	PlayerTextDrawSetOutline(playerid, ArmourTextDraw[playerid], 1);
+	PlayerTextDrawSetOutline(playerid, ArmourTextDraw[playerid], 0);
 	PlayerTextDrawSetProportional(playerid, ArmourTextDraw[playerid], 1);
 	PlayerTextDrawSetShadow(playerid, ArmourTextDraw[playerid],0);
 	PlayerTextDrawAlignment(playerid, ArmourTextDraw[playerid], 2);
@@ -852,7 +858,7 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawFont(playerid, TargetInfoData[playerid][TargetInfoTD], 1);
 	PlayerTextDrawLetterSize(playerid, TargetInfoData[playerid][TargetInfoTD], 0.200000, 1.0);
 	PlayerTextDrawColor(playerid, TargetInfoData[playerid][TargetInfoTD], 255);
-	PlayerTextDrawUseBox(playerid, TargetInfoData[playerid][TargetInfoTD], 1);
+	PlayerTextDrawUseBox(playerid, TargetInfoData[playerid][TargetInfoTD], 0);
 	PlayerTextDrawBoxColor(playerid, TargetInfoData[playerid][TargetInfoTD], 0x00000011);
 	PlayerTextDrawSetOutline(playerid, TargetInfoData[playerid][TargetInfoTD], 1);
 	PlayerTextDrawSetProportional(playerid, TargetInfoData[playerid][TargetInfoTD], 1);
@@ -1028,6 +1034,17 @@ LoadPlayerTextDraws(playerid)
 	CreatePlayerWeaponBindTextDraw(playerid);
 	CreateMessageBoxTextDraws(playerid);
 	return 1;
+}
+
+UpdateRoundKillDmgTDmg(playerid)
+{
+    new iString[160];
+	
+	//format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
+	format(iString, sizeof(iString), "%sKills ~r~%d~n~%sDamage ~r~%d~n~%sTotal Dmg ~r~%d", MAIN_TEXT_COLOUR,Player[playerid][RoundKills], MAIN_TEXT_COLOUR, Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, Player[playerid][TotalDamage]);
+	
+	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
+    return 1;
 }
 
 UpdateTeamNamesTextdraw()
@@ -1246,7 +1263,7 @@ UpdateTeamScoreTextDraw()
 {
 	//TextDrawSetString(TeamScoreText, sprintf("%d     %d", TeamScore[ATTACKER], TeamScore[DEFENDER]));
 	new iString[64];
-	format(iString, sizeof(iString), "~r~~h~~h~%s %s%d - %d ~b~~h~~h~%s", TeamName[ATTACKER], MAIN_TEXT_COLOUR, TeamScore[ATTACKER], TeamScore[DEFENDER], TeamName[DEFENDER]);
+	format(iString, sizeof(iString), "~r~%s %s(~r~%d%s) ~b~~h~%s %s(~b~~h~%d%s)", TeamName[ATTACKER], MAIN_TEXT_COLOUR, TeamScore[ATTACKER], MAIN_TEXT_COLOUR, TeamName[DEFENDER], MAIN_TEXT_COLOUR, TeamScore[DEFENDER], MAIN_TEXT_COLOUR);
     TextDrawSetString(TeamScoreText, iString);
 	UpdateRoundsPlayedTextDraw();
 }
@@ -1256,7 +1273,7 @@ UpdateTeamNameTextDraw()
 	/*TextDrawSetString(TeamAttackerTD, sprintf("~r~~h~~h~%s", TeamName[ATTACKER]));
 	TextDrawSetString(TeamDefenderTD, sprintf("~b~~h~~h~%s", TeamName[DEFENDER]));*/
 	new iString[64];
-	format(iString, sizeof(iString), "~r~~h~~h~%s %s%d - %d ~b~~h~~h~%s", TeamName[ATTACKER], MAIN_TEXT_COLOUR, TeamScore[ATTACKER], TeamScore[DEFENDER], TeamName[DEFENDER]);
+	format(iString, sizeof(iString), "~r~%s %s(~r~%d%s) ~b~~h~%s %s(~b~~h~%d%s)", TeamName[ATTACKER], MAIN_TEXT_COLOUR, TeamScore[ATTACKER], MAIN_TEXT_COLOUR, TeamName[DEFENDER], MAIN_TEXT_COLOUR, TeamScore[DEFENDER], MAIN_TEXT_COLOUR);
     TextDrawSetString(TeamScoreText, iString);
 	UpdateRoundsPlayedTextDraw();
 }
@@ -1264,6 +1281,7 @@ UpdateTeamNameTextDraw()
 UpdateRoundsPlayedTextDraw()
 {
 	//TextDrawSetString(RoundsPlayed, sprintf( "~h~Ro~h~un~h~ds: ~h~%d/%d", CurrentRound, TotalRounds));
+	/*
 	if(TeamScore[ATTACKER] == TeamScore[DEFENDER])
 	{
 		TextDrawSetString(RoundsPlayed, sprintf("%sRounds %d/%d", MAIN_TEXT_COLOUR, CurrentRound, TotalRounds));
@@ -1276,6 +1294,8 @@ UpdateRoundsPlayedTextDraw()
 	{
 		TextDrawSetString(RoundsPlayed, sprintf("%sRounds ~b~~h~~h~%d~b~/~h~~h~%d", MAIN_TEXT_COLOUR, CurrentRound, TotalRounds));
 	}
+	*/
+	TextDrawSetString(RoundsPlayed, sprintf("%sRounds ~r~~h~~h~%d~r~/~h~~h~%d", MAIN_TEXT_COLOUR, CurrentRound, TotalRounds));
 }
 
 InitPlayerInterface(playerid)
@@ -1387,16 +1407,22 @@ public DoShowIntroTextDraws(index, response_code, data[])
 
 ShowIntroTextDraws(playerid)
 {
+    #pragma unused playerid
+    /*
 	HTTP(playerid, HTTP_GET, "infinite-gaming.ml/khk/bulletproof/league/news_textdraw_text.php", "", "DoShowIntroTextDraws");
 
 	TextDrawShowForPlayer(playerid, Intro_GoWebsite);
 	TextDrawShowForPlayer(playerid, Intro_GetStarted);
 	TextDrawShowForPlayer(playerid, Intro_News);
+    */
 }
 
 HideIntroTextDraws(playerid)
 {
+    #pragma unused playerid
+    /*
 	TextDrawHideForPlayer(playerid, Intro_GoWebsite);
 	TextDrawHideForPlayer(playerid, Intro_GetStarted);
 	TextDrawHideForPlayer(playerid, Intro_News);
+	*/
 }

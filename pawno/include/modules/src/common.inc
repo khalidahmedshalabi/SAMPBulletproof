@@ -513,6 +513,7 @@ public SpawnConnectedPlayer(playerid, team)
 	HideIntroTextDraws(playerid);
 	Player[playerid][Spawned] = true;
 	SpawnPlayer(playerid);
+	
 	HideAllTeamBarsForPlayer(playerid);
 
 	LoadPlayerVariables(playerid);
@@ -1459,8 +1460,7 @@ SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
 		SendClientMessageToAll(-1, iString);
 	}
 
-	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
-	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
+	UpdateRoundKillDmgTDmg(playerid);
 
 	ColorFix(playerid);
 	if(fixvs && Current == -1)
@@ -1938,7 +1938,7 @@ FixVsTextDraw(exception = -1)
 			    }
 			}
 		}
-	    format(str, sizeof(str), "  ~r~~h~%d  %sVs  ~b~~h~%d", ct[0], MAIN_TEXT_COLOUR, ct[1]);
+	    format(str, sizeof(str), "  ~r~%d  %sVs  ~b~~h~%d", ct[0], MAIN_TEXT_COLOUR, ct[1]);
 		foreach(new i : Player)
 			PlayerTextDrawSetString(i, BaseID_VS[i], str);
 	}

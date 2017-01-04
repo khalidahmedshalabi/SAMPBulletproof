@@ -63,7 +63,7 @@ CreatePlayerTeamBar(playerid)
 				sprintf("~w~~h~%s ~r~~h~~h~~h~%d/%d", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
 			TextDrawBackgroundColor(TeamBarsData[playerid][TeamBarText], 51);
 			TextDrawFont(TeamBarsData[playerid][TeamBarText], 1);
-			TextDrawLetterSize(TeamBarsData[playerid][TeamBarText], 0.160000, 1.100000);
+			TextDrawLetterSize(TeamBarsData[playerid][TeamBarText], 0.160000, 0.900000);
 			TextDrawColor(TeamBarsData[playerid][TeamBarText], -1);
 			TextDrawSetOutline(TeamBarsData[playerid][TeamBarText], 1);
 			TextDrawSetProportional(TeamBarsData[playerid][TeamBarText], 1);
@@ -98,7 +98,7 @@ CreatePlayerTeamBar(playerid)
 				sprintf("~w~~h~%s ~b~~h~~h~~h~%d/%d", Player[playerid][NameWithoutTag], (Player[playerid][pHealth] + Player[playerid][pArmour]), Player[playerid][RoundDamage]));
 			TextDrawBackgroundColor(TeamBarsData[playerid][TeamBarText], 51);
 			TextDrawFont(TeamBarsData[playerid][TeamBarText], 1);
-			TextDrawLetterSize(TeamBarsData[playerid][TeamBarText], 0.160000, 1.100000);
+			TextDrawLetterSize(TeamBarsData[playerid][TeamBarText], 0.160000, 0.900000);
 			TextDrawColor(TeamBarsData[playerid][TeamBarText], -1);
 			TextDrawSetOutline(TeamBarsData[playerid][TeamBarText], 1);
 			TextDrawSetProportional(TeamBarsData[playerid][TeamBarText], 1);

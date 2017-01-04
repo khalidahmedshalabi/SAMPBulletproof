@@ -201,9 +201,9 @@ InitPlayer(playerid)
 	SetPlayerColor(playerid, 0xAAAAAAAA);
 	RemoveUselessObjectsForPlayer(playerid);
 	LoadPlayerTextDraws(playerid);
+	
 	for(new i = 0; i < MAX_PLAYER_BARS; i ++)
 		TeamBarShownForPlayer[playerid][_:i] = false;
-	
 	
 	InitPlayerMessageBox(playerid);
 	InitPlayerNames(playerid);
@@ -549,8 +549,7 @@ LoadPlayerVariables(playerid)
 				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has spawned as: {FFFFFF}%s", Player[playerid][Name], TeamName[Player[playerid][Team]]);
 				SendClientMessageToAll(-1, iString);
 
-				format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
-				PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
+				UpdateRoundKillDmgTDmg(playerid);
 				return 1;
 			}
 			else if(SaveVariables[i][ToBeAdded] == false)
@@ -592,8 +591,7 @@ LoadPlayerVariables(playerid)
 				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has spawned as: {FFFFFF}%s", Player[playerid][Name], TeamName[Player[playerid][Team]]);
 				SendClientMessageToAll(-1, iString);
 
-				format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
-				PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
+				UpdateRoundKillDmgTDmg(playerid);
 				return 1;
 			}
 
@@ -603,8 +601,10 @@ LoadPlayerVariables(playerid)
 
 	        Player[playerid][Team] = SaveVariables[i][pTeam];
 			Player[playerid][WasInTeam] = Player[playerid][Team];
+			
 			ShowTeamBarsForPlayer(playerid);
 			CreatePlayerTeamBar(playerid);
+			
 			UpdateTeamPlayerCount(Player[playerid][Team], false);
 			SetHP(playerid, SaveVariables[i][gHealth]);
 			SetAP(playerid, SaveVariables[i][gArmour]);
@@ -735,8 +735,7 @@ LoadPlayerVariables(playerid)
 				Player[playerid][FakePacketRenovation] = true;
 			}
 
-			format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
-			PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
+			UpdateRoundKillDmgTDmg(playerid);
 
 			SaveVariables[i][PauseWait] = false;
 			

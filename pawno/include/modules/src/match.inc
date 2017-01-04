@@ -172,6 +172,8 @@ CheckTeamElimination()
 			}
 		}
 	}
+	
+	#if ROUND_NEVER_END != 1
 	// If both teams have no players
 	if(PlayersAlive[ATTACKER] == 0 && PlayersAlive[DEFENDER] == 0)
 	{
@@ -190,6 +192,7 @@ CheckTeamElimination()
 		EndRound(3); // Attackers Win
 		return 0;
 	}
+	#endif
 	return 1;
 }
 
@@ -246,6 +249,7 @@ UpdateTeamPlayerCount(teamid, bool:elimination_check, exception = -1)
 	TextDrawSetString(AttDef_RoundStats, str);
 
 	// If we're asked to check team/round elimination
+	#if ROUND_NEVER_END != 1
 	if(elimination_check)
 	{
 		// If round is not paused
@@ -258,6 +262,7 @@ UpdateTeamPlayerCount(teamid, bool:elimination_check, exception = -1)
 				EndRound(3); // Attackers Win
 		}
 	}
+	#endif
 }
 
 // This updates round textdraws with correct HP info for each team
@@ -992,7 +997,6 @@ public UnpauseRound()
 	    RoundPaused = false;
 	    RoundUnpausing = false;
 	    TextDrawHideForAll(PauseTD);
-		TextDrawSetString(PauseTD, "~r~~h~~h~Round paused");
 	    RecountPlayersOnCP();
 		CheckTeamElimination();
 	    foreach(new g : DynamicVehicle)
@@ -1035,13 +1039,17 @@ public PauseStopWatch()
 		PauseTimeElapsed[0] ++;
 
 	new str[81];
+	
+	/*
 	if(PauseTimeElapsed[1] < 1)
 		format(str, sizeof str, "~b~~h~Round has been paused for: %02d:%02d~n~~b~~h~~h~Pauses count so far: %d", PauseTimeElapsed[1], PauseTimeElapsed[0], TotalPausesInRound);
 	else if(PauseTimeElapsed[1] == 1)
 		format(str, sizeof str, "~y~~h~Round has been paused for: %02d:%02d~n~~y~~h~~h~Pauses count so far: %d", PauseTimeElapsed[1], PauseTimeElapsed[0], TotalPausesInRound);
 	else
 		format(str, sizeof str, "~r~~h~Round has been paused for: %02d:%02d~n~~r~~h~~h~Pauses count so far: %d", PauseTimeElapsed[1], PauseTimeElapsed[0], TotalPausesInRound);
-
+	*/
+    format(str, sizeof str, "~r~Round is paused!~n~~w~Time: ~r~%02d:%02d", PauseTimeElapsed[1], PauseTimeElapsed[0]);
+	
 	TextDrawSetString(PauseTD, str);
 	return 1;
 }
@@ -1082,6 +1090,7 @@ PauseRound()
 		if(GetPlayerWeapon(i) == WEAPON_PARACHUTE)
 			Player[i][ToGiveParachute] = true;
 	}
+	TextDrawSetString(PauseTD, "_");
 	TextDrawShowForAll(PauseTD);
 	RoundPaused = true;
 }
@@ -1211,6 +1220,7 @@ public EndTeamBackupRequest(playerid, iconid)
 		ColorFix(playerid);
 		RadarFix(playerid);
 	}
+	
 	UpdatePlayerTeamBar(playerid);
 	return 1;
 }
@@ -1416,6 +1426,7 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
 
 	CreatePlayerTeamBar(ToAddID);
 	ShowTeamBarsForPlayer(ToAddID);
+	
 	UpdateTeamPlayerCount(Player[ToAddID][Team], false);
 
 	if(RoundPaused == true) {
@@ -1426,8 +1437,7 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
     format(iString,sizeof(iString),"{FFFFFF}%s "COL_PRIM"has replaced {FFFFFF}%s "COL_PRIM"by {FFFFFF}%s", Player[playerid][Name], Player[ToReplaceID][Name], Player[ToAddID][Name]);
 	SendClientMessageToAll(-1, iString);
 
-	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][TotalDamage]);
-	PlayerTextDrawSetString(ToAddID, RoundKillDmgTDmg[ToAddID], iString);
+	UpdateRoundKillDmgTDmg(ToAddID);
 
     RadarFix();
     return 1;
@@ -1477,6 +1487,7 @@ public OnPlayerInGameReplace(ToAddID, i, playerid) {
 
 	CreatePlayerTeamBar(ToAddID);
 	ShowTeamBarsForPlayer(ToAddID);
+
 	UpdateTeamPlayerCount(Player[ToAddID][Team], false);
 
     SaveVariables[i][ToBeAdded] = false;
@@ -1490,8 +1501,7 @@ public OnPlayerInGameReplace(ToAddID, i, playerid) {
     format(iString,sizeof(iString),"{FFFFFF}%s "COL_PRIM"has replaced {FFFFFF}%s "COL_PRIM"by {FFFFFF}%s", Player[playerid][Name], SaveVariables[i][pName], Player[ToAddID][Name]);
 	SendClientMessageToAll(-1, iString);
 
-	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[ToAddID][Team]], Player[ToAddID][TotalDamage]);
-	PlayerTextDrawSetString(ToAddID, RoundKillDmgTDmg[ToAddID], iString);
+    UpdateRoundKillDmgTDmg(ToAddID);
 
     RadarFix();
     return 1;
@@ -1522,8 +1532,10 @@ RemovePlayerFromRound(playerid, bool:remove_iterator = true)
 	Player[playerid][ToAddInRound] = false;
 	TogglePlayerControllable(playerid, 1);
 	RemovePlayerMapIcon(playerid, 59);
+	
 	DeletePlayerTeamBar(playerid);
 	HideAllTeamBarsForPlayer(playerid);
+	
 	UpdateTeamPlayerCount(Player[playerid][Team], true, playerid);
 	UpdateTeamHP(Player[playerid][Team], playerid);
 
@@ -1625,7 +1637,7 @@ public OnRCStart()
 	ResetGunmenuSelections();
 
     new iString[32];
-	format(iString, sizeof(iString), "%sRC BF %s(~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
+	format(iString, sizeof(iString), "%sRC BF %s(~r~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
 	TextDrawSetString( leftTeamData, "_");
 	TextDrawSetString( rightTeamData, "_");
 	TextDrawSetString( centerTeamNames, "_");
@@ -1729,7 +1741,6 @@ SpawnPlayersInRC()
 {
 	ClearChat();
 	SendClientMessageToAll(-1, sprintf(""COL_PRIM"RC Battlefield started: {FFFFFF}%s (ID: %d)", AName[Current], Current));
-	new iString[160];
 	foreach(new i : Player)
 	{
 	    if(Player[i][ToAddInRound] == true)
@@ -1755,6 +1766,7 @@ SpawnPlayersInRC()
 
 			SetAP(i, RoundAR);
 			SetHP(i, RoundHP);
+			
 			CreatePlayerTeamBar(i);
 
 			switch(Player[i][Team]) {
@@ -1765,6 +1777,7 @@ SpawnPlayersInRC()
 			        SetPlayerColor(i, ATTACKER_PLAYING);
 			        SpawnPlayer(i);
                     SetPlayerTeam(i, 1);
+					
                     ShowTeamBarsForPlayer(i);
 				} case DEFENDER: {
 				    if(AInterior[Current] == 0) SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], ADefenderSpawn[Current][0] + random(6), ADefenderSpawn[Current][1] + random(6), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
@@ -1773,6 +1786,7 @@ SpawnPlayersInRC()
 					SetPlayerColor(i, DEFENDER_PLAYING);
 					SpawnPlayer(i);
 					SetPlayerTeam(i, 2);
+					
 			        ShowTeamBarsForPlayer(i);
 				}
 			}
@@ -1781,8 +1795,7 @@ SpawnPlayersInRC()
 			else TogglePlayerControllable(i, 0);
             Player[i][ToAddInRound] = false;
 
-			format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][TotalDamage]);
-			PlayerTextDrawSetString(i, RoundKillDmgTDmg[i], iString);
+			UpdateRoundKillDmgTDmg(i);
 		}
 	}
 
@@ -1858,7 +1871,7 @@ public OnArenaStart(ArenaID)
 	ResetGunmenuSelections();
 
     new iString[32];
-	format(iString, sizeof(iString), "%sArena %s(~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
+	format(iString, sizeof(iString), "%sArena %s(~r~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
 	TextDrawSetString( leftTeamData, "_");
 	TextDrawSetString( rightTeamData, "_");
 	TextDrawSetString( centerTeamNames, "_");
@@ -1964,7 +1977,6 @@ SpawnPlayersInArena()
 {
 	ClearChat();
 	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Arena has completely started: {FFFFFF}%s (ID: %d)", AName[Current], Current));
-	new iString[160];
 	foreach(new i : Player)
 	{
 	    if(Player[i][ToAddInRound] == true)
@@ -1990,6 +2002,7 @@ SpawnPlayersInArena()
 
 			SetAP(i, RoundAR);
 			SetHP(i, RoundHP);
+			
 			CreatePlayerTeamBar(i);
 
 			SetCPForPlayer(i);
@@ -2002,7 +2015,9 @@ SpawnPlayersInArena()
 			        SetPlayerColor(i, ATTACKER_PLAYING);
 			        SpawnPlayer(i);
                     SetPlayerTeam(i, 1);
+					
                     ShowTeamBarsForPlayer(i);
+					
 					if(IsACPluginLoaded() && IsACEnabled())
 						TogglePlayerVehicleBlips(i, true);
 				} case DEFENDER: {
@@ -2012,7 +2027,9 @@ SpawnPlayersInArena()
 					SetPlayerColor(i, DEFENDER_PLAYING);
 					SpawnPlayer(i);
 					SetPlayerTeam(i, 2);
+					
 			        ShowTeamBarsForPlayer(i);
+
 					if(IsACPluginLoaded() && IsACEnabled())
 						TogglePlayerVehicleBlips(i, DefendersSeeVehiclesBlips);
 				}
@@ -2022,8 +2039,7 @@ SpawnPlayersInArena()
 			else TogglePlayerControllable(i, 0);
             Player[i][ToAddInRound] = false;
 
-			format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][TotalDamage]);
-			PlayerTextDrawSetString(i, RoundKillDmgTDmg[i], iString);
+			UpdateRoundKillDmgTDmg(i);
 		}
 	}
 
@@ -2094,8 +2110,9 @@ public AddPlayerToArena(playerid)
 
 	SetAP(playerid, RoundAR);
 	SetHP(playerid, RoundHP);
+	
 	CreatePlayerTeamBar(playerid);
-
+	
 	SetPlayerVirtualWorld(playerid, 2);
 	SetPlayerInterior(playerid, AInterior[Current]);
 	if(!RCArena)
@@ -2110,7 +2127,9 @@ public AddPlayerToArena(playerid)
 	        SetPlayerColor(playerid, ATTACKER_PLAYING);
 
             SetPlayerTeam(playerid, 1);
+			
             ShowTeamBarsForPlayer(playerid);
+			
 			if(IsACPluginLoaded() && IsACEnabled())
 				TogglePlayerVehicleBlips(playerid, true);
 		} case DEFENDER: {
@@ -2119,7 +2138,9 @@ public AddPlayerToArena(playerid)
 			SpawnPlayer(playerid);
 	        SetPlayerColor(playerid, DEFENDER_PLAYING);
 	        SetPlayerTeam(playerid, 2);
+			
 	        ShowTeamBarsForPlayer(playerid);
+			
 			if(IsACPluginLoaded() && IsACEnabled())
 				TogglePlayerVehicleBlips(playerid, DefendersSeeVehiclesBlips);
 		} case REFEREE: {
@@ -2151,9 +2172,7 @@ public AddPlayerToArena(playerid)
 	}
 
 
-	new iString[160];
-	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
-	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
+	UpdateRoundKillDmgTDmg(playerid);
 
 	RadarFix();
 	return 1;
@@ -2198,7 +2217,7 @@ public OnBaseStart(BaseID)
 	ResetGunmenuSelections();
 
     new iString[32];
-	format(iString, sizeof(iString), "%sBase %s(~r~~h~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
+	format(iString, sizeof(iString), "%sBase %s(~r~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
 
 	TextDrawSetString( leftTeamData, "_");
 	TextDrawSetString( rightTeamData, "_");
@@ -2363,7 +2382,6 @@ SpawnPlayersInBase()
 	ClearChat();
 	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Base has completely started: {FFFFFF}%s (ID: %d)", BName[Current], Current));
 	SendClientMessageToAll(-1, sprintf(""COL_PRIM"Current base set: {FFFFFF}%s. "COL_PRIM"Type {FFFFFF}/loadbases "COL_PRIM"to switch base sets!", CurrentBaseSet));
-	new iString[160];
 	foreach(new i : Player)
 	{
 	    if(Player[i][ToAddInRound] == true)
@@ -2394,6 +2412,7 @@ SpawnPlayersInBase()
 
 			SetAP(i, RoundAR);
 			SetHP(i, RoundHP);
+			
 			CreatePlayerTeamBar(i);
 
 	        SetPlayerVirtualWorld(i, 2); //Set player virtual world to something different that that for lobby and DM so that they don't collide with each other. e.g. You shouldn't be able to see players in lobby or DM while you are in base.
@@ -2410,7 +2429,9 @@ SpawnPlayersInBase()
 				    SpawnPlayer(i);
            			SetPlayerMapIcon(i, 59, BAttackerSpawn[Current][0], BAttackerSpawn[Current][1], BAttackerSpawn[Current][2], 59, 0, MAPICON_GLOBAL);
                     SetPlayerTeam(i, ATTACKER);
+					
                     ShowTeamBarsForPlayer(i);
+					
 					if(IsACPluginLoaded() && IsACEnabled())
 						TogglePlayerVehicleBlips(i, true);
 				} case DEFENDER: {
@@ -2422,7 +2443,9 @@ SpawnPlayersInBase()
 					SetPlayerColor(i, DEFENDER_PLAYING);
 					SpawnPlayer(i);
 			        SetPlayerTeam(i, DEFENDER);
+					
 			        ShowTeamBarsForPlayer(i);
+					
 					if(IsACPluginLoaded() && IsACEnabled())
 						TogglePlayerVehicleBlips(i, DefendersSeeVehiclesBlips);
 				}
@@ -2432,8 +2455,7 @@ SpawnPlayersInBase()
 			else TogglePlayerControllable(i, 0);
 			Player[i][ToAddInRound] = false;
 
-			format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][TotalDamage]);
-			PlayerTextDrawSetString(i, RoundKillDmgTDmg[i], iString);
+			UpdateRoundKillDmgTDmg(i);
 		}
 	}
 	RoundMints = ConfigRoundTime;
@@ -2505,6 +2527,7 @@ public AddPlayerToBase(playerid)
 
 	SetAP(playerid, RoundAR);
 	SetHP(playerid, RoundHP);
+	
 	CreatePlayerTeamBar(playerid);
 
     SetPlayerVirtualWorld(playerid, 2); //Set player virtual world to something different that that for lobby and DM so that they don't collide with each other. e.g. You shouldn't be able to see players in lobby or DM while you are in base.
@@ -2518,7 +2541,9 @@ public AddPlayerToBase(playerid)
 	        SetPlayerColor(playerid, ATTACKER_PLAYING);
    			SetPlayerMapIcon(playerid, 59, BAttackerSpawn[Current][0], BAttackerSpawn[Current][1], BAttackerSpawn[Current][2], 59, 0, MAPICON_GLOBAL);
             SetPlayerTeam(playerid, ATTACKER);
+			
             ShowTeamBarsForPlayer(playerid);
+			
 			if(IsACPluginLoaded() && IsACEnabled())
 				TogglePlayerVehicleBlips(playerid, true);
 		} case DEFENDER: {
@@ -2527,7 +2552,9 @@ public AddPlayerToBase(playerid)
 			SetCPForPlayer(playerid);
 	        SetPlayerColor(playerid, DEFENDER_PLAYING);
 	        SetPlayerTeam(playerid, DEFENDER);
+			
 	        ShowTeamBarsForPlayer(playerid);
+			
 			if(IsACPluginLoaded() && IsACEnabled())
 				TogglePlayerVehicleBlips(playerid, DefendersSeeVehiclesBlips);
 		} case REFEREE: {
@@ -2553,9 +2580,7 @@ public AddPlayerToBase(playerid)
 
 	ShowPlayerGunmenu(playerid, 500);
 
-	new iString[160];
-	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
-	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
+	UpdateRoundKillDmgTDmg(playerid);
 
 	RadarFix();
 	return 1;
@@ -2880,11 +2905,11 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 
     switch( WinID )
 	{
-	    case 0: format( iString, sizeof(iString), "~r~~h~~h~Attackers ~w~captured the ~b~~h~~h~Checkpoint");
-	    case 3: format( iString, sizeof(iString), "~r~~h~~h~~h~Attackers ~w~won by ~r~~h~%.0f hp ~w~and ~r~~h~~h~%d players alive" , ahpleft, aalive);
-	    case 1, 2: format( iString, sizeof(iString), "~b~~h~~h~~h~Defenders ~w~won by ~b~~h~%.0f hp ~w~and ~b~~h~~h~%d players alive" ,dhpleft, dalive);
-		case 5: format( iString, sizeof(iString), "~r~~h~~h~%s ~w~captured the ~r~~h~~h~Checkpoint", TeamName[ATTACKER]);
-		case 6: format( iString, sizeof(iString), "~b~~h~~h~%s ~w~captured the ~b~~h~~h~Checkpoint", TeamName[DEFENDER]);
+	    case 0: format( iString, sizeof(iString), "~r~~h~Attackers ~w~captured the ~b~~h~Checkpoint");
+	    case 3: format( iString, sizeof(iString), "~r~~h~~h~Attackers ~w~won by ~r~%.0f hp ~w~and ~r~~h~%d players alive" , ahpleft, aalive);
+	    case 1, 2: format( iString, sizeof(iString), "~b~~h~~h~Defenders ~w~won by ~b~%.0f hp ~w~and ~b~~h~%d players alive" ,dhpleft, dalive);
+		case 5: format( iString, sizeof(iString), "~r~~h~%s ~w~captured the ~r~~h~Checkpoint", TeamName[ATTACKER]);
+		case 6: format( iString, sizeof(iString), "~b~~h~%s ~w~captured the ~b~~h~Checkpoint", TeamName[DEFENDER]);
 	}
 
 	TextDrawSetString( teamWonHow, iString);
@@ -2954,7 +2979,9 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	DefDeaths = "";
 	DefDamage = "";
 	DefAcc = "";
+	
 	DeleteAllTeamBars();
+	
 	DeleteAllDeadBodies();
     ResetTeamLeaders();
 	Iter_Clear(PlayersInRound);
@@ -3008,8 +3035,7 @@ public WarEnded()
 	TotalRounds = strval(iString);
 	db_free_result(res);
 
-	format(iString, sizeof(iString), "%sRounds ~r~~h~~h~%d~r~/~h~~h~%d", MAIN_TEXT_COLOUR, CurrentRound, TotalRounds);
-	TextDrawSetString(RoundsPlayed, iString);
+	UpdateRoundsPlayedTextDraw();
 
     WarMode = false;
 

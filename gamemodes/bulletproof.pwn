@@ -14,6 +14,8 @@
 #include <mSelection>       // Selection with preview models feature library
 #include <gBugFix>			// Fix false vehicle entry as passenger (G (teleport/distance) bug)
 
+#define ROUND_NEVER_END 0   // Used for testing purposes only
+
 // YSI Libraries (updated)
 #define YSI_NO_MASTER
 //#define 	_DEBUG			(7) 	// y_debug debug level
@@ -113,10 +115,14 @@ public OnPlayerConnect(playerid)
 	{
 	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}database is not loaded. Make sure 'BulletproofDatabase.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE));
 	}
+	
+	/*
 	if(CorrectDatabase == false)
 	{
 	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}this server is not using the correct database. Visit %s for further help!", GM_WEBSITE));
 	}
+	*/
+	
 	// Check if players count exceeded the limit
 	if(Iter_Count(Player) == MAX_PLAYERS)
 	{
@@ -511,10 +517,9 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 		    Player[playerid][TotalDeaths]++;
 
 			new str[150];
-			format(str, sizeof(str), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][TotalDamage]);
-			PlayerTextDrawSetString(killerid, RoundKillDmgTDmg[killerid], str);
 			format(str, sizeof(str), "%s%s {FFFFFF}killed %s%s {FFFFFF}with %s [%.1f ft] [%d HP]", TextColor[Player[killerid][Team]], Player[killerid][Name], TextColor[Player[playerid][Team]], Player[playerid][Name], WeaponNames[reason],GetDistanceBetweenPlayers(killerid, playerid), (Player[killerid][pHealth] + Player[killerid][pArmour]));
 			SendClientMessageToAll(-1, str);
+			UpdateRoundKillDmgTDmg(killerid);
 
             OnPlayerAmmoUpdate(playerid);
 		}
@@ -1378,9 +1383,7 @@ HandlePlayerDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 			Player[issuerid][shotsHit] ++;
 			Player[issuerid][RoundDamage] += rounded_amount;
 			Player[issuerid][TotalDamage] += rounded_amount;
-			new str[160];
-			format(str, sizeof(str), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][TotalDamage]);
-			PlayerTextDrawSetString(issuerid, RoundKillDmgTDmg[issuerid], str);
+			UpdateRoundKillDmgTDmg(issuerid);
 		}
 	}
 	else // If damage is caused by something else (not a player)
@@ -1397,6 +1400,7 @@ HandlePlayerDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	    // Update team HP bars
 	    UpdatePlayerTeamBar(playerid);
 	    UpdatePlayerTeamBar(issuerid);
+	    
 	    // Show team lost hp textdraws
 	    if(Player[playerid][Playing] == true)
 		{
@@ -7053,10 +7057,8 @@ YCMD:setteam(playerid, params[], help)
 	}
 	SwitchTeamFix(Params[0], false, true);
 
+    UpdateRoundKillDmgTDmg(Params[0]);
     new iString[150];
-	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][TotalDamage]);
-	PlayerTextDrawSetString(Params[0], RoundKillDmgTDmg[Params[0]], iString);
-
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has switched {FFFFFF}%s "COL_PRIM"to: {FFFFFF}%s", Player[playerid][Name], Player[Params[0]][Name], TeamName[Params[1]+1]);
 	SendClientMessageToAll(-1, iString);
 	return 1;
@@ -7733,7 +7735,9 @@ YCMD:readd(playerid, params[], help)
 		    Player[pID][TotalDeaths] = Player[pID][TotalDeaths] - Player[pID][RoundDeaths];
 			Player[pID][TotalDamage] = Player[pID][TotalDamage] - Player[pID][RoundDamage];
 		}
+		
 		DeletePlayerTeamBar(pID);
+		
 		if(GameType == BASE)
 			AddPlayerToBase(pID);
 		else if(GameType == ARENA)
@@ -7879,6 +7883,7 @@ YCMD:end(playerid, params[], help)
 	SendClientMessageToAll(-1, iString);
 
 	DeleteAllTeamBars();
+	
 	DeleteAllDeadBodies();
     GangZoneDestroy(CPZone);
 	GangZoneDestroy(ArenaZone);
@@ -9438,7 +9443,8 @@ public OnScriptUpdate()
 		// Update net info textdraws
 		if(PlayerInterface[i][INTERFACE_NET])
 		{
-  			PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS %s%d %sPing %s%d %sPacketLoss %s%.1f%%", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][FPS], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], GetPlayerPing(i), MAIN_TEXT_COLOUR, TDC[Player[i][Team]], NetStats_PacketLossPercent(i)));
+  			//PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS %s%d %sPing %s%d %sPacketLoss %s%.1f%%", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][FPS], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], GetPlayerPing(i), MAIN_TEXT_COLOUR, TDC[Player[i][Team]], NetStats_PacketLossPercent(i)));
+  			PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS ~r~%d %sPing ~r~%d %sPacketLoss ~r~%.1f%%", MAIN_TEXT_COLOUR, Player[i][FPS], MAIN_TEXT_COLOUR, GetPlayerPing(i), MAIN_TEXT_COLOUR, NetStats_PacketLossPercent(i)));
 		}
 	}
 	return 1;

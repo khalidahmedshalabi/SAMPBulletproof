@@ -348,7 +348,7 @@ SetHP(playerid, amount)
 		else
 		{
 			if(Player[playerid][Playing] == true)
-				PlayerTextDrawSetString(playerid, HPTextDraw_TD[playerid], sprintf("%sFall Prot.", MAIN_TEXT_COLOUR));
+				PlayerTextDrawSetString(playerid, HPTextDraw_TD[playerid], sprintf("%sProtected", MAIN_TEXT_COLOUR));
 			else
 			{
 				PlayerTextDrawSetString(playerid, HPTextDraw_TD[playerid], sprintf("%s%d", MAIN_TEXT_COLOUR, Player[playerid][pHealth]));
@@ -384,7 +384,7 @@ UpdatePlayerArmourVariables(playerid, amount)
 	{
 		if(Player[playerid][pArmour] > 0)
 		{
-			PlayerTextDrawSetString(playerid, ArmourTextDraw[playerid], sprintf("%s~h~~h~%d", MAIN_TEXT_COLOUR, Player[playerid][pArmour]));
+			PlayerTextDrawSetString(playerid, ArmourTextDraw[playerid], sprintf("~l~%d", Player[playerid][pArmour]));
 		}
 		else
 		{
@@ -708,7 +708,7 @@ SetPlayerDamageBubble(playerid)
 
 		if(VisualDamage[playerid][WhoDamaging][i] != NO_DAMAGER_UNIQUE_ID)
 		{
-			format(str, sizeof str, "%s%s / %s / -%.0f\n",
+			format(str, sizeof str, "%s%s%s ~w~/ %s / -%.0f\n",
 			str,
 			Player[VisualDamage[playerid][WhoDamaging][i]][NameWithoutTag],
 			WeaponNames[VisualDamage[playerid][TakenDamageWeapon][i]],

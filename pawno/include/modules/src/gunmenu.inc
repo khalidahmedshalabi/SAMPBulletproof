@@ -198,47 +198,72 @@ ShowGunmenuDialog(playerid)
 		{
 			new team = Player[playerid][Team];
 			new str[GUNMENU_LIMIT_DIALOG_SIZE];
-			format(str, sizeof str, "%sWeapon\t%sAmmo\t%sPicked / Limit", TextColor[team], TextColor[team], TextColor[team]);
+			
+			if(team == ATTACKER) format(str, sizeof str, "{FF2222}Weapon\t{FF2222}Ammo\t{FF2222}Picked / Limit", TextColor[team], TextColor[team], TextColor[team]);
+			else format(str, sizeof str, "{5555FF}Weapon\t{5555FF}Ammo\t{5555FF}Picked / Limit");
+			
+			//format(str, sizeof str, "%sWeapon\t%sAmmo\t%sPicked / Limit", TextColor[team], TextColor[team], TextColor[team]);
+			
 			for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
 			{
 				// Do some coloring for items
 				if(GunmenuData[i][HasGun][playerid]) // already got this weapon
 				{
-					format(str, sizeof str, "%s\n{DB5858}%s\t%d\t%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
+					if(team == ATTACKER) format(str, sizeof str, "%s\n{FF6666}%s\t%d\t%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
+					else format(str, sizeof str, "%s\n{9999FF}%s\t%d\t%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
 				}
 				else if(GunmenuData[i][TimesSelected][team] < GunmenuData[i][GunLimit]) // available
 				{
-					format(str, sizeof str, "%s\n{50EB50}%s\t%d\t%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
+					if(team == ATTACKER) format(str, sizeof str, "%s\n{FF2222}%s\t%d\t%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
+					else format(str, sizeof str, "%s\n{5555FF}%s\t%d\t%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
+					
+					//format(str, sizeof str, "%s\n{50EB50}%s\t%d\t%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
 				}
 				else // unavailable
 				{
 					format(str, sizeof str, "%s\n{696969}%s\t%d\t%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
 				}
 			}
-			ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, sprintf("%sGunmenu", TextColor[team]), str, sprintf("%sPick", TextColor[team]), sprintf("%sReset", TextColor[team]));
+			
+			if(team == ATTACKER) ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, "{FF2222}Gunmenu", str, "Pick", "Reset");
+			else ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, "{5555FF}Gunmenu", str, "Pick", "Reset");
+			
+			//ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, sprintf("%sGunmenu", TextColor[team]), str, sprintf("%sPick", TextColor[team]), sprintf("%sReset", TextColor[team]));
 		}
 		case ARENA:
 		{
 			new team = Player[playerid][Team];
 			new str[550];
-			format(str, sizeof str, "%sWeapon\t%sTimes Picked", TextColor[team], TextColor[team]);
+			if(team == ATTACKER) format(str, sizeof str, "{FF2222}Weapon\t{FF2222}Times Picked");
+			else format(str, sizeof str, "{5555FF}Weapon\t{5555FF}Times Picked");
+			
+			//format(str, sizeof str, "%sWeapon\t%sTimes Picked", TextColor[team], TextColor[team]);
+			
 			for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
 			{
 				// Do some coloring for items
 				if(GunmenuData[i][HasGun][playerid]) // already got this weapon
 				{
-					format(str, sizeof str, "%s\n{DB5858}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
+					if(team == ATTACKER) format(str, sizeof str, "%s\n{FF6666}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
+					else format(str, sizeof str, "%s\n{9999FF}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
 				}
 				else if(GunmenuData[i][GunLimit] <= 0) // not available
 				{
-					format(str, sizeof str, "%s\n{696969}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
+				    if(team == ATTACKER) format(str, sizeof str, "%s\n{FF2222}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
+					else format(str, sizeof str, "%s\n{5555FF}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
+				
+					//format(str, sizeof str, "%s\n{696969}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
 				}
 				else // available
 				{
 					format(str, sizeof str, "%s\n{50EB50}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
 				}
 			}
-			ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, sprintf("%sGunmenu", TextColor[team]), str, sprintf("%sPick", TextColor[team]), sprintf("%sReset", TextColor[team]));
+			
+			if(team == ATTACKER) ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, "{FF2222}Gunmenu", str, "Pick", "Reset");
+			else ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, "{5555FF}Gunmenu", str, "Pick", "Reset");
+			
+			//ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, sprintf("%sGunmenu", TextColor[team]), str, sprintf("%sPick", TextColor[team]), sprintf("%sReset", TextColor[team]));
 		}
 	}
 }
