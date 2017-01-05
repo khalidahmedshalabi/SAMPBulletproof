@@ -144,7 +144,7 @@ UpdatePlayerSpectators(playerid)
 		foreach(new i : PlayerSpectators[playerid]) // Loop through the array that contains this player's spectators
 		{
 			// Format string with spectator name
-			format(str, sizeof str, "%s%s ~r~~h~%d", str, Player[i][NameWithoutTag], i);
+			format(str, sizeof str, "%s%s ~r~~h~%d~n~", str, Player[i][NameWithoutTag], i);
 		}
 		foreach(new i : PlayerSpectators[playerid])
 			PlayerTextDrawSetString(i, WhoSpec[i], str);
