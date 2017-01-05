@@ -951,7 +951,7 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawBackgroundColor(playerid, WhoSpec[playerid], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, WhoSpec[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, WhoSpec[playerid], 0.180000, 0.9);
-	PlayerTextDrawColor(playerid, WhoSpec[playerid], -65281);
+	PlayerTextDrawColor(playerid, WhoSpec[playerid], -1);
 	PlayerTextDrawSetOutline(playerid, WhoSpec[playerid], 1);
 	PlayerTextDrawSetProportional(playerid, WhoSpec[playerid], 1);
 	PlayerTextDrawSetShadow(playerid, WhoSpec[playerid], 0);

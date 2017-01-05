@@ -249,14 +249,12 @@ ShowGunmenuDialog(playerid)
 				}
 				else if(GunmenuData[i][GunLimit] <= 0) // not available
 				{
-				    if(team == ATTACKER) format(str, sizeof str, "%s\n{FF2222}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
-					else format(str, sizeof str, "%s\n{5555FF}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
-				
-					//format(str, sizeof str, "%s\n{696969}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
+					format(str, sizeof str, "%s\n{696969}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
 				}
 				else // available
 				{
-					format(str, sizeof str, "%s\n{50EB50}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
+					if(team == ATTACKER) format(str, sizeof str, "%s\n{FF2222}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
+					else format(str, sizeof str, "%s\n{5555FF}%s\t%d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team]);
 				}
 			}
 			
