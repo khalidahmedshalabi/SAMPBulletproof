@@ -460,13 +460,13 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 		{
 		    case WEAPON_KNIFE:
 		    {
-		        PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s knifed you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-		        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou knifed %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
+		        PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s%s%s knifed you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
+		        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou knifed %s%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
 		    }
 		    case WEAPON_GRENADE:
 		    {
-				PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s bombed you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-		        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou bombed %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
+				PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s%s%s bombed you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
+		        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou bombed %s%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
 		    }
 		    default:
 			{
@@ -474,23 +474,23 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 				{
 				    case 0:
 				    {
-						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s raped you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-						PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou raped %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
+						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s%s%s raped you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
+						PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou raped %s%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
 					}
 					case 1:
 					{
-						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s owned you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-						PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou owned %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
+						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s%s%s owned you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
+						PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou owned %s%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
 					}
 					case 2:
 				    {
-        				PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s murdered you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-					    PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou murdered %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
+        				PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s%s%s murdered you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
+					    PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou murdered %s%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
 					}
 					case 3:
 					{
-						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s sent you to cemetery", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-                        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou sent %s~h~%s%s to cemetery", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name], MAIN_TEXT_COLOUR));
+						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s%s%s sent you to cemetery", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
+                        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou sent %s%s%s to cemetery", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name], MAIN_TEXT_COLOUR));
 					}
 				}
 			}
@@ -9426,7 +9426,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 forward OnScriptUpdate();
 public OnScriptUpdate()
 {
-    CheckVisualDamageTextDraws(); // This basically hides damage textdraws that should be hidden
+    CheckVisualDamageTextDraws(); // This basically hides damage textdraws and damage bubbles that should be hidden
 
     foreach(new i : Player)
 	{
@@ -9439,12 +9439,12 @@ public OnScriptUpdate()
 	    // Show target info
 	    ShowTargetInfo(i, GetPlayerTargetPlayer(i));
 
-
 		// Update net info textdraws
 		if(PlayerInterface[i][INTERFACE_NET])
 		{
   			//PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS %s%d %sPing %s%d %sPacketLoss %s%.1f%%", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][FPS], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], GetPlayerPing(i), MAIN_TEXT_COLOUR, TDC[Player[i][Team]], NetStats_PacketLossPercent(i)));
   			PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS ~r~%d %sPing ~r~%d %sPacketLoss ~r~%.1f%%", MAIN_TEXT_COLOUR, Player[i][FPS], MAIN_TEXT_COLOUR, GetPlayerPing(i), MAIN_TEXT_COLOUR, NetStats_PacketLossPercent(i)));
+            Update3DTextLabelText(Player[i][InfoLabel], -1, sprintf("%sPL: {FFFFFF}%.1f%%\n%sPing: {FFFFFF}%d\n%sFPS: {FFFFFF}%d", TextColor[Player[i][Team]], NetStats_PacketLossPercent(i), TextColor[Player[i][Team]], GetPlayerPing(i), TextColor[Player[i][Team]], Player[i][FPS]));
 		}
 	}
 	return 1;

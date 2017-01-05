@@ -113,7 +113,11 @@ enum PlayerVariables
 	GunmenuStyle,
 	bool:InDeathCamera,
 	RequestedClass,
-	RoundTDStyle
+	RoundTDStyle,
+	
+	Text3D:InfoLabel,
+	Text3D:DamageLabel,
+	DamageBubbleTick
 }
 new Player[MAX_PLAYERS][PlayerVariables];
 

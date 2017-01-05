@@ -3,8 +3,8 @@
 */
 
 #define UPDATE_SPECINFO_INTERVAL	2000
-#define MAX_PLAYER_SPECTATORS		15
-#define SPECTATORS_STRING_SIZE		(14 + (27 * MAX_PLAYER_SPECTATORS))
+#define MAX_PLAYER_SPECTATORS		7     // Limited to 7 in order to prevent crashing for using color codes after 255th character
+#define SPECTATORS_STRING_SIZE		(21 + (33 * MAX_PLAYER_SPECTATORS))
 
 new
 	Iterator:AllSpectators<MAX_PLAYERS>, // an iterator array that holds all spectators IDs

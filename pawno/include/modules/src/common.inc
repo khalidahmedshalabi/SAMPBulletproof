@@ -137,7 +137,7 @@ SendUsageMessage(playerid, text[], messagebox_type = MSGBOX_TYPE_MIDDLE)
 		case MSGBOX_TYPE_MIDDLE:
 		{
 			new str[145];
-			format(str, sizeof(str), "{0000CC}USAGE: {FFFFFF}%s", text);
+			format(str, sizeof(str), "{CCCCCC}USAGE: {FFFFFF}%s", text);
 			SendClientMessage(playerid, -1, str);
 		}
 		default:

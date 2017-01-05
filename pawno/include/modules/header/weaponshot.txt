@@ -7,7 +7,7 @@
 
 #define MAX_VISUAL_DAMAGES				4 			// Max number of damages that can be visual to player (given/taken damage textdraws)
 #define DAMAGE_BUBBLE_STRING_LENGTH		\
-								MAX_VISUAL_DAMAGES * 70	// Taken damage bubble string length
+								MAX_VISUAL_DAMAGES * 110	// Taken damage bubble string length
 #define DAMAGE_TEXTDRAW_Y_DIFF			9.0		// A good space between each damage textdraw
 #define HIDE_DAMAGE_TEXTDRAW_AFTER		5000		// Time needed to hide visual damage textdraw (milliseconds)
 #define NO_DAMAGER_UNIQUE_ID			-2			// This is helpful in textdraw loops to indicate a textdraw that shows no damager (collision damage?)
