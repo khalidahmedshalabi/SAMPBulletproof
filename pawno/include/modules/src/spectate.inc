@@ -200,6 +200,8 @@ SpectatePlayer(playerid, specid)
 
 		// Team damage textdraws
 		ShowTeamBarsForPlayer(playerid);
+		ShowTeamCornerInfo(playerid);
+		
 		// Hide some HUD textdraws
 		PlayerTextDrawHide(playerid, RoundKillDmgTDmg[playerid]);
 		PlayerTextDrawHide(playerid, ArmourTextDraw[playerid]);
@@ -319,6 +321,7 @@ StopSpectate(playerid, bool:remove_iterator = true)
 		PlayerTextDrawHide(playerid, SpecText[playerid][i]);
 	// Hide team damage textdraws
 	HideTeamBarsForPlayer(playerid);
+	HideTeamCornerInfo(playerid);
 	// Reset text
 	PlayerTextDrawSetString(playerid, WhoSpec[playerid], " ");
 	// Reshow HUD textdraws

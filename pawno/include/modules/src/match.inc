@@ -1427,6 +1427,9 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
 	CreatePlayerTeamBar(ToAddID);
 	ShowTeamBarsForPlayer(ToAddID);
 	
+	ShowTeamCornerInfo(ToAddID);
+	UpdateTeamCornerInfo();
+	
 	UpdateTeamPlayerCount(Player[ToAddID][Team], false);
 
 	if(RoundPaused == true) {
@@ -1487,6 +1490,9 @@ public OnPlayerInGameReplace(ToAddID, i, playerid) {
 
 	CreatePlayerTeamBar(ToAddID);
 	ShowTeamBarsForPlayer(ToAddID);
+	
+	ShowTeamCornerInfo(ToAddID);
+	UpdateTeamCornerInfo();
 
 	UpdateTeamPlayerCount(Player[ToAddID][Team], false);
 
@@ -1535,6 +1541,9 @@ RemovePlayerFromRound(playerid, bool:remove_iterator = true)
 	
 	DeletePlayerTeamBar(playerid);
 	HideAllTeamBarsForPlayer(playerid);
+	
+	HideTeamCornerInfo(playerid);
+	UpdateTeamCornerInfo();
 	
 	UpdateTeamPlayerCount(Player[playerid][Team], true, playerid);
 	UpdateTeamHP(Player[playerid][Team], playerid);
@@ -1768,6 +1777,8 @@ SpawnPlayersInRC()
 			SetHP(i, RoundHP);
 			
 			CreatePlayerTeamBar(i);
+			
+			ShowTeamCornerInfo(i);
 
 			switch(Player[i][Team]) {
 			    case ATTACKER: {
@@ -1798,6 +1809,8 @@ SpawnPlayersInRC()
 			UpdateRoundKillDmgTDmg(i);
 		}
 	}
+	
+	UpdateTeamCornerInfo();
 
 	RoundMints = ConfigRoundTime;
 	RoundSeconds = 0;
@@ -2004,6 +2017,8 @@ SpawnPlayersInArena()
 			SetHP(i, RoundHP);
 			
 			CreatePlayerTeamBar(i);
+			
+			ShowTeamCornerInfo(i);
 
 			SetCPForPlayer(i);
 
@@ -2042,6 +2057,7 @@ SpawnPlayersInArena()
 			UpdateRoundKillDmgTDmg(i);
 		}
 	}
+	UpdateTeamCornerInfo();
 
 	RoundMints = ConfigRoundTime;
 	RoundSeconds = 0;
@@ -2112,6 +2128,9 @@ public AddPlayerToArena(playerid)
 	SetHP(playerid, RoundHP);
 	
 	CreatePlayerTeamBar(playerid);
+	
+	ShowTeamCornerInfo(playerid);
+	UpdateTeamCornerInfo();
 	
 	SetPlayerVirtualWorld(playerid, 2);
 	SetPlayerInterior(playerid, AInterior[Current]);
@@ -2414,6 +2433,8 @@ SpawnPlayersInBase()
 			SetHP(i, RoundHP);
 			
 			CreatePlayerTeamBar(i);
+			
+			ShowTeamCornerInfo(i);
 
 	        SetPlayerVirtualWorld(i, 2); //Set player virtual world to something different that that for lobby and DM so that they don't collide with each other. e.g. You shouldn't be able to see players in lobby or DM while you are in base.
 	        SetPlayerInterior(i, BInterior[Current]);
@@ -2458,6 +2479,8 @@ SpawnPlayersInBase()
 			UpdateRoundKillDmgTDmg(i);
 		}
 	}
+	UpdateTeamCornerInfo();
+	
 	RoundMints = ConfigRoundTime;
 	RoundSeconds = 0;
 
@@ -2529,6 +2552,9 @@ public AddPlayerToBase(playerid)
 	SetHP(playerid, RoundHP);
 	
 	CreatePlayerTeamBar(playerid);
+	
+	ShowTeamCornerInfo(playerid);
+	UpdateTeamCornerInfo();
 
     SetPlayerVirtualWorld(playerid, 2); //Set player virtual world to something different that that for lobby and DM so that they don't collide with each other. e.g. You shouldn't be able to see players in lobby or DM while you are in base.
     SetPlayerInterior(playerid, BInterior[Current]);
@@ -2981,6 +3007,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	DefAcc = "";
 	
 	DeleteAllTeamBars();
+	HideTeamCornerInfoForAll();
 	
 	DeleteAllDeadBodies();
     ResetTeamLeaders();

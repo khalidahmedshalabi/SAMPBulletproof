@@ -336,6 +336,7 @@ SetHP(playerid, amount)
 		}
 	}
 	UpdatePlayerTeamBar(playerid);
+	UpdateTeamCornerInfo();
 	if(WasPlaying)
 		UpdateTeamHP(Player[playerid][Team]);
 
@@ -378,6 +379,7 @@ UpdatePlayerArmourVariables(playerid, amount)
 			SetPlayerScore(playerid, 0);
 	}
 	UpdatePlayerTeamBar(playerid);
+	UpdateTeamCornerInfo();
 	if(Player[playerid][Playing])
 		UpdateTeamHP(Player[playerid][Team]);
 	if(PlayerInterface[playerid][INTERFACE_HP])
@@ -734,9 +736,8 @@ SetPlayerDamageBubble(playerid)
 		}
 		else
 		{
-			format(str, sizeof str, "%s%s%s / -%.0f\n",
+			format(str, sizeof str, "%s%s / -%.0f\n",
 			str,
-			TextColor[Player[VisualDamage[playerid][WhoDamaging][i]][Team]],
 			WeaponNames[VisualDamage[playerid][TakenDamageWeapon][i]],
 			VisualDamage[playerid][TDamageTaken][i]);
 		}

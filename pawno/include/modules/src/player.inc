@@ -206,6 +206,8 @@ InitPlayer(playerid)
 	for(new i = 0; i < MAX_PLAYER_BARS; i ++)
 		TeamBarShownForPlayer[playerid][_:i] = false;
 		
+	ShowTeamCornerInfo(playerid);
+		
 	CreatePlayerLabels(playerid);
 	Player[playerid][DamageBubbleTick] = 0;
 	
@@ -629,6 +631,9 @@ LoadPlayerVariables(playerid)
 			
 			ShowTeamBarsForPlayer(playerid);
 			CreatePlayerTeamBar(playerid);
+			
+			ShowTeamCornerInfo(playerid);
+			UpdateTeamCornerInfo();
 			
 			UpdateTeamPlayerCount(Player[playerid][Team], false);
 			SetHP(playerid, SaveVariables[i][gHealth]);

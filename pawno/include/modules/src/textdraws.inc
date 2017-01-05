@@ -813,6 +813,8 @@ RoundTextdrawsCreate()
 	TextDrawColor(AttDef_RoundTimer, -1);
 	TextDrawSetOutline(AttDef_RoundTimer, 1);
 	TextDrawSetProportional(AttDef_RoundTimer, 1);
+	
+	CreateTeamCornerTextDraws();
 }
 
 LoadPlayerTextDraws(playerid)
