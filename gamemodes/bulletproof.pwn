@@ -110,6 +110,18 @@ public OnPlayerConnect(playerid)
   		SetTimerEx("OnPlayerRequestClass", 1050, false, "ii", playerid, 0);
 		return 0; 
 	}
+	
+	// Cleans chat
+	for(new i=0; i < 20; i++)
+		SendClientMessage(playerid, -1, " ");
+	
+	// Sends welcome messages
+	SendClientMessage(playerid, -1, ""COL_PRIM"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	SendClientMessage(playerid, -1, sprintf("                    "COL_PRIM"Welcome to {FFFFFF}%s %.2f", GM_NAME, GM_VERSION));
+	SendClientMessage(playerid, -1, "      "COL_PRIM"Stay updated with {FFFFFF}/updates "COL_PRIM"and {FFFFFF}/checkversion");
+	SendClientMessage(playerid, -1, "/help, /cmds, /acmds, /settings, /cmdhelp, /matchtips");
+	SendClientMessage(playerid, -1, ""COL_PRIM"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	
 	// If there was a problem loading the database, warn them
 	if(sqliteconnection == DB:0)
 	{
