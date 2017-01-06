@@ -131,10 +131,32 @@ UpdateTeamCornerInfo()
 		}
 	}
 	
+	// Show top players for first second attackers textdraw
+	PlayersAddedToSecondString[0] = 0;
+    for(new i=0; i < (PlayersAdded[0]-MAX_PLAYERS_IN_TEXTDRAW); i++)
+    {
+	    if(i >= PlayersAdded[0] || PlayersAddedToSecondString[0] >= MAX_PLAYERS_IN_TEXTDRAW)
+		    break;	
+			
+		if(Player[PlayerIDs[0][i]][Playing])
+		{
+		    format(PlayersSecondString[0],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~r~~h~%d ~w~- ~r~%d~n~",PlayersSecondString[0],Player[PlayerIDs[0][i]][NameWithoutTag], Player[PlayerIDs[0][i]][pHealth]+Player[PlayerIDs[0][i]][pArmour], Player[PlayerIDs[0][i]][RoundDamage]);  
+		}
+		else
+		{
+		    format(PlayersSecondString[0],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~r~~h~Dead ~w~- ~r~%d~n~",PlayersSecondString[0],Player[PlayerIDs[0][i]][NameWithoutTag], Player[PlayerIDs[0][i]][RoundDamage]);
+		}	
+			
+        PlayersAddedToSecondString[0]++;	
+    }			
+	
+	MoveDownString(PlayersSecondString[0],PlayersAddedToSecondString[0]);
+	TextDrawSetString(TeamCornerInfoSecondTD[0],PlayersSecondString[0]);
+	
 	// Show top players for the first attackers textdraw
 	PlayersAddedToFirstString[0] = 0;
 	
-    for(new i=0; i < MAX_PLAYERS_IN_TEXTDRAW; i++)
+    for(new i=PlayersAddedToSecondString[0]; i < (MAX_PLAYERS_IN_TEXTDRAW+PlayersAddedToSecondString[0]); i++)
     {
 	    if(i >= PlayersAdded[0])
 		    break;
@@ -154,33 +176,32 @@ UpdateTeamCornerInfo()
 	MoveDownString(PlayersFirstString[0],PlayersAddedToFirstString[0]);
 	TextDrawSetString(TeamCornerInfoFirstTD[0],PlayersFirstString[0]);
 	
-	// Show top players for first second textdraw
-	PlayersAddedToSecondString[0] = 0;
-	
-    for(new i=MAX_PLAYERS_IN_TEXTDRAW; i < (MAX_PLAYERS_IN_TEXTDRAW*2); i++)
+	// Show top players for first second defenders textdraw
+	PlayersAddedToSecondString[1] = 0;
+    for(new i=0; i < (PlayersAdded[1]-MAX_PLAYERS_IN_TEXTDRAW); i++)
     {
-	    if(i >= PlayersAdded[0])
+	    if(i >= PlayersAdded[1] || PlayersAddedToSecondString[1] >= MAX_PLAYERS_IN_TEXTDRAW)
 		    break;	
 			
-		if(Player[PlayerIDs[0][i]][Playing])
+		if(Player[PlayerIDs[1][i]][Playing])
 		{
-		    format(PlayersSecondString[0],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~r~~h~%d ~w~- ~r~%d~n~",PlayersSecondString[0],Player[PlayerIDs[0][i]][NameWithoutTag], Player[PlayerIDs[0][i]][pHealth]+Player[PlayerIDs[0][i]][pArmour], Player[PlayerIDs[0][i]][RoundDamage]);  
+		    format(PlayersSecondString[1],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~b~~h~%d ~w~- ~b~%d~n~",PlayersSecondString[1],Player[PlayerIDs[1][i]][NameWithoutTag], Player[PlayerIDs[1][i]][pHealth]+Player[PlayerIDs[1][i]][pArmour], Player[PlayerIDs[1][i]][RoundDamage]);  
 		}
 		else
 		{
-		    format(PlayersSecondString[0],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~r~~h~Dead ~w~- ~r~%d~n~",PlayersSecondString[0],Player[PlayerIDs[0][i]][NameWithoutTag], Player[PlayerIDs[0][i]][RoundDamage]);
+		    format(PlayersSecondString[1],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~b~~h~Dead ~w~- ~b~%d~n~",PlayersSecondString[1],Player[PlayerIDs[1][i]][NameWithoutTag], Player[PlayerIDs[1][i]][RoundDamage]);
 		}	
 			
-        PlayersAddedToSecondString[0]++;			
-	}
+        PlayersAddedToSecondString[1]++;	
+    }			
 	
-	MoveDownString(PlayersSecondString[0],PlayersAddedToSecondString[0]);
-	TextDrawSetString(TeamCornerInfoSecondTD[0],PlayersSecondString[0]);
+	MoveDownString(PlayersSecondString[1],PlayersAddedToSecondString[1]);
+	TextDrawSetString(TeamCornerInfoSecondTD[1],PlayersSecondString[1]);
 	
 	// Show top players for the first defenders textdraw
 	PlayersAddedToFirstString[1] = 0;
 	
-    for(new i=0; i < MAX_PLAYERS_IN_TEXTDRAW; i++)
+    for(new i=PlayersAddedToSecondString[1]; i < (MAX_PLAYERS_IN_TEXTDRAW+PlayersAddedToSecondString[1]); i++)
     {
 	    if(i >= PlayersAdded[1])
 		    break;
@@ -199,29 +220,6 @@ UpdateTeamCornerInfo()
 	
 	MoveDownString(PlayersFirstString[1],PlayersAddedToFirstString[1]);
 	TextDrawSetString(TeamCornerInfoFirstTD[1],PlayersFirstString[1]);
-	
-	// Show top players for first defenders textdraw
-	PlayersAddedToSecondString[1] = 0;
-	
-    for(new i=MAX_PLAYERS_IN_TEXTDRAW; i < (MAX_PLAYERS_IN_TEXTDRAW*2); i++)
-    {
-	    if(i >= PlayersAdded[1])
-		    break;	
-			
-		if(Player[PlayerIDs[1][i]][Playing])
-		{
-		    format(PlayersSecondString[1],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~b~~h~%d ~w~- ~b~%d~n~",PlayersSecondString[1],Player[PlayerIDs[1][i]][NameWithoutTag], Player[PlayerIDs[1][i]][pHealth]+Player[PlayerIDs[1][i]][pArmour], Player[PlayerIDs[1][i]][RoundDamage]);  
-		}
-		else
-		{
-		    format(PlayersSecondString[1],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~b~~h~Dead ~w~- ~b~%d~n~",PlayersSecondString[1],Player[PlayerIDs[1][i]][NameWithoutTag], Player[PlayerIDs[1][i]][RoundDamage]);
-		}	
-			
-        PlayersAddedToSecondString[1]++;			
-	}
-	
-	MoveDownString(PlayersSecondString[1],PlayersAddedToSecondString[1]);
-	TextDrawSetString(TeamCornerInfoSecondTD[1],PlayersSecondString[1]);
     return 1;
 }
 

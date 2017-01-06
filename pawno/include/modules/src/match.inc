@@ -1048,7 +1048,7 @@ public PauseStopWatch()
 	else
 		format(str, sizeof str, "~r~~h~Round has been paused for: %02d:%02d~n~~r~~h~~h~Pauses count so far: %d", PauseTimeElapsed[1], PauseTimeElapsed[0], TotalPausesInRound);
 	*/
-    format(str, sizeof str, "~r~Round is paused!~n~~w~Time: ~r~%02d:%02d", PauseTimeElapsed[1], PauseTimeElapsed[0]);
+    format(str, sizeof str, "~r~~h~Round is paused!~n~~w~Time: ~r~~h~%02d:%02d", PauseTimeElapsed[1], PauseTimeElapsed[0]);
 	
 	TextDrawSetString(PauseTD, str);
 	return 1;
