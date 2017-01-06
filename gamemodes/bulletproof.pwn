@@ -950,6 +950,9 @@ public OnPlayerEnterCheckpoint(playerid)
 			{
 			    if(!ArenaStarted)
 			        return 1;
+			        
+				if(!CPInArena)
+					return 1;
 
                 switch(TeamCapturingCP)
 			    {
