@@ -140,11 +140,18 @@ UpdatePlayerSpectators(playerid)
 	else
 	{
 		new str[SPECTATORS_STRING_SIZE];
+		new totalAdded;
+		
 		format(str, sizeof str, "%sSPECTATORS~n~~n~", MAIN_TEXT_COLOUR);
 		foreach(new i : PlayerSpectators[playerid]) // Loop through the array that contains this player's spectators
 		{
+		    // Make sure we don't show more players than MAX_PLAYER_SPECTATORS. Otherwise string will go beyond 255th character and cause crashes.
+		    if(totalAdded >= MAX_PLAYER_SPECTATORS)break;
+		
 			// Format string with spectator name
 			format(str, sizeof str, "%s%s ~r~~h~%d~n~", str, Player[i][NameWithoutTag], i);
+			
+			totalAdded++;
 		}
 		foreach(new i : PlayerSpectators[playerid])
 			PlayerTextDrawSetString(i, WhoSpec[i], str);
@@ -160,14 +167,6 @@ SpectatePlayer(playerid, specid)
 
 	if(!IsPlayerConnected(playerid) || !IsPlayerConnected(specid))
 		return 0;
-
-	if(Iter_Count(PlayerSpectators[specid]) == MAX_PLAYER_SPECTATORS)
-	{
-		SendErrorMessage(playerid, "This player does already have enough spectators.");
-		if(Player[playerid][Spectating])
-			StopSpectate(playerid);
-		return 0;
-	}
 
 	if(TargetInfoData[playerid][TargetInfoTimer] != -1)
 		HideTargetInfo(playerid); // hides the target info textdraws
@@ -389,9 +388,6 @@ SpectateNextTeamPlayer(playerid, bool:stop_spectate = false)
 		if(Player[playerid][Team] != REFEREE && !IsTeamTheSame(Player[i][Team], Player[playerid][Team]))
 			continue; // Skip this player if he's in a different team than spectator's team
 
-		if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
-			continue; // Skip this player if he's got enough people spectating him
-
 		if(SpectatePlayer(playerid, i) == 1)
 			return; // Stop the loop AS WELL AS the function process when the spectate process is a success
 	}
@@ -419,9 +415,6 @@ SpectatePreviousTeamPlayer(playerid, bool:stop_spectate = false)
 		if(Player[playerid][Team] != REFEREE && !IsTeamTheSame(Player[i][Team], Player[playerid][Team]))
 			continue; // Skip this player if he's in a different team than spectator's team
 
-		if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
-			continue; // Skip this player if he's got enough people spectating him
-
 		if(SpectatePlayer(playerid, i) == 1)
 			return; // Stop the loop AS WELL AS the function process when the spectate process is a success
 	}
@@ -446,9 +439,6 @@ SpectateNextPlayer(playerid, bool:stop_spectate = false)
 		if(Player[i][Spectating])
 			continue; // Skip this player if they're spectating someone else
 
-		if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
-			continue; // Skip this player if he's got enough people spectating him
-
 		if(SpectatePlayer(playerid, i) == 1)
 			return; // Stop the loop AS WELL AS the function process when the spectate process is a success
 	}
@@ -472,9 +462,6 @@ SpectatePreviousPlayer(playerid, bool:stop_spectate = false)
 
 		if(Player[i][Spectating])
 			continue; // Skip this player if they're spectating someone else
-
-		if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
-			continue; // Skip this player if he's got enough people spectating him
 
 		if(SpectatePlayer(playerid, i) == 1)
 			return; // Stop the loop AS WELL AS the function process when the spectate process is a success
@@ -563,9 +550,6 @@ SpectateAnyPlayer(playerid, bool:teammatch, bool:ascending, exception = -1)
 								if(Player[i][Team] == NON || GetPlayerState(i) == PLAYER_STATE_WASTED)
 									continue; // Skip this player if they're dead/wasted or not spawned yet
 
-								if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
-									continue; // Skip this player if he's got enough people spectating him
-
 								if(SpectatePlayer(playerid, i) == 1)
 									return; // Stop the loop AS WELL AS the function process when the spectate process is a success
 							}
@@ -579,9 +563,6 @@ SpectateAnyPlayer(playerid, bool:teammatch, bool:ascending, exception = -1)
 
 								if(Player[i][Team] == NON || GetPlayerState(i) == PLAYER_STATE_WASTED)
 									continue; // Skip this player if they're dead/wasted or not spawned yet
-
-								if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
-									continue; // Skip this player if he's got enough people spectating him
 
 								if(SpectatePlayer(playerid, i) == 1)
 									return; // Stop the loop AS WELL AS the function process when the spectate process is a success
@@ -603,9 +584,6 @@ SpectateAnyPlayer(playerid, bool:teammatch, bool:ascending, exception = -1)
 								if(Player[i][Team] == NON || GetPlayerState(i) == PLAYER_STATE_WASTED)
 									continue; // Skip this player if they're dead/wasted or not spawned yet
 
-								if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
-									continue; // Skip this player if he's got enough people spectating him
-
 								if(SpectatePlayer(playerid, i) == 1)
 									return; // Stop the loop AS WELL AS the function process when the spectate process is a success
 							}
@@ -619,9 +597,6 @@ SpectateAnyPlayer(playerid, bool:teammatch, bool:ascending, exception = -1)
 
 								if(Player[i][Team] == NON || GetPlayerState(i) == PLAYER_STATE_WASTED)
 									continue; // Skip this player if they're dead/wasted or not spawned yet
-
-								if(Iter_Count(PlayerSpectators[i]) >= MAX_PLAYER_SPECTATORS)
-									continue; // Skip this player if he's got enough people spectating him
 
 								if(SpectatePlayer(playerid, i) == 1)
 									return; // Stop the loop AS WELL AS the function process when the spectate process is a success

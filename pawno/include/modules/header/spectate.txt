@@ -3,7 +3,7 @@
 */
 
 #define UPDATE_SPECINFO_INTERVAL	2000
-#define MAX_PLAYER_SPECTATORS		6     // Limited to 6 in order to prevent crashing for using color codes after 255th character
+#define MAX_PLAYER_SPECTATORS		6     // How many players will be shown
 #define SPECTATORS_STRING_SIZE		(21 + (36 * MAX_PLAYER_SPECTATORS))
 
 new

@@ -131,7 +131,7 @@ UpdateTeamCornerInfo()
 		}
 	}
 	
-	// Show top players for first second attackers textdraw
+	// Show top players for the second attackers textdraw
 	PlayersAddedToSecondString[0] = 0;
     for(new i=0; i < (PlayersAdded[0]-MAX_PLAYERS_IN_TEXTDRAW); i++)
     {
@@ -176,7 +176,7 @@ UpdateTeamCornerInfo()
 	MoveDownString(PlayersFirstString[0],PlayersAddedToFirstString[0]);
 	TextDrawSetString(TeamCornerInfoFirstTD[0],PlayersFirstString[0]);
 	
-	// Show top players for first second defenders textdraw
+	// Show top players for the second defenders textdraw
 	PlayersAddedToSecondString[1] = 0;
     for(new i=0; i < (PlayersAdded[1]-MAX_PLAYERS_IN_TEXTDRAW); i++)
     {
