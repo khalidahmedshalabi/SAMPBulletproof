@@ -546,14 +546,19 @@ udb_hash(buf[]) {
 RecountPlayersOnCP()
 {
 	PlayersInCP = 0;
-	foreach(new i : PlayersInRound)
+	
+	if(GameType != ARENA || CPInArena)
 	{
-		Player[i][WasInCP] = false;
-	    if(IsPlayerInCheckpoint(i))
-	    {
-	        OnPlayerEnterCheckpoint(i);
+		foreach(new i : PlayersInRound)
+		{
+			Player[i][WasInCP] = false;
+	    	if(IsPlayerInCheckpoint(i))
+	    	{
+	        	OnPlayerEnterCheckpoint(i);
+			}
 		}
 	}
+	
 	if(PlayersInCP == 0)
 	{
 		TeamCapturingCP = NON;
