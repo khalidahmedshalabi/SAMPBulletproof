@@ -469,45 +469,9 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	}
 	else
 	{
-		switch(reason)
-		{
-		    case WEAPON_KNIFE:
-		    {
-		        PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s knifed you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-		        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou knifed %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
-		    }
-		    case WEAPON_GRENADE:
-		    {
-				PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s bombed you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-		        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou bombed %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
-		    }
-		    default:
-			{
-				switch(random(4))
-				{
-				    case 0:
-				    {
-						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s raped you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-						PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou raped %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
-					}
-					case 1:
-					{
-						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s owned you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-						PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou owned %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
-					}
-					case 2:
-				    {
-        				PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s murdered you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-					    PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou murdered %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
-					}
-					case 3:
-					{
-						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s sent you to cemetery", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-                        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou sent %s~h~%s%s to cemetery", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name], MAIN_TEXT_COLOUR));
-					}
-				}
-			}
-		}
+		PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%sKilled By: ~r~~h~%s", MAIN_TEXT_COLOUR, Player[killerid][Name]));
+		PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou Killed: ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+		        
         PlayerTextDrawShow(killerid, DeathText[killerid][0]);
         PlayerTextDrawShow(playerid, DeathText[playerid][1]);
 
@@ -680,7 +644,7 @@ public OnPlayerText(playerid, text[])
 				{ SendClientMessage(i, ChatColor, ChatString); PlayerPlaySound(i,1137,0.0,0.0,0.0); }
 		        if((Player[playerid][Team] == DEFENDER || Player[playerid][Team] == DEFENDER_SUB) && (Player[i][Team] == DEFENDER || Player[i][Team] == DEFENDER_SUB))
 				{ SendClientMessage(i, ChatColor, ChatString); PlayerPlaySound(i,1137,0.0,0.0,0.0); }
-				if(Player[playerid][Team] == REFEREE && Player[i][Team] == REFEREE)
+				if(Player[playerid][Team] == REFEREE && Player[i][Team] == REFEREE && !Player[i][InDuel])
 			   	{ SendClientMessage(i, ChatColor, ChatString); PlayerPlaySound(i,1137,0.0,0.0,0.0); }
 			}
 		}

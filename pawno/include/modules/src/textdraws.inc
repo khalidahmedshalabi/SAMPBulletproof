@@ -1013,7 +1013,7 @@ LoadPlayerTextDraws(playerid)
 	DeathText[playerid][0] = CreatePlayerTextDraw(playerid,322.000000, 321.000000, "_");
 	PlayerTextDrawBackgroundColor(playerid, DeathText[playerid][0], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, DeathText[playerid][0], 1);
-	PlayerTextDrawLetterSize(playerid, DeathText[playerid][0], 0.250000, 1.2000);
+	PlayerTextDrawLetterSize(playerid, DeathText[playerid][0], 0.280000, 1.4000);
 	PlayerTextDrawColor(playerid, DeathText[playerid][0], 16711935);
 	PlayerTextDrawSetOutline(playerid, DeathText[playerid][0], 1);
 	PlayerTextDrawSetProportional(playerid, DeathText[playerid][0], 1);
@@ -1023,7 +1023,7 @@ LoadPlayerTextDraws(playerid)
 	DeathText[playerid][1] = CreatePlayerTextDraw(playerid,322, 335.000000, "_");
 	PlayerTextDrawBackgroundColor(playerid, DeathText[playerid][1], MAIN_BACKGROUND_COLOUR);
 	PlayerTextDrawFont(playerid, DeathText[playerid][1], 1);
-	PlayerTextDrawLetterSize(playerid, DeathText[playerid][1], 0.250000, 1.2000);
+	PlayerTextDrawLetterSize(playerid, DeathText[playerid][1], 0.280000, 1.4000);
 	PlayerTextDrawColor(playerid, DeathText[playerid][1], 16711935);
 	PlayerTextDrawSetOutline(playerid, DeathText[playerid][1], 1);
 	PlayerTextDrawSetProportional(playerid, DeathText[playerid][1], 1);
