@@ -1906,7 +1906,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 case 0:
                 {
-	                new statsSTR[4][300], namee[60], CID, Country[128];
+	                new statsSTR[4][300], namee[60], CID, Country[128], techInfo[100];
 				    CID = LastClickedPlayer[playerid];
 
 					format(namee, sizeof(namee), "{FF3333}Player {FFFFFF}%s {FF3333}Stats", Player[CID][Name]);
@@ -1917,12 +1917,28 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					new MC = Player[playerid][ChatChannel];
 					new YC = Player[CID][ChatChannel];
 
+					if(IsPlayerAdmin(playerid))
+					{
+                        new str[35];
+
+						// Get player IP
+						GetPlayerIp(CID, str, sizeof(str));
+		                format(techInfo,sizeof techInfo,""COL_PRIM"- {FFFFFF}IP: %s\n",str);
+		                
+		                // Get player hardware ID
+		                if(IsACPluginLoaded() && IsPlayerUsingSampAC(CID))
+		                {
+		                    GetPlayerHardwareID(CID, str, sizeof str);
+		                    format(techInfo,sizeof techInfo,"%s"COL_PRIM"- {FFFFFF}Hardware ID: %s\n",techInfo,str);
+						}
+					}
+
 	                format(statsSTR[0], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Country: %s\n\n"COL_PRIM"- {FFFFFF}Round Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Total Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}FPS: \t\t\t%d\n"COL_PRIM"- {FFFFFF}Round Deaths: \t%.0f\t\t"COL_PRIM"- {FFFFFF}Total Deaths: \t%d\t\t"COL_PRIM"- {FFFFFF}Ping: \t\t\t%d\n",Country,Player[CID][RoundKills],Player[CID][TotalKills], Player[CID][FPS], RD, TD, GetPlayerPing(CID));
 					format(statsSTR[1], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Round Damage: \t%d\t\t"COL_PRIM"- {FFFFFF}Total Damage:   \t%d\t\t"COL_PRIM"- {FFFFFF}Packet-Loss:   \t%.1f\n\n"COL_PRIM"- {FFFFFF}Player Weather: \t%d\t\t"COL_PRIM"- {FFFFFF}Chat Channel: \t%d\t\t"COL_PRIM"- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], NetStats_PacketLossPercent(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
 					format(statsSTR[2], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Player Time: \t\t%d\t\t"COL_PRIM"- {FFFFFF}DM ID: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Hit Sound: \t\t%d\n"COL_PRIM"- {FFFFFF}Player NetCheck: \t%s\t"COL_PRIM"- {FFFFFF}Player Level: \t%d\t\t"COL_PRIM"- {FFFFFF}Get Hit Sound: \t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
 					format(statsSTR[3], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Duels Won: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Duels Lost: \t\t%d", Player[CID][DuelsWon], Player[CID][DuelsLost]);
-					new TotalStr[1200];
-					format(TotalStr, sizeof(TotalStr), "%s%s%s%s", statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3]);
+					new TotalStr[1300];
+					format(TotalStr, sizeof(TotalStr), "%s%s%s%s%s", techInfo, statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3]);
 
 					ShowPlayerDialog(playerid, DIALOG_CLICK_STATS, DIALOG_STYLE_MSGBOX, namee, TotalStr, "Close", "");
                 }
