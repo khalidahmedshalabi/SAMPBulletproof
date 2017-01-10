@@ -1038,18 +1038,8 @@ public PauseStopWatch()
 	else
 		PauseTimeElapsed[0] ++;
 
-	new str[81];
-	
-	/*
-	if(PauseTimeElapsed[1] < 1)
-		format(str, sizeof str, "~b~~h~Round has been paused for: %02d:%02d~n~~b~~h~~h~Pauses count so far: %d", PauseTimeElapsed[1], PauseTimeElapsed[0], TotalPausesInRound);
-	else if(PauseTimeElapsed[1] == 1)
-		format(str, sizeof str, "~y~~h~Round has been paused for: %02d:%02d~n~~y~~h~~h~Pauses count so far: %d", PauseTimeElapsed[1], PauseTimeElapsed[0], TotalPausesInRound);
-	else
-		format(str, sizeof str, "~r~~h~Round has been paused for: %02d:%02d~n~~r~~h~~h~Pauses count so far: %d", PauseTimeElapsed[1], PauseTimeElapsed[0], TotalPausesInRound);
-	*/
-    format(str, sizeof str, "~r~~h~Round is paused!~n~~w~Time: ~r~~h~%02d:%02d", PauseTimeElapsed[1], PauseTimeElapsed[0]);
-	
+	new str[68];
+    format(str, sizeof str, "~r~~h~Round is paused!~n~~w~Time: ~r~~h~%02d:%02d ~w~Count: ~r~~h~%d", PauseTimeElapsed[1], PauseTimeElapsed[0], TotalPausesInRound);
 	TextDrawSetString(PauseTD, str);
 	return 1;
 }
