@@ -165,8 +165,6 @@ public OnPlayerConnect(playerid)
 		GetPlayerHardwareID(playerid, str, sizeof str);
 		printf("%s hardware ID: %s", Player[playerid][Name], str);
 	}
-	
-	PlayAudioStreamForPlayer(playerid, "http://unitedarmy.eu/loginMusic.mp3");
 	return 1;
 }
 
