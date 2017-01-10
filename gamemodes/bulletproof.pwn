@@ -165,6 +165,8 @@ public OnPlayerConnect(playerid)
 		GetPlayerHardwareID(playerid, str, sizeof str);
 		printf("%s hardware ID: %s", Player[playerid][Name], str);
 	}
+	
+	PlayAudioStreamForPlayer(playerid, "http://unitedarmy.eu/loginMusic.mp3");
 	return 1;
 }
 
@@ -428,12 +430,21 @@ public OnPlayerDeath(playerid, killerid, reason)
 	    ServerOnPlayerDeath(playerid, INVALID_PLAYER_ID, 51);
 	    return 1;
 	}
+	
 	// case: died while diving with a parachute?
 	if(reason == WEAPON_PARACHUTE)
 	{
 		ServerOnPlayerDeath(playerid, INVALID_PLAYER_ID, WEAPON_PARACHUTE);
 	    return 1;
 	}
+	
+	// case: suicide
+	if(reason == 255)
+	{
+        ServerOnPlayerDeath(playerid, INVALID_PLAYER_ID, 255);
+        return 1;
+	}
+	
 	// unknown cases
 	SendClientMessageToAll(-1, sprintf("DEBUG:Client:OnPlayerDeath(%d, %d, %d)", playerid, killerid, reason));
 	ServerOnPlayerDeath(playerid, killerid, reason);
