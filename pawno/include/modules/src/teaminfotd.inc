@@ -80,56 +80,75 @@ UpdateTeamCornerInfo()
 	if(ShowHPBars)
 		return 0;
 	
-    // Variables for sorting	
-	new temp_id;                                             // Used for swapping player ids
-	new PlayersAdded[2];                                     // How many players were added to the array
-	new PlayerIDs[2][MAX_PLAYERS*2];                         // Arrays that holds players' ids who are eligible to be shown
+    // For sorting
+	new PlayersAdded[2];                                           // How many players were added to the array
+	new AttackersArray[MAX_PLAYERS][_sort_Info_];                  // Array that holds attackers info
+	new DefendersArray[MAX_PLAYERS][_sort_Info_];                  // Array that holds defenders info
 	
 	// Variables for visual
-	new PlayersAddedToFirstString[2];                        // Tells how many players were added to strings
-	new PlayersAddedToSecondString[2];                       // Tells how many players were added to strings
-	new PlayersFirstString[2][MAX_PLAYERS_STRING_SIZE];      // Strings that hold top players from arrays
-	new PlayersSecondString[2][MAX_PLAYERS_STRING_SIZE];     // Strings that hold top players from arrays
+	new PlayersAddedToFirstString[2];                              // Tells how many players were added to strings
+	new PlayersAddedToSecondString[2];                             // Tells how many players were added to strings
+	new PlayersFirstString[2][MAX_PLAYERS_STRING_SIZE];            // Strings that hold top players from arrays
+	new PlayersSecondString[2][MAX_PLAYERS_STRING_SIZE];           // Strings that hold top players from arrays
 	
-	// Adds players to arrays
+	// How many players were added
 	PlayersAdded[0] = 0;
 	PlayersAdded[1] = 0;
 	
+	for(new i=0; i < MAX_PLAYERS; i++)
+	{
+	    AttackersArray[i][playerID] = -1;
+		AttackersArray[i][playerDamage] = -1;
+	    DefendersArray[i][playerID] = -1;
+		DefendersArray[i][playerDamage] = -1;		
+	}
+	
 	foreach(new i : Player)
 	{
-	    if(Player[i][Team] != ATTACKER && Player[i][Team] != DEFENDER)continue;
+	    if(!Player[i][WasInBase])continue;
 		
-		PlayerIDs[Player[i][Team]-1][PlayersAdded[Player[i][Team]-1]] = i;
-		PlayersAdded[Player[i][Team]-1]++;
-	}
-	
-	// Sorts players who are in the attackers array by damage
-	for(new a=0; a < PlayersAdded[0]; a++)
-	{
-		for(new b=0; b < PlayersAdded[0]; b++)
+		switch(Player[i][Team])
 		{
-			if(Player[PlayerIDs[0][a]][RoundDamage] > Player[PlayerIDs[0][b]][RoundDamage])
+		    case ATTACKER:
 			{
-				temp_id = PlayerIDs[0][a];
-				PlayerIDs[0][a] = PlayerIDs[0][b];
-                PlayerIDs[0][b] = temp_id;
+				AttackersArray[PlayersAdded[0]][playerID] = i;
+				AttackersArray[PlayersAdded[0]][playerDamage] = Player[i][RoundDamage];
+				PlayersAdded[0]++;
+			}
+			case DEFENDER:
+			{
+				DefendersArray[PlayersAdded[1]][playerID] = i;
+				DefendersArray[PlayersAdded[1]][playerDamage] = Player[i][RoundDamage];
+				PlayersAdded[1]++;
 			}
 		}
 	}
 	
-	// Sorts players who are in the defenders array by damage
-	for(new a=0; a < PlayersAdded[1]; a++)
-	{
-		for(new b=0; b < PlayersAdded[1]; b++)
-		{
-			if(Player[PlayerIDs[1][a]][RoundDamage] > Player[PlayerIDs[1][b]][RoundDamage])
-			{
-				temp_id = PlayerIDs[1][a];
-				PlayerIDs[1][a] = PlayerIDs[1][b];
-                PlayerIDs[1][b] = temp_id;
-			}
-		}
-	}
+	/*
+	// This can be used to test textdraw look and sorting
+	DefendersArray[PlayersAdded[1]][playerID] = PlayersAdded[1];
+	DefendersArray[PlayersAdded[1]][playerDamage] = random(400);
+	format(Player[PlayersAdded[1]][NameWithoutTag],MAX_PLAYER_NAME,"Dimitry");
+	PlayersAdded[1]++;
+
+	DefendersArray[PlayersAdded[1]][playerID] = PlayersAdded[1];
+	DefendersArray[PlayersAdded[1]][playerDamage] = random(400);
+	format(Player[PlayersAdded[1]][NameWithoutTag],MAX_PLAYER_NAME,"Jhon");
+	PlayersAdded[1]++;
+	
+	DefendersArray[PlayersAdded[1]][playerID] = PlayersAdded[1];
+	DefendersArray[PlayersAdded[1]][playerDamage] = random(400);
+	format(Player[PlayersAdded[1]][NameWithoutTag],MAX_PLAYER_NAME,"Peter");
+	PlayersAdded[1]++;
+	
+	DefendersArray[PlayersAdded[1]][playerID] = PlayersAdded[1];
+	DefendersArray[PlayersAdded[1]][playerDamage] = random(400);
+	format(Player[PlayersAdded[1]][NameWithoutTag],MAX_PLAYER_NAME,"Arnold");
+	PlayersAdded[1]++;
+	*/
+	
+	SortDeepArray(AttackersArray, playerDamage, .order = SORT_DESC);
+	SortDeepArray(DefendersArray, playerDamage, .order = SORT_DESC);
 	
 	// Show top players for the second attackers textdraw
 	PlayersAddedToSecondString[0] = 0;
@@ -138,13 +157,13 @@ UpdateTeamCornerInfo()
 	    if(i >= PlayersAdded[0] || PlayersAddedToSecondString[0] >= MAX_PLAYERS_IN_TEXTDRAW)
 		    break;	
 			
-		if(Player[PlayerIDs[0][i]][Playing])
+		if(Player[AttackersArray[i][playerID]][Playing])
 		{
-		    format(PlayersSecondString[0],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~r~~h~%d ~w~- ~r~%d~n~",PlayersSecondString[0],Player[PlayerIDs[0][i]][NameWithoutTag], Player[PlayerIDs[0][i]][pHealth]+Player[PlayerIDs[0][i]][pArmour], Player[PlayerIDs[0][i]][RoundDamage]);  
+		    format(PlayersSecondString[0],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~r~~h~%d ~w~- ~r~%d~n~",PlayersSecondString[0],Player[AttackersArray[i][playerID]][NameWithoutTag], Player[AttackersArray[i][playerID]][pHealth]+Player[AttackersArray[i][playerID]][pArmour], AttackersArray[i][playerDamage]);  
 		}
 		else
 		{
-		    format(PlayersSecondString[0],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~r~~h~Dead ~w~- ~r~%d~n~",PlayersSecondString[0],Player[PlayerIDs[0][i]][NameWithoutTag], Player[PlayerIDs[0][i]][RoundDamage]);
+		    format(PlayersSecondString[0],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~r~~h~Dead ~w~- ~r~%d~n~",PlayersSecondString[0],Player[AttackersArray[i][playerID]][NameWithoutTag], AttackersArray[i][playerDamage]);
 		}	
 			
         PlayersAddedToSecondString[0]++;	
@@ -161,13 +180,13 @@ UpdateTeamCornerInfo()
 	    if(i >= PlayersAdded[0])
 		    break;
 			
-		if(Player[PlayerIDs[0][i]][Playing])
+		if(Player[AttackersArray[i][playerID]][Playing])
 		{
-		    format(PlayersFirstString[0],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~r~~h~%d ~w~- ~r~%d~n~",PlayersFirstString[0],Player[PlayerIDs[0][i]][NameWithoutTag], Player[PlayerIDs[0][i]][pHealth]+Player[PlayerIDs[0][i]][pArmour], Player[PlayerIDs[0][i]][RoundDamage]);  
+		    format(PlayersFirstString[0],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~r~~h~%d ~w~- ~r~%d~n~",PlayersFirstString[0],Player[AttackersArray[i][playerID]][NameWithoutTag], Player[AttackersArray[i][playerID]][pHealth]+Player[AttackersArray[i][playerID]][pArmour], AttackersArray[i][playerDamage]);  
 		}
 		else
 		{
-		    format(PlayersFirstString[0],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~r~~h~Dead ~w~- ~r~%d~n~",PlayersFirstString[0],Player[PlayerIDs[0][i]][NameWithoutTag], Player[PlayerIDs[0][i]][RoundDamage]);
+		    format(PlayersFirstString[0],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~r~~h~Dead ~w~- ~r~%d~n~",PlayersFirstString[0],Player[AttackersArray[i][playerID]][NameWithoutTag], AttackersArray[i][playerDamage]);
 		}	
 			
         PlayersAddedToFirstString[0]++;			
@@ -183,13 +202,13 @@ UpdateTeamCornerInfo()
 	    if(i >= PlayersAdded[1] || PlayersAddedToSecondString[1] >= MAX_PLAYERS_IN_TEXTDRAW)
 		    break;	
 			
-		if(Player[PlayerIDs[1][i]][Playing])
+		if(Player[DefendersArray[i][playerID]][Playing])
 		{
-		    format(PlayersSecondString[1],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~b~~h~%d ~w~- ~b~%d~n~",PlayersSecondString[1],Player[PlayerIDs[1][i]][NameWithoutTag], Player[PlayerIDs[1][i]][pHealth]+Player[PlayerIDs[1][i]][pArmour], Player[PlayerIDs[1][i]][RoundDamage]);  
+		    format(PlayersSecondString[1],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~b~~h~%d ~w~- ~b~%d~n~",PlayersSecondString[1],Player[DefendersArray[i][playerID]][NameWithoutTag], Player[DefendersArray[i][playerID]][pHealth]+Player[DefendersArray[i][playerID]][pArmour], DefendersArray[i][playerDamage]);  
 		}
 		else
 		{
-		    format(PlayersSecondString[1],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~b~~h~Dead ~w~- ~b~%d~n~",PlayersSecondString[1],Player[PlayerIDs[1][i]][NameWithoutTag], Player[PlayerIDs[1][i]][RoundDamage]);
+		    format(PlayersSecondString[1],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~b~~h~Dead ~w~- ~b~%d~n~",PlayersSecondString[1],Player[DefendersArray[i][playerID]][NameWithoutTag], DefendersArray[i][playerDamage]);
 		}	
 			
         PlayersAddedToSecondString[1]++;	
@@ -206,13 +225,13 @@ UpdateTeamCornerInfo()
 	    if(i >= PlayersAdded[1])
 		    break;
 			
-		if(Player[PlayerIDs[1][i]][Playing])
+		if(Player[DefendersArray[i][playerID]][Playing])
 		{
-		    format(PlayersFirstString[1],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~b~~h~%d ~w~- ~b~%d~n~",PlayersFirstString[1],Player[PlayerIDs[1][i]][NameWithoutTag], Player[PlayerIDs[1][i]][pHealth]+Player[PlayerIDs[1][i]][pArmour], Player[PlayerIDs[1][i]][RoundDamage]);  
+		    format(PlayersFirstString[1],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~b~~h~%d ~w~- ~b~%d~n~",PlayersFirstString[1],Player[DefendersArray[i][playerID]][NameWithoutTag], Player[DefendersArray[i][playerID]][pHealth]+Player[DefendersArray[i][playerID]][pArmour], DefendersArray[i][playerDamage]);  
 		}
 		else
 		{
-		    format(PlayersFirstString[1],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~b~~h~Dead ~w~- ~b~%d~n~",PlayersFirstString[1],Player[PlayerIDs[1][i]][NameWithoutTag], Player[PlayerIDs[1][i]][RoundDamage]);
+		    format(PlayersFirstString[1],MAX_PLAYERS_STRING_SIZE,"%s~w~| %s ~b~~h~Dead ~w~- ~b~%d~n~",PlayersFirstString[1],Player[DefendersArray[i][playerID]][NameWithoutTag], DefendersArray[i][playerDamage]);
 		}	
 			
         PlayersAddedToFirstString[1]++;			

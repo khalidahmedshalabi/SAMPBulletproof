@@ -13,6 +13,7 @@
 #include <sampac> 			// THE MIGHTY NEW ANTICHEAT
 #include <mSelection>       // Selection with preview models feature library
 #include <gBugFix>			// Fix false vehicle entry as passenger (G (teleport/distance) bug)
+#include <md-sort>         // Sorts multi dimensional arrays
 
 #define ROUND_NEVER_END 0   // Used for testing purposes only
 

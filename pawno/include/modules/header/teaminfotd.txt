@@ -4,6 +4,12 @@
 
 */
 
+enum _sort_Info_
+{
+    playerID,
+	playerDamage
+}
+
 #define MAX_PLAYERS_IN_TEXTDRAW 4
 #define MAX_PLAYERS_STRING_SIZE 255
 
