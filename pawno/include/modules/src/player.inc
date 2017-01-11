@@ -662,6 +662,9 @@ LoadPlayerVariables(playerid)
 			 	SetPlayerVirtualWorld(playerid, 2);
 		 	}
 			
+			Player[playerid][IgnoreSpawn] = true;
+	        SpawnPlayer(playerid);
+			
 			ShowTeamBarsForPlayer(playerid);
 			CreatePlayerTeamBar(playerid);
 			
