@@ -1456,7 +1456,7 @@ BalanceTeams() {
 	return 1;
 }
 
-SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
+SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true, bool:changeskin = true)
 {
 	new iString[160];
 	if(message)
@@ -1470,7 +1470,12 @@ SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
 	ColorFix(playerid);
 	if(fixvs && Current == -1)
 		FixVsTextDraw();
-	SetPlayerSkin(playerid, Skin[Player[playerid][Team]]);
+	
+	if(changeskin)
+	{
+	    SetPlayerSkin(playerid, Skin[Player[playerid][Team]]);
+	}
+	
 	SetCameraBehindPlayer(playerid);
 	HideAllTeamBarsForPlayer(playerid);
 	#if defined _league_included

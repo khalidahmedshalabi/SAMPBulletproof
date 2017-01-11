@@ -1383,7 +1383,12 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
 
     Player[ToAddID][Team] = Player[ToReplaceID][Team];
 	Player[ToAddID][WasInTeam] = Player[ToAddID][Team];
-	SwitchTeamFix(ToAddID, false, false);
+	SwitchTeamFix(ToAddID, false, false, false);
+	
+	SetSpawnInfo(ToAddID, Player[ToAddID][Team], Skin[Player[playerid][Team]], Pos[0], Pos[1], Pos[2]+1, Pos[3], 0, 0, 0, 0, 0, 0);
+	Player[ToAddID][IgnoreSpawn] = true;
+	SpawnPlayer(ToAddID);
+	
 	SetHP(ToAddID, HP[0]);
 	SetAP(ToAddID, HP[1]);
 
@@ -1391,8 +1396,6 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
 	SetPlayerFacingAngle(ToAddID, Pos[3]);
 	SetPlayerInterior(ToAddID, GetPlayerInterior(ToReplaceID));
 	SetPlayerVirtualWorld(ToAddID, GetPlayerVirtualWorld(ToReplaceID));
-
-	SetPlayerSkin(ToAddID, Skin[Player[ToAddID][Team]]);
 	SetPlayerTeam(ToAddID, Player[ToAddID][Team]);
 
 	ColorFix(ToAddID);
@@ -1444,33 +1447,36 @@ public OnPlayerInGameReplace(ToAddID, i, playerid) {
 
     Player[ToAddID][Team] = SaveVariables[i][pTeam];
 	Player[playerid][WasInTeam] = Player[ToAddID][Team];
-	SwitchTeamFix(ToAddID, false, false);
-	SetHP(ToAddID, SaveVariables[i][gHealth]);
-	SetAP(ToAddID, SaveVariables[i][gArmour]);
-
+	SwitchTeamFix(ToAddID, false, false, false);
+	
     if(SaveVariables[i][WasCrashedInStart] == false) {
-		SetPlayerPos(ToAddID, SaveVariables[i][pCoords][0], SaveVariables[i][pCoords][1], SaveVariables[i][pCoords][2]+1);
-		SetPlayerFacingAngle(ToAddID, SaveVariables[i][pCoords][3]);
+		SetSpawnInfo(ToAddID, Player[ToAddID][Team], Skin[Player[playerid][Team]], SaveVariables[i][pCoords][0], SaveVariables[i][pCoords][1], SaveVariables[i][pCoords][2]+1, SaveVariables[i][pCoords][3], 0, 0, 0, 0, 0, 0);
+		
 		SetPlayerInterior(ToAddID, SaveVariables[i][pInterior]);
 		SetPlayerVirtualWorld(ToAddID, SaveVariables[i][pVWorld]);
 	} else if(Current != -1) {
 	    if(GameType == BASE) {
 			switch(Player[ToAddID][Team]) {
-			    case ATTACKER: SetPlayerPos(ToAddID, BAttackerSpawn[Current][0] + random(6), BAttackerSpawn[Current][1] + random(6), BAttackerSpawn[Current][2]+0.5);
-				case DEFENDER: SetPlayerPos(ToAddID, BDefenderSpawn[Current][0] + random(6), BDefenderSpawn[Current][1] + random(6), BDefenderSpawn[Current][2]+0.5);
+				case ATTACKER: SetSpawnInfo(ToAddID, Player[ToAddID][Team], Skin[Player[playerid][Team]], BAttackerSpawn[Current][0] + random(6), BAttackerSpawn[Current][1] + random(6), BAttackerSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+				case DEFENDER: SetSpawnInfo(ToAddID, Player[ToAddID][Team], Skin[Player[playerid][Team]], BDefenderSpawn[Current][0] + random(6), BDefenderSpawn[Current][1] + random(6), BDefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 		    }
 		    SetPlayerInterior(ToAddID, BInterior[Current]);
 		} else if(GameType == ARENA) {
 			switch(Player[ToAddID][Team]) {
-			    case ATTACKER: SetPlayerPos(ToAddID, AAttackerSpawn[Current][0] + random(6), AAttackerSpawn[Current][1] + random(6), AAttackerSpawn[Current][2]+0.5);
-				case DEFENDER: SetPlayerPos(ToAddID, ADefenderSpawn[Current][0] + random(6), ADefenderSpawn[Current][1] + random(6), ADefenderSpawn[Current][2]+0.5);
+				case ATTACKER: SetSpawnInfo(ToAddID, Player[ToAddID][Team], Skin[Player[playerid][Team]],AAttackerSpawn[Current][0] + random(6), AAttackerSpawn[Current][1] + random(6), AAttackerSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+				case DEFENDER: case ATTACKER: SetSpawnInfo(ToAddID, Player[ToAddID][Team], Skin[Player[playerid][Team]],ADefenderSpawn[Current][0] + random(6), ADefenderSpawn[Current][1] + random(6), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 			}
 		    SetPlayerInterior(ToAddID, AInterior[Current]);
 		}
 		SetPlayerVirtualWorld(ToAddID, 2);
 	}
+	
+	Player[ToAddID][IgnoreSpawn] = true;
+	SpawnPlayer(ToAddID);
+	
+	SetHP(ToAddID, SaveVariables[i][gHealth]);
+	SetAP(ToAddID, SaveVariables[i][gArmour]);
 
-	SetPlayerSkin(ToAddID, Skin[Player[ToAddID][Team]]);
 	SetPlayerTeam(ToAddID, Player[ToAddID][Team]);
 
 	ColorFix(ToAddID);

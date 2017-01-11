@@ -22,16 +22,42 @@ stock _H_TogglePlayerControllable(playerid, toggle)
 // Hook SetPlayerSkin to fix skin change when in vehicle
 stock _H_SetPlayerSkin(playerid, skinid)
 {
-	new	vehicleid = GetPlayerVehicleID(playerid);
-	if(vehicleid)
-	{
-		new seat = GetPlayerVehicleSeat(playerid);
-		ClearAnimations(playerid);
-		new ret = SetPlayerSkin(playerid, skinid);
-		PutPlayerInVehicle(playerid, vehicleid, seat);
-		return ret;
-	}
-	return SetPlayerSkin(playerid, skinid);
+    if(GetPlayerSkin(playerid) == skinid)return 1;
+	if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)return 1;
+
+    // Set spectators to re-spectate
+    if(Player[playerid][BeingSpeced])
+        SetTimerEx("ForceRespectate", 1000, false, "i", playerid);
+ 
+    // Store info before re-spawn
+    new Float:__Pos[4], __CurrWep;
+    __CurrWep = GetPlayerWeapon(playerid);
+    GetPlayerPos(playerid, __Pos[0], __Pos[1], __Pos[2]);
+    GetPlayerFacingAngle(playerid, __Pos[3]);
+   
+    // Fixes vehicle bug
+    if(IsPlayerInAnyVehicle(playerid))
+        SetPlayerPos(playerid, __Pos[0], __Pos[1], __Pos[2]+2);
+ 
+    new __Weapons[13][2];
+    for(new i = 0; i < 13; i++)
+        GetPlayerWeaponData(playerid, i, __Weapons[i][0], __Weapons[i][1]);
+ 
+    // Set spawn info and spawn player
+    SetSpawnInfo(playerid, GetPlayerTeam(playerid), skinid, __Pos[0], __Pos[1], __Pos[2]-0.4, __Pos[3], 0, 0, 0, 0, 0, 0);
+    Player[playerid][IgnoreSpawn] = true;
+    SpawnPlayer(playerid);
+ 
+    // Set info back after re-spawn
+    SetHP(playerid, Player[playerid][pHealth]);
+    SetAP(playerid, Player[playerid][pArmour]);
+    SetPlayerInterior(playerid, GetPlayerInterior(playerid));
+    SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(playerid));
+ 
+    for(new i = 0; i < 13; i ++)
+        GivePlayerWeapon(playerid, __Weapons[i][0], __Weapons[i][1]);
+    SetPlayerArmedWeapon(playerid, __CurrWep);
+	return 1;
 }
  
 #if defined _ALS_SetPlayerSkin

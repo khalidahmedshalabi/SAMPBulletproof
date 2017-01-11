@@ -395,7 +395,6 @@ public OnPlayerSpawn(playerid)
 
 		ColorFix(playerid); // Fixes player color based on their team.
 		RadarFix();
-		SetPlayerSkin(playerid, Skin[Player[playerid][Team]]);
 	}
 	// Fixes the x Vs y textdraws with current team player count
 	FixVsTextDraw();

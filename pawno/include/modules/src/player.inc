@@ -628,6 +628,39 @@ LoadPlayerVariables(playerid)
 
 	        Player[playerid][Team] = SaveVariables[i][pTeam];
 			Player[playerid][WasInTeam] = Player[playerid][Team];
+
+			Player[playerid][RoundKills] 	= 	SaveVariables[i][RKills];
+			Player[playerid][RoundDeaths] 	= 	SaveVariables[i][RDeaths];
+			Player[playerid][RoundDamage] 	= 	SaveVariables[i][RDamage];
+			Player[playerid][TotalKills] 	= 	SaveVariables[i][TKills];
+			Player[playerid][TotalDeaths] 	= 	SaveVariables[i][TDeaths];
+			Player[playerid][TotalDamage] 	= 	SaveVariables[i][TDamage];
+			Player[playerid][RoundPlayed] 	= 	SaveVariables[i][TPlayed];
+			Player[playerid][Accuracy]      =   SaveVariables[i][iAccuracy];
+		 	Player[playerid][TotalshotsHit]	=	SaveVariables[i][tshotsHit];
+		 	Player[playerid][TotalBulletsFired] = SaveVariables[i][tBulletsShot];		
+
+    	 	if(SaveVariables[i][WasCrashedInStart] == false) {
+			 	SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], SaveVariables[i][pCoords][0], SaveVariables[i][pCoords][1], SaveVariables[i][pCoords][2]+1, SaveVariables[i][pCoords][3], 0, 0, 0, 0, 0, 0);
+		
+			 	SetPlayerInterior(playerid, SaveVariables[i][pInterior]);
+			 	SetPlayerVirtualWorld(playerid, SaveVariables[i][pVWorld]);
+		 	} else if(Current != -1) {
+	    	 	if(GameType == BASE) {
+				 	switch(Player[playerid][Team]) {
+					 	case ATTACKER: SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], BAttackerSpawn[Current][0] + random(6), BAttackerSpawn[Current][1] + random(6), BAttackerSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+					 	case DEFENDER: SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], BDefenderSpawn[Current][0] + random(6), BDefenderSpawn[Current][1] + random(6), BDefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+		    	 	}
+		    	 	SetPlayerInterior(playerid, BInterior[Current]);
+			 	} else if(GameType == ARENA) {
+				 	switch(Player[playerid][Team]) {
+					 	case ATTACKER: SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]],AAttackerSpawn[Current][0] + random(6), AAttackerSpawn[Current][1] + random(6), AAttackerSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+					 	case DEFENDER: case ATTACKER: SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]],ADefenderSpawn[Current][0] + random(6), ADefenderSpawn[Current][1] + random(6), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+				 	}
+		    	 	SetPlayerInterior(playerid, AInterior[Current]);
+			 	}
+			 	SetPlayerVirtualWorld(playerid, 2);
+		 	}
 			
 			ShowTeamBarsForPlayer(playerid);
 			CreatePlayerTeamBar(playerid);
@@ -640,47 +673,7 @@ LoadPlayerVariables(playerid)
 			SetAP(playerid, SaveVariables[i][gArmour]);
 			UpdateTeamHP(Player[playerid][Team]);
 
-			Player[playerid][RoundKills] 	= 	SaveVariables[i][RKills];
-			Player[playerid][RoundDeaths] 	= 	SaveVariables[i][RDeaths];
-			Player[playerid][RoundDamage] 	= 	SaveVariables[i][RDamage];
-			Player[playerid][TotalKills] 	= 	SaveVariables[i][TKills];
-			Player[playerid][TotalDeaths] 	= 	SaveVariables[i][TDeaths];
-			Player[playerid][TotalDamage] 	= 	SaveVariables[i][TDamage];
-			Player[playerid][RoundPlayed] 	= 	SaveVariables[i][TPlayed];
-			Player[playerid][Accuracy]      =   SaveVariables[i][iAccuracy];
-		 	Player[playerid][TotalshotsHit]	=	SaveVariables[i][tshotsHit];
-		 	Player[playerid][TotalBulletsFired] = SaveVariables[i][tBulletsShot];
-
-            if(SaveVariables[i][WasCrashedInStart] == false)
-			{
-				SetPlayerPos(playerid, SaveVariables[i][pCoords][0], SaveVariables[i][pCoords][1], SaveVariables[i][pCoords][2]);
-				SetPlayerFacingAngle(playerid, SaveVariables[i][pCoords][3]);
-				SetPlayerInterior(playerid, SaveVariables[i][pInterior]);
-				SetPlayerVirtualWorld(playerid, SaveVariables[i][pVWorld]);
-			}
-			else if(Current != -1)
-			{
-			    if(GameType == BASE) {
-					switch(Player[playerid][Team]) {
-					    case ATTACKER: SetPlayerPos(playerid, BAttackerSpawn[Current][0] + random(6), BAttackerSpawn[Current][1] + random(6), BAttackerSpawn[Current][2]);
-						case DEFENDER: SetPlayerPos(playerid, BDefenderSpawn[Current][0] + random(6), BDefenderSpawn[Current][1] + random(6), BDefenderSpawn[Current][2]);
-				    }
-				    SetPlayerInterior(playerid, BInterior[Current]);
-				} else if(GameType == ARENA) {
-					switch(Player[playerid][Team]) {
-					    case ATTACKER: {
-							SetPlayerPos(playerid, AAttackerSpawn[Current][0] + random(6), AAttackerSpawn[Current][1] + random(6), AAttackerSpawn[Current][2]);
-						} case DEFENDER: {
-					 		SetPlayerPos(playerid, ADefenderSpawn[Current][0] + random(6), ADefenderSpawn[Current][1] + random(6), ADefenderSpawn[Current][2]);
-						}
-					}
-				    SetPlayerInterior(playerid, AInterior[Current]);
-				}
-				SetPlayerVirtualWorld(playerid, 2);
-			}
-
 			ColorFix(playerid);
-			SetPlayerSkin(playerid, Skin[Player[playerid][Team]]);
 			SetPlayerTeam(playerid, Player[playerid][Team]);
    			RadarFix();
 			SetCPForPlayer(playerid);
