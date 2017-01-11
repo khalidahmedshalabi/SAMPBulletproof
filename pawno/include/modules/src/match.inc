@@ -1624,6 +1624,7 @@ public OnRCStart()
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
 	TextDrawColor(timerCircleTD, 0x00000033);
+	TextDrawSetString(AttDef_RoundStats, "_");
 	TextDrawSetString(AttDef_RoundTimer, "_");
 	foreach(new i : Player)
 	{
@@ -1865,6 +1866,7 @@ public OnArenaStart(ArenaID)
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
 	TextDrawColor(timerCircleTD, 0x00000033);
+	TextDrawSetString(AttDef_RoundStats, "_");
 	TextDrawSetString(AttDef_RoundTimer, "_");
 	foreach(new i : Player)
 	{
@@ -2217,6 +2219,7 @@ public OnBaseStart(BaseID)
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
 	TextDrawColor(timerCircleTD, 0x00000033);
+	TextDrawSetString(AttDef_RoundStats, "_");
 	TextDrawSetString(AttDef_RoundTimer, "_");
 	foreach(new i : Player)
 	{

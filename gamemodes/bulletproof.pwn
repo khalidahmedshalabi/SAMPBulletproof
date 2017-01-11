@@ -486,6 +486,13 @@ public OnPlayerDeath(playerid, killerid, reason)
 	    return 1;
 	}
 	
+	// case: fell down
+	if(reason == 54)
+	{
+        ServerOnPlayerDeath(playerid, INVALID_PLAYER_ID, 54);
+        return 1;
+	}
+	
 	// case: suicide
 	if(reason == 255)
 	{
