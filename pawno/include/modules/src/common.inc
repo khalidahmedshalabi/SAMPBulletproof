@@ -394,8 +394,6 @@ ShowPlayerClassSelection(playerid)
 forward SpawnConnectedPlayer(playerid, team);
 public SpawnConnectedPlayer(playerid, team)
 {
-	Player[playerid][IgnoreSpawn] = true;
-	TogglePlayerSpectating(playerid, false);
 	switch(team)
 	{
 		case 0: // auto-assign
@@ -439,7 +437,7 @@ public SpawnConnectedPlayer(playerid, team)
 		}
 	}
 
-	SwitchTeamFix(playerid, false, false);
+	SwitchTeamFix(playerid, false, false, false);
 	SetPlayerWeather(playerid, Player[playerid][Weather]);
 	SetPlayerTime(playerid, Player[playerid][Time], 0);
 
@@ -511,8 +509,10 @@ public SpawnConnectedPlayer(playerid, team)
 		ShowMatchScoreBoard(playerid);
 	}
 	HideIntroTextDraws(playerid);
+	
 	Player[playerid][Spawned] = true;
-	SpawnPlayer(playerid);
+	SetSpawnInfo(playerid, playerid, Skin[Player[playerid][Team]], MainSpawn[0] + random(3), MainSpawn[1] + random(3), MainSpawn[2] + 2, 0, 0, 0, 0, 0, 0, 0);
+	TogglePlayerSpectating(playerid, false);
 	
 	HideAllTeamBarsForPlayer(playerid);
 
