@@ -19,7 +19,7 @@ stock _H_TogglePlayerControllable(playerid, toggle)
  
 #define TogglePlayerControllable _H_TogglePlayerControllable
 
-// Hook SetPlayerSkin to fix skin change when in vehicle
+// Hook SetPlayerSkin to fix crashes
 stock _H_SetPlayerSkin(playerid, skinid)
 {
     if(GetPlayerSkin(playerid) == skinid)return 1;

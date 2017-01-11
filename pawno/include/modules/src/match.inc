@@ -1464,7 +1464,7 @@ public OnPlayerInGameReplace(ToAddID, i, playerid) {
 		} else if(GameType == ARENA) {
 			switch(Player[ToAddID][Team]) {
 				case ATTACKER: SetSpawnInfo(ToAddID, Player[ToAddID][Team], Skin[Player[playerid][Team]],AAttackerSpawn[Current][0] + random(6), AAttackerSpawn[Current][1] + random(6), AAttackerSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
-				case DEFENDER: case ATTACKER: SetSpawnInfo(ToAddID, Player[ToAddID][Team], Skin[Player[playerid][Team]],ADefenderSpawn[Current][0] + random(6), ADefenderSpawn[Current][1] + random(6), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+				case DEFENDER: SetSpawnInfo(ToAddID, Player[ToAddID][Team], Skin[Player[playerid][Team]],ADefenderSpawn[Current][0] + random(6), ADefenderSpawn[Current][1] + random(6), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
 			}
 		    SetPlayerInterior(ToAddID, AInterior[Current]);
 		}
