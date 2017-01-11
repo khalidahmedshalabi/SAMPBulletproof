@@ -14,7 +14,7 @@
 // Functions
 ShowConfigDialog(playerid) {
 
-	new string[1700];
+	new string[1771];
 
 	string = "";
 
@@ -125,6 +125,16 @@ ShowConfigDialog(playerid) {
 		strcat(string, "\n{66FF66}Auto round starter");
 	else
 		strcat(string, "\n{FF6666}Auto round starter");
+		
+	if(RandomDeathMessages == true)
+		strcat(string, "\n{66FF66}Random Death Messages");
+	else
+		strcat(string, "\n{FF6666}Random Death Messages");
+		
+	if(SightseeingInClassSelection == true)
+		strcat(string, "\n{66FF66}Sightseeing In Class Selection");
+	else
+		strcat(string, "\n{FF6666}Sightseeing In Class Selection");
 
     ShowPlayerDialog(playerid, DIALOG_CONFIG, DIALOG_STYLE_LIST, ""COL_PRIM"Config Settings", string, "OK", "Cancel");
     return 1;
@@ -254,6 +264,14 @@ LoadConfig()
 
 	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // Game speed
     GAME_SPEED = strval(iString);
+    db_next_row(res);
+	
+	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // RandomDeathMessages
+    RandomDeathMessages = (strval(iString) == 1 ? true : false);
+    db_next_row(res);
+	
+	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // SightseeingInClassSelection
+    SightseeingInClassSelection = (strval(iString) == 1 ? true : false);
     db_next_row(res);
 
 	db_free_result(res);

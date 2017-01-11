@@ -131,5 +131,5 @@ AddToServersDatabase()
 
 FixGamemodeText()
 {
-	SetGameModeText(sprintf("%s v%.2f -dev-", GM_NAME, GM_VERSION));
+	SetGameModeText(sprintf("%s v%.2f", GM_NAME, GM_VERSION));
 }

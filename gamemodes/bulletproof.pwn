@@ -13,7 +13,7 @@
 #include <sampac> 			// THE MIGHTY NEW ANTICHEAT
 #include <mSelection>       // Selection with preview models feature library
 #include <gBugFix>			// Fix false vehicle entry as passenger (G (teleport/distance) bug)
-#include <md-sort>         // Sorts multi dimensional arrays
+#include <md-sort>          // Sorts multi dimensional arrays
 
 #define ROUND_NEVER_END 0   // Used for testing purposes only
 
@@ -130,13 +130,11 @@ public OnPlayerConnect(playerid)
 	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}database is not loaded. Make sure 'BulletproofDatabase.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE));
 	}
 	
-	/*
 	if(CorrectDatabase == false)
 	{
 	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}this server is not using the correct database. Visit %s for further help!", GM_WEBSITE));
 	}
-	*/
-	
+
 	// Check if players count exceeded the limit
 	if(Iter_Count(Player) == MAX_PLAYERS)
 	{
@@ -186,24 +184,76 @@ public OnPlayerRequestClass(playerid, classid)
 	SetPlayerTime(playerid, 12, 0);
 	SetPlayerInterior(playerid, MainInterior);
 	
-	switch(random(3))
+	if(!SightseeingInClassSelection)
 	{
-	    case 0:
+	    switch(random(3))
 	    {
-	        InterpolateCameraPos(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 25.0, MainSpawn[0] - 7.0, MainSpawn[1] + 7.0, MainSpawn[2] + 5.0, 15000, CAMERA_MOVE);
-			InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 27.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 7000, CAMERA_MOVE);
-	    }
-	    case 1:
-	    {
-	        InterpolateCameraPos(playerid, MainSpawn[0] + 5.0, MainSpawn[1] + 5.0, MainSpawn[2] + 2.0, MainSpawn[0] - 7.0, MainSpawn[1] + 7.0, MainSpawn[2] + 25.0, 15000, CAMERA_MOVE);
-			InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 10.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 7000, CAMERA_MOVE);
-	    }
-	    case 2:
-	    {
-	        InterpolateCameraPos(playerid, MainSpawn[0] + 10.0, MainSpawn[1] - 10.0, MainSpawn[2] + 10.0, MainSpawn[0] - 5.0, MainSpawn[1] + 5.0, MainSpawn[2] + 5.0, 15000, CAMERA_MOVE);
-			InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 5.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 10000, CAMERA_MOVE);
+	        case 0:
+	        {
+	            InterpolateCameraPos(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 25.0, MainSpawn[0] - 7.0, MainSpawn[1] + 7.0, MainSpawn[2] + 5.0, 15000, CAMERA_MOVE);
+			    InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 27.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 7000, CAMERA_MOVE);
+	        }
+	        case 1:
+	        {
+	            InterpolateCameraPos(playerid, MainSpawn[0] + 5.0, MainSpawn[1] + 5.0, MainSpawn[2] + 2.0, MainSpawn[0] - 7.0, MainSpawn[1] + 7.0, MainSpawn[2] + 25.0, 15000, CAMERA_MOVE);
+		    	InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 10.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 7000, CAMERA_MOVE);
+	        }
+	        case 2:
+	        {
+	            InterpolateCameraPos(playerid, MainSpawn[0] + 10.0, MainSpawn[1] - 10.0, MainSpawn[2] + 10.0, MainSpawn[0] - 5.0, MainSpawn[1] + 5.0, MainSpawn[2] + 5.0, 15000, CAMERA_MOVE);
+		    	InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 5.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 10000, CAMERA_MOVE);
+	        }
 	    }
 	}
+	else
+	{
+    	switch(random(7))
+	    {
+	        case 0:
+	        {
+	        	// LS Bridge
+	        	InterpolateCameraPos(playerid, 1711.2794, -1052.0945, 23.9063, 1661.6975, -1143.5657, 50.3321, 25000, CAMERA_MOVE);
+	        	InterpolateCameraLookAt(playerid, 1663.6829, -987.8585, 49.9360, 1626.4386, -1082.1777, 23.9063, 25000, CAMERA_MOVE);
+	        }
+	        case 1:
+	        {
+	            // Vinewood Sign
+	            InterpolateCameraPos(playerid, 1476.7277, -874.3438, 110.0, 1476.7277, -900.000, 70.0, 5000, CAMERA_MOVE);
+	            InterpolateCameraLookAt(playerid, 1415.2177, -807.9233, 200.0, 1415.2177, -807.9233, 85.0623, 5000, CAMERA_MOVE);
+	        }
+	        case 2:
+	        {
+                // Desert Mountains
+	            InterpolateCameraPos(playerid, -365.5211, 1938.2665, 86.0535, -228.2556, 1821.5653, 96.6716, 15000, CAMERA_MOVE);
+	            InterpolateCameraLookAt(playerid, -327.0362, 1943.1190, 112.4141, -206.0446, 1895.2479, 91.2241, 15000, CAMERA_MOVE);
+	        }
+	        case 3:
+	        {
+	        	// Streets of San Fierro
+	        	InterpolateCameraPos(playerid, -2078.7246, 731.2352, 69.4141, -1714.5399, 731.2352, 69.4141, 45000, CAMERA_MOVE);
+	        	InterpolateCameraLookAt(playerid, -1971.8036, 731.0178, 45.2969, -1607.8036, 731.0178, 45.2969, 45000, CAMERA_MOVE);
+	        }
+	        case 4:
+	        {
+	        	// LV Streets
+	        	InterpolateCameraPos(playerid, 2057.1357, 944.4031, 71.8247, 2057.1357, 1663.0248, 71.8247, 60000, CAMERA_MOVE);
+	        	InterpolateCameraLookAt(playerid, 2150.1357, 1158.3756, 10.9324, 2150.1357, 1877.3756, 10.9324, 60000, CAMERA_MOVE);
+	        }
+	        case 5:
+	        {
+	        	// SF Bridge
+	        	InterpolateCameraPos(playerid, -2630.2266, 1459.0537, 65.6484, -2596.2339, 2039.0321, 263.0035, 20000, CAMERA_MOVE);
+	        	InterpolateCameraLookAt(playerid, -2678.6890, 1589.8137, 129.3078, -2713.4839, 1757.8318, 98.4932, 20000, CAMERA_MOVE);
+	        }
+		    case 6:
+		    {
+	        	// LV Stadium
+	        	InterpolateCameraPos(playerid, 1328.3080, 2116.9485, 11.0156, 1287.4218, 2097.1223, 55.1216, 20000, CAMERA_MOVE);
+	    	    InterpolateCameraLookAt(playerid, 1334.9221, 2077.7285, 26.6737, 1381.2794, 2184.0823, 11.0234, 20000, CAMERA_MOVE);
+		    }
+	    }
+	}
+	
         
     #if defined _league_included
 	// League account login check
@@ -479,9 +529,54 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	}
 	else
 	{
-		PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%sKilled By: ~r~~h~%s", MAIN_TEXT_COLOUR, Player[killerid][Name]));
-		PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou Killed: ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
-		        
+		if(!RandomDeathMessages)
+		{
+		    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%sKilled By: ~r~~h~%s", MAIN_TEXT_COLOUR, Player[killerid][Name]));
+		    PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou Killed: ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+		}
+		else
+		{
+            switch(reason)
+		    {
+		        case WEAPON_KNIFE:
+		        {
+		            PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s knifed you", Player[killerid][Name], MAIN_TEXT_COLOUR));
+		            PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou knifed ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+		        }
+		        case WEAPON_GRENADE:
+		        {
+				    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s bombed you", Player[killerid][Name], MAIN_TEXT_COLOUR));
+		            PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou bombed ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+		        }
+		        default:
+			    {
+				    switch(random(4))
+				    {
+				        case 0:
+				        {
+						    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s raped you", Player[killerid][Name], MAIN_TEXT_COLOUR));
+						    PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou raped ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+					    }
+					    case 1:
+					    {
+						    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s owned you", Player[killerid][Name], MAIN_TEXT_COLOUR));
+						    PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou owned ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+					    }
+					    case 2:
+				        {
+        				    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s murdered you", Player[killerid][Name], MAIN_TEXT_COLOUR));
+					        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou murdered ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+					    }
+					    case 3:
+					    {
+						    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s sent you to cemetery", Player[killerid][Name], MAIN_TEXT_COLOUR));
+                            PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou sent ~r~~h~%s%s to cemetery", MAIN_TEXT_COLOUR, Player[playerid][Name], MAIN_TEXT_COLOUR));
+					    }
+				    }
+			    }
+		    }
+		}
+			    
         PlayerTextDrawShow(killerid, DeathText[killerid][0]);
         PlayerTextDrawShow(playerid, DeathText[playerid][1]);
 
@@ -2905,6 +3000,50 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						}
 					}
 					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'AutoRoundStarter'", (AutoRoundStarter == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
+				case 24:
+				{
+				    new iString[144];
+				    switch(RandomDeathMessages)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Random Death Messages{FFFFFF}.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							RandomDeathMessages = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Random Death Messages{FFFFFF}.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							RandomDeathMessages = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'RDeathMsg'", (RandomDeathMessages == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
+				case 25:
+				{
+				    new iString[144];
+				    switch(SightseeingInClassSelection)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Sightseeing In Class Selection{FFFFFF}.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							SightseeingInClassSelection = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Sightseeing In Class Selection{FFFFFF}.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							SightseeingInClassSelection = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'SightseeingInCS'", (SightseeingInClassSelection == false ? 0 : 1));
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
