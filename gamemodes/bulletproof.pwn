@@ -7310,6 +7310,9 @@ YCMD:rr(playerid, params[], help)
 		TextDrawHideForAll(PauseTD);
     RoundPaused = false;
     RoundUnpausing = false;
+    
+    GangZoneDestroy(CPZone);
+	GangZoneDestroy(ArenaZone);
 
 	new iString[128];
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has set the round to restart. Round restarting...", Player[playerid][Name]);
@@ -7978,6 +7981,9 @@ YCMD:end(playerid, params[], help)
 	#endif
 	if(RoundPaused == true)
 		TextDrawHideForAll(PauseTD);
+		
+    GangZoneDestroy(CPZone);
+	GangZoneDestroy(ArenaZone);
 
 	RoundPaused = false;
 	FallProtection = false;
