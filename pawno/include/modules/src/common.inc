@@ -511,13 +511,19 @@ public SpawnConnectedPlayer(playerid, team)
 	HideIntroTextDraws(playerid);
 	
 	Player[playerid][Spawned] = true;
-	SetSpawnInfo(playerid, playerid, Skin[Player[playerid][Team]], MainSpawn[0] + random(3), MainSpawn[1] + random(3), MainSpawn[2] + 2, 0, 0, 0, 0, 0, 0, 0);
-	TogglePlayerSpectating(playerid, false);
+	SpawnInLobby(playerid);
 	
 	HideAllTeamBarsForPlayer(playerid);
 
 	LoadPlayerVariables(playerid);
 	return 1;
+}
+
+SpawnInLobby(playerid)
+{
+    SetSpawnInfo(playerid, playerid, Skin[Player[playerid][Team]], MainSpawn[0] + random(3), MainSpawn[1] + random(3), MainSpawn[2] + 2, 0, 0, 0, 0, 0, 0, 0);
+	if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)TogglePlayerSpectating(playerid, false);
+	else SpawnPlayer(playerid);
 }
 
 ShowPlayerDeathMessage(killerid, playerid)
@@ -1969,17 +1975,18 @@ Float:GetDistanceBetweenPlayers(playerid, toplayerid)
 SpawnInDM(playerid, DMID)
 {
 	Player[playerid][InDM] = true;
-
+	
 	ResetPlayerWeapons(playerid); // Reset all player weapons
-	SetPlayerVirtualWorld(playerid, Player[playerid][VWorld]); // Put player in a different virtual world so that if you create a DM in your lobby and you join the DM, you won't be able to see other players in the lobby.
-	SetHP(playerid, 100);
-	SetAP(playerid, 100);
 
 	SetSpawnInfo(playerid, playerid, Skin[Player[playerid][Team]], DMSpawn[DMID][0]+random(2), DMSpawn[DMID][1]+random(2), DMSpawn[DMID][2], DMSpawn[DMID][3], DMWeapons[DMID][0], 9999, DMWeapons[DMID][1], 9999, DMWeapons[DMID][2], 9999);
 	SetPlayerInterior(playerid, DMInterior[DMID]);
 
 	Player[playerid][IgnoreSpawn] = true; //Make sure you ignore OnPlayerSpawn, else you will just spawn in lobby (because u are about to use SpawnPlayer).
 	SpawnPlayer(playerid); //Spawns players, in this case we have SetSpawnInfo (but still you need to make sure OnPlayerSpawn is ignored);
+	
+	SetPlayerVirtualWorld(playerid, Player[playerid][VWorld]); // Put player in a different virtual world so that if you create a DM in your lobby and you join the DM, you won't be able to see other players in the lobby.
+	SetHP(playerid, 100);
+	SetAP(playerid, 100);	
 	return 1;
 }
 
@@ -1990,8 +1997,7 @@ QuitDM(playerid)
 
     Player[playerid][InDM] = false;
     Player[playerid][DMReadd] = 0;
-    SpawnPlayer(playerid);
-
+    SpawnInLobby(playerid);
     return 1;
 }
 

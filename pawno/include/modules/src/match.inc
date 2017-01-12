@@ -2785,8 +2785,10 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 			}
 			Player[i][WasInCP] = false;
 			Player[i][ToAddInRound] = false;
+			
 			if(Player[i][Spectating] == true)
 				StopSpectate(i);
+				
 			Player[i][WasInBase] = false;
 			Player[i][WasInTeam] = NON;
 			Player[i][WeaponPicked] = 0;
@@ -2809,7 +2811,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 			if(Player[i][Playing] == true)
 			{
 				Player[i][Playing] = false;
-				SpawnPlayer(i);
+				SpawnInLobby(i);
 				PlayerTextDrawHide(i, DeathText[i][0]);
 				PlayerTextDrawHide(i, DeathText[i][1]);
 			}
@@ -2854,7 +2856,6 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	Current = -1;
 
 	GetPlayerHighestScores2(playerScores, names, 0, index-1);
-
 
 	new topkill, topkillID = -1,
 		Float: topDmg, topDmgID = -1,

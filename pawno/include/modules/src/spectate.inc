@@ -121,10 +121,8 @@ RememberSpectator(playerid)
 // Warning: can't be used in a loop over AllSpectators
 ForgetSpectator(playerid)
 {
-	printf("START:ForgetSpectator(%d)", playerid);
 	if(Iter_Contains(AllSpectators, playerid))
 		Iter_Remove(AllSpectators, playerid);
-	printf("END:ForgetSpectator(%d)", playerid);
 }
 
 // Update/fix the textdraw that shows who are spectating you
@@ -270,7 +268,6 @@ SpectatePlayer(playerid, specid)
 */
 StopSpectate(playerid, bool:remove_iterator = true)
 {
-	printf("START:StopSpectate(%d, %b)", playerid, remove_iterator);
 	if(!Player[playerid][Spectating])
 		return 0;
 
@@ -282,10 +279,8 @@ StopSpectate(playerid, bool:remove_iterator = true)
 	    Player[playerid][SpectatingRound] = -1;
 	    PlayerTextDrawSetString(playerid, TD_RoundSpec[playerid], "_");
 	    Player[playerid][Spectating] = false;
-		SetSpawnInfo(playerid, GetPlayerTeam(playerid), Skin[Player[playerid][Team]], MainSpawn[0]+random(5),MainSpawn[1]+random(5),MainSpawn[2]+2, MainSpawn[3], 0, 0, 0, 0, 0, 0);
+		SpawnInLobby(playerid);
 		SetPlayerInterior(playerid,MainInterior);
-		Player[playerid][IgnoreSpawn] = true;
-		SpawnPlayer(playerid);
 		return 1;
 	}
  	if(Player[playerid][BeingSpeced] == true)
@@ -348,9 +343,7 @@ StopSpectate(playerid, bool:remove_iterator = true)
 	if(Player[playerid][IgnoreSpawn] == false)
 	{
 		// This will be called if he was spectating normally, not /freecam mode
-		TogglePlayerSpectating(playerid, 0);
-		SetPlayerPos(playerid, MainSpawn[0]+random(5), MainSpawn[1]+random(5), MainSpawn[2]+2);
-		SetPlayerFacingAngle(playerid, MainSpawn[3]);
+		SpawnInLobby(playerid);
 	}
 	else
 	{
@@ -369,7 +362,6 @@ StopSpectate(playerid, bool:remove_iterator = true)
 		Iter_Remove(PlayerSpectators[specid], playerid); // State that this player is no longer a spectator of 'specid'
 		UpdatePlayerSpectators(specid);
 	}
-	printf("END:StopSpectate(%d, %b)", playerid, remove_iterator);
 	return 1;
 }
 

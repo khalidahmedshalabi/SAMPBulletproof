@@ -155,7 +155,7 @@ public OnPlayerConnect(playerid)
 	// Tell everyone that he's connected
 	new str[144];
     GetPlayerCountry(playerid, str, sizeof(str));
-	format(str, sizeof(str), "{FFFFFF}%s {757575}(ID: %d) has connected [{FFFFFF}%s{757575}]", Player[playerid][Name], playerid, str);
+	format(str, sizeof(str), "{FFFFFF}%s {CCCCCC}(ID: %d) has connected [{FFFFFF}%s{CCCCCC}]", Player[playerid][Name], playerid, str);
     SendClientMessageToAll(-1, str);
     
     // Print their hardware ID in the server logs if AC is loaded
@@ -353,25 +353,21 @@ public OnPlayerSpawn(playerid)
 	    Player[playerid][IgnoreSpawn] = false;
 	    return 1;
 	}
-	// If they're in a DM
-	if(Player[playerid][DMReadd] > 0)
-	{
-	    // Re-spawn them there
-	    SpawnInDM(playerid, Player[playerid][DMReadd]);
-	    return 1;
-	}
+	
 	// If they're selecting from gunmenu
     if(Player[playerid][OnGunmenu])
     {
         // Hide it!!!
         HidePlayerGunmenu(playerid);
     }
+    
 	// If the server sees this player frozen
     if(Player[playerid][IsFrozen])
     {
         // Tell the script he is not frozen anymore
 		Player[playerid][IsFrozen] = false;
 	}
+	
 	// If this player is just spawning regularly
 	if(Player[playerid][Playing] == false && Player[playerid][InDM] == false && Player[playerid][InDuel] == false)
  	{
@@ -387,8 +383,6 @@ public OnPlayerSpawn(playerid)
 	    SetPlayerScore(playerid, 0);
 
 		// Initialize player spawn camera and position
-		SetPlayerPos(playerid, MainSpawn[0] + random(3), MainSpawn[1] + random(3), MainSpawn[2] + 2);
-		SetPlayerFacingAngle(playerid, MainSpawn[3]);
 		SetPlayerInterior(playerid, MainInterior);
 		SetPlayerVirtualWorld(playerid, 0);
 		SetCameraBehindPlayer(playerid);
@@ -396,6 +390,7 @@ public OnPlayerSpawn(playerid)
 		ColorFix(playerid); // Fixes player color based on their team.
 		RadarFix();
 	}
+	
 	// Fixes the x Vs y textdraws with current team player count
 	FixVsTextDraw();
 	
@@ -425,23 +420,23 @@ public OnPlayerDisconnect(playerid, reason)
 		case 0:
 		{
 			if(Player[playerid][Playing] == false)
-				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has had a crash/timeout.", Player[playerid][Name]);
+				format(iString, sizeof(iString), "{FFFFFF}%s {CCCCCC}has had a crash/timeout.", Player[playerid][Name]);
 		 	else
-			 	format(iString, sizeof(iString), "{FFFFFF}%s {757575}has had a crash/timeout {FFFFFF}(HP %d | AP %d).", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
+			 	format(iString, sizeof(iString), "{FFFFFF}%s {CCCCCC}has had a crash/timeout {FFFFFF}(HP %d | AP %d).", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
 		}
 		case 1:
 		{
 			if(Player[playerid][Playing] == false)
-				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has quit the server.",Player[playerid][Name]);
+				format(iString, sizeof(iString), "{FFFFFF}%s {CCCCCC}has quit the server.",Player[playerid][Name]);
 			else
-				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has quit the server {FFFFFF}(HP %d | AP %d).", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
+				format(iString, sizeof(iString), "{FFFFFF}%s {CCCCCC}has quit the server {FFFFFF}(HP %d | AP %d).", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
 		}
 		case 2:
 		{
 		    if(Player[playerid][Playing] == false)
-				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has been kicked or banned.",Player[playerid][Name]);
+				format(iString, sizeof(iString), "{FFFFFF}%s {CCCCCC}has been kicked or banned.",Player[playerid][Name]);
 			else
-				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has been kicked or banned {FFFFFF}(HP %d | AP %d).",Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
+				format(iString, sizeof(iString), "{FFFFFF}%s {CCCCCC}has been kicked or banned {FFFFFF}(HP %d | AP %d).",Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
 		}
 	}
 	SendClientMessageToAll(-1,iString);
@@ -701,6 +696,14 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
             	SpectateAnyPlayer(i, true, true, playerid);
         }
     }
+    
+    // If they're selecting from gunmenu
+    if(Player[playerid][OnGunmenu])
+    {
+        // Hide it!!!
+        HidePlayerGunmenu(playerid);
+    }
+    
     // Reset player gunmenu selections
 	ResetPlayerGunmenu(playerid, false);
 	
@@ -713,9 +716,17 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	    
 	if(!Player[playerid][InDeathCamera])
 	{
-		OnPlayerSpawn(playerid);
-		Player[playerid][IgnoreSpawn] = false;
-		SpawnPlayer(playerid);
+  		// If they're in a DM
+		if(Player[playerid][DMReadd] > 0)
+		{
+	    	// Re-spawn them there
+	    	SpawnInDM(playerid, Player[playerid][DMReadd]);
+		}
+		else
+		{
+			// Spawn player in a lobby
+			SpawnInLobby(playerid);
+		}
 	}
 	return 1;
 }
