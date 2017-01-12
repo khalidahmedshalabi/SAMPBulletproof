@@ -1561,7 +1561,7 @@ RemovePlayerFromRound(playerid, bool:remove_iterator = true)
 	ResetPlayerGunmenu(playerid, false);
 	PlayerNoLeadTeam(playerid);
 
-	SpawnPlayerInLobby(playerid);
+	SpawnInLobby(playerid);
 	return 1;
 }
 
