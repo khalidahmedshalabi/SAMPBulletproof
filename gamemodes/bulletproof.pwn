@@ -8026,7 +8026,7 @@ YCMD:end(playerid, params[], help)
 		TogglePlayerControllable(i, 0);
 		RemovePlayerMapIcon(i, 59);
 
-		SpawnPlayer(i);
+		SpawnInLobby(i);
 
 		DisablePlayerCheckpoint(i);
 		SetPlayerScore(i, 0);

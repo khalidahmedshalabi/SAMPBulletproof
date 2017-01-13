@@ -1588,6 +1588,19 @@ ResetPlayerRoundVariables(playerid, bool:total = false)
 	}
 }
 
+ResetRoundVariablesInSlots()
+{
+    for(new i = 0; i < SAVE_SLOTS; i ++)
+	{
+	   	if(strlen(SaveVariables[i][pName]) >= 2) 
+		{
+	   	    SaveVariables[i][RKills]   	=  	0;
+			SaveVariables[i][RDeaths]  	= 	0;
+			SaveVariables[i][RDamage] 	= 	0;
+		}
+	}
+}
+
 forward ShowPlayingPlayersGunmenu();
 public ShowPlayingPlayersGunmenu()
 {
@@ -2055,6 +2068,8 @@ SpawnPlayersInArena()
 			UpdateRoundKillDmgTDmg(i);
 		}
 	}
+	ResetRoundVariablesInSlots();
+	
 	UpdateTeamCornerInfo();
 
 	RoundMints = ConfigRoundTime;
@@ -2478,6 +2493,8 @@ SpawnPlayersInBase()
 			UpdateRoundKillDmgTDmg(i);
 		}
 	}
+	ResetRoundVariablesInSlots();
+	
 	UpdateTeamCornerInfo();
 	
 	RoundMints = ConfigRoundTime;

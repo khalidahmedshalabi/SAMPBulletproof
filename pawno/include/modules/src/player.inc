@@ -519,7 +519,7 @@ ShouldPlayerBeReadded(playerid)
 {
 	for(new i = 0; i < SAVE_SLOTS; i ++)
 	{
-		if( strlen( SaveVariables[i][pName] ) > 2 && strcmp( SaveVariables[i][pName], Player[playerid][Name], true ) == 0 )
+		if( strlen( SaveVariables[i][pName] ) >= 2 && strcmp( SaveVariables[i][pName], Player[playerid][Name], true ) == 0 )
 		{
 			if(SaveVariables[i][RoundID] != Current || Current == -1 || SaveVariables[i][ToBeAdded] == false)
 			{
@@ -540,7 +540,7 @@ LoadPlayerVariables(playerid)
 
 	for(new i = 0; i < SAVE_SLOTS; i ++)
 	{
-		if( strlen( SaveVariables[i][pName] ) > 2 && strcmp( SaveVariables[i][pName], Player[playerid][Name], true ) == 0 )
+		if( strlen( SaveVariables[i][pName] ) >= 2 && strcmp( SaveVariables[i][pName], Player[playerid][Name], true ) == 0 )
 		{
 			if(SaveVariables[i][RoundID] != Current || Current == -1)
 			{
