@@ -9347,46 +9347,52 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		}
 		return 1;
 	}
-	if(Current != -1 && Player[playerid][Playing] == true)
+	if(Current != -1)
 	{
-	    if(PRESSED(131072) && AllowStartBase == true)
+		if(Player[playerid][Playing] == true)
 		{
-		    if(PlayerRequestBackup(playerid))
-		        return 1;
-		}
-	    // Lead team
-	    if(PRESSED(262144) && AllowStartBase == true)
-        {
-            if(GetPlayerVehicleID(playerid))
-                return 1;
-
-            if((GetTickCount() - Player[playerid][LastAskLeader]) < 5000)
-			{
-				SendErrorMessage(playerid,"Please wait.");
-				return 0;
-			}
-            new team = Player[playerid][Team];
-			if(TeamHasLeader[team] != true)
+	        if(PRESSED(131072) && AllowStartBase == true)
+		    {
+		        if(PlayerRequestBackup(playerid))
+		            return 1;
+		    }
+	        // Lead team
+	        if(PRESSED(262144) && AllowStartBase == true)
             {
-                PlayerLeadTeam(playerid, false, true);
-           	}
-           	else
-           	{
-           	    if(TeamLeader[team] == playerid) // off
-      	    	{
-                    PlayerNoLeadTeam(playerid);
-           	    }
+                if(GetPlayerVehicleID(playerid))
+                    return 1;
+
+                if((GetTickCount() - Player[playerid][LastAskLeader]) < 5000)
+			    {
+				    SendErrorMessage(playerid,"Please wait.");
+				    return 0;
+			    }
+                new team = Player[playerid][Team];
+			    if(TeamHasLeader[team] != true)
+                {
+                    PlayerLeadTeam(playerid, false, true);
+               	}
            	    else
-           	    	SendErrorMessage(playerid, "Your team already has a leader!");
-           	}
-           	Player[playerid][LastAskLeader] = GetTickCount();
-           	return 1;
-        }
+           	    {
+           	        if(TeamLeader[team] == playerid) // off
+      	    	    {
+                        PlayerNoLeadTeam(playerid);
+           	        }
+           	        else
+           	    	    SendErrorMessage(playerid, "Your team already has a leader!");
+           	    }
+           	    Player[playerid][LastAskLeader] = GetTickCount();
+           	    return 1;
+            }
+	    }
+	    
         // Pause/unpause or ask for pause/unpause
         if(PRESSED(65536))
         {
 			if(Player[playerid][Level] > 0)
 			{
+				if(!Player[playerid][Spectating] && Player[playerid][Playing] == false)return 1;
+				
 			    switch(RoundPaused)
 	            {
 	                case true:
@@ -9420,6 +9426,8 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			}
 			else
 			{
+				if(Player[playerid][Playing] == false)return 1;
+				
 			    switch(RoundPaused)
 	            {
 	                case true:
