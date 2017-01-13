@@ -66,7 +66,6 @@ HandleSpectatedPlayerDisconnect(playerid)
 	if(!Player[playerid][BeingSpeced])
 		return 0;
 
-	printf("HandleSpectatedPlayerDisconnect(%d)", playerid);
 	foreach(new i : AllSpectators)
 	{
 		if(Player[i][IsSpectatingID] == playerid)
@@ -477,9 +476,7 @@ public SpectateAnyPlayerT(playerid)
 forward RemoveSpectatorSafely(playerid);
 public RemoveSpectatorSafely(playerid)
 {
-	printf("START:RemoveSpectatorSafely(%d)", playerid);
 	Iter_Remove(AllSpectators, playerid);
-	printf("END:RemoveSpectatorSafely(%d)", playerid);
 	return 1;
 }
 
