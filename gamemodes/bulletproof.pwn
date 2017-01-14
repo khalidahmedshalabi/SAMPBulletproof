@@ -15,6 +15,7 @@
 #include <gBugFix>			// Fix false vehicle entry as passenger (G (teleport/distance) bug)
 #include <md-sort>          // Sorts multi dimensional arrays
 
+#define RELEASE_VERSION 1
 #define ROUND_NEVER_END 0   // Used for testing purposes only
 
 // YSI Libraries (updated)
