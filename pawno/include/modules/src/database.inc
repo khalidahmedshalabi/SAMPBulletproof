@@ -9,7 +9,7 @@ new bool:DatabaseSetToReload = false;
 forward ReloadDatabase();
 public ReloadDatabase()
 {
-    sqliteconnection = db_open("BulletproofDatabase.db");
+    sqliteconnection = db_open("AttDefDatabase.db");
     DatabaseSetToReload = false;
     SendClientMessageToAll(-1, ""COL_PRIM"SQLite database has been reloaded successfully.");
 	return 1;
@@ -28,10 +28,10 @@ SetDatabaseToReload(playerid = INVALID_PLAYER_ID)
 
 LoadDatabase()
 {
-	sqliteconnection = db_open("BulletproofDatabase.db");
+	sqliteconnection = db_open("AttDefDatabase.db");
 	if(sqliteconnection == DB:0)
 	{
-		printf("Warning: database is not loaded. Make sure 'BulletproofDatabase.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE);
+		printf("Warning: database is not loaded. Make sure 'AttDefDatabase.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE);
 		return 0;
 	}
 	//db_debug_openfiles();

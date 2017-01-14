@@ -128,7 +128,7 @@ public OnPlayerConnect(playerid)
 	// If there was a problem loading the database, warn them
 	if(sqliteconnection == DB:0)
 	{
-	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}database is not loaded. Make sure 'BulletproofDatabase.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE));
+	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}database is not loaded. Make sure 'AttDefDatabase.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE));
 	}
 	
 	if(CorrectDatabase == false)
@@ -4250,7 +4250,7 @@ YCMD:shop(playerid, params[], help)
 	else
 	    SendErrorMessage(playerid, "League shop is disabled in this server");
 	#else
-	SendErrorMessage(playerid, "This version/edit of Bulletproof gamemode does not support league features!");
+	SendErrorMessage(playerid, "This version/edit of AttDef gamemode does not support league features!");
 	#endif
 	return 1;
 }
@@ -4303,7 +4303,7 @@ YCMD:usebelt(playerid, params[], help)
 	    SendErrorMessage(playerid, "This is not a league match!");
 	}
 	#else
-	SendErrorMessage(playerid, "This version/edit of Bulletproof gamemode does not support league features!");
+	SendErrorMessage(playerid, "This version/edit of AttDef gamemode does not support league features!");
 	#endif
 	return 1;
 }
