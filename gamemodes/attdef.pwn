@@ -120,7 +120,13 @@ public OnPlayerConnect(playerid)
 	
 	// Sends welcome messages
 	SendClientMessage(playerid, -1, ""COL_PRIM"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	SendClientMessage(playerid, -1, sprintf("                    "COL_PRIM"Welcome to {FFFFFF}%s %.2f", GM_NAME, GM_VERSION));
+	
+	#if RELEASE_VERSION == 1
+	SendClientMessage(playerid, -1, sprintf("                    "COL_PRIM"Welcome to {FFFFFF}%s %.2f (r)", GM_NAME, GM_VERSION));
+	#else
+	SendClientMessage(playerid, -1, sprintf("                       "COL_PRIM"Welcome to {FFFFFF}%s %.2f", GM_NAME, GM_VERSION));
+	#endif
+
 	SendClientMessage(playerid, -1, "      "COL_PRIM"Stay updated with {FFFFFF}/updates "COL_PRIM"and {FFFFFF}/checkversion");
 	SendClientMessage(playerid, -1, "/help, /cmds, /acmds, /settings, /cmdhelp, /matchtips");
 	SendClientMessage(playerid, -1, ""COL_PRIM"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
