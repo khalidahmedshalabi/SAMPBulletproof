@@ -1901,9 +1901,6 @@ public OnArenaStart(ArenaID)
 	TextDrawSetString( centerTeamNames, "_");
 	TextDrawSetString( timerCenterTD, "_");
 
-	CPZone = GangZoneCreate(ACPSpawn[Current][0]-50, ACPSpawn[Current][1]-50, ACPSpawn[Current][0]+50, ACPSpawn[Current][1]+50);
-	GangZoneShowForAll(CPZone, 0xFF000044);
-
 	foreach(new i : Player)
 	{
 	    Player[i][LastVehicle] = -1;

@@ -4,9 +4,25 @@
 
 #include "modules\header\player.txt"
 
-// Add "Frozen" variable to this function
+// Add "Frozen" variable to this function and fix parachute bug
 stock _H_TogglePlayerControllable(playerid, toggle)
 {
+    if(!toggle)
+	{
+	    if(GetPlayerWeapon(playerid) == WEAPON_PARACHUTE)
+		{
+		    Player[playerid][HadParachuteBeforeFreeze] = true;
+		}
+	}
+	else
+	{
+	    if(Player[playerid][HadParachuteBeforeFreeze])
+		{
+		    GivePlayerWeapon(playerid,WEAPON_PARACHUTE,9999);
+		    Player[playerid][HadParachuteBeforeFreeze] = false;
+		}
+	}
+
 	Player[playerid][IsFrozen] = !bool:toggle;
 	return TogglePlayerControllable(playerid, toggle);
 }

@@ -108,6 +108,7 @@ new PlayerText:TD_RoundSpec[MAX_PLAYERS];
 new PlayerText:ArmourTextDraw[MAX_PLAYERS];
 new PlayerText:HPTextDraw_TD[MAX_PLAYERS];
 new PlayerText:BaseID_VS[MAX_PLAYERS];
+new PlayerText:Speedometer[MAX_PLAYERS];
 #if defined _league_included
 new PlayerText:PlayerLeagueStatsTD[MAX_PLAYERS];
 #endif

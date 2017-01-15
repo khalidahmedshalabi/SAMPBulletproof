@@ -197,6 +197,7 @@ InitPlayer(playerid)
 	Player[playerid][LeagueLogged] = false;
 	Player[playerid][InDeathCamera] = false;
 	Player[playerid][HasDeathQuote] = false;
+	Player[playerid][HadParachuteBeforeFreeze] = false;
 	
 	ResetPlayerMoney(playerid);
 	SetPlayerColor(playerid, 0xAAAAAAAA);

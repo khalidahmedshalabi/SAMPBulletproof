@@ -1,3 +1,4 @@
+
 #pragma dynamic 3500000
 
 #include <a_samp>
@@ -14,9 +15,6 @@
 #include <mSelection>       // Selection with preview models feature library
 #include <gBugFix>			// Fix false vehicle entry as passenger (G (teleport/distance) bug)
 #include <md-sort>          // Sorts multi dimensional arrays
-
-#define RELEASE_VERSION 1
-#define ROUND_NEVER_END 0   // Used for testing purposes only
 
 // YSI Libraries (updated)
 #define YSI_NO_MASTER
@@ -928,6 +926,18 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 	    }
     }
+	
+	// Speedometer stuff
+	if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_PASSENGER)
+	{
+	    PlayerTextDrawSetString(playerid,Speedometer[playerid],"_");
+		PlayerTextDrawShow(playerid,Speedometer[playerid]);
+	}
+	if(oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER)
+	{
+	    PlayerTextDrawHide(playerid,Speedometer[playerid]);
+	}
+	
 	return 1;
 }
 
@@ -6436,13 +6446,13 @@ YCMD:pm(playerid,params[], help)
 	
 	new str[144];
 	format(str, sizeof(str), "PM from %s (%d): %s", Player[playerid][Name], playerid, message);
-	SendClientMessage(recieverid, 0x90C3D4FF, str);
+	SendClientMessage(recieverid, 0xFFF000FF, str);
 	
 	SendClientMessage(recieverid, -1, ""COL_PRIM"Use {FFFFFF}/r [Message]"COL_PRIM" to reply quicker!");
 	Player[recieverid][LastMsgr] = playerid;
 
 	format(str, sizeof(str),"PM to %s (%d): %s", Player[recieverid][Name], recieverid, message);
-	SendClientMessage(playerid, 0x79A4B3FF, str);
+	SendClientMessage(playerid, 0xECDE00FF, str);
 
 	PlayerPlaySound(recieverid, 1054, 0, 0, 0);
 	return 1;
@@ -6468,10 +6478,10 @@ YCMD:r(playerid,params[], help)
 	
 	new str[144];
 	format(str, sizeof(str), "PM from %s (%d): %s", Player[playerid][Name], playerid, params);
-	SendClientMessage(replytoid, 0x90C3D4FF, str);
+	SendClientMessage(replytoid, 0xFFF000FF, str);
 
 	format(str, sizeof(str),"PM to %s (%d): %s", Player[replytoid][Name], replytoid, params);
-	SendClientMessage(playerid, 0x79A4B3FF, str);
+	SendClientMessage(playerid, 0xECDE00FF, str);
 
     Player[replytoid][LastMsgr] = playerid;
 
@@ -9633,6 +9643,16 @@ public OnScriptUpdate()
   			//PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS %s%d %sPing %s%d %sPacketLoss %s%.1f%%", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][FPS], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], GetPlayerPing(i), MAIN_TEXT_COLOUR, TDC[Player[i][Team]], NetStats_PacketLossPercent(i)));
   			PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS ~r~%d %sPing ~r~%d %sPacketLoss ~r~%.1f%%", MAIN_TEXT_COLOUR, Player[i][FPS], MAIN_TEXT_COLOUR, GetPlayerPing(i), MAIN_TEXT_COLOUR, NetStats_PacketLossPercent(i)));
             Update3DTextLabelText(Player[i][InfoLabel], -1, sprintf("%sPL: {FFFFFF}%.1f%%\n%sPing: {FFFFFF}%d\n%sFPS: {FFFFFF}%d", TextColor[Player[i][Team]], NetStats_PacketLossPercent(i), TextColor[Player[i][Team]], GetPlayerPing(i), TextColor[Player[i][Team]], Player[i][FPS]));
+		}
+		
+		// Update Speedometer
+		if(IsPlayerInAnyVehicle(i))
+		{
+		    new Float:vVelocity[3], Float:vSpeed, Float:vHealth;
+			GetVehicleHealth(GetPlayerVehicleID(i), vHealth);
+			GetVehicleVelocity(GetPlayerVehicleID(i), vVelocity[0], vVelocity[1], vVelocity[2]);
+			vSpeed = floatsqroot(((vVelocity[0]*vVelocity[0])+(vVelocity[1]*vVelocity[1]))+(vVelocity[2]*vVelocity[2]))*250.666667;
+			PlayerTextDrawSetString(i,Speedometer[i],sprintf("~w~Speed ~r~%.0f km/h~n~~w~Health ~r~%.0f",vSpeed,vHealth));
 		}
 	}
 	return 1;

@@ -38,6 +38,7 @@ enum PlayerVariables
 	bool:WeaponBinding,
 	bool:HasDeathQuote,
 	bool:PlayerMarkers,
+	bool:HadParachuteBeforeFreeze,
 	GunmenuModdingType,
 	GunmenuModdingIndex,
 	NetCheck,

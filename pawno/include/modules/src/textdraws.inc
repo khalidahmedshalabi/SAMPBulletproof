@@ -1029,6 +1029,14 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawSetProportional(playerid, DeathText[playerid][1], 1);
 	PlayerTextDrawSetShadow(playerid, DeathText[playerid][1], 0);
 	PlayerTextDrawAlignment(playerid, DeathText[playerid][1], 2);
+	
+	Speedometer[playerid] = CreatePlayerTextDraw(playerid,153.000000, 373.000000, "_");
+	PlayerTextDrawBackgroundColor(playerid,Speedometer[playerid], MAIN_BACKGROUND_COLOUR);
+	PlayerTextDrawFont(playerid,Speedometer[playerid], 1);
+	PlayerTextDrawLetterSize(playerid,Speedometer[playerid], 0.200000, 0.899999);
+	PlayerTextDrawColor(playerid,Speedometer[playerid], -1);
+	PlayerTextDrawSetOutline(playerid,Speedometer[playerid], 1);
+	PlayerTextDrawSetProportional(playerid,Speedometer[playerid], 1);
 
 	#if defined _league_included
 	CreatePlayerLeaguePointTextDraw(playerid);
