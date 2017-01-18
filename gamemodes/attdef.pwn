@@ -927,15 +927,15 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 	    }
     }
 	
-	// Speedometer stuff
+	// Vehicle Information stuff
 	if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_PASSENGER)
 	{
-	    PlayerTextDrawSetString(playerid,Speedometer[playerid],"_");
-		PlayerTextDrawShow(playerid,Speedometer[playerid]);
+	    PlayerTextDrawSetString(playerid,VInfo[playerid],"_");
+		PlayerTextDrawShow(playerid,VInfo[playerid]);
 	}
 	if(oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER)
 	{
-	    PlayerTextDrawHide(playerid,Speedometer[playerid]);
+	    PlayerTextDrawHide(playerid,VInfo[playerid]);
 	}
 	
 	return 1;
@@ -9640,19 +9640,17 @@ public OnScriptUpdate()
 		// Update net info textdraws
 		if(PlayerInterface[i][INTERFACE_NET])
 		{
-  			//PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS %s%d %sPing %s%d %sPacketLoss %s%.1f%%", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][FPS], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], GetPlayerPing(i), MAIN_TEXT_COLOUR, TDC[Player[i][Team]], NetStats_PacketLossPercent(i)));
   			PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS ~r~%d %sPing ~r~%d %sPacketLoss ~r~%.1f%%", MAIN_TEXT_COLOUR, Player[i][FPS], MAIN_TEXT_COLOUR, GetPlayerPing(i), MAIN_TEXT_COLOUR, NetStats_PacketLossPercent(i)));
             Update3DTextLabelText(Player[i][InfoLabel], -1, sprintf("%sPL: {FFFFFF}%.1f%%\n%sPing: {FFFFFF}%d\n%sFPS: {FFFFFF}%d", TextColor[Player[i][Team]], NetStats_PacketLossPercent(i), TextColor[Player[i][Team]], GetPlayerPing(i), TextColor[Player[i][Team]], Player[i][FPS]));
 		}
 		
-		// Update Speedometer
+		// Update Vehicle Information
 		if(IsPlayerInAnyVehicle(i))
 		{
-		    new Float:vVelocity[3], Float:vSpeed, Float:vHealth;
-			GetVehicleHealth(GetPlayerVehicleID(i), vHealth);
-			GetVehicleVelocity(GetPlayerVehicleID(i), vVelocity[0], vVelocity[1], vVelocity[2]);
-			vSpeed = floatsqroot(((vVelocity[0]*vVelocity[0])+(vVelocity[1]*vVelocity[1]))+(vVelocity[2]*vVelocity[2]))*250.666667;
-			PlayerTextDrawSetString(i,Speedometer[i],sprintf("~w~Speed ~r~%.0f km/h~n~~w~Health ~r~%.0f",vSpeed,vHealth));
+			new vID,Float:vHealth;
+			vID = GetPlayerVehicleID(i);
+			GetVehicleHealth(vID, vHealth);
+			PlayerTextDrawSetString(i,VInfo[i],sprintf("~w~%s~n~~w~Health ~r~%.0f",aVehicleNames[GetVehicleModel(vID)-400],vHealth));
 		}
 	}
 	return 1;

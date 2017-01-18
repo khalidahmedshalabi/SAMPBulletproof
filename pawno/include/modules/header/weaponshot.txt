@@ -36,7 +36,8 @@ new
 	Iterator:PlayersDamaged[MAX_PLAYERS]<MAX_PLAYERS>,		// This array holds the IDs of the players who this player put hits/damage on
 	Iterator:PlayersDamagedBy[MAX_PLAYERS]<MAX_PLAYERS>,	// This array holds the IDs of the players who put hits/damage on this player
 	Iterator:PlayerHasTVisualDmg<MAX_PLAYERS>,				// This array holds the IDs of the players who has a taken-damage textdraw shown for them
-	Iterator:PlayerHasGVisualDmg<MAX_PLAYERS>;				// This array holds the IDs of the players who has a given-damage textdraw shown for them
+	Iterator:PlayerHasGVisualDmg<MAX_PLAYERS>,				// This array holds the IDs of the players who has a given-damage textdraw shown for them
+	Iterator:PlayerHasDBubble<MAX_PLAYERS>;                 // This array holds the IDs of the players who has a damage label above their head
 
 new const Float:WEAPON_RANGES_ADD = 30.0;
 

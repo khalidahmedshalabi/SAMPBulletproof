@@ -534,7 +534,8 @@ InitPlayerVisualDamage(playerid)
 	Iter_Remove(PlayerHasGVisualDmg, playerid);
 	Iter_Remove(PlayerHasTVisualDmg, playerid);
 	VisualDamage[playerid][FriendlyDamageTimer] = -1;
-
+	
+    InitPlayerDamageBubble(playerid);
 }
 
 // This basically checks if a damage textdraw has been shown for a specific/pre-defined time, then hide it
@@ -601,18 +602,7 @@ CheckVisualDamageTextDraws()
 		}
 	}
 	
-    // Update Damage Bubble
-	foreach(new i : Player)
-	{
-	    if(Player[i][DamageBubbleTick] > 0)
-	    {
-	        Player[i][DamageBubbleTick] --;
-		
-		    // Hides damage bubble if tick is 0
-		    if(Player[i][DamageBubbleTick] == 0)
-		        Update3DTextLabelText(Player[i][DamageLabel], -1, " ");
-	    }
-	}
+    UpdateDamageBubbles();
 	return 1;
 }
 
@@ -712,7 +702,13 @@ ShowVisualDamageForSpectators(playerid, index, str[], damagetype, currenttick)
 	}
 }
 
-// Updates damage label above player's head.
+// Make sure player is not in a PlayerHasDBubble list.
+InitPlayerDamageBubble(playerid)
+{
+    Iter_Remove(PlayerHasDBubble,playerid);
+}
+
+// Creates and updates damage label above player's head.
 // Note: SetPlayerChatBubble doesn't work as it's line length is too small with color formatting.
 SetPlayerDamageBubble(playerid)
 {
@@ -749,8 +745,29 @@ SetPlayerDamageBubble(playerid)
 	for(new i=0; i < MAX_VISUAL_DAMAGES-linesUsed; i++)
 	    format(str,sizeof str,"\n%s",str);
 	
+	Iter_Add(PlayerHasDBubble, playerid);
 	Update3DTextLabelText(Player[playerid][DamageLabel], -1, str);
 	Player[playerid][DamageBubbleTick] = 3;
+}
+
+// Updates damage label time.
+UpdateDamageBubbles()
+{
+    // Update Damage Bubble
+	if(Iter_Count(PlayerHasDBubble) != 0)
+	{
+	    foreach(new i : PlayerHasDBubble)
+	    {
+	        Player[i][DamageBubbleTick] --;
+		
+		    // Hides damage bubble if tick is 0
+		    if(Player[i][DamageBubbleTick] <= 0)
+			{
+		        Update3DTextLabelText(Player[i][DamageLabel], -1, " ");
+				Iter_SafeRemove(PlayerHasDBubble, i, i);
+			}
+	    }
+	}
 }
 
 // This shows taken and given damage textdraws on damager/damaged player's screen
