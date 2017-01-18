@@ -216,13 +216,13 @@ public OnPlayerRequestClass(playerid, classid)
 	    {
 	        case 0:
 	        {
-	        	// LS Bridge
-	        	InterpolateCameraPos(playerid, 1711.2794, -1052.0945, 23.9063, 1661.6975, -1143.5657, 50.3321, 25000, CAMERA_MOVE);
-	        	InterpolateCameraLookAt(playerid, 1663.6829, -987.8585, 49.9360, 1626.4386, -1082.1777, 23.9063, 25000, CAMERA_MOVE);
+                // Vinewood Sign
+	            InterpolateCameraPos(playerid, 1334.0220, -783.3859, 87.6606, 1407.5430, -896.9464, 87.6606, 20000, CAMERA_MOVE);
+	            InterpolateCameraLookAt(playerid,1415.7408, -806.5591, 85.0399, 1415.7408, -806.5591, 85.0399, 20000, CAMERA_MOVE);
 	        }
 	        case 1:
 	        {
-	            // Vinewood Sign
+	            // Vinewood Sign 2
 	            InterpolateCameraPos(playerid, 1476.7277, -874.3438, 110.0, 1476.7277, -900.000, 70.0, 5000, CAMERA_MOVE);
 	            InterpolateCameraLookAt(playerid, 1415.2177, -807.9233, 200.0, 1415.2177, -807.9233, 85.0623, 5000, CAMERA_MOVE);
 	        }
@@ -240,9 +240,9 @@ public OnPlayerRequestClass(playerid, classid)
 	        }
 	        case 4:
 	        {
-	        	// LV Streets
-	        	InterpolateCameraPos(playerid, 2057.1357, 944.4031, 71.8247, 2057.1357, 1663.0248, 71.8247, 60000, CAMERA_MOVE);
-	        	InterpolateCameraLookAt(playerid, 2150.1357, 1158.3756, 10.9324, 2150.1357, 1877.3756, 10.9324, 60000, CAMERA_MOVE);
+            	// LS Beach
+	        	InterpolateCameraPos(playerid, 340.3344, -1801.2339, 10.6959, 207.3543, -1801.2339, 10.6959, 80000, CAMERA_MOVE);
+	        	InterpolateCameraLookAt(playerid, 289.9604, -1766.6553, 4.5469, 159.9604, -1766.6553, 4.5469, 80000, CAMERA_MOVE);
 	        }
 	        case 5:
 	        {
@@ -258,7 +258,6 @@ public OnPlayerRequestClass(playerid, classid)
 		    }
 	    }
 	}
-	
         
     #if defined _league_included
 	// League account login check
