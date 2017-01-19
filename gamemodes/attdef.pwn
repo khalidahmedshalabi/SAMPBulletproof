@@ -927,16 +927,18 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
     }
 	
 	// Vehicle Information stuff
-	if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_PASSENGER)
+	if(VehicleHealthTextdraw)
 	{
-	    PlayerTextDrawSetString(playerid,VInfo[playerid],"_");
-		PlayerTextDrawShow(playerid,VInfo[playerid]);
+	    if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_PASSENGER)
+	    {
+	        PlayerTextDrawSetString(playerid,VInfo[playerid],"_");
+		    PlayerTextDrawShow(playerid,VInfo[playerid]);
+	    }
+	    if(oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER)
+	    {
+	        PlayerTextDrawHide(playerid,VInfo[playerid]);
+    	}
 	}
-	if(oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER)
-	{
-	    PlayerTextDrawHide(playerid,VInfo[playerid]);
-	}
-	
 	return 1;
 }
 
@@ -3077,6 +3079,43 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						}
 					}
 					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'SightseeingInCS'", (SightseeingInClassSelection == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
+                case 26:
+				{
+				    new iString[144];
+				    switch(VehicleHealthTextdraw)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Vehicle Health Information{FFFFFF}.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							VehicleHealthTextdraw = true;
+							
+							foreach(new i : Player)
+							{
+								if(IsPlayerInAnyVehicle(i))
+								{
+									PlayerTextDrawSetString(i,VInfo[i],"_");
+		                        	PlayerTextDrawShow(i,VInfo[i]);
+								}
+							}
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Vehicle Health Information{FFFFFF}.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							VehicleHealthTextdraw = false;
+							
+							foreach(new i : Player)
+							{
+								if(IsPlayerInAnyVehicle(i))
+                                    PlayerTextDrawHide(i,VInfo[i]);
+							}
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'VehicleHealthTD'", (VehicleHealthTextdraw == false ? 0 : 1));
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
@@ -9644,7 +9683,7 @@ public OnScriptUpdate()
 		}
 		
 		// Update Vehicle Information
-		if(IsPlayerInAnyVehicle(i))
+		if(VehicleHealthTextdraw && IsPlayerInAnyVehicle(i))
 		{
 			new vID,Float:vHealth;
 			vID = GetPlayerVehicleID(i);

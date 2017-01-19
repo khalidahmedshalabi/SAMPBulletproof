@@ -1597,6 +1597,7 @@ ResetRoundVariablesInSlots()
 	   	    SaveVariables[i][RKills]   	=  	0;
 			SaveVariables[i][RDeaths]  	= 	0;
 			SaveVariables[i][RDamage] 	= 	0;
+			SaveVariables[i][sWasInBase] =  false;
 		}
 	}
 }

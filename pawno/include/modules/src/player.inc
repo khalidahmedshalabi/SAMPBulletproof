@@ -373,6 +373,7 @@ StorePlayerVariablesMin(playerid) {
 			SaveVariables[i][TDeaths]  	= 	Player[playerid][TotalDeaths];
 			SaveVariables[i][TDamage] 	= 	Player[playerid][TotalDamage];
 			SaveVariables[i][TPlayed]   =   Player[playerid][RoundPlayed];
+			SaveVariables[i][sWasInBase] =  Player[playerid][WasInBase];
 			
 			#if defined _league_included
 			PlayerShopSaves[i][SHOP_POINTS_DOUBLER] = PlayerShop[playerid][SHOP_POINTS_DOUBLER];
@@ -457,6 +458,7 @@ StorePlayerVariables(playerid) {
 			SaveVariables[i][TDeaths]  	= 	Player[playerid][TotalDeaths];
 			SaveVariables[i][TDamage] 	= 	Player[playerid][TotalDamage];
 			SaveVariables[i][TPlayed]   =   Player[playerid][RoundPlayed];
+			SaveVariables[i][sWasInBase] =  Player[playerid][WasInBase];
 			
 			#if defined _league_included
 			PlayerShopSaves[i][SHOP_POINTS_DOUBLER] = PlayerShop[playerid][SHOP_POINTS_DOUBLER];
@@ -592,8 +594,7 @@ LoadPlayerVariables(playerid)
 				Player[playerid][RoundKills]        =   SaveVariables[i][RKills];
 				Player[playerid][RoundDeaths]       =	SaveVariables[i][RDeaths];
 				Player[playerid][RoundDamage]       =	SaveVariables[i][RDamage];
-
-				Player[playerid][WasInBase]         =   true;
+				Player[playerid][WasInBase]         =   SaveVariables[i][sWasInBase];
 
 				#if defined _league_included
 				PlayerShop[playerid][SHOP_POINTS_DOUBLER] = PlayerShopSaves[i][SHOP_POINTS_DOUBLER];
@@ -795,6 +796,7 @@ ResetSaveVariables(index) {
     SaveVariables[index][TKills] = 0;
     SaveVariables[index][TDeaths] = 0;
     SaveVariables[index][TDamage] = 0;
+	SaveVariables[index][sWasInBase] = false;
     SaveVariables[index][RoundID] = -1;
     SaveVariables[index][WasCrashedInStart] = false;
     SaveVariables[index][ToBeAdded] = false;

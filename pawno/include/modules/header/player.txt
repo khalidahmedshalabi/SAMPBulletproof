@@ -149,6 +149,7 @@ enum save_vars
 	bool:ToBeAdded,
 	bool:CheckScore,
 	bool:PauseWait,
+	bool:sWasInBase,
 	pVehicleID,
 	pSeatID,
 	HadParachute,
