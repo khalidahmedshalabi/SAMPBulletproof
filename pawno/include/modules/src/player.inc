@@ -199,6 +199,8 @@ InitPlayer(playerid)
 	Player[playerid][HasDeathQuote] = false;
 	Player[playerid][HadParachuteBeforeFreeze] = false;
 	
+	Iter_Remove(PlayersInVehicles, playerid);
+	
 	ResetPlayerMoney(playerid);
 	SetPlayerColor(playerid, 0xAAAAAAAA);
 	RemoveUselessObjectsForPlayer(playerid);

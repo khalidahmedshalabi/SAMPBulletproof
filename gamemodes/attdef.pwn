@@ -925,20 +925,26 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 	    }
     }
-	
-	// Vehicle Information stuff
-	if(VehicleHealthTextdraw)
+
+	if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_PASSENGER)
 	{
-	    if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_PASSENGER)
-	    {
+		if(VehicleHealthTextdraw)
+		{
 	        PlayerTextDrawSetString(playerid,VInfo[playerid],"_");
 		    PlayerTextDrawShow(playerid,VInfo[playerid]);
-	    }
-	    if(oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER)
-	    {
-	        PlayerTextDrawHide(playerid,VInfo[playerid]);
-    	}
+		}
+		
+	    Iter_Add(PlayersInVehicles,playerid);
 	}
+	if(oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER)
+	{
+		if(VehicleHealthTextdraw)
+		{
+	        PlayerTextDrawHide(playerid,VInfo[playerid]);
+		}
+		
+	    Iter_Remove(PlayersInVehicles,playerid);
+    }
 	return 1;
 }
 
@@ -9684,9 +9690,12 @@ public OnScriptUpdate()
   			PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS ~r~%d %sPing ~r~%d %sPacketLoss ~r~%.1f%%", MAIN_TEXT_COLOUR, Player[i][FPS], MAIN_TEXT_COLOUR, GetPlayerPing(i), MAIN_TEXT_COLOUR, NetStats_PacketLossPercent(i)));
             Update3DTextLabelText(Player[i][InfoLabel], -1, sprintf("%sPL: {FFFFFF}%.1f%%\n%sPing: {FFFFFF}%d\n%sFPS: {FFFFFF}%d", TextColor[Player[i][Team]], NetStats_PacketLossPercent(i), TextColor[Player[i][Team]], GetPlayerPing(i), TextColor[Player[i][Team]], Player[i][FPS]));
 		}
-		
-		// Update Vehicle Information
-		if(VehicleHealthTextdraw && IsPlayerInAnyVehicle(i))
+	}
+	
+	// Update Vehicle Information
+	if(VehicleHealthTextdraw)
+	{
+		foreach(new i : PlayersInVehicles)
 		{
 			new vID,Float:vHealth;
 			vID = GetPlayerVehicleID(i);
