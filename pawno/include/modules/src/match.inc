@@ -31,6 +31,12 @@ hook OnPlayerDisconnect(playerid, reason)
 	}
 	else
 		StorePlayerVariablesMin(playerid);
+	
+	// Resets backup request (player can be not in the round anymore and timer was not completed either)
+	if(Player[playerid][AskingForHelp])
+	{
+		EndTeamBackupRequest(playerid,((Player[playerid][Team] == DEFENDER) ? DEFENDER_BACKUP_ICON : ATTACKER_BACKUP_ICON));
+	}
 
 	// Handle match
  	Iter_Remove(PlayersInRound, playerid);
@@ -1191,9 +1197,20 @@ ResetTeamLeaders()
 	return 1;
 }
 
+ResetBackupRequests()
+{
+    foreach(new i : Player)
+	{
+	    if(Player[i][AskingForHelp])
+		    EndTeamBackupRequest(i,((Player[i][Team] == DEFENDER) ? DEFENDER_BACKUP_ICON : ATTACKER_BACKUP_ICON));
+	}
+}
+
 forward EndTeamBackupRequest(playerid, iconid);
 public EndTeamBackupRequest(playerid, iconid)
 {
+    if(!Player[playerid][AskingForHelp])return 1;
+
 	new team = Player[playerid][Team];
 	TeamHelp[team] = false;
 	Player[playerid][AskingForHelp] = false;
@@ -2675,6 +2692,8 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 
     GangZoneDestroy(CPZone);
 	GangZoneDestroy(ArenaZone);
+	
+	ResetBackupRequests();
 
 	new iString[256], TopString[3][128];
 

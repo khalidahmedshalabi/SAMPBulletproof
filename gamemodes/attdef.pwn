@@ -7379,6 +7379,8 @@ YCMD:rr(playerid, params[], help)
     
     GangZoneDestroy(CPZone);
 	GangZoneDestroy(ArenaZone);
+	
+	ResetBackupRequests();
 
 	new iString[128];
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has set the round to restart. Round restarting...", Player[playerid][Name]);
@@ -8098,6 +8100,7 @@ YCMD:end(playerid, params[], help)
 	TextDrawHideForAll(EN_CheckPoint);
 
  	ResetGunmenuSelections();
+ 	ResetBackupRequests();
 
 	BaseStarted = false;
 	ArenaStarted = false;
