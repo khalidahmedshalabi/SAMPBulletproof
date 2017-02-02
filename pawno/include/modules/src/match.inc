@@ -240,11 +240,15 @@ UpdateTeamPlayerCount(teamid, bool:elimination_check, exception = -1)
 		{
 			format(str, sizeof str, "~w~%d__(%d)", PlayersAlive[ATTACKER], TeamHP[ATTACKER]);
 			TextDrawSetString(leftTeamData, str);
+			format(str, sizeof str, "~w~%d (%d)", PlayersAlive[ATTACKER], TeamHP[ATTACKER]);
+			TextDrawSetString(AttDef_ModernRoundStats[6], str);
 		}
 		case DEFENDER:
 		{
 			format(str, sizeof str, "~w~(%d)__%d", TeamHP[DEFENDER], PlayersAlive[DEFENDER]);
 			TextDrawSetString(rightTeamData, str);
+			format(str, sizeof str, "~w~(%d) %d", TeamHP[DEFENDER], PlayersAlive[DEFENDER]);
+			TextDrawSetString(AttDef_ModernRoundStats[7], str);
 		}
 	}
 
@@ -303,11 +307,15 @@ UpdateTeamHP(teamid, exception = -1)
 		{
 			format(str, sizeof str, "~w~%d__(%d)", PlayersAlive[ATTACKER], TeamHP[ATTACKER]);
 			TextDrawSetString(leftTeamData, str);
+			format(str, sizeof str, "~w~%d (%d)", PlayersAlive[ATTACKER], TeamHP[ATTACKER]);
+			TextDrawSetString(AttDef_ModernRoundStats[6], str);
 		}
 		case DEFENDER:
 		{
 			format(str, sizeof str, "~w~(%d)__%d", TeamHP[DEFENDER], PlayersAlive[DEFENDER]);
 			TextDrawSetString(rightTeamData, str);
+			format(str, sizeof str, "~w~(%d) %d", TeamHP[DEFENDER], PlayersAlive[DEFENDER]);
+			TextDrawSetString(AttDef_ModernRoundStats[7], str);
 		}
 	}
 
@@ -365,6 +373,7 @@ public GameLoopCallback()
 							format(str, sizeof(str),"~w~%d:%02d", RoundMints,	RoundSeconds);
 							TextDrawSetString(timerCenterTD , str);
 							TextDrawSetString(AttDef_RoundTimer , str);
+							TextDrawSetString(AttDef_ModernRoundStats[5] , str);
 						}
 						default:
 						{
@@ -373,6 +382,7 @@ public GameLoopCallback()
 							format(str, sizeof(str), "~w~%d:%02d / ~r~~h~%d", RoundMints,	RoundSeconds, CurrentCPTime );
 							TextDrawSetString(timerCenterTD , str);
 							TextDrawSetString(AttDef_RoundTimer , str);
+							TextDrawSetString(AttDef_ModernRoundStats[5] , str);
 
 							if(CurrentCPTime == 0)
 								return EndRound(0); // Attackers Win
@@ -459,6 +469,7 @@ public GameLoopCallback()
 								format(str, sizeof(str),"~w~%d:%02d", RoundMints,	RoundSeconds);
 								TextDrawSetString(timerCenterTD , str);
 								TextDrawSetString(AttDef_RoundTimer , str);
+								TextDrawSetString(AttDef_ModernRoundStats[5] , str);
 							}
 							default:
 							{
@@ -467,6 +478,7 @@ public GameLoopCallback()
 								format(str, sizeof(str), "~w~%d:%02d / %s%d", RoundMints,	RoundSeconds, TDC[TeamCapturingCP], CurrentCPTime );
 								TextDrawSetString(timerCenterTD , str);
 								TextDrawSetString(AttDef_RoundTimer , str);
+								TextDrawSetString(AttDef_ModernRoundStats[5] , str);
 
 								if(CurrentCPTime == 0)
 								{
@@ -1654,9 +1666,7 @@ public OnRCStart()
 	PlayersInCP = 0;
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
-	TextDrawColor(timerCircleTD, 0x00000033);
-	TextDrawSetString(AttDef_RoundStats, "_");
-	TextDrawSetString(AttDef_RoundTimer, "_");
+	ResetRoundTextDraws();
 	foreach(new i : Player)
 	{
 		if(!Player[i][Spawned])
@@ -1675,10 +1685,6 @@ public OnRCStart()
 
     new iString[32];
 	format(iString, sizeof(iString), "%sRC BF %s(~r~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
-	TextDrawSetString( leftTeamData, "_");
-	TextDrawSetString( rightTeamData, "_");
-	TextDrawSetString( centerTeamNames, "_");
-	TextDrawSetString( timerCenterTD, "_");
 
 	CPZone = GangZoneCreate(ACPSpawn[Current][0]-50, ACPSpawn[Current][1]-50, ACPSpawn[Current][0]+50, ACPSpawn[Current][1]+50);
 	GangZoneShowForAll(CPZone, 0xFF000044);
@@ -1896,9 +1902,7 @@ public OnArenaStart(ArenaID)
 	PlayersInCP = 0;
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
-	TextDrawColor(timerCircleTD, 0x00000033);
-	TextDrawSetString(AttDef_RoundStats, "_");
-	TextDrawSetString(AttDef_RoundTimer, "_");
+	ResetRoundTextDraws();
 	foreach(new i : Player)
 	{
 		if(!Player[i][Spawned])
@@ -1914,10 +1918,6 @@ public OnArenaStart(ArenaID)
 
     new iString[32];
 	format(iString, sizeof(iString), "%sArena %s(~r~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
-	TextDrawSetString( leftTeamData, "_");
-	TextDrawSetString( rightTeamData, "_");
-	TextDrawSetString( centerTeamNames, "_");
-	TextDrawSetString( timerCenterTD, "_");
 
 	foreach(new i : Player)
 	{
@@ -2248,9 +2248,7 @@ public OnBaseStart(BaseID)
 	PlayersInCP = 0;
  	ElapsedTime = 0;
 	CurrentCPTime = ConfigCPTime + 1;
-	TextDrawColor(timerCircleTD, 0x00000033);
-	TextDrawSetString(AttDef_RoundStats, "_");
-	TextDrawSetString(AttDef_RoundTimer, "_");
+	ResetRoundTextDraws();
 	foreach(new i : Player)
 	{
 		if(!Player[i][Spawned])
@@ -2266,11 +2264,6 @@ public OnBaseStart(BaseID)
 
     new iString[32];
 	format(iString, sizeof(iString), "%sBase %s(~r~%d%s)", MAIN_TEXT_COLOUR, MAIN_TEXT_COLOUR, Current, MAIN_TEXT_COLOUR);
-
-	TextDrawSetString( leftTeamData, "_");
-	TextDrawSetString( rightTeamData, "_");
-	TextDrawSetString( centerTeamNames, "_");
-	TextDrawSetString( timerCenterTD, "_");
 
 	ViewBaseCamPos[0] = BCPSpawn[Current][0];
 	ViewBaseCamPos[1] = BCPSpawn[Current][1];

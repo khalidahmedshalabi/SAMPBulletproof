@@ -68,6 +68,7 @@ new Text:rightTeamData;
 new Text:centerTeamNames;
 new Text:attackerNameTD, Text:defenderNameTD;
 new Text:AttDef_RoundStats, Text:AttDef_RoundTimer;
+new Text:AttDef_ModernRoundStats[8];
 
 // - Result Textdraws - added by Niko_boy // -
 

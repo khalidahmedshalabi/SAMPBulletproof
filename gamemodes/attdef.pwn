@@ -1538,7 +1538,7 @@ HandlePlayerDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		        case ATTACKER:
 				{
 				    new str[16];
-					format(str, sizeof(str), "~w~%s", Player[playerid][NameWithoutTag]);
+					format(str, sizeof(str), "~r~~h~%s", Player[playerid][NameWithoutTag]);
 					TextDrawSetString(AttHpLose, str);
 
 					TempDamage[ATTACKER] += rounded_amount;
@@ -1551,7 +1551,7 @@ HandlePlayerDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 				case DEFENDER:
 				{
 				    new str[16];
-					format(str, sizeof(str), "~w~%s", Player[playerid][NameWithoutTag]);
+					format(str, sizeof(str), "~b~~h~%s", Player[playerid][NameWithoutTag]);
 					TextDrawSetString(DefHpLose, str);
 
 				    TempDamage[DEFENDER] += rounded_amount;
@@ -3481,6 +3481,27 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		return 1;
 	}
+	if(dialogid == DIALOG_STYLE)
+	{
+		if(!response)return 1;
+		
+		HideRoundStats(playerid);
+		
+		Player[playerid][RoundTDStyle] = listitem;
+		db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Players` SET `RoundTDStyle`=%d WHERE `Name`='%q'", Player[playerid][RoundTDStyle], Player[playerid][Name])));
+		
+		switch(Player[playerid][RoundTDStyle])
+		{
+			case 0:SendClientMessage(playerid,-1,"You have switched round textdraws style to: Modern");
+			case 1:SendClientMessage(playerid,-1,"You have switched round textdraws style to: Bulletproof");
+			case 2:SendClientMessage(playerid,-1,"You have switched round textdraws style to: Simple");
+		}
+	
+	    if(Current != -1)
+	        ShowRoundStats(playerid);
+		return 1;
+	}
+	
 	#if defined _league_included
 	// League login dialog lock - so that players can't escape the league clan login check
 	if(Player[playerid][MustLeaguePass] == true)
@@ -3925,24 +3946,7 @@ YCMD:style(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "an option to switch the style of round textdraws on your screen");
 	    return 1;
 	}
-	HideRoundStats(playerid);
-	switch(Player[playerid][RoundTDStyle])
-	{
-	    case 0:
-		{
-		    db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Players` SET `RoundTDStyle`=1 WHERE `Name`='%q'", Player[playerid][Name])));
-		    Player[playerid][RoundTDStyle] = 1;
-		    SendClientMessage(playerid, -1, "Round textdraws style changed to new Bulletproof design.");
-		}
-		case 1:
-		{
-			db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Players` SET `RoundTDStyle`=0 WHERE `Name`='%q'", Player[playerid][Name])));
-		    Player[playerid][RoundTDStyle] = 0;
-		    SendClientMessage(playerid, -1, "Round textdraws style changed to old-school design.");
-		}
-	}
-	if(Current != -1)
-	    ShowRoundStats(playerid);
+    ShowPlayerDialog(playerid, DIALOG_STYLE, DIALOG_STYLE_LIST, "Select round textdraws style", "Modern\nBulletproof\nSimple (Good For FPS)", "Select", "Back");
 	return 1;
 }
 
