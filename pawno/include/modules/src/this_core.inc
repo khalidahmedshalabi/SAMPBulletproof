@@ -113,7 +113,7 @@ InitScriptSecondarySettings()
 AddToServersDatabase()
 {
 	#if defined HTTP_DEST_SERVERLIST
-	if(!strcmp(hostname, "Bulletproof Home Test Server", true) || !strcmp(hostname, "Bulletproof Home Test Server [ACv2 ENABLED]", true))
+	if(!strcmp(hostname, "Encore Home Test Server", true) || !strcmp(hostname, "Encore Home Test Server [ACv2 ENABLED]", true))
 		return;
 
 	new ServerIP[30];
@@ -131,9 +131,5 @@ AddToServersDatabase()
 
 FixGamemodeText()
 {
-    #if RELEASE_VERSION == 1
-	SetGameModeText(sprintf("%s v%.2f (r)", GM_NAME, GM_VERSION));
-	#else
 	SetGameModeText(sprintf("%s v%.2f", GM_NAME, GM_VERSION));
-	#endif
 }

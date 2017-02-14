@@ -118,13 +118,7 @@ public OnPlayerConnect(playerid)
 	
 	// Sends welcome messages
 	SendClientMessage(playerid, -1, ""COL_PRIM"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	
-	#if RELEASE_VERSION == 1
-	SendClientMessage(playerid, -1, sprintf("                    "COL_PRIM"Welcome to {FFFFFF}%s %.2f (r)", GM_NAME, GM_VERSION));
-	#else
 	SendClientMessage(playerid, -1, sprintf("                       "COL_PRIM"Welcome to {FFFFFF}%s %.2f", GM_NAME, GM_VERSION));
-	#endif
-
 	SendClientMessage(playerid, -1, "      "COL_PRIM"Stay updated with {FFFFFF}/updates "COL_PRIM"and {FFFFFF}/checkversion");
 	SendClientMessage(playerid, -1, "/help, /cmds, /acmds, /settings, /cmdhelp, /matchtips");
 	SendClientMessage(playerid, -1, ""COL_PRIM"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -132,7 +126,7 @@ public OnPlayerConnect(playerid)
 	// If there was a problem loading the database, warn them
 	if(sqliteconnection == DB:0)
 	{
-	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}database is not loaded. Make sure 'AttDefDatabase.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE));
+	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}database is not loaded. Make sure 'EncoreDatabase.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE));
 	}
 	
 	if(CorrectDatabase == false)
@@ -3917,7 +3911,7 @@ YCMD:acgetinfo(playerid, params[], help)
 			format(str, sizeof(str), "HardwareID: %s", hwid);
 			SendClientMessage(playerid, -1, str);
 
-			format(str, sizeof(str), "GetPlayerCBug: %d, GetPlayerLiteFoot: %d, GetPlayerSwitchReload: %d", GetPlayerCrouchBug(targetid), GetPlayerLiteFoot(targetid), GetPlayerSwitchReload(targetid));
+			format(str, sizeof(str), "GetPlayerCBug: %d, GetPlayerSprintLimit: %d, GetPlayerSwitchReload: %d", GetPlayerCrouchBug(targetid), GetPlayerSprintLimit(targetid), GetPlayerSwitchReload(targetid));
 			SendClientMessage(playerid, -1, str);
 
 			format(str, sizeof(str), "GetPlayerFPSLimit: %d", GetPlayerFPSLimit(targetid));
@@ -4312,7 +4306,7 @@ YCMD:shop(playerid, params[], help)
 	else
 	    SendErrorMessage(playerid, "League shop is disabled in this server");
 	#else
-	SendErrorMessage(playerid, "This version/edit of AttDef gamemode does not support league features!");
+	SendErrorMessage(playerid, "This version/edit of Encore gamemode does not support league features!");
 	#endif
 	return 1;
 }
@@ -4365,7 +4359,7 @@ YCMD:usebelt(playerid, params[], help)
 	    SendErrorMessage(playerid, "This is not a league match!");
 	}
 	#else
-	SendErrorMessage(playerid, "This version/edit of AttDef gamemode does not support league features!");
+	SendErrorMessage(playerid, "This version/edit of Encore gamemode does not support league features!");
 	#endif
 	return 1;
 }
