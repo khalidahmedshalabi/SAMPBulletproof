@@ -14,6 +14,8 @@ native ac_gateway_param3_str(func[], param1, param2[], param3) = GetGravity;
 
 // PURPOSE: Check if the player is using samp AC and return the result
 // REQUIRES: NULL
+// NOTES: This function might return incorrect values when called at OnPlayerConnect in filterscripts. 
+// NOTES: For a workaround, see OnPlayerConnect in sample scripts.
 //
 // Params:
 // playerid - Player to check
@@ -119,25 +121,6 @@ native ac_gateway_param3_str(func[], param1, param2[], param3) = GetGravity;
 // Returns: bool - True if switch reload is enabled (default)
 #define GetPlayerSwitchReload(%0) ac_gateway_param1("GetPlayerSwitchReload", %0)
 
-// PURPOSE: Toggle the players ability to use lite foot.
-// REQUIRES: The player is using AC.
-//
-// Params:
-// playerid         - Player to change
-// bool:toggle      - true to enable litefoot, false to disable
-//
-// Returns: True if the action was sent to the client.
-#define TogglePlayerLiteFoot(%0) ac_gateway_param2("TogglePlayerLiteFoot", %0)
-
-// PURPOSE: Get the players ability to use lite foot.
-// REQUIRES: Nothing
-//
-// Params:
-// playerid         - Player to check
-//
-// Returns: bool - true if litefoot is enabled for this player (default: false)
-#define GetPlayerLiteFoot(%0) ac_gateway_param1("GetPlayerLiteFoot", %0)
-
 // PURPOSE: Toggle the players unlimited sprint.
 // REQUIRES: The player is using AC.
 // NOTES: Calling this function to true, and then back to false does NOT replenish sprint. Only SpawnPlayer will replenish sprint.
@@ -177,6 +160,28 @@ native ac_gateway_param3_str(func[], param1, param2[], param3) = GetGravity;
 // Returns: bool - True if macro limits are enabled, else false.
 #define GetPlayerMacroLimits(%0) ac_gateway_param1("GetPlayerMacroLimits", %0)
 
+// PURPOSE: Set a player's sprint speed limit.
+// REQUIRES: The player is using AC.
+// NOTES: This will have effect only if macro limits option is enabled (See TogglePlayerMacroLimits and GetPlayerMacroLimits)
+// NOTES: (speed = 85) is a good sprint speed limit.
+// NOTES: If (speed = 0), default GTA speed limit will be used.
+//
+// Params:
+// playerid	- Player to set new sprint speed limit
+// speed	- the new sprint speed limit
+//
+// Returns: int - 1 if action was sent to the client.
+#define SetPlayerSprintLimit(%0) ac_gateway_param2("SetPlayerSprintLimit", %0)
+
+// PURPOSE: Get a player's sprint speed limit.
+// REQUIRES: The player is using AC.
+//
+// Params:
+// playerid	- Player to get sprint speed limit
+//
+// Returns: int - Player's sprint speed limit.
+#define GetPlayerSprintLimit(%0) ac_gateway_param1("GetPlayerSprintLimit", %0)
+
 // PURPOSE: Toggle the player's ability to sprint on all surfaces.
 // REQUIRES: The player is using AC.
 //
@@ -215,7 +220,25 @@ native ac_gateway_param3_str(func[], param1, param2[], param3) = GetGravity;
 // Returns: bool - True if vehicle blips are enabled.
 #define GetPlayerVehicleBlips(%0) ac_gateway_param1("GetPlayerVehicleBlips", %0)
 
-// PURPOSE: Check if the AC is enabled via /actoggle 
+// PURPOSE: Check if the player is banned on Anti-Cheat or not.
+// REQUIRES: The player is using AC.
+//
+// Params:
+// playerid         - Player to check
+//
+// Returns: bool - True if player is banned.
+#define AC_IsPlayerBanned(%0) ac_gateway_param1("AC_IsPlayerBanned", %0)
+
+// PURPOSE: Get player's ban status on Anti-Cheat.
+// REQUIRES: The player is using AC.
+//
+// Params:
+// playerid         - Player to check
+//
+// Returns: (-1) = unknown ban status, 0 = not banned, 1 = banned
+#define AC_GetPlayerBanStatus(%0) ac_gateway_param1("AC_GetPlayerBanStatus", %0)
+
+// PURPOSE: Check if the AC is enabled via /actoggle
 // REQUIRES: Nothing
 //
 // Params: Nothing
@@ -251,7 +274,16 @@ forward AC_OnMD5Calculated(playerid, address, size, md5[]);
 // bool:isCheat   - true if this file is on the AC blacklist.
 //
 // Returns: irrelevant
-forward AC_OnFileExecuted(playerid, module[], md5[], bool:isCheat);
+forward AC_OnFileExecuted(playerid, module[], md5[]);
+
+// PURPOSE: Callback for when a client is trying to do packet tampering.
+// REQUIRES: The player is using AC.
+//
+// Params:
+// playerid     	- Player whom a new file was executed
+//
+// Returns: irrelevant
+forward AC_OnPacketTampering(playerid);
 
 // PURPOSE: Callback for when the AC has detected there is a file inside gta3.img that is modifed that is also on the list of bad gta3.img files. (Files that can't be modified in gta3.img)
 // REQUIRES: The player is using AC.
@@ -298,7 +330,7 @@ forward AC_OnPlayerPause(playerid, type, bool:pause);
 // playerid         - Player who just took a screenshot
 //
 // Returns: irrelevant
-forward AC_OnScreenshotTaken(playerid); 
+forward AC_OnScreenshotTaken(playerid);
 
 // PURPOSE: Callback for when a player's hardware ID has been initially calculated.
 // REQUIRES: The player is using AC.
@@ -310,7 +342,18 @@ forward AC_OnScreenshotTaken(playerid);
 // len				- The length of the hardware ID.
 //
 // Returns: irrelevant
-forward AC_OnHardwareIDCalculated(playerid, hwid[], len = sizeof(hwid));
+forward AC_OnHardwareIDCalculated(playerid, hwid[], len);
+
+// PURPOSE: Callback for when a player's ban status is retrieved.
+// REQUIRES: The player is using AC.
+// NOTES: This callback might never get called.
+//
+// Params:
+// playerid         - Player who just had their hardware id calculated.
+// status           - (-1) = unknown ban status, 0 = not banned, 1 = banned 
+//
+// Returns: irrelevant
+forward AC_OnBanStatusRetrieved(playerid, status);
 
 stock TogglePlayerCrouchBug(playerid, bool:toggle)
 {
