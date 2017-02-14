@@ -13,10 +13,10 @@ SetTeamDefaultColors()
 	TextColor[REFEREE] 		= 	"{FFFF88}";
 
 	TDC[NON] 				= 	"~p~";
-	TDC[ATTACKER] 			= 	"~r~~h~";
-	TDC[ATTACKER_SUB] 		= 	"~r~~h~~h~";
-	TDC[DEFENDER] 			= 	"~b~~h~~h~";
-	TDC[DEFENDER_SUB] 		= 	"~b~~h~~h~~h~";
+	TDC[ATTACKER] 			= 	"~r~";
+	TDC[ATTACKER_SUB] 		= 	"~r~~h~";
+	TDC[DEFENDER] 			= 	"~b~";
+	TDC[DEFENDER_SUB] 		= 	"~b~~h~";
 	TDC[REFEREE]			= 	"~y~~h~";
 	return 1;
 }

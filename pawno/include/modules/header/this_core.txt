@@ -2,11 +2,12 @@
 		Gamemode core
 */
 
-new	const Float:GM_VERSION		= 		0.30;
-#define 		GM_NAME				"Bulletproof"
+new	const Float:GM_VERSION		= 		1.0;
+#define 		GM_NAME				"Att-Def"
 new 			GM_WEBSITE[50]	=	"www.bulletproof.ml";
 
 #define SAFE_GAMETEXT_AUTO_CHECK	0 	// When enabled, most of textdraw and gametext functions are hooked to automatically reject unsafe use of tildes.
+#define RELEASE_VERSION 1 // Small indicator (r) that shows wether version is realeased or is still under development
 
 // Limits
 #define MAX_TEAMS 			6

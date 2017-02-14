@@ -27,8 +27,8 @@ ResetDuellers(dueller1, dueller2, bool:respawn = true)
 	// Teams
 	Player[dueller1][Team] = Player[dueller1][TeamBeforeDuel];
 	Player[dueller2][Team] = Player[dueller2][TeamBeforeDuel];
-    SwitchTeamFix(dueller1, false);
-    SwitchTeamFix(dueller2, false);
+    SwitchTeamFix(dueller1, false, false);
+    SwitchTeamFix(dueller2, false, false);
 	// world bounds
 	ResetPlayerWorldBounds(dueller1);
 	ResetPlayerWorldBounds(dueller2);
@@ -45,8 +45,8 @@ ResetDuellers(dueller1, dueller2, bool:respawn = true)
 	if(respawn)
 	{
 		// spawn
-		SpawnPlayer(dueller1);
-		SpawnPlayer(dueller2);
+		SpawnInLobby(dueller1);
+		SpawnInLobby(dueller2);
 	}
 }
 
@@ -144,8 +144,6 @@ StartDuel(dueller1, dueller2, weapon1, weapon2, Float:centerx, Float:centery, ar
 	SetAP(dueller2, 100);
 	GameTextForPlayer(dueller1, "~r~~h~rape!!!", 3000, 6);
 	GameTextForPlayer(dueller2, "~r~~h~rape!!!", 3000, 6);
-	Player[dueller1][IgnoreSpawn] = true;
-	Player[dueller2][IgnoreSpawn] = true;
 	SetPlayerColor(dueller1, 0xFAB18488);
 	SetPlayerColor(dueller2, 0xFAB18488);
 	SetPlayerSkin(dueller1, Skin[Player[dueller1][Team]]);
@@ -237,6 +235,6 @@ ProcessDuellerDeath(playerid, killerid, reason)
 	Player[playerid][InDuel] = false;
 	Player[killerid][InDuel] = false;
 	ResetDuellers(playerid, killerid, false);
-	SpawnPlayer(killerid);
+	SpawnInLobby(killerid);
 	UpdateDuellersStats(killerid, playerid);
 }

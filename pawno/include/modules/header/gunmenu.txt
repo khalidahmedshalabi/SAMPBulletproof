@@ -14,7 +14,7 @@
 #define GUNMENU_OBJECT_Z_MOVE_SPEED					(GUNMENU_OBJECT_Z_CHANGES / 3.0)
 
 #define GUNMENU_LIMIT_TEXTDRAW_SIZE					(MAX_GUNMENU_GUNS * 50) 			// Each gun needs 50 characters in the textdraw
-#define GUNMENU_LIMIT_DIALOG_SIZE					(45 * MAX_GUNMENU_GUNS)				// Each gun needs 45 characters
+#define GUNMENU_LIMIT_DIALOG_SIZE					(70 * MAX_GUNMENU_GUNS)				// Each gun needs 70 characters
 
 // Gunmenu styles
 #define GUNMENU_STYLE_DIALOG		0

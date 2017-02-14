@@ -1,3 +1,4 @@
+
 #pragma dynamic 3500000
 
 #include <a_samp>
@@ -13,6 +14,7 @@
 #include <sampac> 			// THE MIGHTY NEW ANTICHEAT
 #include <mSelection>       // Selection with preview models feature library
 #include <gBugFix>			// Fix false vehicle entry as passenger (G (teleport/distance) bug)
+#include <md-sort>          // Sorts multi dimensional arrays
 
 // YSI Libraries (updated)
 #define YSI_NO_MASTER
@@ -68,6 +70,7 @@ native IsValidVehicle(vehicleid);
 #include "modules\src\ac_addons.inc"
 #include "modules\src\vote.inc"
 #include "modules\src\teamhpbars.inc"
+#include "modules\src\teaminfotd.inc"
 
 main()
 {}
@@ -108,15 +111,35 @@ public OnPlayerConnect(playerid)
   		SetTimerEx("OnPlayerRequestClass", 1050, false, "ii", playerid, 0);
 		return 0; 
 	}
+	
+	// Cleans chat
+	for(new i=0; i < 20; i++)
+		SendClientMessage(playerid, -1, " ");
+	
+	// Sends welcome messages
+	SendClientMessage(playerid, -1, ""COL_PRIM"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	
+	#if RELEASE_VERSION == 1
+	SendClientMessage(playerid, -1, sprintf("                    "COL_PRIM"Welcome to {FFFFFF}%s %.2f (r)", GM_NAME, GM_VERSION));
+	#else
+	SendClientMessage(playerid, -1, sprintf("                       "COL_PRIM"Welcome to {FFFFFF}%s %.2f", GM_NAME, GM_VERSION));
+	#endif
+
+	SendClientMessage(playerid, -1, "      "COL_PRIM"Stay updated with {FFFFFF}/updates "COL_PRIM"and {FFFFFF}/checkversion");
+	SendClientMessage(playerid, -1, "/help, /cmds, /acmds, /settings, /cmdhelp, /matchtips");
+	SendClientMessage(playerid, -1, ""COL_PRIM"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	
 	// If there was a problem loading the database, warn them
 	if(sqliteconnection == DB:0)
 	{
-	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}database is not loaded. Make sure 'BulletproofDatabase.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE));
+	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}database is not loaded. Make sure 'AttDefDatabase.db' file is inside the '/scriptfiles' directory and restart. Visit %s for further help!", GM_WEBSITE));
 	}
+	
 	if(CorrectDatabase == false)
 	{
 	    SendClientMessage(playerid, -1, sprintf("{CC0000}Warning: {FFFFFF}this server is not using the correct database. Visit %s for further help!", GM_WEBSITE));
 	}
+
 	// Check if players count exceeded the limit
 	if(Iter_Count(Player) == MAX_PLAYERS)
 	{
@@ -137,7 +160,7 @@ public OnPlayerConnect(playerid)
 	// Tell everyone that he's connected
 	new str[144];
     GetPlayerCountry(playerid, str, sizeof(str));
-	format(str, sizeof(str), "{FFFFFF}%s {757575}(ID: %d) has connected [{FFFFFF}%s{757575}]", Player[playerid][Name], playerid, str);
+	format(str, sizeof(str), "{FFFFFF}%s {CCCCCC}(ID: %d) has connected [{FFFFFF}%s{CCCCCC}]", Player[playerid][Name], playerid, str);
     SendClientMessageToAll(-1, str);
     
     // Print their hardware ID in the server logs if AC is loaded
@@ -166,22 +189,73 @@ public OnPlayerRequestClass(playerid, classid)
 	SetPlayerTime(playerid, 12, 0);
 	SetPlayerInterior(playerid, MainInterior);
 	
-	switch(random(3))
+	if(!SightseeingInClassSelection)
 	{
-	    case 0:
+	    switch(random(3))
 	    {
-	        InterpolateCameraPos(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 25.0, MainSpawn[0] - 7.0, MainSpawn[1] + 7.0, MainSpawn[2] + 5.0, 15000, CAMERA_MOVE);
-			InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 27.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 7000, CAMERA_MOVE);
+	        case 0:
+	        {
+	            InterpolateCameraPos(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 25.0, MainSpawn[0] - 7.0, MainSpawn[1] + 7.0, MainSpawn[2] + 5.0, 15000, CAMERA_MOVE);
+			    InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 27.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 7000, CAMERA_MOVE);
+	        }
+	        case 1:
+	        {
+	            InterpolateCameraPos(playerid, MainSpawn[0] + 5.0, MainSpawn[1] + 5.0, MainSpawn[2] + 2.0, MainSpawn[0] - 7.0, MainSpawn[1] + 7.0, MainSpawn[2] + 25.0, 15000, CAMERA_MOVE);
+		    	InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 10.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 7000, CAMERA_MOVE);
+	        }
+	        case 2:
+	        {
+	            InterpolateCameraPos(playerid, MainSpawn[0] + 10.0, MainSpawn[1] - 10.0, MainSpawn[2] + 10.0, MainSpawn[0] - 5.0, MainSpawn[1] + 5.0, MainSpawn[2] + 5.0, 15000, CAMERA_MOVE);
+		    	InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 5.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 10000, CAMERA_MOVE);
+	        }
 	    }
-	    case 1:
+	}
+	else
+	{
+    	switch(random(7))
 	    {
-	        InterpolateCameraPos(playerid, MainSpawn[0] + 5.0, MainSpawn[1] + 5.0, MainSpawn[2] + 2.0, MainSpawn[0] - 7.0, MainSpawn[1] + 7.0, MainSpawn[2] + 25.0, 15000, CAMERA_MOVE);
-			InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 10.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 7000, CAMERA_MOVE);
-	    }
-	    case 2:
-	    {
-	        InterpolateCameraPos(playerid, MainSpawn[0] + 10.0, MainSpawn[1] - 10.0, MainSpawn[2] + 10.0, MainSpawn[0] - 5.0, MainSpawn[1] + 5.0, MainSpawn[2] + 5.0, 15000, CAMERA_MOVE);
-			InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 5.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 10000, CAMERA_MOVE);
+	        case 0:
+	        {
+                // Vinewood Sign
+	            InterpolateCameraPos(playerid, 1334.0220, -783.3859, 87.6606, 1407.5430, -896.9464, 87.6606, 20000, CAMERA_MOVE);
+	            InterpolateCameraLookAt(playerid,1415.7408, -806.5591, 85.0399, 1415.7408, -806.5591, 85.0399, 20000, CAMERA_MOVE);
+	        }
+	        case 1:
+	        {
+	            // Vinewood Sign 2
+	            InterpolateCameraPos(playerid, 1476.7277, -874.3438, 110.0, 1476.7277, -900.000, 70.0, 5000, CAMERA_MOVE);
+	            InterpolateCameraLookAt(playerid, 1415.2177, -807.9233, 200.0, 1415.2177, -807.9233, 85.0623, 5000, CAMERA_MOVE);
+	        }
+	        case 2:
+	        {
+                // Desert Mountains
+	            InterpolateCameraPos(playerid, -365.5211, 1938.2665, 86.0535, -228.2556, 1821.5653, 96.6716, 15000, CAMERA_MOVE);
+	            InterpolateCameraLookAt(playerid, -327.0362, 1943.1190, 112.4141, -206.0446, 1895.2479, 91.2241, 15000, CAMERA_MOVE);
+	        }
+	        case 3:
+	        {
+	        	// Streets of San Fierro
+	        	InterpolateCameraPos(playerid, -2078.7246, 731.2352, 69.4141, -1714.5399, 731.2352, 69.4141, 45000, CAMERA_MOVE);
+	        	InterpolateCameraLookAt(playerid, -1971.8036, 731.0178, 45.2969, -1607.8036, 731.0178, 45.2969, 45000, CAMERA_MOVE);
+	        }
+	        case 4:
+	        {
+            	// LS Beach
+	        	InterpolateCameraPos(playerid, 340.3344, -1801.2339, 10.6959, 207.3543, -1801.2339, 10.6959, 80000, CAMERA_MOVE);
+	        	InterpolateCameraLookAt(playerid, 289.9604, -1766.6553, 4.5469, 159.9604, -1766.6553, 4.5469, 80000, CAMERA_MOVE);
+	        }
+	        case 5:
+	        {
+	        	// SF Bridge
+	        	InterpolateCameraPos(playerid, -2630.2266, 1459.0537, 65.6484, -2596.2339, 2039.0321, 263.0035, 20000, CAMERA_MOVE);
+	        	InterpolateCameraLookAt(playerid, -2678.6890, 1589.8137, 129.3078, -2713.4839, 1757.8318, 98.4932, 20000, CAMERA_MOVE);
+	        }
+		    case 6:
+		    {
+	        	// LV Stadium
+	        	InterpolateCameraPos(playerid, 1328.3080, 2116.9485, 11.0156, 1287.4218, 2097.1223, 55.1216, 20000, CAMERA_MOVE);
+	    	    InterpolateCameraLookAt(playerid, 1334.9221, 2077.7285, 26.6737, 1381.2794, 2184.0823, 11.0234, 20000, CAMERA_MOVE);
+		    }
 	    }
 	}
         
@@ -283,25 +357,21 @@ public OnPlayerSpawn(playerid)
 	    Player[playerid][IgnoreSpawn] = false;
 	    return 1;
 	}
-	// If they're in a DM
-	if(Player[playerid][DMReadd] > 0)
-	{
-	    // Re-spawn them there
-	    SpawnInDM(playerid, Player[playerid][DMReadd]);
-	    return 1;
-	}
+	
 	// If they're selecting from gunmenu
     if(Player[playerid][OnGunmenu])
     {
         // Hide it!!!
         HidePlayerGunmenu(playerid);
     }
+    
 	// If the server sees this player frozen
     if(Player[playerid][IsFrozen])
     {
         // Tell the script he is not frozen anymore
 		Player[playerid][IsFrozen] = false;
 	}
+	
 	// If this player is just spawning regularly
 	if(Player[playerid][Playing] == false && Player[playerid][InDM] == false && Player[playerid][InDuel] == false)
  	{
@@ -317,16 +387,14 @@ public OnPlayerSpawn(playerid)
 	    SetPlayerScore(playerid, 0);
 
 		// Initialize player spawn camera and position
-		SetPlayerPos(playerid, MainSpawn[0] + random(3), MainSpawn[1] + random(3), MainSpawn[2] + 2);
-		SetPlayerFacingAngle(playerid, MainSpawn[3]);
 		SetPlayerInterior(playerid, MainInterior);
 		SetPlayerVirtualWorld(playerid, 0);
 		SetCameraBehindPlayer(playerid);
 
 		ColorFix(playerid); // Fixes player color based on their team.
 		RadarFix();
-		SetPlayerSkin(playerid, Skin[Player[playerid][Team]]);
 	}
+	
 	// Fixes the x Vs y textdraws with current team player count
 	FixVsTextDraw();
 	
@@ -356,23 +424,23 @@ public OnPlayerDisconnect(playerid, reason)
 		case 0:
 		{
 			if(Player[playerid][Playing] == false)
-				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has had a crash/timeout.", Player[playerid][Name]);
+				format(iString, sizeof(iString), "{FFFFFF}%s {CCCCCC}has had a crash/timeout.", Player[playerid][Name]);
 		 	else
-			 	format(iString, sizeof(iString), "{FFFFFF}%s {757575}has had a crash/timeout {FFFFFF}(HP %d | AP %d).", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
+			 	format(iString, sizeof(iString), "{FFFFFF}%s {CCCCCC}has had a crash/timeout {FFFFFF}(HP %d | AP %d).", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
 		}
 		case 1:
 		{
 			if(Player[playerid][Playing] == false)
-				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has quit the server.",Player[playerid][Name]);
+				format(iString, sizeof(iString), "{FFFFFF}%s {CCCCCC}has quit the server.",Player[playerid][Name]);
 			else
-				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has quit the server {FFFFFF}(HP %d | AP %d).", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
+				format(iString, sizeof(iString), "{FFFFFF}%s {CCCCCC}has quit the server {FFFFFF}(HP %d | AP %d).", Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
 		}
 		case 2:
 		{
 		    if(Player[playerid][Playing] == false)
-				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has been kicked or banned.",Player[playerid][Name]);
+				format(iString, sizeof(iString), "{FFFFFF}%s {CCCCCC}has been kicked or banned.",Player[playerid][Name]);
 			else
-				format(iString, sizeof(iString), "{FFFFFF}%s {757575}has been kicked or banned {FFFFFF}(HP %d | AP %d).",Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
+				format(iString, sizeof(iString), "{FFFFFF}%s {CCCCCC}has been kicked or banned {FFFFFF}(HP %d | AP %d).",Player[playerid][Name], Player[playerid][pHealth], Player[playerid][pArmour]);
 		}
 	}
 	SendClientMessageToAll(-1,iString);
@@ -409,12 +477,28 @@ public OnPlayerDeath(playerid, killerid, reason)
 	    ServerOnPlayerDeath(playerid, INVALID_PLAYER_ID, 51);
 	    return 1;
 	}
+	
 	// case: died while diving with a parachute?
 	if(reason == WEAPON_PARACHUTE)
 	{
 		ServerOnPlayerDeath(playerid, INVALID_PLAYER_ID, WEAPON_PARACHUTE);
 	    return 1;
 	}
+	
+	// case: fell down
+	if(reason == 54)
+	{
+        ServerOnPlayerDeath(playerid, INVALID_PLAYER_ID, 54);
+        return 1;
+	}
+	
+	// case: suicide
+	if(reason == 255)
+	{
+        ServerOnPlayerDeath(playerid, INVALID_PLAYER_ID, 255);
+        return 1;
+	}
+	
 	// unknown cases
 	SendClientMessageToAll(-1, sprintf("DEBUG:Client:OnPlayerDeath(%d, %d, %d)", playerid, killerid, reason));
 	ServerOnPlayerDeath(playerid, killerid, reason);
@@ -450,45 +534,54 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	}
 	else
 	{
-		switch(reason)
+		if(!RandomDeathMessages)
 		{
-		    case WEAPON_KNIFE:
-		    {
-		        PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s knifed you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-		        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou knifed %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
-		    }
-		    case WEAPON_GRENADE:
-		    {
-				PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s bombed you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-		        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou bombed %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
-		    }
-		    default:
-			{
-				switch(random(4))
-				{
-				    case 0:
-				    {
-						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s raped you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-						PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou raped %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
-					}
-					case 1:
-					{
-						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s owned you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-						PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou owned %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
-					}
-					case 2:
-				    {
-        				PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s murdered you", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-					    PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou murdered %s~h~%s", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name]));
-					}
-					case 3:
-					{
-						PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%s~h~%s%s sent you to cemetery", TDC[Player[killerid][Team]], Player[killerid][Name], MAIN_TEXT_COLOUR));
-                        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou sent %s~h~%s%s to cemetery", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][Name], MAIN_TEXT_COLOUR));
-					}
-				}
-			}
+		    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%sKilled By: ~r~~h~%s", MAIN_TEXT_COLOUR, Player[killerid][Name]));
+		    PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou Killed: ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
 		}
+		else
+		{
+            switch(reason)
+		    {
+		        case WEAPON_KNIFE:
+		        {
+		            PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s knifed you", Player[killerid][Name], MAIN_TEXT_COLOUR));
+		            PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou knifed ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+		        }
+		        case WEAPON_GRENADE:
+		        {
+				    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s bombed you", Player[killerid][Name], MAIN_TEXT_COLOUR));
+		            PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou bombed ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+		        }
+		        default:
+			    {
+				    switch(random(4))
+				    {
+				        case 0:
+				        {
+						    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s raped you", Player[killerid][Name], MAIN_TEXT_COLOUR));
+						    PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou raped ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+					    }
+					    case 1:
+					    {
+						    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s owned you", Player[killerid][Name], MAIN_TEXT_COLOUR));
+						    PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou owned ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+					    }
+					    case 2:
+				        {
+        				    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s murdered you", Player[killerid][Name], MAIN_TEXT_COLOUR));
+					        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou murdered ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+					    }
+					    case 3:
+					    {
+						    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s sent you to cemetery", Player[killerid][Name], MAIN_TEXT_COLOUR));
+                            PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou sent ~r~~h~%s%s to cemetery", MAIN_TEXT_COLOUR, Player[playerid][Name], MAIN_TEXT_COLOUR));
+					    }
+				    }
+			    }
+		    }
+		}
+			    
         PlayerTextDrawShow(killerid, DeathText[killerid][0]);
         PlayerTextDrawShow(playerid, DeathText[playerid][1]);
 
@@ -511,10 +604,9 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 		    Player[playerid][TotalDeaths]++;
 
 			new str[150];
-			format(str, sizeof(str), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[killerid][Team]], Player[killerid][TotalDamage]);
-			PlayerTextDrawSetString(killerid, RoundKillDmgTDmg[killerid], str);
 			format(str, sizeof(str), "%s%s {FFFFFF}killed %s%s {FFFFFF}with %s [%.1f ft] [%d HP]", TextColor[Player[killerid][Team]], Player[killerid][Name], TextColor[Player[playerid][Team]], Player[playerid][Name], WeaponNames[reason],GetDistanceBetweenPlayers(killerid, playerid), (Player[killerid][pHealth] + Player[killerid][pArmour]));
 			SendClientMessageToAll(-1, str);
+			UpdateRoundKillDmgTDmg(killerid);
 
             OnPlayerAmmoUpdate(playerid);
 		}
@@ -608,6 +700,14 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
             	SpectateAnyPlayer(i, true, true, playerid);
         }
     }
+    
+    // If they're selecting from gunmenu
+    if(Player[playerid][OnGunmenu])
+    {
+        // Hide it!!!
+        HidePlayerGunmenu(playerid);
+    }
+    
     // Reset player gunmenu selections
 	ResetPlayerGunmenu(playerid, false);
 	
@@ -620,9 +720,17 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	    
 	if(!Player[playerid][InDeathCamera])
 	{
-		OnPlayerSpawn(playerid);
-		Player[playerid][IgnoreSpawn] = false;
-		SpawnPlayer(playerid);
+  		// If they're in a DM
+		if(Player[playerid][DMReadd] > 0)
+		{
+	    	// Re-spawn them there
+	    	SpawnInDM(playerid, Player[playerid][DMReadd]);
+		}
+		else
+		{
+			// Spawn player in a lobby
+			SpawnInLobby(playerid);
+		}
 	}
 	return 1;
 }
@@ -662,7 +770,7 @@ public OnPlayerText(playerid, text[])
 				{ SendClientMessage(i, ChatColor, ChatString); PlayerPlaySound(i,1137,0.0,0.0,0.0); }
 		        if((Player[playerid][Team] == DEFENDER || Player[playerid][Team] == DEFENDER_SUB) && (Player[i][Team] == DEFENDER || Player[i][Team] == DEFENDER_SUB))
 				{ SendClientMessage(i, ChatColor, ChatString); PlayerPlaySound(i,1137,0.0,0.0,0.0); }
-				if(Player[playerid][Team] == REFEREE && Player[i][Team] == REFEREE)
+				if(Player[playerid][Team] == REFEREE && Player[i][Team] == REFEREE && !Player[i][InDuel])
 			   	{ SendClientMessage(i, ChatColor, ChatString); PlayerPlaySound(i,1137,0.0,0.0,0.0); }
 			}
 		}
@@ -817,6 +925,26 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 	    }
     }
+
+	if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_PASSENGER)
+	{
+		if(VehicleHealthTextdraw)
+		{
+	        PlayerTextDrawSetString(playerid,VInfo[playerid],"_");
+		    PlayerTextDrawShow(playerid,VInfo[playerid]);
+		}
+		
+	    Iter_Add(PlayersInVehicles,playerid);
+	}
+	if(oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER)
+	{
+		if(VehicleHealthTextdraw)
+		{
+	        PlayerTextDrawHide(playerid,VInfo[playerid]);
+		}
+		
+	    Iter_Remove(PlayersInVehicles,playerid);
+    }
 	return 1;
 }
 
@@ -932,6 +1060,9 @@ public OnPlayerEnterCheckpoint(playerid)
 			{
 			    if(!ArenaStarted)
 			        return 1;
+			        
+				if(!CPInArena)
+					return 1;
 
                 switch(TeamCapturingCP)
 			    {
@@ -1378,9 +1509,7 @@ HandlePlayerDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 			Player[issuerid][shotsHit] ++;
 			Player[issuerid][RoundDamage] += rounded_amount;
 			Player[issuerid][TotalDamage] += rounded_amount;
-			new str[160];
-			format(str, sizeof(str), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[issuerid][Team]], Player[issuerid][TotalDamage]);
-			PlayerTextDrawSetString(issuerid, RoundKillDmgTDmg[issuerid], str);
+			UpdateRoundKillDmgTDmg(issuerid);
 		}
 	}
 	else // If damage is caused by something else (not a player)
@@ -1397,6 +1526,10 @@ HandlePlayerDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 	    // Update team HP bars
 	    UpdatePlayerTeamBar(playerid);
 	    UpdatePlayerTeamBar(issuerid);
+	    
+	    // Update teammates information textdraw
+	    UpdateTeamCornerInfo();
+	    
 	    // Show team lost hp textdraws
 	    if(Player[playerid][Playing] == true)
 		{
@@ -1405,7 +1538,7 @@ HandlePlayerDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		        case ATTACKER:
 				{
 				    new str[16];
-					format(str, sizeof(str), "~w~%s", Player[playerid][NameWithoutTag]);
+					format(str, sizeof(str), "~r~~h~%s", Player[playerid][NameWithoutTag]);
 					TextDrawSetString(AttHpLose, str);
 
 					TempDamage[ATTACKER] += rounded_amount;
@@ -1418,7 +1551,7 @@ HandlePlayerDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 				case DEFENDER:
 				{
 				    new str[16];
-					format(str, sizeof(str), "~w~%s", Player[playerid][NameWithoutTag]);
+					format(str, sizeof(str), "~b~~h~%s", Player[playerid][NameWithoutTag]);
 					TextDrawSetString(DefHpLose, str);
 
 				    TempDamage[DEFENDER] += rounded_amount;
@@ -1919,7 +2052,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 case 0:
                 {
-	                new statsSTR[4][300], namee[60], CID, Country[128];
+	                new statsSTR[4][300], namee[60], CID, Country[128], techInfo[100];
 				    CID = LastClickedPlayer[playerid];
 
 					format(namee, sizeof(namee), "{FF3333}Player {FFFFFF}%s {FF3333}Stats", Player[CID][Name]);
@@ -1930,12 +2063,28 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					new MC = Player[playerid][ChatChannel];
 					new YC = Player[CID][ChatChannel];
 
+					if(IsPlayerAdmin(playerid))
+					{
+                        new str[35];
+
+						// Get player IP
+						GetPlayerIp(CID, str, sizeof(str));
+		                format(techInfo,sizeof techInfo,""COL_PRIM"- {FFFFFF}IP: %s\n",str);
+		                
+		                // Get player hardware ID
+		                if(IsACPluginLoaded() && IsPlayerUsingSampAC(CID))
+		                {
+		                    GetPlayerHardwareID(CID, str, sizeof str);
+		                    format(techInfo,sizeof techInfo,"%s"COL_PRIM"- {FFFFFF}Hardware ID: %s\n",techInfo,str);
+						}
+					}
+
 	                format(statsSTR[0], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Country: %s\n\n"COL_PRIM"- {FFFFFF}Round Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Total Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}FPS: \t\t\t%d\n"COL_PRIM"- {FFFFFF}Round Deaths: \t%.0f\t\t"COL_PRIM"- {FFFFFF}Total Deaths: \t%d\t\t"COL_PRIM"- {FFFFFF}Ping: \t\t\t%d\n",Country,Player[CID][RoundKills],Player[CID][TotalKills], Player[CID][FPS], RD, TD, GetPlayerPing(CID));
 					format(statsSTR[1], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Round Damage: \t%d\t\t"COL_PRIM"- {FFFFFF}Total Damage:   \t%d\t\t"COL_PRIM"- {FFFFFF}Packet-Loss:   \t%.1f\n\n"COL_PRIM"- {FFFFFF}Player Weather: \t%d\t\t"COL_PRIM"- {FFFFFF}Chat Channel: \t%d\t\t"COL_PRIM"- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], NetStats_PacketLossPercent(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
 					format(statsSTR[2], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Player Time: \t\t%d\t\t"COL_PRIM"- {FFFFFF}DM ID: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Hit Sound: \t\t%d\n"COL_PRIM"- {FFFFFF}Player NetCheck: \t%s\t"COL_PRIM"- {FFFFFF}Player Level: \t%d\t\t"COL_PRIM"- {FFFFFF}Get Hit Sound: \t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
 					format(statsSTR[3], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Duels Won: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Duels Lost: \t\t%d", Player[CID][DuelsWon], Player[CID][DuelsLost]);
-					new TotalStr[1200];
-					format(TotalStr, sizeof(TotalStr), "%s%s%s%s", statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3]);
+					new TotalStr[1300];
+					format(TotalStr, sizeof(TotalStr), "%s%s%s%s%s", techInfo, statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3]);
 
 					ShowPlayerDialog(playerid, DIALOG_CLICK_STATS, DIALOG_STYLE_MSGBOX, namee, TotalStr, "Close", "");
                 }
@@ -2895,6 +3044,87 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
+				case 24:
+				{
+				    new iString[144];
+				    switch(RandomDeathMessages)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Random Death Messages{FFFFFF}.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							RandomDeathMessages = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Random Death Messages{FFFFFF}.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							RandomDeathMessages = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'RDeathMsg'", (RandomDeathMessages == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
+				case 25:
+				{
+				    new iString[144];
+				    switch(SightseeingInClassSelection)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Sightseeing In Class Selection{FFFFFF}.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							SightseeingInClassSelection = true;
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Sightseeing In Class Selection{FFFFFF}.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							SightseeingInClassSelection = false;
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'SightseeingInCS'", (SightseeingInClassSelection == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
+                case 26:
+				{
+				    new iString[144];
+				    switch(VehicleHealthTextdraw)
+				    {
+						case false:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Vehicle Health Information{FFFFFF}.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							VehicleHealthTextdraw = true;
+							
+							foreach(new i : Player)
+							{
+								if(IsPlayerInAnyVehicle(i))
+								{
+									PlayerTextDrawSetString(i,VInfo[i],"_");
+		                        	PlayerTextDrawShow(i,VInfo[i]);
+								}
+							}
+						}
+						case true:
+						{
+						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Vehicle Health Information{FFFFFF}.", Player[playerid][Name]);
+							SendClientMessageToAll(-1, iString);
+							VehicleHealthTextdraw = false;
+							
+							foreach(new i : Player)
+							{
+								if(IsPlayerInAnyVehicle(i))
+                                    PlayerTextDrawHide(i,VInfo[i]);
+							}
+						}
+					}
+					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'VehicleHealthTD'", (VehicleHealthTextdraw == false ? 0 : 1));
+				    db_free_result(db_query(sqliteconnection, iString));
+				    ShowConfigDialog(playerid);
+				}
 	        }
 	    }
 	    return 1;
@@ -3251,6 +3481,27 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		return 1;
 	}
+	if(dialogid == DIALOG_STYLE)
+	{
+		if(!response)return 1;
+		
+		HideRoundStats(playerid);
+		
+		Player[playerid][RoundTDStyle] = listitem;
+		db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Players` SET `RoundTDStyle`=%d WHERE `Name`='%q'", Player[playerid][RoundTDStyle], Player[playerid][Name])));
+		
+		switch(Player[playerid][RoundTDStyle])
+		{
+			case 0:SendClientMessage(playerid,-1,"You have switched round textdraws style to: Modern");
+			case 1:SendClientMessage(playerid,-1,"You have switched round textdraws style to: Bulletproof");
+			case 2:SendClientMessage(playerid,-1,"You have switched round textdraws style to: Simple");
+		}
+	
+	    if(Current != -1)
+	        ShowRoundStats(playerid);
+		return 1;
+	}
+	
 	#if defined _league_included
 	// League login dialog lock - so that players can't escape the league clan login check
 	if(Player[playerid][MustLeaguePass] == true)
@@ -3488,9 +3739,7 @@ YCMD:help(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display some guidelines");
 	    return 1;
 	}
-	new str[583];
-	strcat(str, ""COL_PRIM"Main developers: {FFFFFF}Whitetiger & [KHK]Khalid");
-	strcat(str, "\n"COL_PRIM"Contributors on GitHub: {FFFFFF}ApplePieLife, JamesCullum, shendlaw, pds2k12");
+	new str[440];
 	strcat(str, "\n"COL_PRIM"Project on GitHub: {FFFFFF}https://github.com/KHKKhalid/SAMPBulletproof/");
 	strcat(str, "\n\n\n{FFFFFF}To see server settings: {888888}/settings");
 	strcat(str, "\n{FFFFFF}For admin commands: {888888}/acmds");
@@ -3695,24 +3944,7 @@ YCMD:style(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "an option to switch the style of round textdraws on your screen");
 	    return 1;
 	}
-	HideRoundStats(playerid);
-	switch(Player[playerid][RoundTDStyle])
-	{
-	    case 0:
-		{
-		    db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Players` SET `RoundTDStyle`=1 WHERE `Name`='%q'", Player[playerid][Name])));
-		    Player[playerid][RoundTDStyle] = 1;
-		    SendClientMessage(playerid, -1, "Round textdraws style changed to new Bulletproof design.");
-		}
-		case 1:
-		{
-			db_free_result(db_query(sqliteconnection, sprintf("UPDATE `Players` SET `RoundTDStyle`=0 WHERE `Name`='%q'", Player[playerid][Name])));
-		    Player[playerid][RoundTDStyle] = 0;
-		    SendClientMessage(playerid, -1, "Round textdraws style changed to old-school design.");
-		}
-	}
-	if(Current != -1)
-	    ShowRoundStats(playerid);
+    ShowPlayerDialog(playerid, DIALOG_STYLE, DIALOG_STYLE_LIST, "Select round textdraws style", "Modern\nBulletproof\nSimple (Good For FPS)", "Select", "Back");
 	return 1;
 }
 
@@ -4080,7 +4312,7 @@ YCMD:shop(playerid, params[], help)
 	else
 	    SendErrorMessage(playerid, "League shop is disabled in this server");
 	#else
-	SendErrorMessage(playerid, "This version/edit of Bulletproof gamemode does not support league features!");
+	SendErrorMessage(playerid, "This version/edit of AttDef gamemode does not support league features!");
 	#endif
 	return 1;
 }
@@ -4133,7 +4365,7 @@ YCMD:usebelt(playerid, params[], help)
 	    SendErrorMessage(playerid, "This is not a league match!");
 	}
 	#else
-	SendErrorMessage(playerid, "This version/edit of Bulletproof gamemode does not support league features!");
+	SendErrorMessage(playerid, "This version/edit of AttDef gamemode does not support league features!");
 	#endif
 	return 1;
 }
@@ -6260,13 +6492,13 @@ YCMD:pm(playerid,params[], help)
 	
 	new str[144];
 	format(str, sizeof(str), "PM from %s (%d): %s", Player[playerid][Name], playerid, message);
-	SendClientMessage(recieverid, 0x90C3D4FF, str);
+	SendClientMessage(recieverid, 0xFFF000FF, str);
 	
 	SendClientMessage(recieverid, -1, ""COL_PRIM"Use {FFFFFF}/r [Message]"COL_PRIM" to reply quicker!");
 	Player[recieverid][LastMsgr] = playerid;
 
 	format(str, sizeof(str),"PM to %s (%d): %s", Player[recieverid][Name], recieverid, message);
-	SendClientMessage(playerid, 0x79A4B3FF, str);
+	SendClientMessage(playerid, 0xECDE00FF, str);
 
 	PlayerPlaySound(recieverid, 1054, 0, 0, 0);
 	return 1;
@@ -6292,10 +6524,10 @@ YCMD:r(playerid,params[], help)
 	
 	new str[144];
 	format(str, sizeof(str), "PM from %s (%d): %s", Player[playerid][Name], playerid, params);
-	SendClientMessage(replytoid, 0x90C3D4FF, str);
+	SendClientMessage(replytoid, 0xFFF000FF, str);
 
 	format(str, sizeof(str),"PM to %s (%d): %s", Player[replytoid][Name], replytoid, params);
-	SendClientMessage(playerid, 0x79A4B3FF, str);
+	SendClientMessage(playerid, 0xECDE00FF, str);
 
     Player[replytoid][LastMsgr] = playerid;
 
@@ -7046,6 +7278,7 @@ YCMD:setteam(playerid, params[], help)
 	if(Current != -1)
 	{
 		ShowTeamBarsForPlayer(Params[0]);
+		ShowTeamCornerInfo(Params[0]);
 	}
 
 	if(MyVehicle != -1) {
@@ -7053,10 +7286,8 @@ YCMD:setteam(playerid, params[], help)
 	}
 	SwitchTeamFix(Params[0], false, true);
 
+    UpdateRoundKillDmgTDmg(Params[0]);
     new iString[150];
-	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[Params[0]][Team]], Player[Params[0]][TotalDamage]);
-	PlayerTextDrawSetString(Params[0], RoundKillDmgTDmg[Params[0]], iString);
-
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has switched {FFFFFF}%s "COL_PRIM"to: {FFFFFF}%s", Player[playerid][Name], Player[Params[0]][Name], TeamName[Params[1]+1]);
 	SendClientMessageToAll(-1, iString);
 	return 1;
@@ -7153,6 +7384,11 @@ YCMD:rr(playerid, params[], help)
 		TextDrawHideForAll(PauseTD);
     RoundPaused = false;
     RoundUnpausing = false;
+    
+    GangZoneDestroy(CPZone);
+	GangZoneDestroy(ArenaZone);
+	
+	ResetBackupRequests();
 
 	new iString[128];
 	format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has set the round to restart. Round restarting...", Player[playerid][Name]);
@@ -7733,7 +7969,9 @@ YCMD:readd(playerid, params[], help)
 		    Player[pID][TotalDeaths] = Player[pID][TotalDeaths] - Player[pID][RoundDeaths];
 			Player[pID][TotalDamage] = Player[pID][TotalDamage] - Player[pID][RoundDamage];
 		}
+		
 		DeletePlayerTeamBar(pID);
+		
 		if(GameType == BASE)
 			AddPlayerToBase(pID);
 		else if(GameType == ARENA)
@@ -7819,6 +8057,9 @@ YCMD:end(playerid, params[], help)
 	#endif
 	if(RoundPaused == true)
 		TextDrawHideForAll(PauseTD);
+		
+    GangZoneDestroy(CPZone);
+	GangZoneDestroy(ArenaZone);
 
 	RoundPaused = false;
 	FallProtection = false;
@@ -7850,7 +8091,7 @@ YCMD:end(playerid, params[], help)
 		TogglePlayerControllable(i, 0);
 		RemovePlayerMapIcon(i, 59);
 
-		SpawnPlayer(i);
+		SpawnInLobby(i);
 
 		DisablePlayerCheckpoint(i);
 		SetPlayerScore(i, 0);
@@ -7867,6 +8108,7 @@ YCMD:end(playerid, params[], help)
 	TextDrawHideForAll(EN_CheckPoint);
 
  	ResetGunmenuSelections();
+ 	ResetBackupRequests();
 
 	BaseStarted = false;
 	ArenaStarted = false;
@@ -7879,6 +8121,8 @@ YCMD:end(playerid, params[], help)
 	SendClientMessageToAll(-1, iString);
 
 	DeleteAllTeamBars();
+	HideTeamCornerInfoForAll();
+	
 	DeleteAllDeadBodies();
     GangZoneDestroy(CPZone);
 	GangZoneDestroy(ArenaZone);
@@ -9169,46 +9413,52 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		}
 		return 1;
 	}
-	if(Current != -1 && Player[playerid][Playing] == true)
+	if(Current != -1)
 	{
-	    if(PRESSED(131072) && AllowStartBase == true)
+		if(Player[playerid][Playing] == true)
 		{
-		    if(PlayerRequestBackup(playerid))
-		        return 1;
-		}
-	    // Lead team
-	    if(PRESSED(262144) && AllowStartBase == true)
-        {
-            if(GetPlayerVehicleID(playerid))
-                return 1;
-
-            if((GetTickCount() - Player[playerid][LastAskLeader]) < 5000)
-			{
-				SendErrorMessage(playerid,"Please wait.");
-				return 0;
-			}
-            new team = Player[playerid][Team];
-			if(TeamHasLeader[team] != true)
+	        if(PRESSED(131072) && AllowStartBase == true)
+		    {
+		        if(PlayerRequestBackup(playerid))
+		            return 1;
+		    }
+	        // Lead team
+	        if(PRESSED(262144) && AllowStartBase == true)
             {
-                PlayerLeadTeam(playerid, false, true);
-           	}
-           	else
-           	{
-           	    if(TeamLeader[team] == playerid) // off
-      	    	{
-                    PlayerNoLeadTeam(playerid);
-           	    }
+                if(GetPlayerVehicleID(playerid))
+                    return 1;
+
+                if((GetTickCount() - Player[playerid][LastAskLeader]) < 5000)
+			    {
+				    SendErrorMessage(playerid,"Please wait.");
+				    return 0;
+			    }
+                new team = Player[playerid][Team];
+			    if(TeamHasLeader[team] != true)
+                {
+                    PlayerLeadTeam(playerid, false, true);
+               	}
            	    else
-           	    	SendErrorMessage(playerid, "Your team already has a leader!");
-           	}
-           	Player[playerid][LastAskLeader] = GetTickCount();
-           	return 1;
-        }
+           	    {
+           	        if(TeamLeader[team] == playerid) // off
+      	    	    {
+                        PlayerNoLeadTeam(playerid);
+           	        }
+           	        else
+           	    	    SendErrorMessage(playerid, "Your team already has a leader!");
+           	    }
+           	    Player[playerid][LastAskLeader] = GetTickCount();
+           	    return 1;
+            }
+	    }
+	    
         // Pause/unpause or ask for pause/unpause
         if(PRESSED(65536))
         {
 			if(Player[playerid][Level] > 0)
 			{
+				if(!Player[playerid][Spectating] && Player[playerid][Playing] == false)return 1;
+				
 			    switch(RoundPaused)
 	            {
 	                case true:
@@ -9242,6 +9492,8 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			}
 			else
 			{
+				if(Player[playerid][Playing] == false)return 1;
+				
 			    switch(RoundPaused)
 	            {
 	                case true:
@@ -9421,7 +9673,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 forward OnScriptUpdate();
 public OnScriptUpdate()
 {
-    CheckVisualDamageTextDraws(); // This basically hides damage textdraws that should be hidden
+    CheckVisualDamageTextDraws(); // This basically hides damage textdraws and damage bubbles that should be hidden
 
     foreach(new i : Player)
 	{
@@ -9434,11 +9686,23 @@ public OnScriptUpdate()
 	    // Show target info
 	    ShowTargetInfo(i, GetPlayerTargetPlayer(i));
 
-
 		// Update net info textdraws
 		if(PlayerInterface[i][INTERFACE_NET])
 		{
-  			PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS %s%d %sPing %s%d %sPacketLoss %s%.1f%%", MAIN_TEXT_COLOUR, TDC[Player[i][Team]], Player[i][FPS], MAIN_TEXT_COLOUR, TDC[Player[i][Team]], GetPlayerPing(i), MAIN_TEXT_COLOUR, TDC[Player[i][Team]], NetStats_PacketLossPercent(i)));
+  			PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS ~r~%d %sPing ~r~%d %sPacketLoss ~r~%.1f%%", MAIN_TEXT_COLOUR, Player[i][FPS], MAIN_TEXT_COLOUR, GetPlayerPing(i), MAIN_TEXT_COLOUR, NetStats_PacketLossPercent(i)));
+            Update3DTextLabelText(Player[i][InfoLabel], -1, sprintf("%sPL: {FFFFFF}%.1f%%\n%sPing: {FFFFFF}%d\n%sFPS: {FFFFFF}%d", TextColor[Player[i][Team]], NetStats_PacketLossPercent(i), TextColor[Player[i][Team]], GetPlayerPing(i), TextColor[Player[i][Team]], Player[i][FPS]));
+		}
+	}
+	
+	// Update Vehicle Information
+	if(VehicleHealthTextdraw)
+	{
+		foreach(new i : PlayersInVehicles)
+		{
+			new vID,Float:vHealth;
+			vID = GetPlayerVehicleID(i);
+			GetVehicleHealth(vID, vHealth);
+			PlayerTextDrawSetString(i,VInfo[i],sprintf("~w~%s~n~~w~Health ~r~%.0f",aVehicleNames[GetVehicleModel(vID)-400],vHealth));
 		}
 	}
 	return 1;

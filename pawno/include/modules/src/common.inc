@@ -137,7 +137,7 @@ SendUsageMessage(playerid, text[], messagebox_type = MSGBOX_TYPE_MIDDLE)
 		case MSGBOX_TYPE_MIDDLE:
 		{
 			new str[145];
-			format(str, sizeof(str), "{0000CC}USAGE: {FFFFFF}%s", text);
+			format(str, sizeof(str), "{CCCCCC}USAGE: {FFFFFF}%s", text);
 			SendClientMessage(playerid, -1, str);
 		}
 		default:
@@ -394,8 +394,6 @@ ShowPlayerClassSelection(playerid)
 forward SpawnConnectedPlayer(playerid, team);
 public SpawnConnectedPlayer(playerid, team)
 {
-	Player[playerid][IgnoreSpawn] = true;
-	TogglePlayerSpectating(playerid, false);
 	switch(team)
 	{
 		case 0: // auto-assign
@@ -439,7 +437,7 @@ public SpawnConnectedPlayer(playerid, team)
 		}
 	}
 
-	SwitchTeamFix(playerid, false, false);
+	SwitchTeamFix(playerid, false, false, false);
 	SetPlayerWeather(playerid, Player[playerid][Weather]);
 	SetPlayerTime(playerid, Player[playerid][Time], 0);
 
@@ -511,12 +509,21 @@ public SpawnConnectedPlayer(playerid, team)
 		ShowMatchScoreBoard(playerid);
 	}
 	HideIntroTextDraws(playerid);
+	
 	Player[playerid][Spawned] = true;
-	SpawnPlayer(playerid);
+	SpawnInLobby(playerid);
+	
 	HideAllTeamBarsForPlayer(playerid);
 
 	LoadPlayerVariables(playerid);
 	return 1;
+}
+
+SpawnInLobby(playerid)
+{
+    SetSpawnInfo(playerid, playerid, Skin[Player[playerid][Team]], MainSpawn[0] + random(3), MainSpawn[1] + random(3), MainSpawn[2] + 2, 0, 0, 0, 0, 0, 0, 0);
+	if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING)TogglePlayerSpectating(playerid, false);
+	else SpawnPlayer(playerid);
 }
 
 ShowPlayerDeathMessage(killerid, playerid)
@@ -545,14 +552,19 @@ udb_hash(buf[]) {
 RecountPlayersOnCP()
 {
 	PlayersInCP = 0;
-	foreach(new i : PlayersInRound)
+	
+	if(GameType != ARENA || CPInArena)
 	{
-		Player[i][WasInCP] = false;
-	    if(IsPlayerInCheckpoint(i))
-	    {
-	        OnPlayerEnterCheckpoint(i);
+		foreach(new i : PlayersInRound)
+		{
+			Player[i][WasInCP] = false;
+	    	if(IsPlayerInCheckpoint(i))
+	    	{
+	        	OnPlayerEnterCheckpoint(i);
+			}
 		}
 	}
+	
 	if(PlayersInCP == 0)
 	{
 		TeamCapturingCP = NON;
@@ -1450,7 +1462,7 @@ BalanceTeams() {
 	return 1;
 }
 
-SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
+SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true, bool:changeskin = true)
 {
 	new iString[160];
 	if(message)
@@ -1459,13 +1471,17 @@ SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true)
 		SendClientMessageToAll(-1, iString);
 	}
 
-	format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
-	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
+	UpdateRoundKillDmgTDmg(playerid);
 
 	ColorFix(playerid);
 	if(fixvs && Current == -1)
 		FixVsTextDraw();
-	SetPlayerSkin(playerid, Skin[Player[playerid][Team]]);
+	
+	if(changeskin)
+	{
+	    SetPlayerSkin(playerid, Skin[Player[playerid][Team]]);
+	}
+	
 	SetCameraBehindPlayer(playerid);
 	HideAllTeamBarsForPlayer(playerid);
 	#if defined _league_included
@@ -1938,7 +1954,7 @@ FixVsTextDraw(exception = -1)
 			    }
 			}
 		}
-	    format(str, sizeof(str), "  ~r~~h~%d  %sVs  ~b~~h~%d", ct[0], MAIN_TEXT_COLOUR, ct[1]);
+	    format(str, sizeof(str), "  ~r~%d  %sVs  ~b~~h~%d", ct[0], MAIN_TEXT_COLOUR, ct[1]);
 		foreach(new i : Player)
 			PlayerTextDrawSetString(i, BaseID_VS[i], str);
 	}
@@ -1959,17 +1975,18 @@ Float:GetDistanceBetweenPlayers(playerid, toplayerid)
 SpawnInDM(playerid, DMID)
 {
 	Player[playerid][InDM] = true;
-
+	
 	ResetPlayerWeapons(playerid); // Reset all player weapons
-	SetPlayerVirtualWorld(playerid, Player[playerid][VWorld]); // Put player in a different virtual world so that if you create a DM in your lobby and you join the DM, you won't be able to see other players in the lobby.
-	SetHP(playerid, 100);
-	SetAP(playerid, 100);
 
 	SetSpawnInfo(playerid, playerid, Skin[Player[playerid][Team]], DMSpawn[DMID][0]+random(2), DMSpawn[DMID][1]+random(2), DMSpawn[DMID][2], DMSpawn[DMID][3], DMWeapons[DMID][0], 9999, DMWeapons[DMID][1], 9999, DMWeapons[DMID][2], 9999);
 	SetPlayerInterior(playerid, DMInterior[DMID]);
 
 	Player[playerid][IgnoreSpawn] = true; //Make sure you ignore OnPlayerSpawn, else you will just spawn in lobby (because u are about to use SpawnPlayer).
 	SpawnPlayer(playerid); //Spawns players, in this case we have SetSpawnInfo (but still you need to make sure OnPlayerSpawn is ignored);
+	
+	SetPlayerVirtualWorld(playerid, Player[playerid][VWorld]); // Put player in a different virtual world so that if you create a DM in your lobby and you join the DM, you won't be able to see other players in the lobby.
+	SetHP(playerid, 100);
+	SetAP(playerid, 100);	
 	return 1;
 }
 
@@ -1980,8 +1997,7 @@ QuitDM(playerid)
 
     Player[playerid][InDM] = false;
     Player[playerid][DMReadd] = 0;
-    SpawnPlayer(playerid);
-
+    SpawnInLobby(playerid);
     return 1;
 }
 

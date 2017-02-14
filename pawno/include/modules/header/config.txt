@@ -30,6 +30,9 @@ new bool:AntiMacros = true;
 new bool:LeagueAllowed = true;
 new bool:MeleeAllowed = false;
 new bool:AutoRoundStarter = false;
+new bool:RandomDeathMessages = false;
+new bool:SightseeingInClassSelection = false;
+new bool:VehicleHealthTextdraw = false;
 
 new RoundHP = 100, RoundAR = 100;
 

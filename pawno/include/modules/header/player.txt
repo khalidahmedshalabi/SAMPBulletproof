@@ -38,6 +38,7 @@ enum PlayerVariables
 	bool:WeaponBinding,
 	bool:HasDeathQuote,
 	bool:PlayerMarkers,
+	bool:HadParachuteBeforeFreeze,
 	GunmenuModdingType,
 	GunmenuModdingIndex,
 	NetCheck,
@@ -113,7 +114,11 @@ enum PlayerVariables
 	GunmenuStyle,
 	bool:InDeathCamera,
 	RequestedClass,
-	RoundTDStyle
+	RoundTDStyle,
+	
+	Text3D:InfoLabel,
+	Text3D:DamageLabel,
+	DamageBubbleTick
 }
 new Player[MAX_PLAYERS][PlayerVariables];
 
@@ -144,6 +149,7 @@ enum save_vars
 	bool:ToBeAdded,
 	bool:CheckScore,
 	bool:PauseWait,
+	bool:sWasInBase,
 	pVehicleID,
 	pSeatID,
 	HadParachute,
@@ -164,3 +170,5 @@ enum rankingEnum {
     player_Acc,
     player_ID
 }
+
+new Iterator:PlayersInVehicles<MAX_PLAYERS>;

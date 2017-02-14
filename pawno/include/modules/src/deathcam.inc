@@ -12,9 +12,7 @@ public OnPlayerDeathCameraEnd(playerid)
 
 	SetPlayerDrunkLevel(playerid, 0);
 	Player[playerid][InDeathCamera] = false;
-	OnPlayerSpawn(playerid);
-	Player[playerid][IgnoreSpawn] = false;
-	TogglePlayerSpectating(playerid, false);
+	SpawnInLobby(playerid);
 	HideMessageBox(playerid, -1);
 	TextDrawHideForPlayer(playerid, RedDeathScreen);
 	switch(PlayerInterface[playerid][INTERFACE_HP])

@@ -15,6 +15,7 @@
 #tryinclude "modules\header\league.txt"
 #include "modules\header\weaponbinds.txt"
 #include "modules\header\teamhpbars.txt"
+#include <YSI_inc\YSI\y_hooks>
 
 // Checks player AKAs
 GetPlayerAKA(playerid, str[], len)
@@ -196,14 +197,20 @@ InitPlayer(playerid)
 	Player[playerid][LeagueLogged] = false;
 	Player[playerid][InDeathCamera] = false;
 	Player[playerid][HasDeathQuote] = false;
+	Player[playerid][HadParachuteBeforeFreeze] = false;
 	
 	ResetPlayerMoney(playerid);
 	SetPlayerColor(playerid, 0xAAAAAAAA);
 	RemoveUselessObjectsForPlayer(playerid);
 	LoadPlayerTextDraws(playerid);
+	
 	for(new i = 0; i < MAX_PLAYER_BARS; i ++)
 		TeamBarShownForPlayer[playerid][_:i] = false;
-	
+		
+	ShowTeamCornerInfo(playerid);
+		
+	CreatePlayerLabels(playerid);
+	Player[playerid][DamageBubbleTick] = 0;
 	
 	InitPlayerMessageBox(playerid);
 	InitPlayerNames(playerid);
@@ -219,6 +226,28 @@ InitPlayer(playerid)
 	noclipdata[playerid][accelmul]   	= 	0.0;
 	noclipdata[playerid][FlyMode] 		= 	false;
 	return 1;
+}
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+    DestroyPlayerLabels(playerid);
+	Iter_Remove(PlayersInVehicles, playerid);
+    return 1;
+}
+
+CreatePlayerLabels(playerid)
+{
+	Player[playerid][InfoLabel] = Create3DTextLabel(" ", -1, 0, 0, 0, DRAW_DISTANCE-3.2, 0, 1);
+	Attach3DTextLabelToPlayer(Player[playerid][InfoLabel], playerid, 0, 0, -0.7);
+	
+    Player[playerid][DamageLabel] = Create3DTextLabel(" ", -1, 0, 0, 0, DRAW_DISTANCE-7, 0, 1);
+	Attach3DTextLabelToPlayer(Player[playerid][DamageLabel], playerid, 0, 0, 1.3);	
+}
+
+DestroyPlayerLabels(playerid)
+{
+    Delete3DTextLabel(Player[playerid][InfoLabel]);
+	Delete3DTextLabel(Player[playerid][DamageLabel]);
 }
 
 LoginPlayer(playerid, DBResult:res)
@@ -345,6 +374,7 @@ StorePlayerVariablesMin(playerid) {
 			SaveVariables[i][TDeaths]  	= 	Player[playerid][TotalDeaths];
 			SaveVariables[i][TDamage] 	= 	Player[playerid][TotalDamage];
 			SaveVariables[i][TPlayed]   =   Player[playerid][RoundPlayed];
+			SaveVariables[i][sWasInBase] =  Player[playerid][WasInBase];
 			
 			#if defined _league_included
 			PlayerShopSaves[i][SHOP_POINTS_DOUBLER] = PlayerShop[playerid][SHOP_POINTS_DOUBLER];
@@ -429,6 +459,7 @@ StorePlayerVariables(playerid) {
 			SaveVariables[i][TDeaths]  	= 	Player[playerid][TotalDeaths];
 			SaveVariables[i][TDamage] 	= 	Player[playerid][TotalDamage];
 			SaveVariables[i][TPlayed]   =   Player[playerid][RoundPlayed];
+			SaveVariables[i][sWasInBase] =  Player[playerid][WasInBase];
 			
 			#if defined _league_included
 			PlayerShopSaves[i][SHOP_POINTS_DOUBLER] = PlayerShop[playerid][SHOP_POINTS_DOUBLER];
@@ -492,7 +523,7 @@ ShouldPlayerBeReadded(playerid)
 {
 	for(new i = 0; i < SAVE_SLOTS; i ++)
 	{
-		if( strlen( SaveVariables[i][pName] ) > 2 && strcmp( SaveVariables[i][pName], Player[playerid][Name], true ) == 0 )
+		if( strlen( SaveVariables[i][pName] ) >= 2 && strcmp( SaveVariables[i][pName], Player[playerid][Name], true ) == 0 )
 		{
 			if(SaveVariables[i][RoundID] != Current || Current == -1 || SaveVariables[i][ToBeAdded] == false)
 			{
@@ -513,7 +544,7 @@ LoadPlayerVariables(playerid)
 
 	for(new i = 0; i < SAVE_SLOTS; i ++)
 	{
-		if( strlen( SaveVariables[i][pName] ) > 2 && strcmp( SaveVariables[i][pName], Player[playerid][Name], true ) == 0 )
+		if( strlen( SaveVariables[i][pName] ) >= 2 && strcmp( SaveVariables[i][pName], Player[playerid][Name], true ) == 0 )
 		{
 			if(SaveVariables[i][RoundID] != Current || Current == -1)
 			{
@@ -549,8 +580,7 @@ LoadPlayerVariables(playerid)
 				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has spawned as: {FFFFFF}%s", Player[playerid][Name], TeamName[Player[playerid][Team]]);
 				SendClientMessageToAll(-1, iString);
 
-				format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
-				PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
+				UpdateRoundKillDmgTDmg(playerid);
 				return 1;
 			}
 			else if(SaveVariables[i][ToBeAdded] == false)
@@ -565,8 +595,7 @@ LoadPlayerVariables(playerid)
 				Player[playerid][RoundKills]        =   SaveVariables[i][RKills];
 				Player[playerid][RoundDeaths]       =	SaveVariables[i][RDeaths];
 				Player[playerid][RoundDamage]       =	SaveVariables[i][RDamage];
-
-				Player[playerid][WasInBase]         =   true;
+				Player[playerid][WasInBase]         =   SaveVariables[i][sWasInBase];
 
 				#if defined _league_included
 				PlayerShop[playerid][SHOP_POINTS_DOUBLER] = PlayerShopSaves[i][SHOP_POINTS_DOUBLER];
@@ -592,8 +621,7 @@ LoadPlayerVariables(playerid)
 				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has spawned as: {FFFFFF}%s", Player[playerid][Name], TeamName[Player[playerid][Team]]);
 				SendClientMessageToAll(-1, iString);
 
-				format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
-				PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
+				UpdateRoundKillDmgTDmg(playerid);
 				return 1;
 			}
 
@@ -603,12 +631,6 @@ LoadPlayerVariables(playerid)
 
 	        Player[playerid][Team] = SaveVariables[i][pTeam];
 			Player[playerid][WasInTeam] = Player[playerid][Team];
-			ShowTeamBarsForPlayer(playerid);
-			CreatePlayerTeamBar(playerid);
-			UpdateTeamPlayerCount(Player[playerid][Team], false);
-			SetHP(playerid, SaveVariables[i][gHealth]);
-			SetAP(playerid, SaveVariables[i][gArmour]);
-			UpdateTeamHP(Player[playerid][Team]);
 
 			Player[playerid][RoundKills] 	= 	SaveVariables[i][RKills];
 			Player[playerid][RoundDeaths] 	= 	SaveVariables[i][RDeaths];
@@ -619,38 +641,45 @@ LoadPlayerVariables(playerid)
 			Player[playerid][RoundPlayed] 	= 	SaveVariables[i][TPlayed];
 			Player[playerid][Accuracy]      =   SaveVariables[i][iAccuracy];
 		 	Player[playerid][TotalshotsHit]	=	SaveVariables[i][tshotsHit];
-		 	Player[playerid][TotalBulletsFired] = SaveVariables[i][tBulletsShot];
+		 	Player[playerid][TotalBulletsFired] = SaveVariables[i][tBulletsShot];		
 
-            if(SaveVariables[i][WasCrashedInStart] == false)
-			{
-				SetPlayerPos(playerid, SaveVariables[i][pCoords][0], SaveVariables[i][pCoords][1], SaveVariables[i][pCoords][2]);
-				SetPlayerFacingAngle(playerid, SaveVariables[i][pCoords][3]);
-				SetPlayerInterior(playerid, SaveVariables[i][pInterior]);
-				SetPlayerVirtualWorld(playerid, SaveVariables[i][pVWorld]);
-			}
-			else if(Current != -1)
-			{
-			    if(GameType == BASE) {
-					switch(Player[playerid][Team]) {
-					    case ATTACKER: SetPlayerPos(playerid, BAttackerSpawn[Current][0] + random(6), BAttackerSpawn[Current][1] + random(6), BAttackerSpawn[Current][2]);
-						case DEFENDER: SetPlayerPos(playerid, BDefenderSpawn[Current][0] + random(6), BDefenderSpawn[Current][1] + random(6), BDefenderSpawn[Current][2]);
-				    }
-				    SetPlayerInterior(playerid, BInterior[Current]);
-				} else if(GameType == ARENA) {
-					switch(Player[playerid][Team]) {
-					    case ATTACKER: {
-							SetPlayerPos(playerid, AAttackerSpawn[Current][0] + random(6), AAttackerSpawn[Current][1] + random(6), AAttackerSpawn[Current][2]);
-						} case DEFENDER: {
-					 		SetPlayerPos(playerid, ADefenderSpawn[Current][0] + random(6), ADefenderSpawn[Current][1] + random(6), ADefenderSpawn[Current][2]);
-						}
-					}
-				    SetPlayerInterior(playerid, AInterior[Current]);
-				}
-				SetPlayerVirtualWorld(playerid, 2);
-			}
+    	 	if(SaveVariables[i][WasCrashedInStart] == false) {
+			 	SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], SaveVariables[i][pCoords][0], SaveVariables[i][pCoords][1], SaveVariables[i][pCoords][2]+1, SaveVariables[i][pCoords][3], 0, 0, 0, 0, 0, 0);
+		
+			 	SetPlayerInterior(playerid, SaveVariables[i][pInterior]);
+			 	SetPlayerVirtualWorld(playerid, SaveVariables[i][pVWorld]);
+		 	} else if(Current != -1) {
+	    	 	if(GameType == BASE) {
+				 	switch(Player[playerid][Team]) {
+					 	case ATTACKER: SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], BAttackerSpawn[Current][0] + random(6), BAttackerSpawn[Current][1] + random(6), BAttackerSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+					 	case DEFENDER: SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], BDefenderSpawn[Current][0] + random(6), BDefenderSpawn[Current][1] + random(6), BDefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+		    	 	}
+		    	 	SetPlayerInterior(playerid, BInterior[Current]);
+			 	} else if(GameType == ARENA) {
+				 	switch(Player[playerid][Team]) {
+					 	case ATTACKER: SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]],AAttackerSpawn[Current][0] + random(6), AAttackerSpawn[Current][1] + random(6), AAttackerSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+					 	case DEFENDER: SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]],ADefenderSpawn[Current][0] + random(6), ADefenderSpawn[Current][1] + random(6), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
+				 	}
+		    	 	SetPlayerInterior(playerid, AInterior[Current]);
+			 	}
+			 	SetPlayerVirtualWorld(playerid, 2);
+		 	}
+			
+			Player[playerid][IgnoreSpawn] = true;
+	        SpawnPlayer(playerid);
+			
+			ShowTeamBarsForPlayer(playerid);
+			CreatePlayerTeamBar(playerid);
+			
+			ShowTeamCornerInfo(playerid);
+			UpdateTeamCornerInfo();
+			
+			UpdateTeamPlayerCount(Player[playerid][Team], false);
+			SetHP(playerid, SaveVariables[i][gHealth]);
+			SetAP(playerid, SaveVariables[i][gArmour]);
+			UpdateTeamHP(Player[playerid][Team]);
 
 			ColorFix(playerid);
-			SetPlayerSkin(playerid, Skin[Player[playerid][Team]]);
 			SetPlayerTeam(playerid, Player[playerid][Team]);
    			RadarFix();
 			SetCPForPlayer(playerid);
@@ -735,8 +764,7 @@ LoadPlayerVariables(playerid)
 				Player[playerid][FakePacketRenovation] = true;
 			}
 
-			format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
-			PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
+			UpdateRoundKillDmgTDmg(playerid);
 
 			SaveVariables[i][PauseWait] = false;
 			
@@ -769,6 +797,7 @@ ResetSaveVariables(index) {
     SaveVariables[index][TKills] = 0;
     SaveVariables[index][TDeaths] = 0;
     SaveVariables[index][TDamage] = 0;
+	SaveVariables[index][sWasInBase] = false;
     SaveVariables[index][RoundID] = -1;
     SaveVariables[index][WasCrashedInStart] = false;
     SaveVariables[index][ToBeAdded] = false;

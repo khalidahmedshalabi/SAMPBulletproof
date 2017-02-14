@@ -7,7 +7,7 @@
 
 #define MAX_VISUAL_DAMAGES				4 			// Max number of damages that can be visual to player (given/taken damage textdraws)
 #define DAMAGE_BUBBLE_STRING_LENGTH		\
-								MAX_VISUAL_DAMAGES * 70	// Taken damage bubble string length
+								MAX_VISUAL_DAMAGES * 110	// Taken damage bubble string length
 #define DAMAGE_TEXTDRAW_Y_DIFF			9.0		// A good space between each damage textdraw
 #define HIDE_DAMAGE_TEXTDRAW_AFTER		5000		// Time needed to hide visual damage textdraw (milliseconds)
 #define NO_DAMAGER_UNIQUE_ID			-2			// This is helpful in textdraw loops to indicate a textdraw that shows no damager (collision damage?)
@@ -36,7 +36,8 @@ new
 	Iterator:PlayersDamaged[MAX_PLAYERS]<MAX_PLAYERS>,		// This array holds the IDs of the players who this player put hits/damage on
 	Iterator:PlayersDamagedBy[MAX_PLAYERS]<MAX_PLAYERS>,	// This array holds the IDs of the players who put hits/damage on this player
 	Iterator:PlayerHasTVisualDmg<MAX_PLAYERS>,				// This array holds the IDs of the players who has a taken-damage textdraw shown for them
-	Iterator:PlayerHasGVisualDmg<MAX_PLAYERS>;				// This array holds the IDs of the players who has a given-damage textdraw shown for them
+	Iterator:PlayerHasGVisualDmg<MAX_PLAYERS>,				// This array holds the IDs of the players who has a given-damage textdraw shown for them
+	Iterator:PlayerHasDBubble<MAX_PLAYERS>;                 // This array holds the IDs of the players who has a damage label above their head
 
 new const Float:WEAPON_RANGES_ADD = 30.0;
 

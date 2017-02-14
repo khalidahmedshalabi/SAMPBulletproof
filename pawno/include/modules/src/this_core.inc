@@ -131,5 +131,9 @@ AddToServersDatabase()
 
 FixGamemodeText()
 {
+    #if RELEASE_VERSION == 1
+	SetGameModeText(sprintf("%s v%.2f (r)", GM_NAME, GM_VERSION));
+	#else
 	SetGameModeText(sprintf("%s v%.2f", GM_NAME, GM_VERSION));
+	#endif
 }
