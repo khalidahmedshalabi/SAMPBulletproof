@@ -31,7 +31,7 @@ hook OnPlayerDisconnect(playerid, reason)
 	}
 	else
 		StorePlayerVariablesMin(playerid);
-	
+
 	// Resets backup request (player can be not in the round anymore and timer was not completed either)
 	if(Player[playerid][AskingForHelp])
 	{
@@ -178,8 +178,7 @@ CheckTeamElimination()
 			}
 		}
 	}
-	
-	#if ROUND_NEVER_END != 1
+
 	// If both teams have no players
 	if(PlayersAlive[ATTACKER] == 0 && PlayersAlive[DEFENDER] == 0)
 	{
@@ -198,7 +197,6 @@ CheckTeamElimination()
 		EndRound(3); // Attackers Win
 		return 0;
 	}
-	#endif
 	return 1;
 }
 
@@ -259,7 +257,6 @@ UpdateTeamPlayerCount(teamid, bool:elimination_check, exception = -1)
 	TextDrawSetString(AttDef_RoundStats, str);
 
 	// If we're asked to check team/round elimination
-	#if ROUND_NEVER_END != 1
 	if(elimination_check)
 	{
 		// If round is not paused
@@ -272,7 +269,6 @@ UpdateTeamPlayerCount(teamid, bool:elimination_check, exception = -1)
 				EndRound(3); // Attackers Win
 		}
 	}
-	#endif
 }
 
 // This updates round textdraws with correct HP info for each team
@@ -1239,7 +1235,7 @@ public EndTeamBackupRequest(playerid, iconid)
 		ColorFix(playerid);
 		RadarFix(playerid);
 	}
-	
+
 	UpdatePlayerTeamBar(playerid);
 	return 1;
 }
@@ -1413,11 +1409,11 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
     Player[ToAddID][Team] = Player[ToReplaceID][Team];
 	Player[ToAddID][WasInTeam] = Player[ToAddID][Team];
 	SwitchTeamFix(ToAddID, false, false, false);
-	
+
 	SetSpawnInfo(ToAddID, Player[ToAddID][Team], Skin[Player[playerid][Team]], Pos[0], Pos[1], Pos[2]+1, Pos[3], 0, 0, 0, 0, 0, 0);
 	Player[ToAddID][IgnoreSpawn] = true;
 	SpawnPlayer(ToAddID);
-	
+
 	SetHP(ToAddID, HP[0]);
 	SetAP(ToAddID, HP[1]);
 
@@ -1448,10 +1444,10 @@ public OnPlayerReplace(ToAddID, ToReplaceID, playerid) {
 
 	CreatePlayerTeamBar(ToAddID);
 	ShowTeamBarsForPlayer(ToAddID);
-	
+
 	ShowTeamCornerInfo(ToAddID);
 	UpdateTeamCornerInfo();
-	
+
 	UpdateTeamPlayerCount(Player[ToAddID][Team], false);
 
 	if(RoundPaused == true) {
@@ -1477,10 +1473,10 @@ public OnPlayerInGameReplace(ToAddID, i, playerid) {
     Player[ToAddID][Team] = SaveVariables[i][pTeam];
 	Player[playerid][WasInTeam] = Player[ToAddID][Team];
 	SwitchTeamFix(ToAddID, false, false, false);
-	
+
     if(SaveVariables[i][WasCrashedInStart] == false) {
 		SetSpawnInfo(ToAddID, Player[ToAddID][Team], Skin[Player[playerid][Team]], SaveVariables[i][pCoords][0], SaveVariables[i][pCoords][1], SaveVariables[i][pCoords][2]+1, SaveVariables[i][pCoords][3], 0, 0, 0, 0, 0, 0);
-		
+
 		SetPlayerInterior(ToAddID, SaveVariables[i][pInterior]);
 		SetPlayerVirtualWorld(ToAddID, SaveVariables[i][pVWorld]);
 	} else if(Current != -1) {
@@ -1499,10 +1495,10 @@ public OnPlayerInGameReplace(ToAddID, i, playerid) {
 		}
 		SetPlayerVirtualWorld(ToAddID, 2);
 	}
-	
+
 	Player[ToAddID][IgnoreSpawn] = true;
 	SpawnPlayer(ToAddID);
-	
+
 	SetHP(ToAddID, SaveVariables[i][gHealth]);
 	SetAP(ToAddID, SaveVariables[i][gArmour]);
 
@@ -1515,7 +1511,7 @@ public OnPlayerInGameReplace(ToAddID, i, playerid) {
 
 	CreatePlayerTeamBar(ToAddID);
 	ShowTeamBarsForPlayer(ToAddID);
-	
+
 	ShowTeamCornerInfo(ToAddID);
 	UpdateTeamCornerInfo();
 
@@ -1563,13 +1559,13 @@ RemovePlayerFromRound(playerid, bool:remove_iterator = true)
 	Player[playerid][ToAddInRound] = false;
 	TogglePlayerControllable(playerid, 1);
 	RemovePlayerMapIcon(playerid, 59);
-	
+
 	DeletePlayerTeamBar(playerid);
 	HideAllTeamBarsForPlayer(playerid);
-	
+
 	HideTeamCornerInfo(playerid);
 	UpdateTeamCornerInfo();
-	
+
 	UpdateTeamPlayerCount(Player[playerid][Team], true, playerid);
 	UpdateTeamHP(Player[playerid][Team], playerid);
 
@@ -1621,7 +1617,7 @@ ResetRoundVariablesInSlots()
 {
     for(new i = 0; i < SAVE_SLOTS; i ++)
 	{
-	   	if(strlen(SaveVariables[i][pName]) >= 2) 
+	   	if(strlen(SaveVariables[i][pName]) >= 2)
 		{
 	   	    SaveVariables[i][RKills]   	=  	0;
 			SaveVariables[i][RDeaths]  	= 	0;
@@ -1809,9 +1805,9 @@ SpawnPlayersInRC()
 
 			SetAP(i, RoundAR);
 			SetHP(i, RoundHP);
-			
+
 			CreatePlayerTeamBar(i);
-			
+
 			ShowTeamCornerInfo(i);
 
 			switch(Player[i][Team]) {
@@ -1822,7 +1818,7 @@ SpawnPlayersInRC()
 			        SetPlayerColor(i, ATTACKER_PLAYING);
 			        SpawnPlayer(i);
                     SetPlayerTeam(i, 1);
-					
+
                     ShowTeamBarsForPlayer(i);
 				} case DEFENDER: {
 				    if(AInterior[Current] == 0) SetSpawnInfo(i, Player[i][Team], Skin[Player[i][Team]], ADefenderSpawn[Current][0] + random(6), ADefenderSpawn[Current][1] + random(6), ADefenderSpawn[Current][2]+0.5, 0, 0, 0, 0, 0, 0, 0);
@@ -1831,7 +1827,7 @@ SpawnPlayersInRC()
 					SetPlayerColor(i, DEFENDER_PLAYING);
 					SpawnPlayer(i);
 					SetPlayerTeam(i, 2);
-					
+
 			        ShowTeamBarsForPlayer(i);
 				}
 			}
@@ -1843,7 +1839,7 @@ SpawnPlayersInRC()
 			UpdateRoundKillDmgTDmg(i);
 		}
 	}
-	
+
 	UpdateTeamCornerInfo();
 
 	RoundMints = ConfigRoundTime;
@@ -2041,9 +2037,9 @@ SpawnPlayersInArena()
 
 			SetAP(i, RoundAR);
 			SetHP(i, RoundHP);
-			
+
 			CreatePlayerTeamBar(i);
-			
+
 			ShowTeamCornerInfo(i);
 
 			SetCPForPlayer(i);
@@ -2056,9 +2052,9 @@ SpawnPlayersInArena()
 			        SetPlayerColor(i, ATTACKER_PLAYING);
 			        SpawnPlayer(i);
                     SetPlayerTeam(i, 1);
-					
+
                     ShowTeamBarsForPlayer(i);
-					
+
 					if(IsACPluginLoaded() && IsACEnabled())
 						TogglePlayerVehicleBlips(i, true);
 				} case DEFENDER: {
@@ -2068,7 +2064,7 @@ SpawnPlayersInArena()
 					SetPlayerColor(i, DEFENDER_PLAYING);
 					SpawnPlayer(i);
 					SetPlayerTeam(i, 2);
-					
+
 			        ShowTeamBarsForPlayer(i);
 
 					if(IsACPluginLoaded() && IsACEnabled())
@@ -2084,7 +2080,7 @@ SpawnPlayersInArena()
 		}
 	}
 	ResetRoundVariablesInSlots();
-	
+
 	UpdateTeamCornerInfo();
 
 	RoundMints = ConfigRoundTime;
@@ -2154,12 +2150,12 @@ public AddPlayerToArena(playerid)
 
 	SetAP(playerid, RoundAR);
 	SetHP(playerid, RoundHP);
-	
+
 	CreatePlayerTeamBar(playerid);
-	
+
 	ShowTeamCornerInfo(playerid);
 	UpdateTeamCornerInfo();
-	
+
 	SetPlayerVirtualWorld(playerid, 2);
 	SetPlayerInterior(playerid, AInterior[Current]);
 	if(!RCArena)
@@ -2174,9 +2170,9 @@ public AddPlayerToArena(playerid)
 	        SetPlayerColor(playerid, ATTACKER_PLAYING);
 
             SetPlayerTeam(playerid, 1);
-			
+
             ShowTeamBarsForPlayer(playerid);
-			
+
 			if(IsACPluginLoaded() && IsACEnabled())
 				TogglePlayerVehicleBlips(playerid, true);
 		} case DEFENDER: {
@@ -2185,9 +2181,9 @@ public AddPlayerToArena(playerid)
 			SpawnPlayer(playerid);
 	        SetPlayerColor(playerid, DEFENDER_PLAYING);
 	        SetPlayerTeam(playerid, 2);
-			
+
 	        ShowTeamBarsForPlayer(playerid);
-			
+
 			if(IsACPluginLoaded() && IsACEnabled())
 				TogglePlayerVehicleBlips(playerid, DefendersSeeVehiclesBlips);
 		} case REFEREE: {
@@ -2453,9 +2449,9 @@ SpawnPlayersInBase()
 
 			SetAP(i, RoundAR);
 			SetHP(i, RoundHP);
-			
+
 			CreatePlayerTeamBar(i);
-			
+
 			ShowTeamCornerInfo(i);
 
 	        SetPlayerVirtualWorld(i, 2); //Set player virtual world to something different that that for lobby and DM so that they don't collide with each other. e.g. You shouldn't be able to see players in lobby or DM while you are in base.
@@ -2472,9 +2468,9 @@ SpawnPlayersInBase()
 				    SpawnPlayer(i);
            			SetPlayerMapIcon(i, 59, BAttackerSpawn[Current][0], BAttackerSpawn[Current][1], BAttackerSpawn[Current][2], 59, 0, MAPICON_GLOBAL);
                     SetPlayerTeam(i, ATTACKER);
-					
+
                     ShowTeamBarsForPlayer(i);
-					
+
 					if(IsACPluginLoaded() && IsACEnabled())
 						TogglePlayerVehicleBlips(i, true);
 				} case DEFENDER: {
@@ -2486,9 +2482,9 @@ SpawnPlayersInBase()
 					SetPlayerColor(i, DEFENDER_PLAYING);
 					SpawnPlayer(i);
 			        SetPlayerTeam(i, DEFENDER);
-					
+
 			        ShowTeamBarsForPlayer(i);
-					
+
 					if(IsACPluginLoaded() && IsACEnabled())
 						TogglePlayerVehicleBlips(i, DefendersSeeVehiclesBlips);
 				}
@@ -2502,9 +2498,9 @@ SpawnPlayersInBase()
 		}
 	}
 	ResetRoundVariablesInSlots();
-	
+
 	UpdateTeamCornerInfo();
-	
+
 	RoundMints = ConfigRoundTime;
 	RoundSeconds = 0;
 
@@ -2574,9 +2570,9 @@ public AddPlayerToBase(playerid)
 
 	SetAP(playerid, RoundAR);
 	SetHP(playerid, RoundHP);
-	
+
 	CreatePlayerTeamBar(playerid);
-	
+
 	ShowTeamCornerInfo(playerid);
 	UpdateTeamCornerInfo();
 
@@ -2591,9 +2587,9 @@ public AddPlayerToBase(playerid)
 	        SetPlayerColor(playerid, ATTACKER_PLAYING);
    			SetPlayerMapIcon(playerid, 59, BAttackerSpawn[Current][0], BAttackerSpawn[Current][1], BAttackerSpawn[Current][2], 59, 0, MAPICON_GLOBAL);
             SetPlayerTeam(playerid, ATTACKER);
-			
+
             ShowTeamBarsForPlayer(playerid);
-			
+
 			if(IsACPluginLoaded() && IsACEnabled())
 				TogglePlayerVehicleBlips(playerid, true);
 		} case DEFENDER: {
@@ -2602,9 +2598,9 @@ public AddPlayerToBase(playerid)
 			SetCPForPlayer(playerid);
 	        SetPlayerColor(playerid, DEFENDER_PLAYING);
 	        SetPlayerTeam(playerid, DEFENDER);
-			
+
 	        ShowTeamBarsForPlayer(playerid);
-			
+
 			if(IsACPluginLoaded() && IsACEnabled())
 				TogglePlayerVehicleBlips(playerid, DefendersSeeVehiclesBlips);
 		} case REFEREE: {
@@ -2647,6 +2643,10 @@ public NotEndingRound()
 
 EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefendersLeft, 4 = Nobody, 5 = Arena:Attackers took cp, 6 = Arena:Defenders took cp
 {
+	#if defined ROUND_NEVER_END
+		return 0; // Don't end the round. Useful for testing in-match textdraws for example.
+	#endif
+	
 	if(AlreadyEndingRound == true)
 	    return 0;
 
@@ -2685,7 +2685,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 
     GangZoneDestroy(CPZone);
 	GangZoneDestroy(ArenaZone);
-	
+
 	ResetBackupRequests();
 
 	new iString[256], TopString[3][128];
@@ -2812,10 +2812,10 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 			}
 			Player[i][WasInCP] = false;
 			Player[i][ToAddInRound] = false;
-			
+
 			if(Player[i][Spectating] == true)
 				StopSpectate(i);
-				
+
 			Player[i][WasInBase] = false;
 			Player[i][WasInTeam] = NON;
 			Player[i][WeaponPicked] = 0;
@@ -3032,10 +3032,10 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	DefDeaths = "";
 	DefDamage = "";
 	DefAcc = "";
-	
+
 	DeleteAllTeamBars();
 	HideTeamCornerInfoForAll();
-	
+
 	DeleteAllDeadBodies();
     ResetTeamLeaders();
 	Iter_Clear(PlayersInRound);
