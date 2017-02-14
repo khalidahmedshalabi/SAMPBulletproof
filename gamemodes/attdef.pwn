@@ -3739,9 +3739,7 @@ YCMD:help(playerid, params[], help)
 	    SendCommandHelpMessage(playerid, "display some guidelines");
 	    return 1;
 	}
-	new str[583];
-	strcat(str, ""COL_PRIM"Main developers: {FFFFFF}Whitetiger & [KHK]Khalid");
-	strcat(str, "\n"COL_PRIM"Contributors on GitHub: {FFFFFF}ApplePieLife, JamesCullum, shendlaw, pds2k12");
+	new str[440];
 	strcat(str, "\n"COL_PRIM"Project on GitHub: {FFFFFF}https://github.com/KHKKhalid/SAMPBulletproof/");
 	strcat(str, "\n\n\n{FFFFFF}To see server settings: {888888}/settings");
 	strcat(str, "\n{FFFFFF}For admin commands: {888888}/acmds");
