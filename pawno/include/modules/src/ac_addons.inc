@@ -4,19 +4,6 @@
 
 #include "modules\header\ac_addons.txt"
 
-public AC_OnFileExecuted(playerid, module[], md5[], bool:isCheat)
-{
-	// If it's a cheat file, ac is not enabled
-	if(isCheat && !IsACEnabled())
-	{
-	    // Report it to other players
-		new str[144];
-		format(str, sizeof str, ""COL_PRIM"[AC] {FFFFFF}File execution report from "COL_PRIM"%s {FFFFFF}module: %s / blacklisted: Yes", Player[playerid][Name], module);
-		SendClientMessageToAll(-1, str);
-	}
-	return 1;
-}
-
 public AC_OnImgFileModifed(playerid, filename[], md5[])
 {
     // If it's a modified file, ac is not enabled
@@ -25,19 +12,6 @@ public AC_OnImgFileModifed(playerid, filename[], md5[])
 	    // Report it to other players
 		new str[144];
 		format(str, sizeof str, ""COL_PRIM"[AC] %s {FFFFFF}has got a modified IMG file "COL_PRIM"(%s)", Player[playerid][Name], filename);
-		SendClientMessageToAll(-1, str);
-	}
-	return 1;
-}
-
-public AC_OnFileCalculated(playerid, filename[], md5[], bool:isCheat)
-{
-    // If it's a modified file, ac is not enabled
-    if(isCheat && !IsACEnabled())
-	{
-	    // Report it to other players
-		new str[144];
-		format(str, sizeof str, ""COL_PRIM"[AC] {FFFFFF}File calculation report from "COL_PRIM"%s {FFFFFF}file: %s / blacklisted: Yes", Player[playerid][Name], filename);
 		SendClientMessageToAll(-1, str);
 	}
 	return 1;

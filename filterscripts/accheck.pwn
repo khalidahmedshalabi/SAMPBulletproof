@@ -100,6 +100,16 @@ public OnFilterScriptExit()
 
 public OnPlayerConnect(playerid)
 {
+    // IsPlayerUsingSampAC might return incorrect values when called at OnPlayerConnect in filterscripts. 
+    // So, we'll use SetTimerEx for a dirty fix.
+    // See "Running code just after a function finishes" paragraph: http://forum.sa-mp.com/showpost.php?p=1037822
+    SetTimerEx("FIX_OnPlayerConnect", 0, false, "d", playerid);
+    return 1;
+}
+
+forward FIX_OnPlayerConnect(playerid);
+public FIX_OnPlayerConnect(playerid)
+{
 	// Get the player's IP
 	new IP[16];
 	GetPlayerIp(playerid, IP, sizeof(IP));
@@ -252,19 +262,6 @@ COMMAND:acchecklist(playerid, params[])
 	}
 	// Always free result
 	db_free_result(query_result);
-	return 1;
-}
-
-public AC_OnFileExecuted(playerid, module[], md5[], bool:isCheat)
-{
-	// If it's a cheat file, ac is not enabled and this player has got ac-checked enabled on them
-	if(isCheat && !IsACEnabled() && PlayerACCheck[playerid] == true)
-	{
-	    // Report it to other players
-		new str[144];
-		format(str, sizeof str, "{FF0000}[AC] {FFFFFF}File execution report from {FF0000}%s {FFFFFF}module: %s / blacklisted: Yes", ReturnPlayerName(playerid), module);
-		SendClientMessageToAll(-1, str);
-	}
 	return 1;
 }
 
