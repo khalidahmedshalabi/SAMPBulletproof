@@ -3012,28 +3012,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				case 24:
 				{
 				    new iString[144];
-				    switch(RandomDeathMessages)
-				    {
-						case false:
-						{
-						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Random Death Messages{FFFFFF}.", Player[playerid][Name]);
-							SendClientMessageToAll(-1, iString);
-							RandomDeathMessages = true;
-						}
-						case true:
-						{
-						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Random Death Messages{FFFFFF}.", Player[playerid][Name]);
-							SendClientMessageToAll(-1, iString);
-							RandomDeathMessages = false;
-						}
-					}
-					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'RDeathMsg'", (RandomDeathMessages == false ? 0 : 1));
-				    db_free_result(db_query(sqliteconnection, iString));
-				    ShowConfigDialog(playerid);
-				}
-				case 25:
-				{
-				    new iString[144];
 				    switch(SightseeingInClassSelection)
 				    {
 						case false:
@@ -3053,7 +3031,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
-                case 26:
+                case 25:
 				{
 				    new iString[144];
 				    switch(VehicleHealthTextdraw)
