@@ -528,51 +528,22 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 	}
 	else
 	{
-		if(!RandomDeathMessages)
-		{
-		    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%sKilled By: ~r~~h~%s", MAIN_TEXT_COLOUR, Player[killerid][Name]));
-		    PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou Killed: ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
-		}
-		else
-		{
-            switch(reason)
-		    {
-		        case WEAPON_KNIFE:
-		        {
-		            PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s knifed you", Player[killerid][Name], MAIN_TEXT_COLOUR));
-		            PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou knifed ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
-		        }
-		        case WEAPON_GRENADE:
-		        {
-				    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s bombed you", Player[killerid][Name], MAIN_TEXT_COLOUR));
-		            PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou bombed ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
-		        }
-		        default:
-			    {
-				    switch(random(4))
-				    {
-				        case 0:
-				        {
-						    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s raped you", Player[killerid][Name], MAIN_TEXT_COLOUR));
-						    PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou raped ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
-					    }
-					    case 1:
-					    {
-						    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s owned you", Player[killerid][Name], MAIN_TEXT_COLOUR));
-						    PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou owned ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
-					    }
-					    case 2:
-				        {
-        				    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s murdered you", Player[killerid][Name], MAIN_TEXT_COLOUR));
-					        PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou murdered ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
-					    }
-					    case 3:
-					    {
-						    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s sent you to cemetery", Player[killerid][Name], MAIN_TEXT_COLOUR));
-                            PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou sent ~r~~h~%s%s to cemetery", MAIN_TEXT_COLOUR, Player[playerid][Name], MAIN_TEXT_COLOUR));
-					    }
-				    }
-			    }
+		switch(reason)
+	    {
+	        case WEAPON_KNIFE:
+	        {
+	            PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s knifed you", Player[killerid][Name], MAIN_TEXT_COLOUR));
+	            PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou knifed ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+	        }
+	        case WEAPON_GRENADE:
+	        {
+			    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s bombed you", Player[killerid][Name], MAIN_TEXT_COLOUR));
+	            PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou bombed ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+	        }
+	        default:
+	    	{
+	    		PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("%sKilled By: ~r~~h~%s", MAIN_TEXT_COLOUR, Player[killerid][Name]));
+				PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou Killed: ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
 		    }
 		}
 			    
