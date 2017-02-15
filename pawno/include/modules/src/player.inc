@@ -15,7 +15,6 @@
 #tryinclude "modules\header\league.txt"
 #include "modules\header\weaponbinds.txt"
 #include "modules\header\teamhpbars.txt"
-#include <YSI_inc\YSI\y_hooks>
 
 // Checks player AKAs
 GetPlayerAKA(playerid, str[], len)
@@ -209,7 +208,6 @@ InitPlayer(playerid)
 
 	ShowTeamCornerInfo(playerid);
 
-	CreatePlayerLabels(playerid);
 	Player[playerid][DamageBubbleTick] = 0;
 
 	InitPlayerMessageBox(playerid);
@@ -226,27 +224,6 @@ InitPlayer(playerid)
 	noclipdata[playerid][accelmul]   	= 	0.0;
 	noclipdata[playerid][FlyMode] 		= 	false;
 	return 1;
-}
-
-hook OnPlayerDisconnect(playerid, reason)
-{
-    DestroyPlayerLabels(playerid);
-    return 1;
-}
-
-CreatePlayerLabels(playerid)
-{
-	Player[playerid][InfoLabel] = Create3DTextLabel(" ", -1, 0, 0, 0, DRAW_DISTANCE-3.2, 0, 1);
-	Attach3DTextLabelToPlayer(Player[playerid][InfoLabel], playerid, 0, 0, -0.7);
-
-    Player[playerid][DamageLabel] = Create3DTextLabel(" ", -1, 0, 0, 0, DRAW_DISTANCE-7, 0, 1);
-	Attach3DTextLabelToPlayer(Player[playerid][DamageLabel], playerid, 0, 0, 1.3);
-}
-
-DestroyPlayerLabels(playerid)
-{
-    Delete3DTextLabel(Player[playerid][InfoLabel]);
-	Delete3DTextLabel(Player[playerid][DamageLabel]);
 }
 
 LoginPlayer(playerid, DBResult:res)
