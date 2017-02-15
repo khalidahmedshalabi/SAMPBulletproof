@@ -773,7 +773,7 @@ RoundTextdrawsCreate()
 	TextDrawColor(AttDef_RoundTimer, -1);
 	TextDrawSetOutline(AttDef_RoundTimer, 1);
 	TextDrawSetProportional(AttDef_RoundTimer, 1);
-	
+
     AttDef_ModernRoundStats[0] = TextDrawCreate(513.540893, 374.283630, "-");
 	TextDrawBackgroundColor(AttDef_ModernRoundStats[0], 0x000000AA);
 	TextDrawFont(AttDef_ModernRoundStats[0], 1);
@@ -848,7 +848,7 @@ RoundTextdrawsCreate()
 	TextDrawSetOutline(AttDef_ModernRoundStats[7], 1);
 	TextDrawSetProportional(AttDef_ModernRoundStats[7], 1);
 	TextDrawSetShadow(AttDef_ModernRoundStats[7], 2);
-	
+
 	AttHpLose = TextDrawCreate(10.000000, 436.000000, "_");
 	TextDrawBackgroundColor(AttHpLose, MAIN_BACKGROUND_COLOUR);
 	TextDrawFont(AttHpLose, 1);
@@ -878,7 +878,7 @@ RoundTextdrawsCreate()
 	TextDrawSetOutline(TeamHpLose[0], 1);
 	TextDrawSetProportional(TeamHpLose[0], 1);
 	TextDrawSetShadow(TeamHpLose[0],0);
-	
+
 	TeamHpLose[1] = TextDrawCreate(387.000000, 412.000000, "_");
 	TextDrawAlignment(TeamHpLose[1], 2);
 	TextDrawFont(TeamHpLose[1], 2);
@@ -888,7 +888,7 @@ RoundTextdrawsCreate()
 	TextDrawSetOutline(TeamHpLose[1], 1);
 	TextDrawSetProportional(TeamHpLose[1], 1);
 	TextDrawSetShadow(TeamHpLose[1], 0);
-	
+
 	CreateTeamCornerTextDraws();
 }
 
@@ -1104,14 +1104,6 @@ LoadPlayerTextDraws(playerid)
 	PlayerTextDrawSetProportional(playerid, DeathText[playerid][1], 1);
 	PlayerTextDrawSetShadow(playerid, DeathText[playerid][1], 0);
 	PlayerTextDrawAlignment(playerid, DeathText[playerid][1], 2);
-	
-	VInfo[playerid] = CreatePlayerTextDraw(playerid,153.000000, 373.000000, "_");
-	PlayerTextDrawBackgroundColor(playerid,VInfo[playerid], MAIN_BACKGROUND_COLOUR);
-	PlayerTextDrawFont(playerid,VInfo[playerid], 1);
-	PlayerTextDrawLetterSize(playerid,VInfo[playerid], 0.200000, 0.899999);
-	PlayerTextDrawColor(playerid,VInfo[playerid], -1);
-	PlayerTextDrawSetOutline(playerid,VInfo[playerid], 1);
-	PlayerTextDrawSetProportional(playerid,VInfo[playerid], 1);
 
 	#if defined _league_included
 	CreatePlayerLeaguePointTextDraw(playerid);
@@ -1124,10 +1116,10 @@ LoadPlayerTextDraws(playerid)
 UpdateRoundKillDmgTDmg(playerid)
 {
     new iString[160];
-	
+
 	//format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
 	format(iString, sizeof(iString), "%sKills ~r~%d~n~%sDamage ~r~%d~n~%sTotal Dmg ~r~%d", MAIN_TEXT_COLOUR,Player[playerid][RoundKills], MAIN_TEXT_COLOUR, Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, Player[playerid][TotalDamage]);
-	
+
 	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
     return 1;
 }
@@ -1152,7 +1144,7 @@ ShowRoundStats(playerid)
 	{
 		TextDrawShowForPlayer(playerid, PauseTD);
 	}
-	
+
 	switch(Player[playerid][RoundTDStyle])
 	{
 		/**** Modern Round Textdraws ****/
@@ -1175,10 +1167,10 @@ ShowRoundStats(playerid)
 			TextDrawShowForPlayer(playerid,defenderNameTD);
 		}
 	    /**** Simple Attack-Defend Textdraws ****/
-	    case 2: 
+	    case 2:
 		{
 			TextDrawShowForPlayer(playerid, AttDef_RoundStats);
-			TextDrawShowForPlayer(playerid, AttDef_RoundTimer);		
+			TextDrawShowForPlayer(playerid, AttDef_RoundTimer);
 		}
 	}
 }
@@ -1207,10 +1199,10 @@ HideRoundStats(playerid)
 			TextDrawHideForPlayer(playerid,defenderNameTD);
 		}
 	    /**** Simple Attack-Defend Textdraws ****/
-	    case 2: 
+	    case 2:
 		{
 			TextDrawHideForPlayer(playerid, AttDef_RoundStats);
-			TextDrawHideForPlayer(playerid, AttDef_RoundTimer);		
+			TextDrawHideForPlayer(playerid, AttDef_RoundTimer);
 		}
 	}
 
@@ -1226,14 +1218,14 @@ ResetRoundTextDraws()
 	TextDrawSetString(AttDef_ModernRoundStats[5], "_");
 	TextDrawSetString(AttDef_ModernRoundStats[6], "_");
 	TextDrawSetString(AttDef_ModernRoundStats[7], "_");
-	
+
 	/**** Bulletproof Gamemode Textdraws ****/
 	TextDrawColor(timerCircleTD, 0x00000033);
 	TextDrawSetString(leftTeamData, "_");
 	TextDrawSetString(rightTeamData, "_");
 	TextDrawSetString(centerTeamNames, "_");
 	TextDrawSetString(timerCenterTD, "_");
-	
+
     /**** Simple Attack-Defend Textdraws ****/
     TextDrawSetString(AttDef_RoundStats, "_");
 	TextDrawSetString(AttDef_RoundTimer, "_");

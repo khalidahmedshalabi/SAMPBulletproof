@@ -115,7 +115,7 @@ enum PlayerVariables
 	bool:InDeathCamera,
 	RequestedClass,
 	RoundTDStyle,
-	
+
 	Text3D:InfoLabel,
 	Text3D:DamageLabel,
 	DamageBubbleTick
@@ -170,5 +170,3 @@ enum rankingEnum {
     player_Acc,
     player_ID
 }
-
-new Iterator:PlayersInVehicles<MAX_PLAYERS>;

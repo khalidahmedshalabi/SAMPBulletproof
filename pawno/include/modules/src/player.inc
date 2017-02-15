@@ -24,11 +24,11 @@ GetPlayerAKA(playerid, str[], len)
     GetPlayerIp(playerid, IP, sizeof(IP));
 	new DBResult:dbres = db_query(sqliteconnection, sprintf("SELECT `Names` FROM `AKAs` WHERE `IP` = '%s'", IP));
 
-	if(db_num_rows(dbres) > 0) 
+	if(db_num_rows(dbres) > 0)
 	{
 		db_get_field_assoc(dbres, "Names", str, len);
-	} 
-	else 
+	}
+	else
 	{
 		strcat(str, "NULL", len);
 		db_free_result(db_query(sqliteconnection, sprintf("INSERT INTO `AKAs` (`IP`, `Names`) VALUES ('%s', '%s')", IP, "")));
@@ -36,7 +36,7 @@ GetPlayerAKA(playerid, str[], len)
 	db_free_result(dbres);
 }
 
-MatchAKA(playerid) 
+MatchAKA(playerid)
 {
     new AKAString[256];
 	GetPlayerAKA(playerid, AKAString, sizeof AKAString);
@@ -58,7 +58,7 @@ MatchAKA(playerid)
 
 CheckPlayerAKA(playerid)
 {
-	if(!MatchAKA(playerid)) 
+	if(!MatchAKA(playerid))
 	{
 		new str[16];
 		GetPlayerIp(playerid, str, sizeof(str));
@@ -93,10 +93,10 @@ RemoveClanTagFromName(playerid) {
 // Loads nickname and name without the clan tag
 InitPlayerNames(playerid)
 {
-	GetPlayerName(playerid, Player[playerid][Name], MAX_PLAYER_NAME); 
+	GetPlayerName(playerid, Player[playerid][Name], MAX_PLAYER_NAME);
 	new NewName[MAX_PLAYER_NAME];
 	NewName = RemoveClanTagFromName(playerid);
-	
+
 	if(strlen(NewName) != 0)
 		Player[playerid][NameWithoutTag] = NewName; // Removes clan tag from the player name and stores the new name in NameWithoutTag variable.
 	else
@@ -167,7 +167,7 @@ InitPlayer(playerid)
 	Player[playerid][GunmenuModdingType] = 0;
 	Player[playerid][GunmenuModdingIndex] = 0;
 	Player[playerid][RoundTDStyle] = 0;
-	
+
     Player[playerid][Logged] = false;
     Player[playerid][IgnoreSpawn] = false;
     Player[playerid][InDM] = false;
@@ -198,26 +198,26 @@ InitPlayer(playerid)
 	Player[playerid][InDeathCamera] = false;
 	Player[playerid][HasDeathQuote] = false;
 	Player[playerid][HadParachuteBeforeFreeze] = false;
-	
+
 	ResetPlayerMoney(playerid);
 	SetPlayerColor(playerid, 0xAAAAAAAA);
 	RemoveUselessObjectsForPlayer(playerid);
 	LoadPlayerTextDraws(playerid);
-	
+
 	for(new i = 0; i < MAX_PLAYER_BARS; i ++)
 		TeamBarShownForPlayer[playerid][_:i] = false;
-		
+
 	ShowTeamCornerInfo(playerid);
-		
+
 	CreatePlayerLabels(playerid);
 	Player[playerid][DamageBubbleTick] = 0;
-	
+
 	InitPlayerMessageBox(playerid);
 	InitPlayerNames(playerid);
 	InitPlayerWeaponBind(playerid);
 	InitPlayerVisualDamage(playerid);
 	InitPlayerVoting(playerid);
-	
+
 	noclipdata[playerid][cameramode] 	= 	CAMERA_MODE_NONE;
 	noclipdata[playerid][lrold]	   	 	= 	0;
 	noclipdata[playerid][udold]   		= 	0;
@@ -231,7 +231,6 @@ InitPlayer(playerid)
 hook OnPlayerDisconnect(playerid, reason)
 {
     DestroyPlayerLabels(playerid);
-	Iter_Remove(PlayersInVehicles, playerid);
     return 1;
 }
 
@@ -239,9 +238,9 @@ CreatePlayerLabels(playerid)
 {
 	Player[playerid][InfoLabel] = Create3DTextLabel(" ", -1, 0, 0, 0, DRAW_DISTANCE-3.2, 0, 1);
 	Attach3DTextLabelToPlayer(Player[playerid][InfoLabel], playerid, 0, 0, -0.7);
-	
+
     Player[playerid][DamageLabel] = Create3DTextLabel(" ", -1, 0, 0, 0, DRAW_DISTANCE-7, 0, 1);
-	Attach3DTextLabelToPlayer(Player[playerid][DamageLabel], playerid, 0, 0, 1.3);	
+	Attach3DTextLabelToPlayer(Player[playerid][DamageLabel], playerid, 0, 0, 1.3);
 }
 
 DestroyPlayerLabels(playerid)
@@ -253,7 +252,7 @@ DestroyPlayerLabels(playerid)
 LoginPlayer(playerid, DBResult:res)
 {
     new iString[128];
-	
+
     // Load level
     db_get_field_assoc(res, "Level", iString, sizeof(iString));
     Player[playerid][Level] = strval(iString);
@@ -294,27 +293,27 @@ LoginPlayer(playerid, DBResult:res)
 	// Load ShowSpecs
 	db_get_field_assoc(res, "InterfaceSpec", iString, sizeof(iString));
 	PlayerInterface[playerid][INTERFACE_SPEC] = (strval(iString) == 0 ? false : true);
-	
+
 	// Load Fighting Style
 	db_get_field_assoc(res, "FightStyle", iString, sizeof(iString));
 	Player[playerid][FightStyle] = strval(iString);
 	SetPlayerFightingStyle(playerid, Player[playerid][FightStyle]);
-	
+
 	// Load Death Messages
 	db_get_field_assoc(res, "DeathMessage", iString, sizeof(iString));
 	DeathMessageStr[playerid][0] = EOS;
 	strcat(DeathMessageStr[playerid], iString, 64);
 	if(strcmp("NO_DEATH_MESSAGE", DeathMessageStr[playerid], false) != 0)
 		Player[playerid][HasDeathQuote] = true;
-	
+
 	// Load Show net textdraws
 	db_get_field_assoc(res, "InterfaceNet", iString, sizeof(iString));
 	PlayerInterface[playerid][INTERFACE_NET] = (strval(iString) == 0 ? false : true);
-	
+
 	// Load Show HP textdraws
 	db_get_field_assoc(res, "InterfaceHP", iString, sizeof(iString));
 	PlayerInterface[playerid][INTERFACE_HP] = (strval(iString) == 0 ? false : true);
-	
+
 	// Load weapon key binds
 	new fieldName[12], value;
 	for(new i = 0; i < MAX_WEAPON_BINDS; i ++)
@@ -327,44 +326,44 @@ LoginPlayer(playerid, DBResult:res)
 			WeaponBindData[playerid][BindKeyWeapon][i] = value;
 		}
 	}
-	
+
 	// Load Gunmenu Style
 	db_get_field_assoc(res, "GunmenuStyle", iString, sizeof(iString));
 	Player[playerid][GunmenuStyle] = strval(iString);
-	
-	// Load Weapon Binding 
+
+	// Load Weapon Binding
 	db_get_field_assoc(res, "WeaponBinding", iString, sizeof(iString));
 	Player[playerid][WeaponBinding] = (strval(iString) == 0 ? false : true);
-	
+
 	// Load player markers setting
 	db_get_field_assoc(res, "PlayerMarkers", iString, sizeof(iString));
 	Player[playerid][PlayerMarkers] = (strval(iString) == 0 ? false : true);
-	
+
 	// Load round textdraws style
 	db_get_field_assoc(res, "RoundTDStyle", iString, sizeof(iString));
 	Player[playerid][RoundTDStyle] = strval(iString);
-	
+
 	// Get current IP address
 	new IP[16];
 	GetPlayerIp(playerid, IP, sizeof(IP));
-	
+
 	// Update players table with new IP address for auto login if they reconnect.
 	format(iString, sizeof(iString), "UPDATE `Players` SET `IP` = '%s' WHERE `Name` = '%s' AND IP != '%s'", IP, Player[playerid][Name], IP);
 	db_free_result(db_query(sqliteconnection, iString));
-	
+
 	// Update last seen/logged in
 	new day, month, year;
 	getdate(year, month, day);
 	format(iString, sizeof(iString), "UPDATE `Players` SET `LastSeen_Day` = %d, `LastSeen_Month` = %d, `LastSeen_Year` = %d WHERE `Name` = '%s'", day, month, year, Player[playerid][Name]);
 	db_free_result(db_query(sqliteconnection, iString));
-	
+
     Player[playerid][Logged] = true;
 }
 
 StorePlayerVariablesMin(playerid) {
     for(new i = 0; i < SAVE_SLOTS; i ++)
 	{
-	   	if(strlen(SaveVariables[i][pName]) < 2) 
+	   	if(strlen(SaveVariables[i][pName]) < 2)
 		{
 	   	    SaveVariables[i][pTeam] 	= 	Player[playerid][Team];
 	   	    SaveVariables[i][RKills]   	=  	Player[playerid][RoundKills];
@@ -375,7 +374,7 @@ StorePlayerVariablesMin(playerid) {
 			SaveVariables[i][TDamage] 	= 	Player[playerid][TotalDamage];
 			SaveVariables[i][TPlayed]   =   Player[playerid][RoundPlayed];
 			SaveVariables[i][sWasInBase] =  Player[playerid][WasInBase];
-			
+
 			#if defined _league_included
 			PlayerShopSaves[i][SHOP_POINTS_DOUBLER] = PlayerShop[playerid][SHOP_POINTS_DOUBLER];
 			PlayerShopSaves[i][SHOP_EXPLOSIVE_BELT] = PlayerShop[playerid][SHOP_EXPLOSIVE_BELT];
@@ -397,14 +396,14 @@ StorePlayerVariablesMin(playerid) {
 			SaveVariables[i][RoundID]   =   Current;
 			SaveVariables[i][ToBeAdded] =   false;
 			SaveVariables[i][CheckScore] = 	true;
-	
+
 			new weapID, weapAmmo = 0;
 			GetPlayerWeaponData(playerid, 8, weapID, weapAmmo);
 			if(weapID == WEAPON_GRENADE)
 				SaveVariables[i][SavedGrenadeAmmo] = weapAmmo;
 			else
 				SaveVariables[i][SavedGrenadeAmmo] = 0;
-			
+
 			format(SaveVariables[i][pName], 24, Player[playerid][Name]);
 			format(SaveVariables[i][pNameWithoutTag], 24, Player[playerid][NameWithoutTag]);
 
@@ -460,7 +459,7 @@ StorePlayerVariables(playerid) {
 			SaveVariables[i][TDamage] 	= 	Player[playerid][TotalDamage];
 			SaveVariables[i][TPlayed]   =   Player[playerid][RoundPlayed];
 			SaveVariables[i][sWasInBase] =  Player[playerid][WasInBase];
-			
+
 			#if defined _league_included
 			PlayerShopSaves[i][SHOP_POINTS_DOUBLER] = PlayerShop[playerid][SHOP_POINTS_DOUBLER];
 			PlayerShopSaves[i][SHOP_EXPLOSIVE_BELT] = PlayerShop[playerid][SHOP_EXPLOSIVE_BELT];
@@ -470,7 +469,7 @@ StorePlayerVariables(playerid) {
 			PlayerShopSaves[i][SHOP_SPRAYCAN] = PlayerShop[playerid][SHOP_SPRAYCAN];
 			PlayerShopSaves[i][SHOP_NINJA] = PlayerShop[playerid][SHOP_NINJA];
 			#endif
-			
+
 			OnPlayerAmmoUpdate(playerid);
 			SaveVariables[i][iAccuracy] =  floatround(Player[playerid][Accuracy], floatround_round);
 			SaveVariables[i][tshotsHit] =   Player[playerid][TotalshotsHit];
@@ -484,7 +483,7 @@ StorePlayerVariables(playerid) {
 			SaveVariables[i][RoundID]   =   Current;
 			SaveVariables[i][ToBeAdded] =   true;
 			SaveVariables[i][CheckScore] = 	true;
-			
+
 			new weapID, weapAmmo = 0;
 			GetPlayerWeaponData(playerid, 8, weapID, weapAmmo);
 			if(weapID == WEAPON_GRENADE)
@@ -508,7 +507,7 @@ StorePlayerVariables(playerid) {
 			    SaveVariables[i][pSeatID] = -1;
 			}
 
-			if(Current != -1 && (AllowStartBase == false || ElapsedTime < 20) && (Player[i][ToAddInRound] || Player[i][Playing])) 
+			if(Current != -1 && (AllowStartBase == false || ElapsedTime < 20) && (Player[i][ToAddInRound] || Player[i][Playing]))
 				SaveVariables[i][WasCrashedInStart] = true;
 
 	        format(iString,sizeof(iString),"{FFFFFF}%s's "COL_PRIM"data saved.", Player[playerid][Name]);
@@ -555,7 +554,7 @@ LoadPlayerVariables(playerid)
                 Player[playerid][Accuracy]      	=   SaveVariables[i][iAccuracy];
 			 	Player[playerid][TotalshotsHit]		=	SaveVariables[i][tshotsHit];
 			 	Player[playerid][TotalBulletsFired] = 	SaveVariables[i][tBulletsShot];
-				
+
 				#if defined _league_included
 				PlayerShop[playerid][SHOP_POINTS_DOUBLER] = PlayerShopSaves[i][SHOP_POINTS_DOUBLER];
 				PlayerShop[playerid][SHOP_EXPLOSIVE_BELT] = PlayerShopSaves[i][SHOP_EXPLOSIVE_BELT];
@@ -564,7 +563,7 @@ LoadPlayerVariables(playerid)
 				PlayerShop[playerid][SHOP_CHAINSAW] = PlayerShopSaves[i][SHOP_CHAINSAW];
 				PlayerShop[playerid][SHOP_SPRAYCAN] = PlayerShopSaves[i][SHOP_SPRAYCAN];
 				PlayerShop[playerid][SHOP_NINJA] = PlayerShopSaves[i][SHOP_NINJA];
-				
+
 				if(PlayerShop[playerid][SHOP_CHAINSAW])
 				{
 					GivePlayerWeapon(playerid, WEAPON_CHAINSAW, 1);
@@ -605,7 +604,7 @@ LoadPlayerVariables(playerid)
 				PlayerShop[playerid][SHOP_CHAINSAW] = PlayerShopSaves[i][SHOP_CHAINSAW];
 				PlayerShop[playerid][SHOP_SPRAYCAN] = PlayerShopSaves[i][SHOP_SPRAYCAN];
 				PlayerShop[playerid][SHOP_NINJA] = PlayerShopSaves[i][SHOP_NINJA];
-				
+
 				if(PlayerShop[playerid][SHOP_CHAINSAW])
 				{
 					GivePlayerWeapon(playerid, WEAPON_CHAINSAW, 1);
@@ -615,7 +614,7 @@ LoadPlayerVariables(playerid)
 					GivePlayerWeapon(playerid, WEAPON_SPRAYCAN, 9999);
 				}
 				#endif
-				
+
                 ResetSaveVariables(i);
 
 				format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has spawned as: {FFFFFF}%s", Player[playerid][Name], TeamName[Player[playerid][Team]]);
@@ -641,11 +640,11 @@ LoadPlayerVariables(playerid)
 			Player[playerid][RoundPlayed] 	= 	SaveVariables[i][TPlayed];
 			Player[playerid][Accuracy]      =   SaveVariables[i][iAccuracy];
 		 	Player[playerid][TotalshotsHit]	=	SaveVariables[i][tshotsHit];
-		 	Player[playerid][TotalBulletsFired] = SaveVariables[i][tBulletsShot];		
+		 	Player[playerid][TotalBulletsFired] = SaveVariables[i][tBulletsShot];
 
     	 	if(SaveVariables[i][WasCrashedInStart] == false) {
 			 	SetSpawnInfo(playerid, Player[playerid][Team], Skin[Player[playerid][Team]], SaveVariables[i][pCoords][0], SaveVariables[i][pCoords][1], SaveVariables[i][pCoords][2]+1, SaveVariables[i][pCoords][3], 0, 0, 0, 0, 0, 0);
-		
+
 			 	SetPlayerInterior(playerid, SaveVariables[i][pInterior]);
 			 	SetPlayerVirtualWorld(playerid, SaveVariables[i][pVWorld]);
 		 	} else if(Current != -1) {
@@ -664,16 +663,16 @@ LoadPlayerVariables(playerid)
 			 	}
 			 	SetPlayerVirtualWorld(playerid, 2);
 		 	}
-			
+
 			Player[playerid][IgnoreSpawn] = true;
 	        SpawnPlayer(playerid);
-			
+
 			ShowTeamBarsForPlayer(playerid);
 			CreatePlayerTeamBar(playerid);
-			
+
 			ShowTeamCornerInfo(playerid);
 			UpdateTeamCornerInfo();
-			
+
 			UpdateTeamPlayerCount(Player[playerid][Team], false);
 			SetHP(playerid, SaveVariables[i][gHealth]);
 			SetAP(playerid, SaveVariables[i][gArmour]);
@@ -747,7 +746,7 @@ LoadPlayerVariables(playerid)
 			}
 			else
 				TogglePlayerControllable(playerid, 1);
-			
+
 			#if defined _league_included
 			if(LeagueAllowed)
 			{
@@ -757,7 +756,7 @@ LoadPlayerVariables(playerid)
 
 	        format(iString,sizeof(iString),""COL_PRIM"Re-added player {FFFFFF}%s. "COL_PRIM"Data fetched successfully.", Player[playerid][Name]);
 	    	SendClientMessageToAll(-1, iString);
-			
+
 			if(!Player[playerid][FakePacketRenovation] && Player[playerid][NetCheck] && NetStats_GetConnectedTime(playerid) < 300000)
 			{
 				SetTimerEx("FakePacketRenovationEnd", 30000, false, "ifb", playerid, NetStats_PacketLossPercent(playerid), false);
@@ -767,7 +766,7 @@ LoadPlayerVariables(playerid)
 			UpdateRoundKillDmgTDmg(playerid);
 
 			SaveVariables[i][PauseWait] = false;
-			
+
 			ResetSaveVariables(i);
 	    	return 1;
 		}
@@ -809,7 +808,7 @@ ResetSaveVariables(index) {
 	SaveVariables[index][SavedGrenadeAmmo] = 0;
 	for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
 		SaveVariables[index][HadGunmenuGun][i] = false;
-	
+
 	#if defined _league_included
 	PlayerShopSaves[index][SHOP_POINTS_DOUBLER] = false;
 	PlayerShopSaves[index][SHOP_EXPLOSIVE_BELT] = false;

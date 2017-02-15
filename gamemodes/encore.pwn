@@ -890,26 +890,6 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 	    }
     }
-
-	if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_PASSENGER)
-	{
-		if(VehicleHealthTextdraw)
-		{
-	        PlayerTextDrawSetString(playerid,VInfo[playerid],"_");
-		    PlayerTextDrawShow(playerid,VInfo[playerid]);
-		}
-		
-	    Iter_Add(PlayersInVehicles,playerid);
-	}
-	if(oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER)
-	{
-		if(VehicleHealthTextdraw)
-		{
-	        PlayerTextDrawHide(playerid,VInfo[playerid]);
-		}
-		
-	    Iter_Remove(PlayersInVehicles,playerid);
-    }
 	return 1;
 }
 
@@ -3028,43 +3008,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						}
 					}
 					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'SightseeingInCS'", (SightseeingInClassSelection == false ? 0 : 1));
-				    db_free_result(db_query(sqliteconnection, iString));
-				    ShowConfigDialog(playerid);
-				}
-                case 25:
-				{
-				    new iString[144];
-				    switch(VehicleHealthTextdraw)
-				    {
-						case false:
-						{
-						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Vehicle Health Information{FFFFFF}.", Player[playerid][Name]);
-							SendClientMessageToAll(-1, iString);
-							VehicleHealthTextdraw = true;
-							
-							foreach(new i : Player)
-							{
-								if(IsPlayerInAnyVehicle(i))
-								{
-									PlayerTextDrawSetString(i,VInfo[i],"_");
-		                        	PlayerTextDrawShow(i,VInfo[i]);
-								}
-							}
-						}
-						case true:
-						{
-						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Vehicle Health Information{FFFFFF}.", Player[playerid][Name]);
-							SendClientMessageToAll(-1, iString);
-							VehicleHealthTextdraw = false;
-							
-							foreach(new i : Player)
-							{
-								if(IsPlayerInAnyVehicle(i))
-                                    PlayerTextDrawHide(i,VInfo[i]);
-							}
-						}
-					}
-					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'VehicleHealthTD'", (VehicleHealthTextdraw == false ? 0 : 1));
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}
@@ -9634,18 +9577,6 @@ public OnScriptUpdate()
 		{
   			PlayerTextDrawSetString(i, FPSPingPacket[i], sprintf("%sFPS ~r~%d %sPing ~r~%d %sPacketLoss ~r~%.1f%%", MAIN_TEXT_COLOUR, Player[i][FPS], MAIN_TEXT_COLOUR, GetPlayerPing(i), MAIN_TEXT_COLOUR, NetStats_PacketLossPercent(i)));
             Update3DTextLabelText(Player[i][InfoLabel], -1, sprintf("%sPL: {FFFFFF}%.1f%%\n%sPing: {FFFFFF}%d\n%sFPS: {FFFFFF}%d", TextColor[Player[i][Team]], NetStats_PacketLossPercent(i), TextColor[Player[i][Team]], GetPlayerPing(i), TextColor[Player[i][Team]], Player[i][FPS]));
-		}
-	}
-	
-	// Update Vehicle Information
-	if(VehicleHealthTextdraw)
-	{
-		foreach(new i : PlayersInVehicles)
-		{
-			new vID,Float:vHealth;
-			vID = GetPlayerVehicleID(i);
-			GetVehicleHealth(vID, vHealth);
-			PlayerTextDrawSetString(i,VInfo[i],sprintf("~w~%s~n~~w~Health ~r~%.0f",aVehicleNames[GetVehicleModel(vID)-400],vHealth));
 		}
 	}
 	return 1;
