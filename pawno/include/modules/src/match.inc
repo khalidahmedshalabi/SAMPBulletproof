@@ -35,7 +35,7 @@ hook OnPlayerDisconnect(playerid, reason)
 	// Resets backup request (player can be not in the round anymore and timer was not completed either)
 	if(Player[playerid][AskingForHelp])
 	{
-		EndTeamBackupRequest(playerid,((Player[playerid][Team] == DEFENDER) ? DEFENDER_BACKUP_ICON : ATTACKER_BACKUP_ICON));
+		EndTeamBackupRequest(playerid);
 	}
 
 	// Handle match
@@ -1162,7 +1162,7 @@ PlayerNoLeadTeam(playerid)
 						SendClientMessage(i, -1, sprintf("%s%s {FFFFFF}is no longer leading the team.", TextColor[team], Player[playerid][Name]));
 					}
 				}
-				EndTeamBackupRequest(playerid, ATTACKER_BACKUP_ICON);
+				EndTeamBackupRequest(playerid);
 			}
 			case DEFENDER:
 			{
@@ -1173,7 +1173,7 @@ PlayerNoLeadTeam(playerid)
 						SendClientMessage(i, -1, sprintf("%s%s {FFFFFF}is no longer leading the team.", TextColor[team], Player[playerid][Name]));
 					}
 				}
-				EndTeamBackupRequest(playerid, DEFENDER_BACKUP_ICON);
+				EndTeamBackupRequest(playerid);
 			}
 		}
 	}
@@ -1210,13 +1210,14 @@ ResetBackupRequests()
     foreach(new i : Player)
 	{
 	    if(Player[i][AskingForHelp])
-		    EndTeamBackupRequest(i,((Player[i][Team] == DEFENDER) ? DEFENDER_BACKUP_ICON : ATTACKER_BACKUP_ICON));
+		    EndTeamBackupRequest(i);
 	}
 }
 
-forward EndTeamBackupRequest(playerid, iconid);
-public EndTeamBackupRequest(playerid, iconid)
+forward EndTeamBackupRequest(playerid);
+public EndTeamBackupRequest(playerid)
 {
+	new iconid = (Player[playerid][Team] == DEFENDER) ? DEFENDER_BACKUP_ICON : ATTACKER_BACKUP_ICON;
     if(!Player[playerid][AskingForHelp])return 1;
 
 	new team = Player[playerid][Team];
@@ -1316,7 +1317,7 @@ PlayerRequestBackup(playerid)
 	SetPlayerColor(playerid, team == ATTACKER ? ATTACKER_ASKING_HELP : DEFENDER_ASKING_HELP);
 
 	// Set a timer to end backup request later
-	SetTimerEx("EndTeamBackupRequest", 7000, 0, "ii", playerid, iconID);
+	SetTimerEx("EndTeamBackupRequest", 7000, 0, "i", playerid);
 
 	// Set values to tell that this team has someone requesting for backup now
 	TeamHelp[team] = true;
@@ -2646,7 +2647,7 @@ EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefen
 	#if defined ROUND_NEVER_END
 		return 0; // Don't end the round. Useful for testing in-match textdraws for example.
 	#endif
-	
+
 	if(AlreadyEndingRound == true)
 	    return 0;
 
