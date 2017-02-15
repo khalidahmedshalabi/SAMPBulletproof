@@ -509,10 +509,10 @@ public SpawnConnectedPlayer(playerid, team)
 		ShowMatchScoreBoard(playerid);
 	}
 	HideIntroTextDraws(playerid);
-	
+
 	Player[playerid][Spawned] = true;
 	SpawnInLobby(playerid);
-	
+
 	HideAllTeamBarsForPlayer(playerid);
 
 	LoadPlayerVariables(playerid);
@@ -552,8 +552,8 @@ udb_hash(buf[]) {
 RecountPlayersOnCP()
 {
 	PlayersInCP = 0;
-	
-	if(GameType != ARENA || CPInArena)
+
+	if(GameType == ARENA && CPInArena)
 	{
 		foreach(new i : PlayersInRound)
 		{
@@ -564,7 +564,7 @@ RecountPlayersOnCP()
 			}
 		}
 	}
-	
+
 	if(PlayersInCP == 0)
 	{
 		TeamCapturingCP = NON;
@@ -1476,12 +1476,12 @@ SwitchTeamFix(playerid, bool:message = true, bool:fixvs = true, bool:changeskin 
 	ColorFix(playerid);
 	if(fixvs && Current == -1)
 		FixVsTextDraw();
-	
+
 	if(changeskin)
 	{
 	    SetPlayerSkin(playerid, Skin[Player[playerid][Team]]);
 	}
-	
+
 	SetCameraBehindPlayer(playerid);
 	HideAllTeamBarsForPlayer(playerid);
 	#if defined _league_included
@@ -1975,7 +1975,7 @@ Float:GetDistanceBetweenPlayers(playerid, toplayerid)
 SpawnInDM(playerid, DMID)
 {
 	Player[playerid][InDM] = true;
-	
+
 	ResetPlayerWeapons(playerid); // Reset all player weapons
 
 	SetSpawnInfo(playerid, playerid, Skin[Player[playerid][Team]], DMSpawn[DMID][0]+random(2), DMSpawn[DMID][1]+random(2), DMSpawn[DMID][2], DMSpawn[DMID][3], DMWeapons[DMID][0], 9999, DMWeapons[DMID][1], 9999, DMWeapons[DMID][2], 9999);
@@ -1983,10 +1983,10 @@ SpawnInDM(playerid, DMID)
 
 	Player[playerid][IgnoreSpawn] = true; //Make sure you ignore OnPlayerSpawn, else you will just spawn in lobby (because u are about to use SpawnPlayer).
 	SpawnPlayer(playerid); //Spawns players, in this case we have SetSpawnInfo (but still you need to make sure OnPlayerSpawn is ignored);
-	
+
 	SetPlayerVirtualWorld(playerid, Player[playerid][VWorld]); // Put player in a different virtual world so that if you create a DM in your lobby and you join the DM, you won't be able to see other players in the lobby.
 	SetHP(playerid, 100);
-	SetAP(playerid, 100);	
+	SetAP(playerid, 100);
 	return 1;
 }
 
