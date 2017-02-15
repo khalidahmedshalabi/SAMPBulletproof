@@ -183,75 +183,24 @@ public OnPlayerRequestClass(playerid, classid)
 	SetPlayerTime(playerid, 12, 0);
 	SetPlayerInterior(playerid, MainInterior);
 	
-	if(!SightseeingInClassSelection)
-	{
-	    switch(random(3))
-	    {
-	        case 0:
-	        {
-	            InterpolateCameraPos(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 25.0, MainSpawn[0] - 7.0, MainSpawn[1] + 7.0, MainSpawn[2] + 5.0, 15000, CAMERA_MOVE);
-			    InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 27.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 7000, CAMERA_MOVE);
-	        }
-	        case 1:
-	        {
-	            InterpolateCameraPos(playerid, MainSpawn[0] + 5.0, MainSpawn[1] + 5.0, MainSpawn[2] + 2.0, MainSpawn[0] - 7.0, MainSpawn[1] + 7.0, MainSpawn[2] + 25.0, 15000, CAMERA_MOVE);
-		    	InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 10.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 7000, CAMERA_MOVE);
-	        }
-	        case 2:
-	        {
-	            InterpolateCameraPos(playerid, MainSpawn[0] + 10.0, MainSpawn[1] - 10.0, MainSpawn[2] + 10.0, MainSpawn[0] - 5.0, MainSpawn[1] + 5.0, MainSpawn[2] + 5.0, 15000, CAMERA_MOVE);
-		    	InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 5.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 10000, CAMERA_MOVE);
-	        }
-	    }
-	}
-	else
-	{
-    	switch(random(7))
-	    {
-	        case 0:
-	        {
-                // Vinewood Sign
-	            InterpolateCameraPos(playerid, 1334.0220, -783.3859, 87.6606, 1407.5430, -896.9464, 87.6606, 20000, CAMERA_MOVE);
-	            InterpolateCameraLookAt(playerid,1415.7408, -806.5591, 85.0399, 1415.7408, -806.5591, 85.0399, 20000, CAMERA_MOVE);
-	        }
-	        case 1:
-	        {
-	            // Vinewood Sign 2
-	            InterpolateCameraPos(playerid, 1476.7277, -874.3438, 110.0, 1476.7277, -900.000, 70.0, 5000, CAMERA_MOVE);
-	            InterpolateCameraLookAt(playerid, 1415.2177, -807.9233, 200.0, 1415.2177, -807.9233, 85.0623, 5000, CAMERA_MOVE);
-	        }
-	        case 2:
-	        {
-                // Desert Mountains
-	            InterpolateCameraPos(playerid, -365.5211, 1938.2665, 86.0535, -228.2556, 1821.5653, 96.6716, 15000, CAMERA_MOVE);
-	            InterpolateCameraLookAt(playerid, -327.0362, 1943.1190, 112.4141, -206.0446, 1895.2479, 91.2241, 15000, CAMERA_MOVE);
-	        }
-	        case 3:
-	        {
-	        	// Streets of San Fierro
-	        	InterpolateCameraPos(playerid, -2078.7246, 731.2352, 69.4141, -1714.5399, 731.2352, 69.4141, 45000, CAMERA_MOVE);
-	        	InterpolateCameraLookAt(playerid, -1971.8036, 731.0178, 45.2969, -1607.8036, 731.0178, 45.2969, 45000, CAMERA_MOVE);
-	        }
-	        case 4:
-	        {
-            	// LS Beach
-	        	InterpolateCameraPos(playerid, 340.3344, -1801.2339, 10.6959, 207.3543, -1801.2339, 10.6959, 80000, CAMERA_MOVE);
-	        	InterpolateCameraLookAt(playerid, 289.9604, -1766.6553, 4.5469, 159.9604, -1766.6553, 4.5469, 80000, CAMERA_MOVE);
-	        }
-	        case 5:
-	        {
-	        	// SF Bridge
-	        	InterpolateCameraPos(playerid, -2630.2266, 1459.0537, 65.6484, -2596.2339, 2039.0321, 263.0035, 20000, CAMERA_MOVE);
-	        	InterpolateCameraLookAt(playerid, -2678.6890, 1589.8137, 129.3078, -2713.4839, 1757.8318, 98.4932, 20000, CAMERA_MOVE);
-	        }
-		    case 6:
-		    {
-	        	// LV Stadium
-	        	InterpolateCameraPos(playerid, 1328.3080, 2116.9485, 11.0156, 1287.4218, 2097.1223, 55.1216, 20000, CAMERA_MOVE);
-	    	    InterpolateCameraLookAt(playerid, 1334.9221, 2077.7285, 26.6737, 1381.2794, 2184.0823, 11.0234, 20000, CAMERA_MOVE);
-		    }
-	    }
-	}
+	switch(random(3))
+    {
+        case 0:
+        {
+            InterpolateCameraPos(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 25.0, MainSpawn[0] - 7.0, MainSpawn[1] + 7.0, MainSpawn[2] + 5.0, 15000, CAMERA_MOVE);
+		    InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 27.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 7000, CAMERA_MOVE);
+        }
+        case 1:
+        {
+            InterpolateCameraPos(playerid, MainSpawn[0] + 5.0, MainSpawn[1] + 5.0, MainSpawn[2] + 2.0, MainSpawn[0] - 7.0, MainSpawn[1] + 7.0, MainSpawn[2] + 25.0, 15000, CAMERA_MOVE);
+	    	InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 10.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 7000, CAMERA_MOVE);
+        }
+        case 2:
+        {
+            InterpolateCameraPos(playerid, MainSpawn[0] + 10.0, MainSpawn[1] - 10.0, MainSpawn[2] + 10.0, MainSpawn[0] - 5.0, MainSpawn[1] + 5.0, MainSpawn[2] + 5.0, 15000, CAMERA_MOVE);
+	    	InterpolateCameraLookAt(playerid, MainSpawn[0], MainSpawn[1], MainSpawn[2] + 5.0, MainSpawn[0], MainSpawn[1], MainSpawn[2], 10000, CAMERA_MOVE);
+        }
+    }
         
     #if defined _league_included
 	// League account login check
@@ -2986,28 +2935,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						}
 					}
 					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'AutoRoundStarter'", (AutoRoundStarter == false ? 0 : 1));
-				    db_free_result(db_query(sqliteconnection, iString));
-				    ShowConfigDialog(playerid);
-				}
-				case 24:
-				{
-				    new iString[144];
-				    switch(SightseeingInClassSelection)
-				    {
-						case false:
-						{
-						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}enabled "COL_PRIM"Sightseeing In Class Selection{FFFFFF}.", Player[playerid][Name]);
-							SendClientMessageToAll(-1, iString);
-							SightseeingInClassSelection = true;
-						}
-						case true:
-						{
-						    format(iString, sizeof(iString), "{FFFFFF}%s "COL_PRIM"has {FFFFFF}disabled "COL_PRIM"Sightseeing In Class Selection{FFFFFF}.", Player[playerid][Name]);
-							SendClientMessageToAll(-1, iString);
-							SightseeingInClassSelection = false;
-						}
-					}
-					format(iString, sizeof(iString), "UPDATE Configs SET Value = %d WHERE Option = 'SightseeingInCS'", (SightseeingInClassSelection == false ? 0 : 1));
 				    db_free_result(db_query(sqliteconnection, iString));
 				    ShowConfigDialog(playerid);
 				}

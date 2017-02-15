@@ -126,11 +126,6 @@ ShowConfigDialog(playerid) {
 	else
 		strcat(string, "\n{FF6666}Auto round starter");
 
-	if(SightseeingInClassSelection == true)
-		strcat(string, "\n{66FF66}Sightseeing In Class Selection");
-	else
-		strcat(string, "\n{FF6666}Sightseeing In Class Selection");
-
     ShowPlayerDialog(playerid, DIALOG_CONFIG, DIALOG_STYLE_LIST, ""COL_PRIM"Config Settings", string, "OK", "Cancel");
     return 1;
 }
@@ -259,10 +254,6 @@ LoadConfig()
 
 	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // Game speed
     GAME_SPEED = strval(iString);
-    db_next_row(res);
-
-	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // SightseeingInClassSelection
-    SightseeingInClassSelection = (strval(iString) == 1 ? true : false);
     db_next_row(res);
 
 	db_free_result(res);
