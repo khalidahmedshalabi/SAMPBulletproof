@@ -553,7 +553,7 @@ RecountPlayersOnCP()
 {
 	PlayersInCP = 0;
 
-	if(GameType == ARENA && CPInArena)
+	if(GameType == BASE || (GameType == ARENA && CPInArena))
 	{
 		foreach(new i : PlayersInRound)
 		{
