@@ -35,9 +35,6 @@ UpdateSpectateInfoForPlayer(spectatorid)
 // This timer is called frequently to update textdraws for spectators so they can see correct info about who they're spectating
 TIMER(UpdateInfoForSpectators)
 {
-	if(Iter_Count(AllSpectators) == 0)
-		return 0;
-
 	foreach(new i : AllSpectators)
 	{
 		UpdateSpectateInfoForPlayer(i);
@@ -127,7 +124,6 @@ ForgetSpectator(playerid)
 // Update/fix the textdraw that shows who are spectating you
 UpdatePlayerSpectators(playerid)
 {
-	// Iter_Count(PlayerSpectators[playerid]); ==  how many are spectating this guy?
 	if(Iter_Count(PlayerSpectators[playerid]) == 0) // if none are spectating
 	{
 		PlayerTextDrawSetString(playerid, WhoSpec[playerid], " ");
@@ -138,16 +134,16 @@ UpdatePlayerSpectators(playerid)
 	{
 		new str[SPECTATORS_STRING_SIZE];
 		new totalAdded;
-		
+
 		format(str, sizeof str, "%sSPECTATORS~n~~n~", MAIN_TEXT_COLOUR);
 		foreach(new i : PlayerSpectators[playerid]) // Loop through the array that contains this player's spectators
 		{
 		    // Make sure we don't show more players than MAX_PLAYER_SPECTATORS. Otherwise string will go beyond 255th character and cause crashes.
 		    if(totalAdded >= MAX_PLAYER_SPECTATORS)break;
-		
+
 			// Format string with spectator name
 			format(str, sizeof str, "%s%s ~r~~h~%d~n~", str, Player[i][NameWithoutTag], i);
-			
+
 			totalAdded++;
 		}
 		foreach(new i : PlayerSpectators[playerid])
@@ -197,7 +193,7 @@ SpectatePlayer(playerid, specid)
 		// Team damage textdraws
 		ShowTeamBarsForPlayer(playerid);
 		ShowTeamCornerInfo(playerid);
-		
+
 		// Hide some HUD textdraws
 		PlayerTextDrawHide(playerid, RoundKillDmgTDmg[playerid]);
 		PlayerTextDrawHide(playerid, ArmourTextDraw[playerid]);

@@ -8305,8 +8305,7 @@ YCMD:spec(playerid, params[], help)
 	if(Player[specid][Spectating] == true) return SendErrorMessage(playerid,"That player is spectating someone else.");
 	if(GetPlayerState(specid) != 1 && GetPlayerState(specid) != 2 && GetPlayerState(specid) != 3) return SendErrorMessage(playerid,"That player is not spawned.");
 	if(Current != -1 && Player[playerid][Team] != REFEREE && !IsTeamTheSame(Player[specid][Team], Player[playerid][Team])) return SendErrorMessage(playerid,"You can only spectate your own team.");
-    if(Iter_Count(PlayerSpectators[specid]) == MAX_PLAYER_SPECTATORS)
-
+    
 	if(Player[playerid][InDM] == true) {
 	    Player[playerid][InDM] = false;
 		Player[playerid][DMReadd] = 0;

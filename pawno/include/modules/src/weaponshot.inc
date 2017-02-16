@@ -534,12 +534,9 @@ InitPlayerVisualDamage(playerid)
 	Iter_Remove(PlayerHasGVisualDmg, playerid);
 	Iter_Remove(PlayerHasTVisualDmg, playerid);
 	VisualDamage[playerid][FriendlyDamageTimer] = -1;
-	
-    InitPlayerDamageBubble(playerid);
 }
 
 // This basically checks if a damage textdraw has been shown for a specific/pre-defined time, then hide it
-// Also checks damage bubble
 // Usually placed in a frequently called timer
 CheckVisualDamageTextDraws()
 {
@@ -601,8 +598,6 @@ CheckVisualDamageTextDraws()
 				Iter_SafeRemove(PlayerHasTVisualDmg, cur, i); // Safely remove him from the iterator array.
 		}
 	}
-	
-    UpdateDamageBubbles();
 	return 1;
 }
 
@@ -702,33 +697,26 @@ ShowVisualDamageForSpectators(playerid, index, str[], damagetype, currenttick)
 	}
 }
 
-// Make sure player is not in a PlayerHasDBubble list.
-InitPlayerDamageBubble(playerid)
-{
-    Iter_Remove(PlayerHasDBubble,playerid);
-}
-
-// Creates and updates damage label above player's head.
-// Note: SetPlayerChatBubble doesn't work as it's line length is too small with color formatting.
+// Creates a bubble above a player's head with damages they take
 SetPlayerDamageBubble(playerid)
 {
+	// A string to hold the damage bubble
 	new str[DAMAGE_BUBBLE_STRING_LENGTH];
-	new linesUsed = 0;
-	for(new i = 0; i != MAX_VISUAL_DAMAGES; i ++) // Loop through all visual damages a player could take
+
+	// Loop through all visual damages a player could take
+	for(new i = 0; i != MAX_VISUAL_DAMAGES; i ++)
 	{
 		// Check if there's a taken damage in this slot
 		if(VisualDamage[playerid][ShownTakenDamage][i] == false)
 			continue;
 
 		if(VisualDamage[playerid][WhoDamaging][i] != NO_DAMAGER_UNIQUE_ID)
-		{	
-			format(str, sizeof str, "%s%s%s {FFFFFF}/ -%.0f (%s%s{FFFFFF})\n",
+		{
+			format(str, sizeof str, "%s%s / %s / -%.0f\n",
 			str,
-			TextColor[Player[VisualDamage[playerid][WhoDamaging][i]][Team]],
 			Player[VisualDamage[playerid][WhoDamaging][i]][NameWithoutTag],
-			VisualDamage[playerid][TDamageTaken][i],
-			TextColor[Player[VisualDamage[playerid][WhoDamaging][i]][Team]],
-			WeaponNames[VisualDamage[playerid][TakenDamageWeapon][i]]);
+			WeaponNames[VisualDamage[playerid][TakenDamageWeapon][i]],
+			VisualDamage[playerid][TDamageTaken][i]);
 		}
 		else
 		{
@@ -737,37 +725,8 @@ SetPlayerDamageBubble(playerid)
 			WeaponNames[VisualDamage[playerid][TakenDamageWeapon][i]],
 			VisualDamage[playerid][TDamageTaken][i]);
 		}
-		
-		linesUsed++;
 	}
-	
-	// Movees 3d text down according to lines count
-	for(new i=0; i < MAX_VISUAL_DAMAGES-linesUsed; i++)
-	    format(str,sizeof str,"\n%s",str);
-	
-	Iter_Add(PlayerHasDBubble, playerid);
-	Update3DTextLabelText(Player[playerid][DamageLabel], -1, str);
-	Player[playerid][DamageBubbleTick] = 3;
-}
-
-// Updates damage label time.
-UpdateDamageBubbles()
-{
-    // Update Damage Bubble
-	if(Iter_Count(PlayerHasDBubble) != 0)
-	{
-	    foreach(new i : PlayerHasDBubble)
-	    {
-	        Player[i][DamageBubbleTick] --;
-		
-		    // Hides damage bubble if tick is 0
-		    if(Player[i][DamageBubbleTick] <= 0)
-			{
-		        Update3DTextLabelText(Player[i][DamageLabel], -1, " ");
-				Iter_SafeRemove(PlayerHasDBubble, i, i);
-			}
-	    }
-	}
+	SetPlayerChatBubble(playerid, str, 0xFFFFFFEE, 30.0, 3000);
 }
 
 // This shows taken and given damage textdraws on damager/damaged player's screen

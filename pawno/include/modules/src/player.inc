@@ -208,8 +208,6 @@ InitPlayer(playerid)
 
 	ShowTeamCornerInfo(playerid);
 
-	Player[playerid][DamageBubbleTick] = 0;
-
 	InitPlayerMessageBox(playerid);
 	InitPlayerNames(playerid);
 	InitPlayerWeaponBind(playerid);
