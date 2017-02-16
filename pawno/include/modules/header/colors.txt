@@ -28,3 +28,10 @@ new TDC[MAX_TEAMS][13];
 new MAIN_BACKGROUND_COLOUR;
 new MAIN_TEXT_COLOUR[16] /*   =	("~w~")*/;
 new ColScheme[10] = ""COL_PRIM"";
+
+// Damage bubbles
+new const DamageBubbleCol[3] = {
+	0xFFFFFFEE, // team none
+	0xDB3D3DEE, // attacker
+	0x3D52DBEE	// defender
+};

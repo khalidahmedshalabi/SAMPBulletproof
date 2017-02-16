@@ -726,7 +726,7 @@ SetPlayerDamageBubble(playerid)
 			VisualDamage[playerid][TDamageTaken][i]);
 		}
 	}
-	SetPlayerChatBubble(playerid, str, 0xFFFFFFEE, 30.0, 3000);
+	SetPlayerChatBubble(playerid, str, DamageBubbleCol[Player[playerid][Team]], 30.0, 3000);
 }
 
 // This shows taken and given damage textdraws on damager/damaged player's screen
