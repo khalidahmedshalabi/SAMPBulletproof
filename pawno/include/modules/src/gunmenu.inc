@@ -198,9 +198,9 @@ ShowGunmenuDialog(playerid)
 		{
 			new team = Player[playerid][Team];
 			new str[GUNMENU_LIMIT_DIALOG_SIZE];
-			
+
 			format(str, sizeof str, "{FFFFFF}Weapon\t{FFFFFF}Ammo\t{FFFFFF}Picked / Limit");
-			
+
 			for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
 			{
 				// Do some coloring for items
@@ -214,30 +214,30 @@ ShowGunmenuDialog(playerid)
 					{
 					    if(team == ATTACKER) format(str, sizeof str, "%s\n{FF2222}%s\t{FF2222}%d\t{FF2222}%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
 						else format(str, sizeof str, "%s\n{5555FF}%s\t{5555FF}%d\t{5555FF}%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
-						
+
 					}
 					else
 					{
                         if(team == ATTACKER) format(str, sizeof str, "%s\n{FF4444}%s\t{FF4444}%d\t{FF4444}%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
 						else format(str, sizeof str, "%s\n{7777FF}%s\t{7777FF}%d\t{7777FF}%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
 					}
-					
+
 				}
 				else // unavailable
 				{
 					format(str, sizeof str, "%s\n{696969}%s\t{696969}%d\t{696969}%d / %d", str, WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][GunAmmo], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
 				}
 			}
-			
+
 			ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, "{FFFFFF}Select your weapons:", str, "Pick", "Reset");
 		}
 		case ARENA:
 		{
 			new team = Player[playerid][Team];
 			new str[800];
-			
+
 			format(str, sizeof str, "{FFFFFF}Weapon\t{FFFFFF}Times Picked");
-			
+
 			for(new i = 0; i < MAX_GUNMENU_GUNS; i ++)
 			{
 				// Do some coloring for items
@@ -263,7 +263,7 @@ ShowGunmenuDialog(playerid)
 					}
 				}
 			}
-			
+
 			ShowPlayerDialog(playerid, DIALOG_GUNMENU, DIALOG_STYLE_TABLIST_HEADERS, "{FFFFFF}Select your weapons:", str, "Pick", "Reset");
 		}
 	}
@@ -741,7 +741,6 @@ OnPlayerFinishGunmenu(playerid)
 		}
 	}
 	ShowGunmenuHelp(playerid);
-	SetTimerEx("AimbotCheck", 3000, false, "i", playerid);
 }
 
 forward ShowPlayerMeleeWeaponsMenu(playerid);

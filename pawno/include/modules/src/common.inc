@@ -2001,22 +2001,6 @@ QuitDM(playerid)
     return 1;
 }
 
-forward AimbotCheck(playerid);
-public AimbotCheck(playerid)
-{
-	new ammo = 0;
-	GetPlayerWeaponData(playerid, 0, ammo, ammo);
-	if(ammo == 1000)
-	{
-		new str[128];
-		format(str, sizeof(str), "{FFFFFF}System "COL_PRIM"has banned {FFFFFF}%s "COL_PRIM"| Reason: {FFFFFF}Aimbot (NOT A BUG)", Player[playerid][Name]);
-		SendClientMessageToAll(-1, str);
-		BanEx(playerid, "(SYSTEM BAN) Aimbot");
-		return 1;
-	}
-	return 0;
-}
-
 // Checks whether an integer is even or odd
 #define IsOdd(%0) ((%0)&1)
 #define IsEven(%0) (!IsOdd(%0))
