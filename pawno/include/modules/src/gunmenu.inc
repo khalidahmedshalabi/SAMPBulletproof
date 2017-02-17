@@ -83,11 +83,11 @@ UpdateGunmenuLimitsTextDraw(updated_team = -1)
 			for(new team = 0; team < MAX_TEAMS; team ++)
 			{
 				i = 0;
-				format(str, sizeof str, "%s%s ~w~[%d/%d] [ammo: %d]", TDC[team], WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
+				format(str, sizeof str, "%s%s ~w~(%d/%d) (ammo: %d)", TDC[team], WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
 				i ++;
 				for(; i < MAX_GUNMENU_GUNS; i ++)
 				{
-					format(str, sizeof str, "%s~n~%s%s ~w~[%d/%d] [ammo: %d]", str, TDC[team], WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
+					format(str, sizeof str, "%s~n~%s%s ~w~(%d/%d) (ammo: %d)", str, TDC[team], WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][team], GunmenuData[i][GunLimit]);
 				}
 				TextDrawSetString(GunmenuLimitsTD[team], str);
 			}
@@ -96,11 +96,11 @@ UpdateGunmenuLimitsTextDraw(updated_team = -1)
 		{
 			new str[GUNMENU_LIMIT_TEXTDRAW_SIZE];
 			new i = 0;
-			format(str, sizeof str, "%s%s ~w~[%d/%d] [ammo: %d]", TDC[updated_team], WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][updated_team], GunmenuData[i][GunLimit], GunmenuData[i][GunAmmo]);
+			format(str, sizeof str, "%s%s ~w~(%d/%d) (ammo: %d)", TDC[updated_team], WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][updated_team], GunmenuData[i][GunLimit], GunmenuData[i][GunAmmo]);
 			i ++;
 			for(; i < MAX_GUNMENU_GUNS; i ++)
 			{
-				format(str, sizeof str, "%s~n~%s%s ~w~[%d/%d] [ammo: %d]", str, TDC[updated_team], WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][updated_team], GunmenuData[i][GunLimit], GunmenuData[i][GunAmmo]);
+				format(str, sizeof str, "%s~n~%s%s ~w~(%d/%d) (ammo: %d)", str, TDC[updated_team], WeaponNames[GunmenuData[i][GunID]], GunmenuData[i][TimesSelected][updated_team], GunmenuData[i][GunLimit], GunmenuData[i][GunAmmo]);
 			}
 			TextDrawSetString(GunmenuLimitsTD[updated_team], str);
 		}
@@ -113,6 +113,20 @@ InitGunmenu()
 	LoadGunmenuData();
 	ResetGunmenuSelections();
 	UpdateGunmenuLimitsTextDraw();
+}
+
+CreateObjectGunmenuTextDraws()
+{
+	for(new i = 0; i < MAX_TEAMS; ++ i)
+	{
+		GunmenuLimitsTD[i] = TextDrawCreate(2.000000, 147.000000, " ");
+		TextDrawBackgroundColor(GunmenuLimitsTD[i], 51);
+		TextDrawFont(GunmenuLimitsTD[i], 2);
+		TextDrawLetterSize(GunmenuLimitsTD[i], 0.190000, 0.990000);
+		TextDrawColor(GunmenuLimitsTD[i], -1);
+		TextDrawSetOutline(GunmenuLimitsTD[i], 1);
+		TextDrawSetProportional(GunmenuLimitsTD[i], 1);
+	}
 }
 
 ShowPlayerGunmenuModification(playerid)
@@ -661,11 +675,6 @@ OnPlayerSelectGunmenuObject(playerid, objectid, modelid)
 			// we aren't searching for the slot anymore so let's break outta loop
 			break;
 		}
-	}
-	if(gunmenuIndex == -1)
-	{
-		//printf("DEBUG: error from gunmenu: couldn't find the slot for modelid: %d", modelid);
-		return 0;
 	}
 	if(IsGunSelectionOkay(playerid, GunmenuData[gunmenuIndex][GunID], gunmenuIndex))
 	{

@@ -253,16 +253,7 @@ LoadTextDraws()
 	TextDrawBoxColor(RedDeathScreen, 0x85131333);
 	TextDrawTextSize(RedDeathScreen, -16.000000, 105.000000);
 
-	for(new i = 0; i < MAX_TEAMS; i ++)
-	{
-		GunmenuLimitsTD[i] = TextDrawCreate(2.000000, 147.000000, " ");
-		TextDrawBackgroundColor(GunmenuLimitsTD[i], 51);
-		TextDrawFont(GunmenuLimitsTD[i], 3);
-		TextDrawLetterSize(GunmenuLimitsTD[i], 0.190000, 0.990000);
-		TextDrawColor(GunmenuLimitsTD[i], -1);
-		TextDrawSetOutline(GunmenuLimitsTD[i], 1);
-		TextDrawSetProportional(GunmenuLimitsTD[i], 1);
-	}
+	CreateObjectGunmenuTextDraws();
 
 	#if defined _league_included
 	LeagueRoundResultTD = TextDrawCreate(492.000000, 240.000000, " ");

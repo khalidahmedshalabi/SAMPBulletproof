@@ -4,8 +4,8 @@
 
 #include "modules\header\fields.txt"
 
-// Round never ends if this is not commented. Useful for testing. Make sure it's commented on release though.
-//#define ROUND_NEVER_END
+// Team elimination checks are disabled. Useful for testing. Make sure it's commented on release though.
+#define END_ROUND_TEAM_ELIMINATION
 
 // Teams definition
 #define NON 				0 	// Team nothing, used for when the player join the server

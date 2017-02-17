@@ -179,6 +179,8 @@ CheckTeamElimination()
 		}
 	}
 
+	#if !defined END_ROUND_TEAM_ELIMINATION
+
 	// If both teams have no players
 	if(PlayersAlive[ATTACKER] == 0 && PlayersAlive[DEFENDER] == 0)
 	{
@@ -197,6 +199,8 @@ CheckTeamElimination()
 		EndRound(3); // Attackers Win
 		return 0;
 	}
+
+	#endif
 	return 1;
 }
 
@@ -2507,7 +2511,7 @@ SpawnPlayersInBase()
 
 	if(CheckTeamElimination() != 0)
 	{
-		foreach(new i:Player)
+		foreach(new i : Player)
 		{
 			ShowRoundStats(i);
 		}
@@ -2644,10 +2648,6 @@ public NotEndingRound()
 
 EndRound(WinID) //WinID: 0 = CP, 1 = RoundTime, 2 = NoAttackersLeft, 3 = NoDefendersLeft, 4 = Nobody, 5 = Arena:Attackers took cp, 6 = Arena:Defenders took cp
 {
-	#if defined ROUND_NEVER_END
-		return 0; // Don't end the round. Useful for testing in-match textdraws for example.
-	#endif
-
 	if(AlreadyEndingRound == true)
 	    return 0;
 
