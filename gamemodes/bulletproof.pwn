@@ -5,15 +5,16 @@
 #include <maxplayers>
 
 // Libraries
-#include <geolocation> 		// Shows player country based on IP
-#include <strlib>           // String functions by Slice
-#include <progress2>        // Player Progress Bar functions
-#include <globalprogressbar>// Global Progress Bar functions
-#include <profiler>         // Script profiler
-#include <sampac> 			// THE MIGHTY NEW ANTICHEAT
-#include <mSelection>       // Selection with preview models feature library
-#include <gBugFix>			// Fix false vehicle entry as passenger (G (teleport/distance) bug)
-#include <md-sort>          // Sorts multi dimensional arrays
+#include <geolocation> 			// Shows player country based on IP
+#include <strlib>           	// String functions by Slice
+#include <progress2>        	// Player Progress Bar functions
+#include <globalprogressbar>	// Global Progress Bar functions
+#include <profiler>         	// Script profiler
+#include <sampac> 				// THE MIGHTY NEW ANTICHEAT
+#include <mSelection>       	// Selection with preview models feature library
+#include <gBugFix>				// Fix false vehicle entry as passenger (G (teleport/distance) bug)
+#include <md-sort>          	// Sorts multi dimensional arrays
+#include <dialogs_prev_model>   // Dialogs with preview model
 
 // YSI Libraries (updated)
 #define YSI_NO_MASTER
