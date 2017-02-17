@@ -1221,13 +1221,14 @@ ResetBackupRequests()
 forward EndTeamBackupRequest(playerid);
 public EndTeamBackupRequest(playerid)
 {
-	new iconid = (Player[playerid][Team] == DEFENDER) ? DEFENDER_BACKUP_ICON : ATTACKER_BACKUP_ICON;
-    if(!Player[playerid][AskingForHelp])return 1;
+    if(Current == -1)
+		return 0;
 
 	new team = Player[playerid][Team];
 	TeamHelp[team] = false;
 	Player[playerid][AskingForHelp] = false;
 
+	new iconid = (team == DEFENDER) ? DEFENDER_BACKUP_ICON : ATTACKER_BACKUP_ICON;
 	foreach(new i : Player)
 	{
 		RemovePlayerMapIcon(i, iconid);
