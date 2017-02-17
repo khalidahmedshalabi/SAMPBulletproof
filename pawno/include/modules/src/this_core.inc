@@ -113,7 +113,7 @@ InitScriptSecondarySettings()
 AddToServersDatabase()
 {
 	#if defined HTTP_DEST_SERVERLIST
-	if(!strcmp(hostname, "Encore Home Test Server", true) || !strcmp(hostname, "Encore Home Test Server [ACv2 ENABLED]", true))
+	if(!strcmp(hostname, "BulletproofDatabase Home Test Server", true) || !strcmp(hostname, "BulletproofDatabase Home Test Server [ACv2 ENABLED]", true))
 		return;
 
 	new ServerIP[30];
