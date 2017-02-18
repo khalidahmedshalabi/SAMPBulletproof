@@ -248,7 +248,7 @@ LoadConfig()
     AutoRoundStarter = (strval(iString) == 1 ? true : false);
     db_next_row(res);
 
-	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // GMVersion
+	db_get_field_assoc(res, "Value", iString, sizeof(iString)); // Database version
     CorrectDatabase = (floatstr(iString) == GM_VERSION ? true : false);
     db_next_row(res);
 

@@ -502,13 +502,13 @@ public SpawnConnectedPlayer(playerid, team)
 			PlayerTextDrawShow(playerid, PlayerLeagueStatsTD[playerid]);
 		}
 	}
+	HideIntroTextDraws(playerid);
 	#endif
 
 	if(WarMode == true)
 	{
 		ShowMatchScoreBoard(playerid);
 	}
-	HideIntroTextDraws(playerid);
 
 	Player[playerid][Spawned] = true;
 	SpawnInLobby(playerid);

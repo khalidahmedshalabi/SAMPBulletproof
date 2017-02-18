@@ -112,17 +112,6 @@ public OnPlayerConnect(playerid)
 		return 0; 
 	}
 	
-	// Cleans chat
-	for(new i=0; i < 20; i++)
-		SendClientMessage(playerid, -1, " ");
-	
-	// Sends welcome messages
-	SendClientMessage(playerid, -1, ""COL_PRIM"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	SendClientMessage(playerid, -1, sprintf("                       "COL_PRIM"Welcome to {FFFFFF}%s %.2f", GM_NAME, GM_VERSION));
-	SendClientMessage(playerid, -1, "      "COL_PRIM"Stay updated with {FFFFFF}/updates "COL_PRIM"and {FFFFFF}/checkversion");
-	SendClientMessage(playerid, -1, "/help, /cmds, /acmds, /settings, /cmdhelp, /matchtips");
-	SendClientMessage(playerid, -1, ""COL_PRIM"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	
 	// If there was a problem loading the database, warn them
 	if(sqliteconnection == DB:0)
 	{
@@ -255,7 +244,9 @@ public OnPlayerRequestClass(playerid, classid)
 				}
 				else
 				{
+					#if defined _league_included
 					ShowIntroTextDraws(playerid);
+					#endif
    					ShowPlayerClassSelection(playerid);
 				}
 			}
@@ -275,7 +266,9 @@ public OnPlayerRequestClass(playerid, classid)
 		}
 		else
 		{
+			#if defined _league_included
 			ShowIntroTextDraws(playerid);
+			#endif
 			ShowPlayerClassSelection(playerid);
 		}
 	}
@@ -2065,7 +2058,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			else
 			{
+                #if defined _league_included
 				ShowIntroTextDraws(playerid);
+				#endif
 				ShowPlayerClassSelection(playerid);
 			}
 
@@ -2188,7 +2183,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				else
 				{
+                    #if defined _league_included
 					ShowIntroTextDraws(playerid);
+					#endif
    					ShowPlayerClassSelection(playerid);
 				}
 			}
@@ -3035,7 +3032,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 		    if(!Player[playerid][Spawned])
 		    {
-		        ShowIntroTextDraws(playerid);
+		        #if defined _league_included
+				ShowIntroTextDraws(playerid);
+				#endif
 				ShowPlayerClassSelection(playerid);
 			}
  			return 1;
@@ -3286,7 +3285,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		else
 		{
-		    ShowIntroTextDraws(playerid);
+		    #if defined _league_included
+			ShowIntroTextDraws(playerid);
+			#endif
 		    ShowPlayerClassSelection(playerid);
 		}
 		return 1;
@@ -5421,7 +5422,7 @@ YCMD:joinclan(playerid, params[], help)
 	    return SendErrorMessage(playerid, "You're already in a clan.");
 	    
 	if(isnull(params))
-		return SendUsageMessage(playerid,"/createclan [Clan Tag]");
+		return SendUsageMessage(playerid,"/joinclan [Clan Tag]");
 
     if(strlen(params) > 6)
 	    return SendErrorMessage(playerid,"A clan tag must be very short");

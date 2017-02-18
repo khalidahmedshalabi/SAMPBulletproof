@@ -256,51 +256,8 @@ LoadTextDraws()
 	CreateObjectGunmenuTextDraws();
 
 	#if defined _league_included
-	LeagueRoundResultTD = TextDrawCreate(492.000000, 240.000000, " ");
-	TextDrawBackgroundColor(LeagueRoundResultTD, MAIN_BACKGROUND_COLOUR);
-	TextDrawFont(LeagueRoundResultTD, 1);
-	TextDrawLetterSize(LeagueRoundResultTD, 0.19, 0.80);
-	TextDrawColor(LeagueRoundResultTD, -1);
-	TextDrawSetOutline(LeagueRoundResultTD, 1);
-	TextDrawSetProportional(LeagueRoundResultTD, 1);
-	TextDrawUseBox(LeagueRoundResultTD, 1);
-	TextDrawBoxColor(LeagueRoundResultTD, 0x00000088);
-	TextDrawTextSize(LeagueRoundResultTD, 710.000000, 0.000000);
+	CreateLeagueTextDraws();
 	#endif
-
-	Intro_GoWebsite = TextDrawCreate(22.000000, 175.000000, "~w~Use your account to login to ~r~~h~bulletproof.ml ~w~where you can chat, find matches, read papers and many more features");
-	TextDrawBackgroundColor(Intro_GoWebsite, 255);
-	TextDrawFont(Intro_GoWebsite, 2);
-	TextDrawLetterSize(Intro_GoWebsite, 0.120000, 1.400000);
-	TextDrawColor(Intro_GoWebsite, -1);
-	TextDrawSetOutline(Intro_GoWebsite, 1);
-	TextDrawSetProportional(Intro_GoWebsite, 1);
-	TextDrawUseBox(Intro_GoWebsite, 1);
-	TextDrawBoxColor(Intro_GoWebsite, 187);
-	TextDrawTextSize(Intro_GoWebsite, 192.000000, 0.000000);
-
-	Intro_GetStarted = TextDrawCreate(22.000000, 210.000000, "~w~Get started: ~b~~h~~h~~h~/help, /cmds, /matchtips, /cmdhelp, ~b~~h~~h~~h~/leaguestats, /leaguecmds");
-	TextDrawBackgroundColor(Intro_GetStarted, 255);
-	TextDrawFont(Intro_GetStarted, 2);
-	TextDrawLetterSize(Intro_GetStarted, 0.140000, 1.400000);
-	TextDrawColor(Intro_GetStarted, -1);
-	TextDrawSetOutline(Intro_GetStarted, 1);
-	TextDrawSetProportional(Intro_GetStarted, 1);
-	TextDrawUseBox(Intro_GetStarted, 1);
-	TextDrawBoxColor(Intro_GetStarted, 187);
-	TextDrawTextSize(Intro_GetStarted, 192.000000, 0.000000);
-
-	Intro_News = TextDrawCreate(22.000000, 246.000000, "News");
-	TextDrawBackgroundColor(Intro_News, 17);
-	TextDrawFont(Intro_News, 1);
-	TextDrawLetterSize(Intro_News, 0.160000, 1.400000);
-	TextDrawColor(Intro_News, -1);
-	TextDrawSetOutline(Intro_News, 0);
-	TextDrawSetProportional(Intro_News, 1);
-	TextDrawSetShadow(Intro_News, 0);
-	TextDrawUseBox(Intro_News, 1);
-	TextDrawBoxColor(Intro_News, 187);
-	TextDrawTextSize(Intro_News, 192.000000, 0.000000);
 	return 1;
 }
 
@@ -1509,33 +1466,4 @@ TogglePlayerInterface(playerid, bool:toggle, interface = -1)
 			db_free_result(db_query(sqliteconnection, str));
 		}
 	}
-}
-
-forward DoShowIntroTextDraws(index, response_code, data[]);
-public DoShowIntroTextDraws(index, response_code, data[])
-{
-	if(response_code == 200)
-		TextDrawSetString(Intro_News, data);
-}
-
-ShowIntroTextDraws(playerid)
-{
-    #pragma unused playerid
-    /*
-	HTTP(playerid, HTTP_GET, "infinite-gaming.ml/khk/bulletproof/league/news_textdraw_text.php", "", "DoShowIntroTextDraws");
-
-	TextDrawShowForPlayer(playerid, Intro_GoWebsite);
-	TextDrawShowForPlayer(playerid, Intro_GetStarted);
-	TextDrawShowForPlayer(playerid, Intro_News);
-    */
-}
-
-HideIntroTextDraws(playerid)
-{
-    #pragma unused playerid
-    /*
-	TextDrawHideForPlayer(playerid, Intro_GoWebsite);
-	TextDrawHideForPlayer(playerid, Intro_GetStarted);
-	TextDrawHideForPlayer(playerid, Intro_News);
-	*/
 }

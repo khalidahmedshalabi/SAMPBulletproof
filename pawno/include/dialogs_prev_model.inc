@@ -157,7 +157,7 @@ static Dialog_Init(playerid, style, caption[], button1[], button2[])
 		for (new i; i < 24; i++)
 		{
 			p_DialogCompnent[playerid][E_DIALOG_COMPONENT_MODEL][i] = Dialog_Create(playerid, base[0], base[1], "_", Dialog_SetOpacity(0x3B3B3BFF, 200), 5, 0.129998, 0.799998, -1, 0, 0, 1, 1, 1, 0, 44.000000, 41.000000, .selectable = 1);
-	        p_DialogCompnent[playerid][E_DIALOG_COMPONENT_LABEL][i] = Dialog_Create(playerid, base[0] + 2.000000, base[1] + 1.000000, "", 255, 1, 0.140000, 0.899999, -36, 0, 0, 1, 2, 0);
+	        p_DialogCompnent[playerid][E_DIALOG_COMPONENT_LABEL][i] = Dialog_Create(playerid, base[0] + 2.000000, base[1] + 1.000000, "", 255, 1, 0.140000, 0.899999, -36, 0, 0, 1, 0, 0);
 
 	        base[0] += 45.000000;
 
